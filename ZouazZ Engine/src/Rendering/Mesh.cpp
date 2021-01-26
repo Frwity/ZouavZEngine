@@ -32,7 +32,7 @@ Mesh::Mesh(const char* path)
 
     const aiVector3D aiZeroVector(0.0f, 0.0f, 0.0f);
 
-    for(unsigned int i = 0; i < mesh->mNumVertices - 1; i++) 
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++) 
 	{
 		const aiVector3D* pPos = &(mesh->mVertices[i]);
 		const aiVector3D* pNormal = mesh->HasNormals() ? &(mesh->mNormals[i]) : &aiZeroVector;
@@ -42,8 +42,8 @@ Mesh::Mesh(const char* path)
 
 		if (mesh->HasTextureCoords(0)) // does the mesh contain texture coordinates?
 		{
-			vec.x = &mesh->mTextureCoords[0][i].x ? mesh->mTextureCoords[0][i].x : 0;
-			vec.y = &mesh->mTextureCoords[0][i].y ? mesh->mTextureCoords[0][i].y : 0;
+			vec.x = i / 10 % 10;
+			vec.y = i / 10 % 10;
 			//vertex.TexCoords = vec;
 		}
 		else
@@ -64,36 +64,73 @@ Mesh::Mesh(const char* path)
 		indices.push_back(face.mIndices[2]);
 	}
 
-	InitMesh(&vertices[0], vertices.size(), (int*)&indices[0]);
+	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
-void Mesh::InitMesh(Vertex* vertices, int vertSize, int* indices)
+void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize)
 {
-	unsigned int VBO, EBO;
-
-	glGenBuffers(1, &EBO);
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+	nbElements = indicesSize;
 
     glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+	glGenBuffers(1, &EBO);
+    glGenBuffers(1, &VBO);
+    
+	glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)3);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)3);
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)6);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)6);
 }
+
 Mesh::~Mesh()
 {
+	glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glDeleteVertexArrays(1, &VAO);
+}
+
+void Mesh::CreateQuad()
+{
+	std::vector<Vertex> vertices;
+	std::vector<int> indices;
+
+	Vertex vert;
+
+	vert = {Vec3(-0.5f, -0.5f, 0.f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(0.f, 0.f)};
+	vertices.push_back(vert);
+
+	vert = {Vec3(0.5f, -0.5f, 0.f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(1.f, 0.f)};
+	vertices.push_back(vert);
+
+	vert = {Vec3(0.5f, 0.5f, 0.f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(1.f, 1.f)};
+	vertices.push_back(vert);
+
+	vert = {Vec3(-0.5f, 0.5f, 0.f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(0.f, 1.f)};
+	vertices.push_back(vert);
+
+	indices.push_back(0);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(0);
+	indices.push_back(2);
+	indices.push_back(3);
+	
+	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }

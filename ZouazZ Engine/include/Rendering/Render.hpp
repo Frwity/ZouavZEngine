@@ -3,9 +3,9 @@
 class Render
 {
 private:
-	int width, height;
 public:
 	struct GLFWwindow* window;
+	int width, height;
 
 	Render(int _width, int _height);
 	void Draw();

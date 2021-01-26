@@ -51,12 +51,6 @@
     <ClCompile Include="src\Rendering\Texture.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Render.cpp">
-      <Filter>src\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\Mesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="external_lib\src\imgui.cpp">
       <Filter>external_lib</Filter>
     </ClCompile>
@@ -87,6 +81,24 @@
     <ClCompile Include="src\Maths\Vec2.cpp">
       <Filter>src\Maths</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Mesh.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Render.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Matrix4.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Vec4.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Matrix.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Camera.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -95,13 +107,7 @@
     <ClInclude Include="include\Rendering\Texture.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\Render.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\Resource.hpp">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\Mesh.hpp">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\System\Engine.hpp">
@@ -115,6 +121,24 @@
     </ClInclude>
     <ClInclude Include="include\Maths\Vec2.hpp">
       <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Mesh.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Render.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Matrix4.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Vec4.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Matrix.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Camera.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

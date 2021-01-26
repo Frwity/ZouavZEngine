@@ -160,19 +160,27 @@
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Maths\Matrix.cpp" />
+    <ClCompile Include="src\Maths\Matrix4.cpp" />
     <ClCompile Include="src\Maths\Vec2.cpp" />
     <ClCompile Include="src\Maths\Vec3.cpp" />
-    <ClCompile Include="src\Render.cpp" />
+    <ClCompile Include="src\Maths\Vec4.cpp" />
+    <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
+    <ClCompile Include="src\Rendering\Render.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
+    <ClInclude Include="include\Maths\Matrix.hpp" />
+    <ClInclude Include="include\Maths\Matrix4.hpp" />
     <ClInclude Include="include\Maths\Vec2.hpp" />
     <ClInclude Include="include\Maths\Vec3.hpp" />
-    <ClInclude Include="include\Render.hpp" />
+    <ClInclude Include="include\Maths\Vec4.hpp" />
+    <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
+    <ClInclude Include="include\Rendering\Render.hpp" />
     <ClInclude Include="include\Rendering\Shader.hpp" />
     <ClInclude Include="include\Rendering\Texture.hpp" />
     <ClInclude Include="include\Resource.hpp" />

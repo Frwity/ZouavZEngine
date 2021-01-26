@@ -90,3 +90,34 @@ Shader::~Shader()
 {
     glDeleteProgram(id);
 }
+
+
+void Shader::SetBool(const std::string& name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
+}
+
+void Shader::SetInt(const std::string& name, int value) const
+{
+    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::SetFloat(const std::string& name, float value) const
+{
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::SetMatrix(const std::string& name, const Matrix4& mat) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, mat.matrix);
+}
+
+void Shader::SetVector3(const std::string& name, float x, float y, float z) const
+{
+    glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
+}
+
+void Shader::SetVector3(const std::string& name, const Vec3& v) const
+{
+    glUniform3f(glGetUniformLocation(id, name.c_str()), v.x, v.y, v.z);
+}

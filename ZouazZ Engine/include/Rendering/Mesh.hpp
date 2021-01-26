@@ -13,25 +13,26 @@ struct Vertex
 class Mesh : public Resource
 {
 private:
+    unsigned int VBO, EBO;
     unsigned int VAO;
-    unsigned int nbPoly;
+    unsigned int nbElements;
 
 public:
-    Mesh();
+    Mesh() = default;
     Mesh(const char* path);
     ~Mesh();
 
-    void loadOBJ(const char* path, std::vector<Vec3>& verticesCoords, std::vector<Vec3>& verticesColors, std::vector<Vec3>& verticesNormals);
+    void InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
+    void CreateQuad();
 
-    unsigned int getID() const
+    unsigned int GetID() const
     {
         return VAO;
     }
-    unsigned int getNbPoly() const
+    unsigned int GetNbElements() const
     {
-        return nbPoly;
+        return nbElements;
     }
 
-    void InitMesh(Vertex* vertices, int vertSize, int* indices);
 
 };
