@@ -24,7 +24,7 @@ public:
 
     void InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
     void CreateQuad();
-
+  
     unsigned int GetID() const
     {
         return VAO;

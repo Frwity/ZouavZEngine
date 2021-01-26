@@ -22,21 +22,21 @@ void InputManager(GLFWwindow* window, Camera& camera, float deltaTime)
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, deltaTime });
+        camera.MoveTo({ 0.0f, 0.0f, -deltaTime * 100 });
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, -deltaTime });
+        camera.MoveTo({ 0.0f, 0.0f, deltaTime * 100 });
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.MoveTo({ deltaTime, 0.0f, 0.0f });
+        camera.MoveTo({ deltaTime * 100, 0.0f, 0.0f });
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.MoveTo({ -deltaTime, 0.0f, 0.0f });
+        camera.MoveTo({ -deltaTime * 100, 0.0f, 0.0f });
 }
 
 int main()
 {
-    Render render(800, 600);
+    Render render(1400, 900);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -53,12 +53,12 @@ int main()
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.id, "textureSample"), 0);
 
-    Mesh mesh("resources/fantasy_game_inn.obj");
+    Mesh mesh("resources/Skull.obj");
 
     //Mesh mesh;
     //mesh.CreateQuad();
 
-    Texture texture("resources/fantasy_game_inn_diffuse.png");
+    Texture texture("resources/skull.jpg");
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -68,7 +68,7 @@ int main()
 
     Camera camera({ (float)startCursorX, (float)startCursorY });
 
-    Matrix4 projection = Matrix4::CreatePerspectiveProjectionMatrix(render.width, render.height, 0, 1000, 90);
+    Matrix4 projection = Matrix4::CreatePerspectiveProjectionMatrix(render.width, render.height, 0.01, 1000, 45);
 
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
@@ -91,8 +91,8 @@ int main()
         shader.Use();
 
         shader.SetMatrix("view", camera.GetMatrix());
-        //shader.SetMatrix("projection", projection);
-        shader.SetMatrix("projection", Matrix4::Identity());
+        shader.SetMatrix("projection", projection);
+        //shader.SetMatrix("projection", Matrix4::Identity());
         shader.SetMatrix("model", Matrix4::Identity());
 
         glBindVertexArray(mesh.GetID());
