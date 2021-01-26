@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{0da9d34b-0a77-4425-aa04-9c4c773f7b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{1e4c3c08-87eb-4809-a81d-2a3a5738d473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Maths">
+      <UniqueIdentifier>{c1c8c06d-131a-4697-845a-6f25a82f3cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Maths">
+      <UniqueIdentifier>{221339f5-6264-41b0-9674-24df5aaf3d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external_lib">
+      <UniqueIdentifier>{88a615f3-ac52-4b58-aac2-0c077781d67e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Rendering">
+      <UniqueIdentifier>{0ac60715-0882-4684-9b9b-1dc705bbdfde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Rendering">
+      <UniqueIdentifier>{ecbbf4c0-457d-4156-90e5-b2d8f0fe743b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{2eaf80a9-e727-4643-b74f-38796243c567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\System">
+      <UniqueIdentifier>{7f2d1e11-579a-4b80-a26f-a3231aaaf7ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System">
+      <UniqueIdentifier>{67c51e73-e01e-44de-802e-fcbd0ce42879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Component">
+      <UniqueIdentifier>{7e66d3e7-179b-497a-a696-07df53e2070a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Component">
+      <UniqueIdentifier>{f332dd7c-ddc6-40ac-b480-219977366fad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="external_lib\src\glad.c">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Shader.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Texture.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Mesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_demo.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_draw.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_impl_glfw.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_impl_opengl3.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_tables.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_widgets.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\tiny_obj_loader.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Vec3.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Vec2.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Rendering\Shader.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Texture.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Render.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Resource.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Mesh.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Engine.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\src\imgui_internal.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Vec3.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Vec2.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader.vs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\shader.fs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="external_lib\libs\assimp-vc142-mtd.dll">
+      <Filter>external_lib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\texture.jpg">
+      <Filter>resources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
