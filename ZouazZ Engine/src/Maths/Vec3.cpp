@@ -13,6 +13,46 @@ Vec3::Vec3(const Vec3& v)
     : x{ v.x }, y{ v.y }, z{ v.z }
 {}
 
+Vec3 Vec3::Zero()
+{
+    return { 0.0f, 0.0f, 0.0f };
+}
+
+Vec3 Vec3::One()
+{
+    return { 1.0f, 1.0f, 1.0f };
+}
+
+Vec3 Vec3::Forward()
+{
+    return { 0.0f, 0.0f, 1.0f };
+}
+
+Vec3 Vec3::Backward()
+{
+    return { 0.0f, 0.0f, -1.0f };
+}
+
+Vec3 Vec3::Right()
+{
+    return { 1.0f, 0.0f, 0.0f };
+}
+
+Vec3 Vec3::Left()
+{
+    return { -1.0f, 0.0f, 0.0f };
+}
+
+Vec3 Vec3::Up()
+{
+    return { 0.0f, 1.0f, 0.0f };
+}
+
+Vec3 Vec3::Down()
+{
+    return { 0.0f, -1.0f, 0.0f };
+}
+
 float Vec3::GetMagnitude() const
 {
     return sqrt( x * x + y * y + z * z );

@@ -134,7 +134,7 @@ Matrix4 Matrix4::CreateProjMatrix(float d)
     return projectionMat;
 }
 
-Matrix4 Matrix4::CreatePerspectiveProjectionMatrix(int width, int height, float near, float far, float fov)
+Matrix4 Matrix4::CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov)
 {
     Matrix4 perspective;
     float temp, temp2, temp3, temp4;
@@ -156,7 +156,7 @@ Matrix4 Matrix4::CreatePerspectiveProjectionMatrix(int width, int height, float 
     return perspective;
 }
 
-Matrix4 Matrix4::CreateOrthographicProjectionMatrix(int width, int height, float near, float far)
+Matrix4 Matrix4::CreateOrthographicProjectionMatrix(float width, float height, float near, float far)
 {
     Matrix4 orthographic = Identity();
         
