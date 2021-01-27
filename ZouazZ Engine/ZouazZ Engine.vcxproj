@@ -159,6 +159,7 @@
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Maths\Matrix.cpp" />
     <ClCompile Include="src\Maths\Matrix4.cpp" />

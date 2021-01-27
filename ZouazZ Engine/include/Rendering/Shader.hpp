@@ -6,6 +6,7 @@ class Shader: public Resource
 {
 public:
 	unsigned int id = 0;
+	Shader() {};
 	Shader(const char* vertexPath, const char* fragmentPath);
 	const char* LoadFile(const char* pathToFile);
 	void DebugCheck(const int& shader, const char* msg, const char* pathToFile);

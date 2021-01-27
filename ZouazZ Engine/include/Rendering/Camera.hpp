@@ -11,6 +11,7 @@ class Camera
 	float pitch, yaw;
 
 public:
+	Camera() {};
 	Camera(const Vec2& mouseStartPosition);
 	~Camera() = default;
 

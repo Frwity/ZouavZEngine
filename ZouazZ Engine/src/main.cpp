@@ -11,34 +11,13 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-void InputManager(GLFWwindow* window, Camera& camera, float deltaTime)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    double cursorX, cursorY;
-    glfwGetCursorPos(window, &cursorX, &cursorY);
-    camera.UpdateRotation({ (float)cursorX, (float)cursorY });
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, -deltaTime * 100 });
-
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, deltaTime * 100 });
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.MoveTo({ deltaTime * 100, 0.0f, 0.0f });
-
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.MoveTo({ -deltaTime * 100, 0.0f, 0.0f });
-}
+#include "System/Engine.hpp"
 
 int main()
 {
-    Render render(1400, 900);
+    /*Render render(1400, 900);
 
-    IMGUI_CHECKVERSION();
+    /*IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
@@ -47,9 +26,9 @@ int main()
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(render.window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_Init("#version 330");*/
 
-    Shader shader("resources/shader.vs", "resources/shader.fs");
+   /* Shader shader("resources/shader.vs", "resources/shader.fs");
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.id, "textureSample"), 0);
 
@@ -102,10 +81,15 @@ int main()
 
     }
 
-    ImGui_ImplGlfw_Shutdown();
+    /*ImGui_ImplGlfw_Shutdown();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui::DestroyContext();
-    render.Destroy();
+    render.Destroy();*/
+
+    Engine engine;
+
+    engine.Update();
+
 
 	return EXIT_SUCCESS;
 }
