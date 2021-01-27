@@ -121,6 +121,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>external_lib/include; include/</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,27 +160,37 @@
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Component\Component.cpp" />
+    <ClCompile Include="src\Component\Transform.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Maths\Matrix.cpp" />
-    <ClCompile Include="src\Maths\Matrix4.cpp" />
+    <ClCompile Include="src\Maths\Quaternion.cpp" />
     <ClCompile Include="src\Maths\Vec2.cpp" />
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
+    <ClCompile Include="src\Rendering\MeshRenderer.cpp" />
     <ClCompile Include="src\Rendering\Render.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
+    <ClInclude Include="include\Component\Component.hpp" />
+    <ClInclude Include="include\Component\Transform.hpp" />
+    <ClInclude Include="include\GameObject.hpp" />
+    <ClInclude Include="include\Maths\Mat4.hpp" />
     <ClInclude Include="include\Maths\Matrix.hpp" />
-    <ClInclude Include="include\Maths\Matrix4.hpp" />
+    <ClInclude Include="include\Maths\Quaternion.hpp" />
     <ClInclude Include="include\Maths\Vec2.hpp" />
     <ClInclude Include="include\Maths\Vec3.hpp" />
     <ClInclude Include="include\Maths\Vec4.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
+    <ClInclude Include="include\Rendering\MeshRenderer.hpp" />
     <ClInclude Include="include\Rendering\Render.hpp" />
     <ClInclude Include="include\Rendering\Shader.hpp" />
     <ClInclude Include="include\Rendering\Texture.hpp" />

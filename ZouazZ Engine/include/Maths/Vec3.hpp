@@ -41,6 +41,9 @@ class Vec3
         void operator+=(const Vec3& v);
         void operator-=(const Vec3& v);
         void operator*=(float value);
+        Vec3 operator/(float number) const;
 };
+
+Vec3 operator*(float number, const Vec3& rhs);
 
 #endif

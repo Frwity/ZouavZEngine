@@ -1,12 +1,13 @@
-#include "Rendering/Shader.hpp"
-#include "Rendering/Texture.hpp"
+#include "Maths/Mat4.hpp"
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Resource.hpp"
 #include "Rendering/Render.hpp"
-#include "Rendering/Mesh.hpp"
 #include "Rendering/Camera.hpp"
+#include "Rendering/MeshRenderer.hpp"
+#include "Component/Transform.hpp"
+#include "GameObject.hpp"
 #include <string>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -61,16 +62,15 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(render.window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    Shader shader("resources/shader.vs", "resources/shader.fs");
-    shader.Use();
-    glUniform1i(glGetUniformLocation(shader.id, "ourTexture"), 0);
 
-    //Mesh mesh("resources/fanta/*sy_game_inn.obj");
-    //Texture texture("resources*//fantasy_game_inn_diffuse.png");
+    std::unique_ptr<Shader> shader = std::make_unique<Shader>("resources/shader.vs", "resources/shader.fs");
+    std::unique_ptr<Mesh> skullMesh = std::make_unique<Mesh>("resources/Skull.obj");
+    std::unique_ptr<Texture> skullTexture = std::make_unique<Texture>("resources/skull.jpg");
+    std::unique_ptr<Mesh> innMesh = std::make_unique<Mesh>("resources/fantasy_game_inn.obj");
+    std::unique_ptr<Texture> innTexture = std::make_unique<Texture>("resources/fantasy_game_inn_diffuse.png");
 
-    Mesh mesh("resources/Skull.obj");
-    Texture texture("resources/skull.jpg");
-
+    GameObject skull(Transform(), MeshRenderer(skullMesh.get(), shader.get(), skullTexture.get()));
+    GameObject inn(Transform(), MeshRenderer(innMesh.get(), shader.get(), innTexture.get()));
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -78,15 +78,15 @@ int main()
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
-    Camera camera({ (float)startCursorX, (float)startCursorY });
+    Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
 
-    Matrix4 projection = Matrix4::CreatePerspectiveProjectionMatrix(render.width, render.height, 0.01, 1000, 45);
+    
 
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
 
     bool lookAt = false;
-
+    float translation = 0.0f;
     while (glfwWindowShouldClose(render.window) == false)
     {
         float currentFrame = glfwGetTime();
@@ -100,17 +100,11 @@ int main()
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader.Use();
-        glActiveTexture(GL_TEXTURE0);
-        texture.Use();
+        translation -= deltaTime;
 
-        shader.SetMatrix("view", lookAt ? camera.GetLookAtMatrix(Vec3::Zero()) : camera.GetMatrix());
-        shader.SetMatrix("projection", projection);
-        shader.SetMatrix("model", Matrix4::Identity());
+        skull.meshRenderer.Draw(Mat4::CreateTranslationMatrix({ -3.0f + sin(translation), 0.0f, cos(translation) }), camera);
+        inn.meshRenderer.Draw(Mat4::Identity(), camera);
 
-        glBindVertexArray(mesh.GetID());
-        glDrawElements(GL_TRIANGLES, mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
-        
         glfwSwapBuffers(render.window);
     }
 

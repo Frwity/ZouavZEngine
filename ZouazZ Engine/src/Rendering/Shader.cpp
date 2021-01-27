@@ -1,6 +1,8 @@
 #include <fstream>
 #include <glad/glad.h>
 #include <iostream>
+#include "Maths/Mat4.hpp"
+#include "Maths/Vec3.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
@@ -107,7 +109,7 @@ void Shader::SetFloat(const std::string& name, float value) const
     glUniform1f(glGetUniformLocation(id, name.c_str()), value);
 }
 
-void Shader::SetMatrix(const std::string& name, const Matrix4& mat) const
+void Shader::SetMatrix(const std::string& name, const Mat4& mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, mat.matrix);
 }

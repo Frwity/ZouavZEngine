@@ -113,6 +113,14 @@ void Vec3::operator*=(float value)
 {
     *this = *this * value;
 }
+Vec3 Vec3::operator/(float number) const
+{
+    Vec3 to_return;
+    to_return.x = this->x / number;
+    to_return.y = this->y / number;
+    to_return.z = this->z / number;
+    return to_return;
+}
 
 Vec3 Vec3::Cross(const Vec3& v) const
 {
@@ -120,6 +128,11 @@ Vec3 Vec3::Cross(const Vec3& v) const
              z * v.x - x * v.z,
              x * v.y - y * v.x };
 } 
+
+Vec3 operator*(float number, const Vec3& rhs)
+{
+    return rhs * number;
+}
 
 float Vec3::Dot(const Vec3& v) const
 {

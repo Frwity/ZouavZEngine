@@ -1,6 +1,7 @@
 #pragma once
+#include "Component/Component.hpp"
 
-class Resource
+class Resource : public Component
 {
 
 };

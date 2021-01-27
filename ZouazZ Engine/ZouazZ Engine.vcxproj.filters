@@ -87,9 +87,6 @@
     <ClCompile Include="src\Rendering\Render.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Maths\Matrix4.cpp">
-      <Filter>src\Maths</Filter>
-    </ClCompile>
     <ClCompile Include="src\Maths\Vec4.cpp">
       <Filter>src\Maths</Filter>
     </ClCompile>
@@ -98,6 +95,24 @@
     </ClCompile>
     <ClCompile Include="src\Rendering\Camera.cpp">
       <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Transform.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Quaternion.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Mat4.cpp">
+      <Filter>src\Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\MeshRenderer.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Component.cpp">
+      <Filter>src\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +143,6 @@
     <ClInclude Include="include\Rendering\Render.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\Maths\Matrix4.hpp">
-      <Filter>include\Maths</Filter>
-    </ClInclude>
     <ClInclude Include="include\Maths\Vec4.hpp">
       <Filter>include\Maths</Filter>
     </ClInclude>
@@ -138,6 +150,24 @@
       <Filter>include\Maths</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\Camera.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Transform.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Quaternion.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths\Mat4.hpp">
+      <Filter>include\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Component.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\MeshRenderer.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

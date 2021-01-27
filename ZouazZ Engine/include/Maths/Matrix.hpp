@@ -1,8 +1,6 @@
 #ifndef _MATRIX_HPP_
 #define _MATRIX_HPP_
 
-#include "Vec3.hpp"
-
 class Matrix
 {
     public:

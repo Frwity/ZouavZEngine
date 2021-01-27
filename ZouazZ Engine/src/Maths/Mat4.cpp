@@ -1,20 +1,34 @@
-#include "Maths/Matrix4.hpp"
+#include "Maths/Vec3.hpp"
+#include "Maths/Quaternion.hpp"
 #include <math.h>
+#include <cassert>
 
-Matrix4::Matrix4() 
+#include "Maths/Mat4.hpp"
+
+Mat4::Mat4() 
     : Matrix(4, 4)
 {
     for (int i = 0; i < 16; i++)
         matrix[i] = 0;        
 }
 
-Matrix4::Matrix4(const Matrix& m) 
+Mat4::Mat4(std::initializer_list<float> matrix)
+    : Matrix(4, 4)
+{
+    assert(matrix.size() == 16);
+
+    int i = 0;
+    for (float f : matrix)
+        this->matrix[i++] = f;
+}
+
+Mat4::Mat4(const Matrix& m) 
     : Matrix(m)
 {}
 
-Matrix4 Matrix4::CreateScaleMatrix(const Vec3& scale)
+Mat4 Mat4::CreateScaleMatrix(const Vec3& scale)
 {
-    Matrix4 scaleMat;
+    Mat4 scaleMat;
 
     scaleMat.Accessor(0, 0) = scale.x;
     scaleMat.Accessor(1, 1) = scale.y;
@@ -24,9 +38,9 @@ Matrix4 Matrix4::CreateScaleMatrix(const Vec3& scale)
     return scaleMat;
 }
 
-Matrix4 Matrix4::CreateTranslationMatrix(const Vec3& translation)
+Mat4 Mat4::CreateTranslationMatrix(const Vec3& translation)
 {
-    Matrix4 translationMat;
+    Mat4 translationMat;
 
     translationMat.Accessor(0, 0) = 1;
     translationMat.Accessor(1, 1) = 1;
@@ -40,9 +54,9 @@ Matrix4 Matrix4::CreateTranslationMatrix(const Vec3& translation)
     return translationMat;
 }
 
-Matrix4 Matrix4::CreateXRotationMatrix(float angle)
+Mat4 Mat4::CreateXRotationMatrix(float angle)
 {
-    Matrix4 rotationMat;
+    Mat4 rotationMat;
 
     rotationMat.Accessor(0, 0) = 1;
     rotationMat.Accessor(3, 3) = 1;
@@ -55,9 +69,9 @@ Matrix4 Matrix4::CreateXRotationMatrix(float angle)
     return rotationMat;    
 }
 
-Matrix4 Matrix4::CreateYRotationMatrix(float angle)
+Mat4 Mat4::CreateYRotationMatrix(float angle)
 {
-    Matrix4 rotationMat;
+    Mat4 rotationMat;
 
     rotationMat.Accessor(1, 1) = 1;
     rotationMat.Accessor(3, 3) = 1;
@@ -70,9 +84,9 @@ Matrix4 Matrix4::CreateYRotationMatrix(float angle)
     return rotationMat;    
 }
 
-Matrix4 Matrix4::CreateZRotationMatrix(float angle)
+Mat4 Mat4::CreateZRotationMatrix(float angle)
 {
-    Matrix4 rotationMat;
+    Mat4 rotationMat;
 
     rotationMat.Accessor(2, 2) = 1;
     rotationMat.Accessor(3, 3) = 1;
@@ -85,23 +99,30 @@ Matrix4 Matrix4::CreateZRotationMatrix(float angle)
     return rotationMat;    
 }
 
-Matrix4 Matrix4::CreateFixedAngleEulerRotationMatrix(const Vec3& angle)
+Mat4 Mat4::CreateFixedAngleEulerRotationMatrix(const Vec3& angle)
 {
-    return Matrix4::CreateYRotationMatrix(angle.y) * 
-        Matrix4::CreateXRotationMatrix(angle.x) * 
-        Matrix4::CreateZRotationMatrix(angle.z);    
+    return Mat4::CreateYRotationMatrix(angle.y) * 
+        Mat4::CreateXRotationMatrix(angle.x) * 
+        Mat4::CreateZRotationMatrix(angle.z);    
 }
 
-Matrix4 Matrix4::CreateTRSMatrix(const Vec3& translation, const Vec3& rotate, const Vec3& scale)
+Mat4 Mat4::CreateTRSMatrix(const Vec3& translation, const Vec3& rotate, const Vec3& scale)
 {
-    return Matrix4::CreateTranslationMatrix(translation) * 
-        Matrix4::CreateFixedAngleEulerRotationMatrix(rotate) * 
-        Matrix4::CreateScaleMatrix(scale);    
+    return Mat4::CreateTranslationMatrix(translation) * 
+        Mat4::CreateFixedAngleEulerRotationMatrix(rotate) * 
+        Mat4::CreateScaleMatrix(scale);    
 }
 
-Matrix4 Matrix4::CreateUnitVecRotMatrix(const Vec3& v, float angle)
+Mat4 Mat4::CreateTRSMatrix(const Vec3& translation, const Quaternion& rotate, const Vec3& scale)
 {
-    Matrix4 rotationMat = Identity();
+    return Mat4::CreateTranslationMatrix(translation) *
+        rotate.GetRotationMatrix() *
+        Mat4::CreateScaleMatrix(scale);
+}
+
+Mat4 Mat4::CreateUnitVecRotMatrix(const Vec3& v, float angle)
+{
+    Mat4 rotationMat = Identity();
 
     float c = cos(angle);
     float s = sin(angle);
@@ -122,9 +143,9 @@ Matrix4 Matrix4::CreateUnitVecRotMatrix(const Vec3& v, float angle)
     return rotationMat;
 }
 
-Matrix4 Matrix4::CreateProjMatrix(float d)
+Mat4 Mat4::CreateProjMatrix(float d)
 {
-    Matrix4 projectionMat;
+    Mat4 projectionMat;
 
     projectionMat.Accessor(0, 0) = 1;
     projectionMat.Accessor(1, 1) = 1;
@@ -134,9 +155,9 @@ Matrix4 Matrix4::CreateProjMatrix(float d)
     return projectionMat;
 }
 
-Matrix4 Matrix4::CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov)
+Mat4 Mat4::CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov)
 {
-    Matrix4 perspective;
+    Mat4 perspective;
     float temp, temp2, temp3, temp4;
     {
         float ymax, xmax;
@@ -156,9 +177,9 @@ Matrix4 Matrix4::CreatePerspectiveProjectionMatrix(float width, float height, fl
     return perspective;
 }
 
-Matrix4 Matrix4::CreateOrthographicProjectionMatrix(float width, float height, float near, float far)
+Mat4 Mat4::CreateOrthographicProjectionMatrix(float width, float height, float near, float far)
 {
-    Matrix4 orthographic = Identity();
+    Mat4 orthographic = Identity();
         
     float aspect = (float)width / height;
 
@@ -172,26 +193,26 @@ Matrix4 Matrix4::CreateOrthographicProjectionMatrix(float width, float height, f
     return orthographic;
 }
 
-Matrix4 Matrix4::Identity()
+Mat4 Mat4::Identity()
 {
     return Matrix::Identity(4);
 }
 
-Matrix4 Matrix4::Zero()
+Mat4 Mat4::Zero()
 {
     return Matrix::Zero(4, 4);
 }
 
-Vec3 Matrix4::operator*(const Vec3& v) const
+Vec3 Mat4::operator*(const Vec3& v) const
 {
     return {matrix[0] * v.x + matrix[4] * v.y + matrix[8] * v.z + matrix[12],
             matrix[1] * v.x + matrix[5] * v.y + matrix[9] * v.z + matrix[13],
             matrix[2] * v.x + matrix[6] * v.y + matrix[10] * v.z + matrix[14]};
 }
 
-Matrix4 Matrix4::operator*(const Matrix4& m) const
+Mat4 Mat4::operator*(const Mat4& m) const
 {
-    Matrix4 result = Zero();
+    Mat4 result = Zero();
 
     for (int i = 0; i < 4; i++)
     {
@@ -207,7 +228,17 @@ Matrix4 Matrix4::operator*(const Matrix4& m) const
     return result;
 }
 
-void Matrix4::operator=(const Matrix4& m)
+Mat4 Mat4::operator/(float scalar) const
+{
+    Mat4 rst = *this;
+    for (size_t i = 0; i < 16; i++)
+    {
+        rst.matrix[i] /= scalar;
+    }
+    return rst;
+}
+
+void Mat4::operator=(const Mat4& m)
 {
     for (int i = 0; i < 16; i++)
     {
