@@ -34,10 +34,15 @@ Render::Render(int _width, int _height)
         //TODO EXIT WITH ERROR
     }
 
+    glViewport(0, 0, width, height);
+
     //TODO PUT IN DEBUG
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 }
 
 void Render::Init(int _width, int _height)

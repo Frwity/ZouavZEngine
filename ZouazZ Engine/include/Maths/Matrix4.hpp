@@ -19,8 +19,8 @@ class Matrix4 : public Matrix
         static Matrix4 CreateTRSMatrix(const Vec3& translation, const Vec3& rotation, const Vec3& scale);
         static Matrix4 CreateUnitVecRotMatrix(const Vec3& v, float anle);
         static Matrix4 CreateProjMatrix(float d);
-        static Matrix4 CreateOrthographicProjectionMatrix(int width, int height, float near, float far);
-        static Matrix4 CreatePerspectiveProjectionMatrix(int width, int height, float near, float far, float fov);
+        static Matrix4 CreateOrthographicProjectionMatrix(float width, float height, float near, float far);
+        static Matrix4 CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov);
         static Matrix4 Identity();
         static Matrix4 Zero();
 

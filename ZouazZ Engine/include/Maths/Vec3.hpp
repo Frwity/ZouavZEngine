@@ -13,6 +13,15 @@ class Vec3
         Vec3(const Vec3& v);
         ~Vec3() = default;
 
+        static Vec3 Zero();
+        static Vec3 One();
+        static Vec3 Forward();
+        static Vec3 Backward();
+        static Vec3 Right();
+        static Vec3 Left();
+        static Vec3 Up();
+        static Vec3 Down();
+
         float GetMagnitude() const;
         float GetSquaredMagnitude() const;
         Vec3 Normalized() const;

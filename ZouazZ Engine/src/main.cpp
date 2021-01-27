@@ -11,7 +11,40 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include "System/Engine.hpp"
+
+void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    double cursorX, cursorY;
+    glfwGetCursorPos(window, &cursorX, &cursorY);
+    camera.UpdateRotation({ (float)cursorX, (float)cursorY });
+
+    bool sprint = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
+    float cameraSpeed = deltaTime * camera.Speed() + camera.Speed() * sprint * 0.2f;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        lookAt = !lookAt;
+}
 
 int main()
 {
@@ -30,14 +63,14 @@ int main()
 
    /* Shader shader("resources/shader.vs", "resources/shader.fs");
     shader.Use();
-    glUniform1i(glGetUniformLocation(shader.id, "textureSample"), 0);
+    glUniform1i(glGetUniformLocation(shader.id, "ourTexture"), 0);
 
-    Mesh mesh("resources/fantasy_game_inn.obj");
+    //Mesh mesh("resources/fanta/*sy_game_inn.obj");
+    //Texture texture("resources*//fantasy_game_inn_diffuse.png");
 
-    //Mesh mesh;
-    //mesh.CreateQuad();
+    Mesh mesh("resources/Skull.obj");
+    Texture texture("resources/skull.jpg");
 
-    Texture texture("resources/fantasy_game_inn_diffuse.png");
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -52,6 +85,8 @@ int main()
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
 
+    bool lookAt = false;
+
     while (glfwWindowShouldClose(render.window) == false)
     {
         float currentFrame = glfwGetTime();
@@ -60,25 +95,23 @@ int main()
 
         glfwPollEvents();
 
-        InputManager(render.window, camera, deltaTime);
+        InputManager(render.window, camera, deltaTime, lookAt);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        shader.Use();
         glActiveTexture(GL_TEXTURE0);
         texture.Use();
-        shader.Use();
 
-        shader.SetMatrix("view", camera.GetMatrix());
+        shader.SetMatrix("view", lookAt ? camera.GetLookAtMatrix(Vec3::Zero()) : camera.GetMatrix());
         shader.SetMatrix("projection", projection);
-        //shader.SetMatrix("projection", Matrix4::Identity());
         shader.SetMatrix("model", Matrix4::Identity());
 
         glBindVertexArray(mesh.GetID());
         glDrawElements(GL_TRIANGLES, mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
         
         glfwSwapBuffers(render.window);
-
     }
 
     /*ImGui_ImplGlfw_Shutdown();

@@ -24,7 +24,9 @@ Mesh::Mesh(const char* path)
 	//	aiProcess_FixInfacingNormals |
 	//	aiProcess_FindInvalidData |
 	//	aiProcess_ValidateDataStructure | 0);
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+	const aiScene* scene = importer.ReadFile(path,	aiProcess_Triangulate | 
+													aiProcess_FindInvalidData | 
+													aiProcess_ValidateDataStructure );
     if (!scene)
         std::cout << "Mesh load failed!: " << path << std::endl;
 
@@ -35,7 +37,7 @@ Mesh::Mesh(const char* path)
 	int test = scene->mNumMeshes;
 	for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 	{
-		vertices.push_back(Vertex{ Vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z),
+		vertices.push_back(Vertex{	Vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z),
 									mesh->HasNormals() ? Vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z) : Vec3(),
 									mesh->HasTextureCoords(0) ? Vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y) : Vec2()});
 
@@ -70,12 +72,12 @@ void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsig
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)3);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)6);
 }
 
 Mesh::~Mesh()
