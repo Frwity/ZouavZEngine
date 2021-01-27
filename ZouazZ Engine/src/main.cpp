@@ -12,7 +12,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-void InputManager(GLFWwindow* window, Camera& camera, float deltaTime)
+void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -21,17 +21,29 @@ void InputManager(GLFWwindow* window, Camera& camera, float deltaTime)
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
+    bool sprint = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
+    float cameraSpeed = deltaTime * camera.Speed() + camera.Speed() * sprint * 0.2f;
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, -deltaTime * 100 });
+        camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.MoveTo({ 0.0f, 0.0f, deltaTime * 100 });
+        camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.MoveTo({ deltaTime * 100, 0.0f, 0.0f });
+        camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.MoveTo({ -deltaTime * 100, 0.0f, 0.0f });
+        camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        lookAt = !lookAt;
 }
 
 int main()
@@ -73,6 +85,8 @@ int main()
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
 
+    bool lookAt = false;
+
     while (glfwWindowShouldClose(render.window) == false)
     {
         float currentFrame = glfwGetTime();
@@ -81,7 +95,7 @@ int main()
 
         glfwPollEvents();
 
-        InputManager(render.window, camera, deltaTime);
+        InputManager(render.window, camera, deltaTime, lookAt);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -90,16 +104,14 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         texture.Use();
 
-        shader.SetMatrix("view", camera.GetMatrix());
+        shader.SetMatrix("view", lookAt ? camera.GetLookAtMatrix(Vec3::Zero()) : camera.GetMatrix());
         shader.SetMatrix("projection", projection);
-        //shader.SetMatrix("projection", Matrix4::Identity());
         shader.SetMatrix("model", Matrix4::Identity());
 
         glBindVertexArray(mesh.GetID());
         glDrawElements(GL_TRIANGLES, mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
         
         glfwSwapBuffers(render.window);
-
     }
 
     ImGui_ImplGlfw_Shutdown();

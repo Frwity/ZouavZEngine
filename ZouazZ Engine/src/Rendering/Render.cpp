@@ -34,6 +34,8 @@ Render::Render(int _width, int _height)
         //TODO EXIT WITH ERROR
     }
 
+    glViewport(0, 0, width, height);
+
     //TODO PUT IN DEBUG
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
