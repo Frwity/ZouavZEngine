@@ -38,6 +38,9 @@ Render::Render(int _width, int _height)
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 }
 
 void Render::Draw()

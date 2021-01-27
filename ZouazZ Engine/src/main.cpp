@@ -51,14 +51,14 @@ int main()
 
     Shader shader("resources/shader.vs", "resources/shader.fs");
     shader.Use();
-    glUniform1i(glGetUniformLocation(shader.id, "textureSample"), 0);
+    glUniform1i(glGetUniformLocation(shader.id, "ourTexture"), 0);
 
-    Mesh mesh("resources/fantasy_game_inn.obj");
+    //Mesh mesh("resources/fanta/*sy_game_inn.obj");
+    //Texture texture("resources*//fantasy_game_inn_diffuse.png");
 
-    //Mesh mesh;
-    //mesh.CreateQuad();
+    Mesh mesh("resources/Skull.obj");
+    Texture texture("resources/skull.jpg");
 
-    Texture texture("resources/fantasy_game_inn_diffuse.png");
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -84,11 +84,11 @@ int main()
         InputManager(render.window, camera, deltaTime);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        shader.Use();
         glActiveTexture(GL_TEXTURE0);
         texture.Use();
-        shader.Use();
 
         shader.SetMatrix("view", camera.GetMatrix());
         shader.SetMatrix("projection", projection);
