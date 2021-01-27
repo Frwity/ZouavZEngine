@@ -17,49 +17,39 @@ Mesh::Mesh(const char* path)
 {
     Assimp::Importer importer;
 		
-	const aiScene* scene = importer.ReadFile(path, aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
-		aiProcess_CalcTangentSpace |
-		aiProcess_GenSmoothNormals |
-		aiProcess_Triangulate |
-		aiProcess_FixInfacingNormals |
-		aiProcess_FindInvalidData |
-		aiProcess_ValidateDataStructure | 0);
+	//const aiScene* scene = importer.ReadFile(path, aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
+	//	aiProcess_CalcTangentSpace |
+	//	aiProcess_GenSmoothNormals |
+	//	aiProcess_Triangulate |
+	//	aiProcess_FixInfacingNormals |
+	//	aiProcess_FindInvalidData |
+	//	aiProcess_ValidateDataStructure | 0);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
     if (!scene)
         std::cout << "Mesh load failed!: " << path << std::endl;
 
     std::vector<Vertex> vertices;
 	std::vector<int> indices;
 
-    const aiVector3D aiZeroVector(0.0f, 0.0f, 0.0f);
-
-
-	for (unsigned int m = 0; m < scene->mNumMeshes; ++m)
+	const aiMesh* mesh = scene->mMeshes[0];
+	int test = scene->mNumMeshes;
+	for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 	{
-		const aiMesh* mesh = scene->mMeshes[m];
-		for (unsigned int j = 0; j < mesh->mNumFaces; ++j) 
-		{
-			auto const& face = mesh->mFaces[j];
-			for (int k = 0; k < 3; ++k) 
-			{
-				auto const& vertex = mesh->mVertices[face.mIndices[k]];
-				auto const& normal = /*mesh->mNormals[face.mIndices[k]]*/ Vec3(0.0f, 0.0f, 0.0f);
-				auto const& uv = mesh->HasTextureCoords(0) ? /*Vec2(mesh->mTextureCoords[0][face.mIndices[k]].x, mesh->mTextureCoords[0][face.mIndices[k]].y)*/ Vec2(0.0f, 0.0f) : Vec2(0.0f, 0.0f);
+		vertices.push_back(Vertex{ Vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z),
+									mesh->HasNormals() ? Vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z) : Vec3(),
+									mesh->HasTextureCoords(0) ? Vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y) : Vec2()});
 
-				vertices.push_back(Vertex{	Vec3(vertex.x, vertex.y, vertex.z),
-											Vec3(normal.x, normal.y, normal.z),
-											uv });
-			}
-		}
-
-		for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			const aiFace& face = mesh->mFaces[i];
-			assert(face.mNumIndices == 3);
-			indices.push_back(face.mIndices[0]);
-			indices.push_back(face.mIndices[1]);
-			indices.push_back(face.mIndices[2]);
-		}
 	}
+
+ 	for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		const aiFace& face = mesh->mFaces[i];
+		assert(face.mNumIndices == 3);
+		indices.push_back(face.mIndices[0]);
+		indices.push_back(face.mIndices[1]);
+		indices.push_back(face.mIndices[2]);
+	}
+
 
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }

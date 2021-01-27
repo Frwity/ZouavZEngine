@@ -53,12 +53,12 @@ int main()
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.id, "textureSample"), 0);
 
-    Mesh mesh("resources/Skull.obj");
+    Mesh mesh("resources/fantasy_game_inn.obj");
 
     //Mesh mesh;
     //mesh.CreateQuad();
 
-    Texture texture("resources/skull.jpg");
+    Texture texture("resources/fantasy_game_inn_diffuse.png");
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);

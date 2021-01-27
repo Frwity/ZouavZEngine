@@ -187,7 +187,6 @@
     <ClInclude Include="include\System\Engine.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="external_lib\libs\assimp-vc142-mtd.dll" />
     <None Include="resources\shader.fs" />
     <None Include="resources\shader.vs" />
   </ItemGroup>
