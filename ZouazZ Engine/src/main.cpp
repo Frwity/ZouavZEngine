@@ -1,18 +1,7 @@
-#include "Rendering/Shader.hpp"
-#include "Rendering/Texture.hpp"
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include "Resource.hpp"
-#include "Rendering/Render.hpp"
-#include "Rendering/Mesh.hpp"
-#include "Rendering/Camera.hpp"
-#include <string>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
-void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
+#include "System/Engine.hpp"
+
+/*void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -44,7 +33,7 @@ void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& loo
 
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
         lookAt = !lookAt;
-}
+}*/
 
 int main()
 {
@@ -66,7 +55,7 @@ int main()
     glUniform1i(glGetUniformLocation(shader.id, "ourTexture"), 0);
 
     //Mesh mesh("resources/fanta/*sy_game_inn.obj");
-    //Texture texture("resources*//fantasy_game_inn_diffuse.png");
+    //Texture texture("resources*fantasy_game_inn_diffuse.png");
 
     Mesh mesh("resources/Skull.obj");
     Texture texture("resources/skull.jpg");

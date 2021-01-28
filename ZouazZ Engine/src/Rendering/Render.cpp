@@ -2,6 +2,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Rendering/Mesh.hpp"
 
 
 Render::Render(int _width, int _height)
@@ -85,17 +86,24 @@ void Render::Init(int _width, int _height)
 
 void Render::Update()
 {
-
+    glfwSwapBuffers(window);
 }
 
-void Render::Draw()
+bool Render::Stop()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    return glfwWindowShouldClose(window);
+}
 
-    //Render Scene
+void Render::Clear()
+{
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
-    glfwSwapBuffers(window);
+void Render::Draw(const Mesh& mesh)
+{
+    glBindVertexArray(mesh.GetID());
+    glDrawElements(GL_TRIANGLES, mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
 }
 
 void Render::Destroy()

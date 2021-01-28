@@ -11,7 +11,9 @@ public:
 	Render(int _width, int _height);
 	void Init(int _width, int _height);
 	void Update();
-	void Draw();
+	void Draw(const class Mesh& mesh);
+	bool Stop();
+	void Clear();
 	~Render() = default;
 
 	//Set int, float, ...

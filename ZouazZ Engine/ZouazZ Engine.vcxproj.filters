@@ -100,7 +100,7 @@
       <Filter>src\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine.cpp">
-      <Filter>src\System</Filter>
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

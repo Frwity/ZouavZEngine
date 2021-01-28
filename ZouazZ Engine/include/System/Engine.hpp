@@ -16,10 +16,10 @@ public:
 	Matrix4 projection;
 
 	//TEMP
-	Shader shader;
+	/*Shader shader;
 	Mesh mesh;
-	Texture texture;
-	float lastFrame;
+	Texture texture;*/
+	//float lastFrame;
 
 	Engine();
 	~Engine();
