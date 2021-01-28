@@ -15,7 +15,7 @@ private:
 public:
 
     MeshRenderer() = default;
-    MeshRenderer(Mesh* _mesh, Shader* _shader, Texture* _texture);
+    MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture);
 
     ~MeshRenderer() = default;
 

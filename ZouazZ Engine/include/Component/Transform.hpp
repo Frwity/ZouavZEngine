@@ -24,4 +24,6 @@ public:
     void AddChild(Transform* _child);
 
     Transform* GetParent() const { return parent; }
+
+    static Transform InitTransform();
 };

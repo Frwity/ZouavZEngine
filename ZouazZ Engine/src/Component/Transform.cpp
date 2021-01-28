@@ -16,3 +16,8 @@ void Transform::AddChild(Transform* _child)
 	children.emplace_back(_child);
 	_child->parent = this;
 }
+
+Transform Transform::InitTransform()
+{
+	return Transform({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+}

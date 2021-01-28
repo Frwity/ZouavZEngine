@@ -4,9 +4,9 @@ class Component
 {
 private:
 public:
-	class GameObject* gameObject{nullptr};
+	class GameObject* gameObject;
 
 	Component(class GameObject* _gameObject);
-	Component() = default;
+	Component() = delete;
 	virtual ~Component() = default;
 };

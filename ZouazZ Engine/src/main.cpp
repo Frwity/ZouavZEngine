@@ -13,6 +13,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+static Camera* MainCamera;
+
 void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -69,8 +71,11 @@ int main()
     std::unique_ptr<Mesh> innMesh = std::make_unique<Mesh>("resources/fantasy_game_inn.obj");
     std::unique_ptr<Texture> innTexture = std::make_unique<Texture>("resources/fantasy_game_inn_diffuse.png");
 
-    GameObject skull(Transform(), MeshRenderer(skullMesh.get(), shader.get(), skullTexture.get()));
-    GameObject inn(Transform(), MeshRenderer(innMesh.get(), shader.get(), innTexture.get()));
+    GameObject skull;
+    GameObject inn;
+    
+    skull.AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
+    inn.AddComponent<MeshRenderer>(innMesh.get(), shader.get(), innTexture.get());
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -79,7 +84,7 @@ int main()
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
     Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
-
+    MainCamera = &camera;
     
 
     float deltaTime = 0.0f;
@@ -102,8 +107,8 @@ int main()
 
         translation -= deltaTime;
 
-        skull.meshRenderer.Draw(Mat4::CreateTranslationMatrix({ -3.0f + sin(translation), 0.0f, cos(translation) }), camera);
-        inn.meshRenderer.Draw(Mat4::Identity(), camera);
+        skull.GetComponent<MeshRenderer>()->Draw(Mat4::CreateTranslationMatrix({ -3.0f + sin(translation), 0.0f, cos(translation) }), camera);
+        inn.GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), camera);
 
         glfwSwapBuffers(render.window);
     }

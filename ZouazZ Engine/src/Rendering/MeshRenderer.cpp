@@ -1,12 +1,12 @@
-#include "Rendering/MeshRenderer.hpp"
 #include "Rendering/Camera.hpp"
 #include "GameObject.hpp"
 #include "Maths/Mat4.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Rendering/MeshRenderer.hpp"
 
-MeshRenderer::MeshRenderer(Mesh* _mesh, Shader* _shader, Texture* _texture)
-	: Component(nullptr), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
+MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture)
+	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
 {}
 
 void MeshRenderer::Draw(const Mat4& _parent, const Camera& _camera)
