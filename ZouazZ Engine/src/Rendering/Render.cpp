@@ -82,6 +82,9 @@ void Render::Init(int _width, int _height)
     printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
     printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
     printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPos(window, (int)width / 2, (int)height / 2);
 }
 
 void Render::Update()
@@ -100,10 +103,10 @@ void Render::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Render::Draw(const Mesh& mesh)
+void Render::Draw(const Mesh& _mesh)
 {
-    glBindVertexArray(mesh.GetID());
-    glDrawElements(GL_TRIANGLES, mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(_mesh.GetID());
+    glDrawElements(GL_TRIANGLES, _mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
 }
 
 void Render::Destroy()
