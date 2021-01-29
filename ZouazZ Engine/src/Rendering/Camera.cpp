@@ -22,7 +22,7 @@ void Camera::MoveTo(const Vec3& direction)
 
 Mat4 Camera::GetMatrix() const
 {
-    return Mat4::CreateTRSMatrix(position, { pitch, yaw, 0 }, { 1, 1, 1 }).Reverse();
+    return Mat4::CreateTRSMatrix(position, { pitch, yaw, 0 }, { 1, 1, 1 });
 }
 
 Mat4 Camera::GetLookAtMatrix(const Vec3& target) const

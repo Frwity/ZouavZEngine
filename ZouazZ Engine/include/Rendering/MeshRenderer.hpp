@@ -9,10 +9,10 @@ class MeshRenderer : public Component
 {
 private:
     Mesh* mesh;
-    Shader* shader;
     Texture* texture;
 
 public:
+    Shader* shader;
 
     MeshRenderer() = default;
     MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture);

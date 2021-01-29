@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Maths/Mat4.hpp"
 #include "Maths/Vec3.hpp"
+#include "Maths/Vec2.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
@@ -119,7 +120,31 @@ void Shader::SetVector3(const std::string& name, float x, float y, float z) cons
     glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
 }
 
+void Shader::SetVector2(const std::string& name, const Vec2& v) const
+{
+    glUniform2f(glGetUniformLocation(id, name.c_str()), v.x, v.y);
+}
+
+
 void Shader::SetVector3(const std::string& name, const Vec3& v) const
 {
     glUniform3f(glGetUniformLocation(id, name.c_str()), v.x, v.y, v.z);
+}
+
+void Shader::SetLight(const std::vector<Light>& lights)
+{
+    int i = 0;
+    for (const Light& l : lights)
+    {
+        const std::string index = std::to_string(i++);
+        
+        SetVector3(("lights[" + index + "].position").c_str(), l.position);
+        SetVector3(("lights[" + index + "].ambient").c_str(), l.ambient);
+        SetVector3(("lights[" + index + "].diffuse").c_str(), l.diffuse);
+        SetVector3(("lights[" + index + "].specular").c_str(), l.specular);
+        SetVector3(("lights[" + index + "].direction").c_str(), l.direction);
+        SetVector3(("lights[" + index + "].ConstLineQuad").c_str(), l.constLineQuad);
+        SetVector2(("lights[" + index + "].cutOffOuterCutOff").c_str(), l.cutOffOuterCutOff);
+        SetInt(("lights[" + index + "].type").c_str(), (int)l.type);
+    }
 }

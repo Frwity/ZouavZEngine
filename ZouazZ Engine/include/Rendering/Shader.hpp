@@ -1,9 +1,12 @@
 #pragma once
 #include "Resource.hpp"
 #include <string>
+#include "Rendering/Light.hpp"
+#include <vector>
 
 class Mat4;
 class Vec3;
+class Vec2;
 
 class Shader: public Resource
 {
@@ -22,5 +25,7 @@ public:
 	void SetFloat(const std::string& name, float value) const;
 	void SetVector3(const std::string& name, float x, float y, float z) const;
 	void SetVector3(const std::string& name, const Vec3& v) const;
+	void SetVector2(const std::string& name, const Vec2& v) const;
 	void SetMatrix(const std::string& name, const Mat4& mat) const;
+	void SetLight(const std::vector<Light>& lights);
 };

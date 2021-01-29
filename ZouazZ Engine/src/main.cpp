@@ -12,6 +12,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include "Rendering/Light.hpp"
 
 static Camera* MainCamera;
 
@@ -85,7 +86,15 @@ int main()
 
     Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
     MainCamera = &camera;
-    
+
+    Light light(Vec3(0, 0, 0), Vec3(0.5, 0, 0), Vec3(0.5,0,0), Vec3(0,0,0), Vec3(1.0f,0.01f,0.001f), Vec3(0, -1, 0), Vec2(0.9f,0.8f), E_LIGHT_TYPE::Spot);
+    Light light2(Vec3(0.5, 0.5, 0.5), Vec3(0.5, 0.5, 0.5), Vec3(0.5, 0.5, 0.5), Vec3(0, 0, 0), Vec3(1.0f, 0.01f, 0.001f), Vec3(0, -1, 0), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
+    Light light3(Vec3(0, 0, 0), Vec3(0, 0.5, 0), Vec3(0, 0.5, 0), Vec3(-5, 0, 0), Vec3(1.0f, 0.01f, 0.001f), Vec3(0, -1, 0), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Point);
+    std::vector<Light> lights;
+
+    lights.push_back(light);
+    lights.push_back(light2);
+    lights.push_back(light3);
 
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
@@ -100,12 +109,16 @@ int main()
 
         glfwPollEvents();
 
+        
         InputManager(render.window, camera, deltaTime, lookAt);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         translation -= deltaTime;
+
+        skull.GetComponent<MeshRenderer>()->shader->SetLight(lights);
+        inn.GetComponent<MeshRenderer>()->shader->SetLight(lights);
 
         skull.GetComponent<MeshRenderer>()->Draw(Mat4::CreateTranslationMatrix({ -3.0f + sin(translation), 0.0f, cos(translation) }), camera);
         inn.GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), camera);
