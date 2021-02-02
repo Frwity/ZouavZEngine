@@ -14,6 +14,8 @@ private:
 	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix) const;
 
 public:
+	std::vector<class Light*> lights;
+
 	Scene();
 	~Scene() = default;
 

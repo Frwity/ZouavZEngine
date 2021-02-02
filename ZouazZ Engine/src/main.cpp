@@ -14,6 +14,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include "Rendering/Light.hpp"
 
 void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
@@ -78,6 +79,23 @@ int main()
     GameObject* skull2 = GameObject::CreateGameObject();
     skull2->SetParent(skull);
 
+    GameObject* light1 = GameObject::CreateGameObject();
+    GameObject* light2 = GameObject::CreateGameObject();
+    GameObject* light3 = GameObject::CreateGameObject();
+
+    light1->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
+    light2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
+    light3->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
+
+    light1->scale = { 0.2f, 0.2f, 0.2f };
+    light2->scale = { 0.2f, 0.2f, 0.2f };
+    light3->scale = { 0.2f, 0.2f, 0.2f };
+    light3->position = { -5.0f, 0.0f, 0.0f };
+
+    light1->AddComponent<Light>(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.5f, 0.0f, 0.0f), Vec3(0.5f, 0.0f, 0.0f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Spot);
+    light2->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
+    light3->AddComponent<Light>(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.5f, 0.0f), Vec3(0.0f, 0.5f, 0.0f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Point);
+
     inn->AddComponent<MeshRenderer>(innMesh, shader, innTexture);
     skull->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
     skull2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
@@ -91,6 +109,10 @@ int main()
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
     Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
+
+    scene.lights.push_back(light1->GetComponent<Light>());
+    scene.lights.push_back(light2->GetComponent<Light>());
+    scene.lights.push_back(light3->GetComponent<Light>());
 
     float deltaTime = 0.0f;
     float lastFrame = (float)glfwGetTime();

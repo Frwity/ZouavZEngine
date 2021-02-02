@@ -123,6 +123,9 @@
     <ClCompile Include="src\System\ResourcesManager.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Light.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -187,6 +190,18 @@
     </ClInclude>
     <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Light.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\PointLight.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\DirectionalLight.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\SpotLight.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

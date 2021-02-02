@@ -171,6 +171,7 @@
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
+    <ClCompile Include="src\Rendering\Light.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\MeshRenderer.cpp" />
     <ClCompile Include="src\Rendering\Render.cpp" />
@@ -192,10 +193,14 @@
     <ClInclude Include="include\Maths\Vec3.hpp" />
     <ClInclude Include="include\Maths\Vec4.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
+    <ClInclude Include="include\Rendering\DirectionalLight.hpp" />
+    <ClInclude Include="include\Rendering\Light.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
     <ClInclude Include="include\Rendering\MeshRenderer.hpp" />
+    <ClInclude Include="include\Rendering\PointLight.hpp" />
     <ClInclude Include="include\Rendering\Render.hpp" />
     <ClInclude Include="include\Rendering\Shader.hpp" />
+    <ClInclude Include="include\Rendering\SpotLight.hpp" />
     <ClInclude Include="include\Rendering\Texture.hpp" />
     <ClInclude Include="include\Resource.hpp" />
     <ClInclude Include="include\Scene.hpp" />
