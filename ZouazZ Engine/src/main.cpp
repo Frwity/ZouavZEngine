@@ -8,6 +8,7 @@
 #include "Rendering/MeshRenderer.hpp"
 #include "Component/Transform.hpp"
 #include "Scene.hpp"
+#include "System/ResourcesManager.hpp"
 #include "GameObject.hpp"
 #include <string>
 #include <imgui.h>
@@ -63,12 +64,11 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(render.window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-
-    std::unique_ptr<Shader> shader = std::make_unique<Shader>("resources/shader.vs", "resources/shader.fs");
-    std::unique_ptr<Mesh> skullMesh = std::make_unique<Mesh>("resources/Skull.obj");
-    std::unique_ptr<Texture> skullTexture = std::make_unique<Texture>("resources/skull.jpg");
-    std::unique_ptr<Mesh> innMesh = std::make_unique<Mesh>("resources/fantasy_game_inn.obj");
-    std::unique_ptr<Texture> innTexture = std::make_unique<Texture>("resources/fantasy_game_inn_diffuse.png");
+    Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("shader", "resources/shader.vs", "resources/shader.fs"));
+    Mesh* skullMesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
+    Mesh* innMesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Inn Mesh", "resources/fantasy_game_inn.obj"));
+    Texture* skullTexture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Texture", "resources/skull.jpg"));
+    Texture* innTexture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Inn Texture", "resources/fantasy_game_inn_diffuse.png"));
 
     Scene scene;
 
@@ -78,9 +78,9 @@ int main()
     GameObject* skull2 = GameObject::CreateGameObject();
     skull2->SetParent(skull);
 
-    inn->AddComponent<MeshRenderer>(innMesh.get(), shader.get(), innTexture.get());
-    skull->AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
-    skull2->AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
+    inn->AddComponent<MeshRenderer>(innMesh, shader, innTexture);
+    skull->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
+    skull2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
     
     skull2->position.x = -5;
 
@@ -93,13 +93,13 @@ int main()
     Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
 
     float deltaTime = 0.0f;
-    float lastFrame = glfwGetTime();
+    float lastFrame = (float)glfwGetTime();
 
     bool lookAt = false;
     float translation = 0.0f;
     while (glfwWindowShouldClose(render.window) == false)
     {
-        float currentFrame = glfwGetTime();
+        float currentFrame = (float)glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 

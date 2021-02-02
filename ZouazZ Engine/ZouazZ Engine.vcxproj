@@ -178,6 +178,7 @@
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
+    <ClCompile Include="src\System\ResourcesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="include\Scene.hpp" />
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
+    <ClInclude Include="include\System\ResourcesManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.fs" />

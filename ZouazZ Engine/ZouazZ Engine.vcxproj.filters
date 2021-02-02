@@ -120,6 +120,9 @@
     <ClCompile Include="src\System\GameObjectSystem.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\ResourcesManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -180,6 +183,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\System\GameObjectSystem.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>
