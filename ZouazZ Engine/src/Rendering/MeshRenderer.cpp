@@ -9,7 +9,7 @@ MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader
 	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
 {}
 
-void MeshRenderer::Draw(const Mat4& _parent, const Camera& _camera)
+void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 {
     shader->Use();
     glActiveTexture(GL_TEXTURE0);
@@ -17,9 +17,8 @@ void MeshRenderer::Draw(const Mat4& _parent, const Camera& _camera)
 
     shader->SetMatrix("view", _camera.GetMatrix());
     shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    shader->SetMatrix("model", _parent * Mat4::CreateTRSMatrix( gameObject->transform.position,
-                                                                gameObject->transform.rotation, 
-                                                                gameObject->transform.scale));
+    shader->SetMatrix("model", heritedMatrix * Mat4::CreateTRSMatrix(gameObject->position, gameObject->rotation, gameObject->scale));
+
     glBindVertexArray(mesh->GetID());
     glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 

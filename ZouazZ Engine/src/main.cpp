@@ -7,13 +7,12 @@
 #include "Rendering/Camera.hpp"
 #include "Rendering/MeshRenderer.hpp"
 #include "Component/Transform.hpp"
+#include "Scene.hpp"
 #include "GameObject.hpp"
 #include <string>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-static Camera* MainCamera;
 
 void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
@@ -71,11 +70,19 @@ int main()
     std::unique_ptr<Mesh> innMesh = std::make_unique<Mesh>("resources/fantasy_game_inn.obj");
     std::unique_ptr<Texture> innTexture = std::make_unique<Texture>("resources/fantasy_game_inn_diffuse.png");
 
-    GameObject skull;
-    GameObject inn;
+    Scene scene;
+
+    GameObject* inn = GameObject::CreateGameObject();
+    GameObject* skull = GameObject::CreateGameObject();
+    inn->AddChild(skull);
+    GameObject* skull2 = GameObject::CreateGameObject();
+    skull2->SetParent(skull);
+
+    inn->AddComponent<MeshRenderer>(innMesh.get(), shader.get(), innTexture.get());
+    skull->AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
+    skull2->AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
     
-    skull.AddComponent<MeshRenderer>(skullMesh.get(), shader.get(), skullTexture.get());
-    inn.AddComponent<MeshRenderer>(innMesh.get(), shader.get(), innTexture.get());
+    skull2->position.x = -5;
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -84,8 +91,6 @@ int main()
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
     Camera camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
-    MainCamera = &camera;
-    
 
     float deltaTime = 0.0f;
     float lastFrame = glfwGetTime();
@@ -107,8 +112,9 @@ int main()
 
         translation -= deltaTime;
 
-        skull.GetComponent<MeshRenderer>()->Draw(Mat4::CreateTranslationMatrix({ -3.0f + sin(translation), 0.0f, cos(translation) }), camera);
-        inn.GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), camera);
+		skull->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
+
+        scene.Draw();
 
         glfwSwapBuffers(render.window);
     }

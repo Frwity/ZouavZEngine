@@ -4,9 +4,14 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+Camera* Camera::mainCamera = nullptr;
+
 Camera::Camera(const Vec2& mouseStartPosition, int width, int height)
 	: mousePosition(mouseStartPosition), position(0.0f, 0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{30.0f}
 {
+    if (!mainCamera)
+        mainCamera = this;
+
     projection = Mat4::CreatePerspectiveProjectionMatrix(width, height, 0.01, 1000, 45); 
 }
 

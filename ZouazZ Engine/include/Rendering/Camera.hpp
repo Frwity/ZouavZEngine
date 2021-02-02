@@ -6,6 +6,8 @@
 
 class Camera
 {
+private:
+	static Camera* mainCamera;
 	Mat4 projection;
 	Vec2 mousePosition;
 	Vec3 position;
@@ -16,6 +18,10 @@ public:
 	Camera(const Vec2& mouseStartPosition, int width, int height);
 	Camera() = delete;
 	~Camera() = default;
+
+	static const Camera& GetMainCamera() { return *mainCamera; }
+
+	void SetMainCamera() { mainCamera = this; }
 
 	float Speed() const;
 

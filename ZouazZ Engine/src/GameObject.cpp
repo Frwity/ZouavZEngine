@@ -1,12 +1,14 @@
 #include "GameObject.hpp"
+#include "Scene.hpp"
+#include "System/GameObjectSystem.hpp"
 
-GameObject::GameObject()
-	: transform(Transform::InitTransform())
+GameObject* GameObject::CreateGameObject()
 {
-	transform.gameObject = this;
+	return GameObjectSystem::CreateGameObject();
 }
 
-void GameObject::AddChild(GameObject& _child) 
+GameObject::GameObject(GameObject* _parent)
+	: parent(_parent)
 {
-	transform.AddChild(&_child.transform);
-} 
+}
+

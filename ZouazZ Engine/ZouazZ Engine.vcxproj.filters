@@ -114,6 +114,12 @@
     <ClCompile Include="src\Component\Component.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\GameObjectSystem.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\MeshRenderer.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\GameObjectSystem.hpp">
+      <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
