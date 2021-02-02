@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Resource.hpp"
 #include <vector>
 #include "Maths/Vec3.hpp"

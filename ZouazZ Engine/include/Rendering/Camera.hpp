@@ -16,7 +16,7 @@ private:
 
 public:
 	Camera(const Vec2& mouseStartPosition, int width, int height);
-	Camera() = delete;
+	Camera() = default;
 	~Camera() = default;
 
 	static const Camera& GetMainCamera() { return *mainCamera; }

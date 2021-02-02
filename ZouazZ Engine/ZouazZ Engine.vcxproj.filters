@@ -126,6 +126,9 @@
     <ClCompile Include="src\Rendering\Light.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
