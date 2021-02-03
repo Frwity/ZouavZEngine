@@ -205,6 +205,7 @@
     <ClInclude Include="include\Rendering\Texture.hpp" />
     <ClInclude Include="include\Resource.hpp" />
     <ClInclude Include="include\Scene.hpp" />
+    <ClInclude Include="include\System\Editor.hpp" />
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />

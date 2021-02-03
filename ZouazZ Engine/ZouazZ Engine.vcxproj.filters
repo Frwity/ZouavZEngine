@@ -206,6 +206,9 @@
     <ClInclude Include="include\Rendering\SpotLight.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\System\Editor.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.vs">
