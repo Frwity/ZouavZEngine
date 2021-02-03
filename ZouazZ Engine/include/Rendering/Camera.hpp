@@ -11,8 +11,8 @@ private:
 	Mat4 projection;
 	Vec2 mousePosition;
 	Vec3 position;
-	float pitch, yaw;
-	float speed;
+	float pitch, yaw{ 0.0f };
+	float speed{ 0.0f };
 
 public:
 	Camera(const Vec2& mouseStartPosition, int width, int height);

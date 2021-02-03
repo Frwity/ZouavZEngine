@@ -182,7 +182,9 @@
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
+    <ClCompile Include="src\System\InputManager.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
+    <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -212,8 +214,10 @@
     <ClInclude Include="include\Scene.hpp" />
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
+    <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
+    <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.fs" />
