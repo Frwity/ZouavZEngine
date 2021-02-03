@@ -161,9 +161,11 @@
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
+    <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Maths\Matrix.cpp" />
@@ -181,12 +183,15 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
+    <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
     <ClInclude Include="include\Component\Component.hpp" />
+    <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
+    <ClInclude Include="include\Game\Player.hpp" />
     <ClInclude Include="include\Maths\Mat4.hpp" />
     <ClInclude Include="include\Maths\Matrix.hpp" />
     <ClInclude Include="include\Maths\Quaternion.hpp" />
@@ -208,6 +213,7 @@
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
+    <ClInclude Include="include\System\ScriptSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.fs" />

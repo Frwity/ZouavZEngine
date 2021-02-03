@@ -6,7 +6,9 @@
 #include "Rendering/Texture.hpp"
 #include "Rendering/MeshRenderer.hpp"
 #include "Rendering/Light.hpp"
+#include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include "Game/Player.hpp"
 
 void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
@@ -109,6 +111,8 @@ void Engine::Load()
     skull->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
     skull2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
 
+    skull->AddComponent<Player>();
+
     skull2->position.x = -5;
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -129,6 +133,7 @@ void Engine::Update()
 
     bool lookAt = false;
     float translation = 0.0f;
+    ScriptSystem::Begin();
 
     while (!render.Stop())
     {
@@ -146,6 +151,9 @@ void Engine::Update()
         translation -= deltaTime;
 
         scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
+
+        ScriptSystem::FixedUpdate();
+        ScriptSystem::Update();
 
         scene.Draw();
 
