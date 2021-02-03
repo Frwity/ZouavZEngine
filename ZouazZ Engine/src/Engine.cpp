@@ -6,39 +6,41 @@
 #include "Rendering/Texture.hpp"
 #include "Rendering/MeshRenderer.hpp"
 #include "Rendering/Light.hpp"
+#include "System/TimeManager.hpp"
+#include "System/InputManager.hpp"
 #include "System/Engine.hpp"
 
-void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
+void InputManager(GLFWwindow* window, Camera& camera, bool& lookAt)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::ESCAPE))
         glfwSetWindowShouldClose(window, true);
 
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
-    bool sprint = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
-    float cameraSpeed = deltaTime * camera.Speed() + camera.Speed() * sprint * 0.2f;
+    bool sprint = InputManager::GetState(E_KEYS::LCTRL);
+    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::S))
         camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::D))
         camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::A))
         camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::SPACEBAR))
         camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+    if (InputManager::GetState(E_KEYS::L))
         lookAt = !lookAt;
 }
 
@@ -47,6 +49,7 @@ Engine::Engine()
 {
 	render.Init(1400, 900);
 
+    InputManager::SetWindow(render.window);
 
     //IMGUI_CHECKVERSION();
     //ImGui::CreateContext();
@@ -124,26 +127,21 @@ void Engine::Load()
 
 void Engine::Update()
 {
-    float deltaTime = 0.0f;
-    float lastFrame = (float)glfwGetTime();
-
     bool lookAt = false;
     float translation = 0.0f;
 
     while (!render.Stop())
     {
-        float currentFrame = (float)glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        TimeManager::Update();
 
         glfwPollEvents();
 
-        InputManager(render.window, camera, deltaTime, lookAt);
+        InputManager(render.window, camera, lookAt);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        translation -= deltaTime;
+        translation -= TimeManager::GetDeltaTime();
 
         scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
 

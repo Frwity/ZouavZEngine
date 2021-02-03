@@ -129,6 +129,12 @@
     <ClCompile Include="src\Engine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\TimeManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\InputManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -205,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\SpotLight.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\InputManager.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\TimeManager.hpp">
+      <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
