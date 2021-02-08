@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unordered_map>
+#include <utility>
+
 enum class E_KEYS
 {
 	SPACEBAR = 32,
@@ -64,16 +67,40 @@ enum class E_KEYS
 	RSHIFT = 344,
 };
 
+enum class E_MOUSE_BUTTON
+{
+	BUTTON_LEFT,
+	BUTTON_RIGHT,
+	BUTTON_MIDDLE,
+	BUTTON_4,
+	BUTTON_5,
+	NUMBER_OF_BUTTONS
+};
+
 class InputManager
 {
 private:
 	static struct GLFWwindow* window;
-	
+
+	static std::unordered_map<E_MOUSE_BUTTON, std::pair<bool, bool>> mouseButtonsState;
+
 	InputManager() = delete;
 	~InputManager() = delete;
 
 public:
-	static bool GetState(E_KEYS _key);
+	static void InitMouseButtons();
+
+	static void UpdateMouseButtons();
+
+	static bool GetKeyState(E_KEYS _key);
+
+	static bool GetMouseButtonPressed(E_MOUSE_BUTTON _button);
+
+	static bool GetMouseButtonPressedOneTime(E_MOUSE_BUTTON _button);
+
+	static bool GetMouseButtonReleased(E_MOUSE_BUTTON _button);
+
+	static bool GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button);
 
 	static void SetWindow(struct GLFWwindow* _window);
 };

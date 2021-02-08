@@ -12,38 +12,45 @@
 #include "System/Engine.hpp"
 #include "Game/Player.hpp"
 
-void InputManager(GLFWwindow* window, Camera& camera, bool& lookAt)
+void InputManager(GLFWwindow* window, Camera& camera)
 {
-    if (InputManager::GetState(E_KEYS::ESCAPE))
+    InputManager::UpdateMouseButtons();
+
+    if (InputManager::GetKeyState(E_KEYS::ESCAPE))
         glfwSetWindowShouldClose(window, true);
 
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
-    bool sprint = InputManager::GetState(E_KEYS::LCTRL);
+    bool sprint = InputManager::GetKeyState(E_KEYS::LCTRL);
     float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
 
-    if (InputManager::GetState(E_KEYS::W))
+    if (InputManager::GetKeyState(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
-    if (InputManager::GetState(E_KEYS::S))
+    if (InputManager::GetKeyState(E_KEYS::S))
         camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
-    if (InputManager::GetState(E_KEYS::D))
+    if (InputManager::GetKeyState(E_KEYS::D))
         camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetState(E_KEYS::A))
+    if (InputManager::GetKeyState(E_KEYS::A))
         camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetState(E_KEYS::SPACEBAR))
+    if (InputManager::GetKeyState(E_KEYS::SPACEBAR))
         camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
 
-    if (InputManager::GetState(E_KEYS::LSHIFT))
+    if (InputManager::GetKeyState(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
 
-    if (InputManager::GetState(E_KEYS::L))
-        lookAt = !lookAt;
+    for (int i = 0; i < static_cast<int>(E_MOUSE_BUTTON::NUMBER_OF_BUTTONS); i++)
+    {
+        if (InputManager::GetMouseButtonPressedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
+            std::cout << static_cast<int>(i) << " pressed" << std::endl;
+        if (InputManager::GetMouseButtonReleasedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
+            std::cout << static_cast<int>(i) << " released" << std::endl;
+    }
 }
 
 
@@ -131,7 +138,6 @@ void Engine::Load()
 
 void Engine::Update()
 {
-    bool lookAt = false;
     float translation = 0.0f;
     ScriptSystem::Begin();
 
@@ -141,7 +147,7 @@ void Engine::Update()
 
         glfwPollEvents();
 
-        InputManager(render.window, camera, lookAt);
+        InputManager(render.window, camera);
 
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
