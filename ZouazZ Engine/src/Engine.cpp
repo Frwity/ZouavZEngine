@@ -59,6 +59,7 @@ Engine::Engine()
 	render.Init(1400, 900);
 
     InputManager::SetWindow(render.window);
+    InputManager::InitMouseButtons();
 
     //IMGUI_CHECKVERSION();
     //ImGui::CreateContext();

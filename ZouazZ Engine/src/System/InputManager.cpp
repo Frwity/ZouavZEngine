@@ -1,6 +1,8 @@
 #include "System/InputManager.hpp"
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+
 GLFWwindow* InputManager::window = nullptr;
 
 std::unordered_map<E_MOUSE_BUTTON, std::pair<bool, bool>> InputManager::mouseButtonsState;
@@ -9,6 +11,11 @@ void InputManager::InitMouseButtons()
 {
 	for (int i = 0; i < static_cast<int>(E_MOUSE_BUTTON::NUMBER_OF_BUTTONS); i++)
 		mouseButtonsState.emplace(static_cast<E_MOUSE_BUTTON>(i), std::make_pair(false, false));
+}
+
+void InputManager::MouseButtonCallback(GLFWwindow* _window, int _button, int _action, int _mods)
+{
+
 }
 
 void InputManager::UpdateMouseButtons()
@@ -49,5 +56,9 @@ bool InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button)
 
 void InputManager::SetWindow(GLFWwindow* _window)
 {
+	if (window)
+		glfwSetMouseButtonCallback(window, nullptr);
+
 	window = _window;
+	glfwSetMouseButtonCallback(window, InputManager::MouseButtonCallback);
 }

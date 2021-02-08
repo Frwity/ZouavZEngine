@@ -87,6 +87,8 @@ private:
 	InputManager() = delete;
 	~InputManager() = delete;
 
+	static void MouseButtonCallback(struct GLFWwindow* _window, int _button, int _action, int _mods);
+
 public:
 	static void InitMouseButtons();
 
