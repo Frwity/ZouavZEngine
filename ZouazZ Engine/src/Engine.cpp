@@ -50,21 +50,6 @@ void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& loo
 Engine::Engine()
 {
 	render.Init(1400, 900);
-
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    ImGui::StyleColorsDark();
-
-    ImGuiStyle& style = ImGui::GetStyle();
-
-    ImGui_ImplGlfw_InitForOpenGL(render.window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
     //TEMP
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -75,9 +60,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    ImGui_ImplGlfw_Shutdown();
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui::DestroyContext();
 	render.Destroy();
 }
 
@@ -137,7 +119,6 @@ void Engine::Update()
     float translation = 0.0f;
 
     bool show = false;
-    ImGuiIO& io = ImGui::GetIO();
     while (!render.Stop())
     {
         float currentFrame = (float)glfwGetTime();
@@ -146,65 +127,18 @@ void Engine::Update()
 
         glfwPollEvents();
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        editor.NewFrame();
 
         InputManager(render.window, camera, deltaTime, lookAt);
 
-        //ImGui::ShowDemoWindow(&show);
-
-        ImGuiViewport* main_viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(ImVec2(0, .0), ImGuiCond_FirstUseEver);
-        //Main editor window
-        ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
-        ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                ImGui::MenuItem("Open", NULL);
-                ImGui::MenuItem("Save", NULL);
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Edit"))
-            {
-                ImGui::MenuItem("XXXX", NULL);
-                ImGui::MenuItem("YYYY", NULL);
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
-        ImGui::End();
-
-        ImGui::Begin("test", NULL, ImGuiWindowFlags_NoCollapse);
-        ImGui::Text("JE TEST");
-        if (ImGui::IsWindowFocused())
-        {
-            std::cout << "Window focus" << std::endl;
-        }
-        ImGui::End();
-
-        ImGui::Render();
+        editor.DisplayMainWindow();
         
         render.Clear();
         translation -= deltaTime;
 
         scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
 
-        //scene.Draw();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-        
-        glfwSwapBuffers(render.window);
+        editor.Update();
+        render.Update();
     }
 }

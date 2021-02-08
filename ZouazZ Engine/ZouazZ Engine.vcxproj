@@ -179,6 +179,7 @@
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\System\Editor.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
   </ItemGroup>
