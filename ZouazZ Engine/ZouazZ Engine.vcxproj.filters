@@ -230,7 +230,6 @@
     <ClInclude Include="include\Rendering\SpotLight.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="include\System\InputManager.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
@@ -246,11 +245,9 @@
     <ClInclude Include="include\Game\Player.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
-=======
     <ClInclude Include="include\System\Editor.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
->>>>>>> origin/Editor
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.vs">
