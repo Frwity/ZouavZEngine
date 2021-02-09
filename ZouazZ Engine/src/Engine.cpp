@@ -47,14 +47,6 @@ void InputManager(GLFWwindow* window, Camera& camera)
 
     if (InputManager::GetKeyState(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-
-    for (int i = 0; i < static_cast<int>(E_MOUSE_BUTTON::NUMBER_OF_BUTTONS); i++)
-    {
-        if (InputManager::GetMouseButtonPressedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
-            std::cout << static_cast<int>(i) << " pressed" << std::endl;
-        if (InputManager::GetMouseButtonReleasedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
-            std::cout << static_cast<int>(i) << " released" << std::endl;
-    }
 }
 
 

@@ -4,6 +4,14 @@
 #include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <direct.h>
+#include <fstream>
+#include <iostream>
+
+bool newFolderWindow = false;
+char folderName[256] = "New Folder";
+bool newFileWindow = false;
+char fileName[256] = "New File";
 
 Editor::Editor()
 {
@@ -20,7 +28,7 @@ void Editor::NewFrame()
 void Editor::DisplayMainWindow()
 {
     ImGuiViewport* main_viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(ImVec2(0, .0), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiCond_FirstUseEver);
     //Main editor window
     ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
@@ -34,6 +42,8 @@ void Editor::DisplayMenuBar()
     {
         if (ImGui::BeginMenu("File"))
         {
+            ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
+            ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("Open", NULL);
             ImGui::MenuItem("Save", NULL);
             ImGui::EndMenu();
@@ -47,6 +57,45 @@ void Editor::DisplayMenuBar()
         }
     }
     ImGui::EndMenuBar();
+
+    if (newFolderWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
+        ImGui::InputText("Folder Name", folderName, 256);
+
+        if (ImGui::Button("Create"))
+        {
+            if (_mkdir(folderName) == 0)
+                std::cout << "Folder " << folderName << " created" << std::endl;
+            else
+                std::cout << "Folder " << folderName << " not created" << std::endl;
+            newFolderWindow = !newFolderWindow;
+        }
+        ImGui::End();
+    }
+
+    if (newFileWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New File", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
+        ImGui::InputText("File Name", fileName, 256);
+
+        if (ImGui::Button("Create"))
+        {
+            if (std::fstream(fileName))
+                std::cout << "File " << fileName << " not created" << std::endl;
+            else
+                if (std::ofstream(fileName))
+                    std::cout << "File " << fileName << " created" << std::endl;
+            newFileWindow = !newFileWindow;
+        }
+        ImGui::End();
+    }
 }
 
 void Editor::FileMenu()
