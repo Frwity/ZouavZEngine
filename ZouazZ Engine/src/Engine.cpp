@@ -1,3 +1,6 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "System/ResourcesManager.hpp"
@@ -11,6 +14,7 @@
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
 #include "Game/Player.hpp"
+#include <iostream>
 
 void InputManager(GLFWwindow* window, Camera& camera)
 {
@@ -60,18 +64,7 @@ Engine::Engine()
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
-
-    //IMGUI_CHECKVERSION();
-    //ImGui::CreateContext();
-    //ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       
-    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           
-    //ImGui::StyleColorsDark();
-
-    //ImGui_ImplGlfw_InitForOpenGL(render.window, true);
-    //ImGui_ImplOpenGL3_Init("#version 330");
-
+    
     //TEMP
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -82,9 +75,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    /*ImGui_ImplGlfw_Shutdown();
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui::DestroyContext();*/
 	render.Destroy();
 }
 
@@ -126,7 +116,7 @@ void Engine::Load()
 
     skull2->position.x = -5;
 
-    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
 
     double startCursorX, startCursorY;
@@ -142,6 +132,7 @@ void Engine::Update()
     float translation = 0.0f;
     ScriptSystem::Begin();
 
+    bool show = false;
     while (!render.Stop())
     {
         TimeManager::Update();
@@ -149,19 +140,20 @@ void Engine::Update()
         glfwPollEvents();
 
         InputManager(render.window, camera);
-
-        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        editor.NewFrame();
 
         translation -= TimeManager::GetDeltaTime();
+
+        editor.DisplayMainWindow();
+        
+        render.Clear();
 
         scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
 
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
-        scene.Draw();
-
-        glfwSwapBuffers(render.window);
+        editor.Update();
+        render.Update();
     }
 }
