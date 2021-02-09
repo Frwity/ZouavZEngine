@@ -7,11 +7,13 @@
 #include <direct.h>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
 bool newFileWindow = false;
 char fileName[256] = "New File";
+std::string actualFolder = ".";
 
 Editor::Editor()
 {
@@ -34,6 +36,23 @@ void Editor::DisplayMainWindow()
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
     DisplayMenuBar();
     ImGui::End();
+}
+
+void ListActualFolder()
+{
+    if (ImGui::Button("../"))
+        actualFolder.append("/../");
+
+    for (const auto& entry : std::filesystem::directory_iterator(actualFolder))
+    {
+        if (entry.is_directory())
+        {
+            if (ImGui::Button(entry.path().string().c_str()))
+                actualFolder = entry.path().string();
+        }
+        else
+            ImGui::Text(entry.path().string().c_str());
+    }
 }
 
 void Editor::DisplayMenuBar()
@@ -64,11 +83,13 @@ void Editor::DisplayMenuBar()
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
         ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
+        ListActualFolder();
+
         ImGui::InputText("Folder Name", folderName, 256);
 
         if (ImGui::Button("Create"))
         {
-            if (_mkdir(folderName) == 0)
+            if (_mkdir(std::string(actualFolder).append("/").append(folderName).c_str()) == 0)
                 std::cout << "Folder " << folderName << " created" << std::endl;
             else
                 std::cout << "Folder " << folderName << " not created" << std::endl;
@@ -83,15 +104,19 @@ void Editor::DisplayMenuBar()
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
         ImGui::Begin("New File", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
+        ListActualFolder();
+
         ImGui::InputText("File Name", fileName, 256);
 
         if (ImGui::Button("Create"))
         {
-            if (std::fstream(fileName))
+            if (std::fstream(std::string(actualFolder).append("/").append(fileName).c_str()))
                 std::cout << "File " << fileName << " not created" << std::endl;
             else
-                if (std::ofstream(fileName))
+                if (std::ofstream(std::string(actualFolder).append("/").append(fileName).c_str()))
                     std::cout << "File " << fileName << " created" << std::endl;
+                else
+                    std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
             newFileWindow = !newFileWindow;
         }
         ImGui::End();
