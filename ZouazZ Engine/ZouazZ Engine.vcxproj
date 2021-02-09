@@ -172,6 +172,7 @@
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
+    <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Light.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\MeshRenderer.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="include\Maths\Vec4.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\DirectionalLight.hpp" />
+    <ClInclude Include="include\Rendering\Framebuffer.hpp" />
     <ClInclude Include="include\Rendering\Light.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
     <ClInclude Include="include\Rendering\MeshRenderer.hpp" />

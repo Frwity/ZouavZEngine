@@ -11,6 +11,7 @@
 #include "Rendering/Light.hpp"
 #include "System/Engine.hpp"
 #include <iostream>
+#include "Rendering/Framebuffer.hpp"
 
 void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
 {
@@ -118,6 +119,8 @@ void Engine::Update()
     bool lookAt = false;
     float translation = 0.0f;
 
+    Framebuffer frameBuffer;
+
     bool show = false;
     while (!render.Stop())
     {
@@ -132,11 +135,34 @@ void Engine::Update()
         InputManager(render.window, camera, deltaTime, lookAt);
 
         editor.DisplayMainWindow();
-        
-        render.Clear();
-        translation -= deltaTime;
 
+        if (ImGui::Begin("test"))
+        {
+            ImGui::Image((ImTextureID)(size_t)frameBuffer.finalTexture, ImVec2(400, 400), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::End();
+        }
+
+        glViewport(0, 0, (int)render.width, (int)render.height);
+        render.Clear();
+
+        int viewport[4];
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        translation -= deltaTime;
+        render.Clear();
+
+        glViewport(0, 0, render.width, render.height);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.fbo);
         scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
+
+        scene.Draw();
+
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer.fbo);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glBlitFramebuffer(0, 0, render.width, render.height,
+            viewport[0], viewport[1], viewport[2], viewport[3],
+            GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
         editor.Update();
         render.Update();

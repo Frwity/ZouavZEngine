@@ -132,6 +132,9 @@
     <ClCompile Include="src\System\Editor.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Framebuffer.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="include\System\Editor.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Framebuffer.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -71,6 +71,7 @@ void Editor::Update()
 void Editor::DisplaySceneWindow()
 {
     //TODO display scene window
+
 }
 
 void Editor::AddWindow(std::string windowName)
