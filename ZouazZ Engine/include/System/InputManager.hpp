@@ -67,6 +67,7 @@ enum class E_KEYS
 	RSHIFT = 344,
 };
 
+ 
 enum class E_MOUSE_BUTTON
 {
 	BUTTON_LEFT,
@@ -83,18 +84,29 @@ private:
 	static struct GLFWwindow* window;
 
 	static std::unordered_map<E_MOUSE_BUTTON, std::pair<bool, bool>> mouseButtonsState;
+	static std::unordered_map<E_KEYS, std::pair<bool, bool>> keysState;
 
+	static std::initializer_list<E_KEYS> allKeys;
+	
 	InputManager() = delete;
 	~InputManager() = delete;
-
-	static void MouseButtonCallback(struct GLFWwindow* _window, int _button, int _action, int _mods);
 
 public:
 	static void InitMouseButtons();
 
+	static void InitKeys();
+
 	static void UpdateMouseButtons();
 
-	static bool GetKeyState(E_KEYS _key);
+	static void UpdateKeys();
+
+	static bool GetKeyPressed(E_KEYS _key);
+
+	static bool GetKeyPressedOneTime(E_KEYS _key);
+
+	static bool GetKeyReleased(E_KEYS _key);
+
+	static bool GetKeyReleasedOneTime(E_KEYS _key);
 
 	static bool GetMouseButtonPressed(E_MOUSE_BUTTON _button);
 

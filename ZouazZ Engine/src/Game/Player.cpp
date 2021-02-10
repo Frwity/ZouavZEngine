@@ -16,7 +16,7 @@ void Player::Begin()
 
 void Player::Update()
 {
-	if (InputManager::GetKeyState(E_KEYS::SPACEBAR))
+	if (InputManager::GetKeyPressedOneTime(E_KEYS::SPACEBAR))
 		life--;
 	if (life <= 0)
 		std::cout << "dead" << std::endl;

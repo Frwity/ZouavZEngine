@@ -15,42 +15,35 @@
 void InputManager(GLFWwindow* window, Camera& camera)
 {
     InputManager::UpdateMouseButtons();
+    InputManager::UpdateKeys();
 
-    if (InputManager::GetKeyState(E_KEYS::ESCAPE))
+    if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
         glfwSetWindowShouldClose(window, true);
 
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
-    bool sprint = InputManager::GetKeyState(E_KEYS::LCTRL);
+    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
     float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
 
-    if (InputManager::GetKeyState(E_KEYS::W))
+    if (InputManager::GetKeyPressed(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
-    if (InputManager::GetKeyState(E_KEYS::S))
+    if (InputManager::GetKeyPressed(E_KEYS::S))
         camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
-    if (InputManager::GetKeyState(E_KEYS::D))
+    if (InputManager::GetKeyPressed(E_KEYS::D))
         camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::A))
+    if (InputManager::GetKeyPressed(E_KEYS::A))
         camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::SPACEBAR))
+    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
         camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::LSHIFT))
+    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-
-    for (int i = 0; i < static_cast<int>(E_MOUSE_BUTTON::NUMBER_OF_BUTTONS); i++)
-    {
-        if (InputManager::GetMouseButtonPressedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
-            std::cout << static_cast<int>(i) << " pressed" << std::endl;
-        if (InputManager::GetMouseButtonReleasedOneTime(static_cast<E_MOUSE_BUTTON>(i)))
-            std::cout << static_cast<int>(i) << " released" << std::endl;
-    }
 }
 
 
