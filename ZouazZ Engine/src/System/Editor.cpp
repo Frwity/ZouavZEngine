@@ -13,6 +13,8 @@ bool newFolderWindow = false;
 char folderName[256] = "New Folder";
 bool newFileWindow = false;
 char fileName[256] = "New File";
+bool newClassWindow = false;
+char className[256] = "NewClass";
 std::string actualFolder = ".";
 
 Editor::Editor()
@@ -38,20 +40,154 @@ void Editor::DisplayMainWindow()
     ImGui::End();
 }
 
-void ListActualFolder()
+void ListActualFolder(bool& windowOpened)
 {
     if (ImGui::Button("../"))
         actualFolder.append("/../");
 
+    std::string currentName;
+
     for (const auto& entry : std::filesystem::directory_iterator(actualFolder))
     {
+        currentName = entry.path().string();
         if (entry.is_directory())
         {
-            if (ImGui::Button(entry.path().string().c_str()))
-                actualFolder = entry.path().string();
+            if (ImGui::Button(currentName.c_str()))
+                actualFolder = currentName;
+            ImGui::SameLine();
+            if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
+            {
+                if (_rmdir(currentName.c_str()) == 0)
+                {
+                    std::cout << currentName << " removed" << std::endl;
+                    windowOpened = !windowOpened;
+                }
+                else
+                    std::cout << currentName << " not removed" << std::endl;
+            }
         }
         else
-            ImGui::Text(entry.path().string().c_str());
+        {
+            ImGui::Text(currentName.c_str());
+            ImGui::SameLine();
+            if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
+            {
+                if (std::remove(currentName.c_str()))
+                {
+                    std::cout << currentName << " removed" << std::endl;
+                    windowOpened = !windowOpened;
+                }
+                else
+                    std::cout << currentName << " not removed" << std::endl;
+            }
+        }
+    }
+}
+
+void CreateNewClass(std::string className)
+{
+    std::ofstream hppFile(std::string("include/Game/").append(className).append(".hpp").c_str());
+    std::ofstream cppFile(std::string("src/Game/").append(className).append(".cpp").c_str());
+
+    if (hppFile && cppFile)
+    {
+        hppFile <<
+            "#pragma once\n"
+            "#include \"Component/ScriptComponent.hpp\"\n\n"
+            "class " << className << " : public ScriptComponent\n"
+            "{\n"
+            "   public:\n"
+            "        " << className << "() = delete;\n"
+            "        " << className << "(class GameObject* _gameobject);\n"
+            "        void Begin() final;\n"
+            "        void Update() final;\n"
+            "};\0";
+
+        cppFile <<
+            "#include \"Game/" << className << ".hpp\"\n"
+            "#include \"GameObject.hpp\"\n\n"
+
+            << className << "::" << className << "(GameObject * _gameobject)\n"
+            ": ScriptComponent(_gameobject)\n"
+            "{}\n\n"
+
+            "void " << className << "::Begin()\n"
+            "{}\n\n"
+
+            "void " << className << "::Update()\n"
+            "{}\0";
+    }
+}
+
+void NewFolderWindow()
+{
+    if (newFolderWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
+        ListActualFolder(newFolderWindow);
+
+        ImGui::InputText("Folder Name", folderName, 256);
+
+        if (ImGui::Button("Create"))
+        {
+            if (_mkdir(std::string(actualFolder).append("/").append(folderName).c_str()) == 0)
+            {
+                std::cout << "Folder " << folderName << " created" << std::endl;
+                newFolderWindow = !newFolderWindow;
+            }
+            else
+                std::cout << "Folder " << folderName << " not created" << std::endl;
+        }
+        ImGui::End();
+    }
+}
+
+void NewFileWindow()
+{
+    if (newFileWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New File", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
+        ListActualFolder(newFileWindow);
+
+        ImGui::InputText("File Name", fileName, 256);
+
+        if (ImGui::Button("Create"))
+        {
+            if (std::fstream(std::string(actualFolder).append("/").append(fileName).c_str()))
+                std::cout << "File " << fileName << " not created" << std::endl;
+            else
+                if (std::ofstream(std::string(actualFolder).append("/").append(fileName).c_str()))
+                {
+                    std::cout << "File " << fileName << " created" << std::endl;
+                    newFileWindow = !newFileWindow;
+                }
+                else
+                    std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
+        }
+        ImGui::End();
+    }
+}
+
+void NewClassWindow()
+{
+    if (newClassWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
+        ImGui::InputText("Class Name", className, 256);
+
+        if (ImGui::Button("Create"))
+            CreateNewClass(className);
+
+        ImGui::End();
     }
 }
 
@@ -63,6 +199,7 @@ void Editor::DisplayMenuBar()
         {
             ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
             ImGui::MenuItem("New File", nullptr, &newFileWindow);
+            ImGui::MenuItem("New Class", nullptr, &newClassWindow);
             ImGui::MenuItem("Open", NULL);
             ImGui::MenuItem("Save", NULL);
             ImGui::EndMenu();
@@ -77,50 +214,11 @@ void Editor::DisplayMenuBar()
     }
     ImGui::EndMenuBar();
 
-    if (newFolderWindow)
-    {
-        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+    NewFolderWindow();
 
-        ListActualFolder();
+    NewFileWindow();
 
-        ImGui::InputText("Folder Name", folderName, 256);
-
-        if (ImGui::Button("Create"))
-        {
-            if (_mkdir(std::string(actualFolder).append("/").append(folderName).c_str()) == 0)
-                std::cout << "Folder " << folderName << " created" << std::endl;
-            else
-                std::cout << "Folder " << folderName << " not created" << std::endl;
-            newFolderWindow = !newFolderWindow;
-        }
-        ImGui::End();
-    }
-
-    if (newFileWindow)
-    {
-        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New File", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
-
-        ListActualFolder();
-
-        ImGui::InputText("File Name", fileName, 256);
-
-        if (ImGui::Button("Create"))
-        {
-            if (std::fstream(std::string(actualFolder).append("/").append(fileName).c_str()))
-                std::cout << "File " << fileName << " not created" << std::endl;
-            else
-                if (std::ofstream(std::string(actualFolder).append("/").append(fileName).c_str()))
-                    std::cout << "File " << fileName << " created" << std::endl;
-                else
-                    std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
-            newFileWindow = !newFileWindow;
-        }
-        ImGui::End();
-    }
+    NewClassWindow();
 }
 
 void Editor::FileMenu()
