@@ -119,7 +119,14 @@ void Engine::Update()
     bool lookAt = false;
     float translation = 0.0f;
 
+    int previousFramebuffer;
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+
     Framebuffer frameBuffer;
+    frameBuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
+    
+    int sceneWidth, sceneHeight = 0;
 
     bool show = false;
     while (!render.Stop())
@@ -136,33 +143,32 @@ void Engine::Update()
 
         editor.DisplayMainWindow();
 
-        if (ImGui::Begin("test"))
+        if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
         {
-            ImGui::Image((ImTextureID)(size_t)frameBuffer.finalTexture, ImVec2(400, 400), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::End();
+        }
+        
+        if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+        {
+            ImVec2 windowSize = ImGui::GetWindowSize();
+
+            if ((int)windowSize.x != frameBuffer.getWidth() || (int)windowSize.y != frameBuffer.getHeight())
+                frameBuffer.Resize(windowSize.x, windowSize.y);
+
+            ImGui::Image((ImTextureID)frameBuffer.getTexture(), ImVec2(frameBuffer.getWidth(), frameBuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
             ImGui::End();
         }
 
-        glViewport(0, 0, (int)render.width, (int)render.height);
-        render.Clear();
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 
-        int viewport[4];
-        glGetIntegerv(GL_VIEWPORT, viewport);
-        translation -= deltaTime;
+        glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
         render.Clear();
-
-        glViewport(0, 0, render.width, render.height);
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.fbo);
-        scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
 
         scene.Draw();
 
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer.fbo);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, render.width, render.height,
-            viewport[0], viewport[1], viewport[2], viewport[3],
-            GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
+        glViewport(0, 0, (int)render.width, (int)render.height);
+        render.Clear();
 
         editor.Update();
         render.Update();
