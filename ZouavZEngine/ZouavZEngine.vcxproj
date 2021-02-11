@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6de1f192-28b5-450f-aa72-aa05b5ece380}</ProjectGuid>
-    <RootNamespace>ZouazZEngine</RootNamespace>
+    <ProjectGuid>{757D02D4-7DE8-4185-A73A-C57C99576071}</ProjectGuid>
+    <RootNamespace>ZouavZEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
