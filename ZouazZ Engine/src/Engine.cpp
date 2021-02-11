@@ -13,39 +13,41 @@
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include "Rendering/Framebuffer.hpp"
 #include "Game/Player.hpp"
 #include <iostream>
 
 void InputManager(GLFWwindow* window, Camera& camera)
 {
     InputManager::UpdateMouseButtons();
+    InputManager::UpdateKeys();
 
-    if (InputManager::GetKeyState(E_KEYS::ESCAPE))
+    if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
         glfwSetWindowShouldClose(window, true);
 
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
-    bool sprint = InputManager::GetKeyState(E_KEYS::LCTRL);
+    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
     float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
 
-    if (InputManager::GetKeyState(E_KEYS::W))
+    if (InputManager::GetKeyPressed(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
-    if (InputManager::GetKeyState(E_KEYS::S))
+    if (InputManager::GetKeyPressed(E_KEYS::S))
         camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
-    if (InputManager::GetKeyState(E_KEYS::D))
+    if (InputManager::GetKeyPressed(E_KEYS::D))
         camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::A))
+    if (InputManager::GetKeyPressed(E_KEYS::A))
         camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::SPACEBAR))
+    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
         camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
 
-    if (InputManager::GetKeyState(E_KEYS::LSHIFT))
+    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
 }
 
@@ -56,7 +58,7 @@ Engine::Engine()
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
-    
+
     //TEMP
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -124,27 +126,64 @@ void Engine::Update()
     float translation = 0.0f;
     ScriptSystem::Begin();
 
+    int previousFramebuffer;
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+
+    Framebuffer frameBuffer;
+    frameBuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
+    
+    int sceneWidth, sceneHeight = 0;
+
     bool show = false;
     while (!render.Stop())
     {
         TimeManager::Update();
 
-        glfwPollEvents();
+        {
+            glfwPollEvents();
 
-        InputManager(render.window, camera);
-        editor.NewFrame();
-
-        translation -= TimeManager::GetDeltaTime();
-
-        editor.DisplayMainWindow();
-        
-        render.Clear();
-
-        scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
+            InputManager(render.window, camera);
+        }
 
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
+        {
+            editor.NewFrame();
+
+            editor.DisplayMainWindow();
+
+            if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                ImGui::End();
+            }
+        
+            if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+            {
+                ImVec2 windowSize = ImGui::GetWindowSize();
+
+                if ((int)windowSize.x != frameBuffer.getWidth() || (int)windowSize.y != frameBuffer.getHeight())
+                    frameBuffer.Resize(windowSize.x, windowSize.y);
+
+                ImGui::Image((ImTextureID)frameBuffer.getTexture(), ImVec2(frameBuffer.getWidth(), frameBuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+                ImGui::End();
+            }
+
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
+
+            glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
+            render.Clear();
+        }
+
+        {
+            scene.Draw();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
+            glViewport(0, 0, (int)render.width, (int)render.height);
+            render.Clear();
+        }
+        
         editor.Update();
         render.Update();
     }
