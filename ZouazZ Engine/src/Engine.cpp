@@ -1,3 +1,6 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "System/ResourcesManager.hpp"
@@ -10,6 +13,8 @@
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include <iostream>
+#include "Rendering/Framebuffer.hpp"
 #include "Game/Player.hpp"
 
 void InputManager(GLFWwindow* window, Camera& camera)
@@ -54,17 +59,6 @@ Engine::Engine()
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
 
-    //IMGUI_CHECKVERSION();
-    //ImGui::CreateContext();
-    //ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       
-    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           
-    //ImGui::StyleColorsDark();
-
-    //ImGui_ImplGlfw_InitForOpenGL(render.window, true);
-    //ImGui_ImplOpenGL3_Init("#version 330");
-
     //TEMP
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -75,9 +69,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    /*ImGui_ImplGlfw_Shutdown();
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui::DestroyContext();*/
 	render.Destroy();
 }
 
@@ -119,7 +110,7 @@ void Engine::Load()
 
     skull2->position.x = -5;
 
-    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
 
     double startCursorX, startCursorY;
@@ -135,26 +126,59 @@ void Engine::Update()
     float translation = 0.0f;
     ScriptSystem::Begin();
 
+    int previousFramebuffer;
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+
+    Framebuffer frameBuffer;
+    frameBuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
+    
+    int sceneWidth, sceneHeight = 0;
+
+    bool show = false;
     while (!render.Stop())
     {
         TimeManager::Update();
 
         glfwPollEvents();
 
+        editor.NewFrame();
+
         InputManager(render.window, camera);
 
-        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        editor.DisplayMainWindow();
 
-        translation -= TimeManager::GetDeltaTime();
+        if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::End();
+        }
+        
+        if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+        {
+            ImVec2 windowSize = ImGui::GetWindowSize();
 
-        scene.GetWorld().GetChildren().at(1)->position = { -3.0f + sin(translation), 0.0f, cos(translation) };
+            if ((int)windowSize.x != frameBuffer.getWidth() || (int)windowSize.y != frameBuffer.getHeight())
+                frameBuffer.Resize(windowSize.x, windowSize.y);
+
+            ImGui::Image((ImTextureID)frameBuffer.getTexture(), ImVec2(frameBuffer.getWidth(), frameBuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::End();
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
+
+        glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
+        render.Clear();
 
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
         scene.Draw();
 
-        glfwSwapBuffers(render.window);
+        glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
+        glViewport(0, 0, (int)render.width, (int)render.height);
+        render.Clear();
+
+        editor.Update();
+        render.Update();
     }
 }

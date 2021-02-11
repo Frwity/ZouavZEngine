@@ -135,6 +135,12 @@
     <ClCompile Include="src\Engine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Editor.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Framebuffer.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="src\System\TimeManager.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
@@ -225,6 +231,12 @@
       <Filter>include\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\SpotLight.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Editor.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Framebuffer.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\System\InputManager.hpp">
