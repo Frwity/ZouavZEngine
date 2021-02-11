@@ -114,9 +114,6 @@
     <ClCompile Include="src\GameObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\MeshRenderer.cpp">
-      <Filter>src\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\Component.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -128,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="src\System\ResourcesManager.cpp">
       <Filter>src\System</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\Light.cpp">
-      <Filter>src\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine.cpp">
       <Filter>src</Filter>
@@ -155,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="src\Game\Player.cpp">
       <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Terrain.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Light.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\MeshRenderer.cpp">
+      <Filter>src\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +212,6 @@
     <ClInclude Include="include\Component\Component.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\MeshRenderer.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scene.hpp">
       <Filter>include</Filter>
     </ClInclude>
@@ -220,18 +220,6 @@
     </ClInclude>
     <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\Light.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\PointLight.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\DirectionalLight.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\SpotLight.hpp">
-      <Filter>include\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\System\Editor.hpp">
       <Filter>include\System</Filter>
@@ -253,6 +241,15 @@
     </ClInclude>
     <ClInclude Include="include\Game\Player.hpp">
       <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Terrain.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Light.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\MeshRenderer.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

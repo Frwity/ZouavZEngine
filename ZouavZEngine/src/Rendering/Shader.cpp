@@ -4,7 +4,7 @@
 #include "Maths/Mat4.hpp"
 #include "Maths/Vec3.hpp"
 #include "Maths/Vec2.hpp"
-#include "Rendering/Light.hpp"
+#include "Component/Light.hpp"
 #include "GameObject.hpp"
 #include "Rendering/Shader.hpp"
 

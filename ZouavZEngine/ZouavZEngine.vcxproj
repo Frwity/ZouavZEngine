@@ -161,6 +161,8 @@
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
+    <ClCompile Include="src\Component\Light.cpp" />
+    <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -175,9 +177,7 @@
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
-    <ClCompile Include="src\Rendering\Light.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
-    <ClCompile Include="src\Rendering\MeshRenderer.cpp" />
     <ClCompile Include="src\Rendering\Render.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
@@ -186,12 +186,15 @@
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\InputManager.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
+    <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
     <ClInclude Include="include\Component\Component.hpp" />
+    <ClInclude Include="include\Component\Light.hpp" />
+    <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
@@ -203,15 +206,10 @@
     <ClInclude Include="include\Maths\Vec3.hpp" />
     <ClInclude Include="include\Maths\Vec4.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
-    <ClInclude Include="include\Rendering\DirectionalLight.hpp" />
     <ClInclude Include="include\Rendering\Framebuffer.hpp" />
-    <ClInclude Include="include\Rendering\Light.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
-    <ClInclude Include="include\Rendering\MeshRenderer.hpp" />
-    <ClInclude Include="include\Rendering\PointLight.hpp" />
     <ClInclude Include="include\Rendering\Render.hpp" />
     <ClInclude Include="include\Rendering\Shader.hpp" />
-    <ClInclude Include="include\Rendering\SpotLight.hpp" />
     <ClInclude Include="include\Rendering\Texture.hpp" />
     <ClInclude Include="include\Resource.hpp" />
     <ClInclude Include="include\Scene.hpp" />
@@ -221,6 +219,7 @@
     <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
+    <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 #include "GameObject.hpp"
 #include "Component/Transform.hpp"
-#include "Rendering/MeshRenderer.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "Rendering/Camera.hpp"
-#include "Rendering/Light.hpp"
+#include "Component/Light.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 
