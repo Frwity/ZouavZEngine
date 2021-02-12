@@ -146,32 +146,28 @@ void Engine::Update()
             InputManager(render.window, camera);
         }
 
+        editor.NewFrame();
+
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
         {
-            ImGui::End();
+            editor.DisplayMainWindow();
         }
 
         editor.DisplaySceneWindow(render, frameBuffer);
-        
-        if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::End();
-        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 
         glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
         render.Clear();
+       
+        scene.Draw();
 
-        {
-            scene.Draw();
-
-            glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
-            glViewport(0, 0, (int)render.width, (int)render.height);
-            render.Clear();
-        }
+        glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
+        glViewport(0, 0, (int)render.width, (int)render.height);
+        render.Clear();
+        
         
         editor.Update();
         render.Update();

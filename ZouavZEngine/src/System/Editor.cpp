@@ -8,6 +8,9 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "Rendering/Render.hpp"
+#include "Rendering/Framebuffer.hpp"
+#include "System/InputManager.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -240,10 +243,29 @@ void Editor::Update()
     }
 }
 
-void Editor::DisplaySceneWindow()
+void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     //TODO display scene window
+    if (ImGui::Begin("Scene"), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
+    {
+        if (ImGui::IsWindowFocused())
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+        //best place ?
+        if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
+        {
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            ImGui::SetWindowFocus("Main");
+        }
+
+        ImVec2 windowSize = ImGui::GetWindowSize();
+
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+            _framebuffer.Resize(windowSize.x, windowSize.y);
+
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
+        ImGui::End();
+    }
 }
 
 void Editor::AddWindow(std::string windowName)

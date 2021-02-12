@@ -150,9 +150,6 @@
     <ClCompile Include="src\Game\Player.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Terrain.cpp">
-      <Filter>src\System</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\Light.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -241,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="include\Game\Player.hpp">
       <Filter>include\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\System\Terrain.hpp">
-      <Filter>include\System</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\Light.hpp">
       <Filter>include\Component</Filter>

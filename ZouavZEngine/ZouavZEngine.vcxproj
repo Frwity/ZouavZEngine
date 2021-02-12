@@ -186,7 +186,6 @@
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\InputManager.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
-    <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
@@ -219,7 +218,6 @@
     <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
-    <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
