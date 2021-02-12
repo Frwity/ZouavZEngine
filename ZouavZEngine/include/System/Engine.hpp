@@ -10,7 +10,6 @@ class Engine
 private:
 	Render render;
 public:
-	float deltaTime = 0.0f;
 	Camera camera;
 	Scene scene;
 	Editor editor;

@@ -7,50 +7,58 @@
 #include "Rendering/Shader.hpp"
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Texture.hpp"
-#include "Rendering/MeshRenderer.hpp"
-#include "Rendering/Light.hpp"
+#include "Component/MeshRenderer.hpp"
+#include "Component/Light.hpp"
+#include "System/TimeManager.hpp"
+#include "System/InputManager.hpp"
+#include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
-#include <iostream>
 #include "Rendering/Framebuffer.hpp"
+#include "Game/Player.hpp"
+#include <iostream>
 
-void InputManager(GLFWwindow* window, Camera& camera, float deltaTime, bool& lookAt)
+void InputManager(GLFWwindow* window, Camera& camera)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    InputManager::UpdateMouseButtons();
+    InputManager::UpdateKeys();
+
+    if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
         glfwSetWindowShouldClose(window, true);
 
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
-    bool sprint = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
-    float cameraSpeed = deltaTime * camera.Speed() + camera.Speed() * sprint * 0.2f;
+    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
+    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::S))
         camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
 
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::D))
         camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::A))
         camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
         camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        lookAt = !lookAt;
 }
 
 
 Engine::Engine()
 {
 	render.Init(1400, 900);
+
+    InputManager::SetWindow(render.window);
+    InputManager::InitMouseButtons();
+
     //TEMP
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -98,6 +106,8 @@ void Engine::Load()
     skull->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
     skull2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
 
+    skull->AddComponent<Player>();
+
     skull2->position.x = -5;
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -113,11 +123,8 @@ void Engine::Load()
 
 void Engine::Update()
 {
-    float deltaTime = 0.0f;
-    float lastFrame = (float)glfwGetTime();
-
-    bool lookAt = false;
     float translation = 0.0f;
+    ScriptSystem::Begin();
 
     int previousFramebuffer;
 
@@ -131,53 +138,41 @@ void Engine::Update()
     bool show = false;
     while (!render.Stop())
     {
-        float currentFrame = (float)glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        TimeManager::Update();
 
-        glfwPollEvents();
+        {
+            glfwPollEvents();
 
-        editor.NewFrame();
+            InputManager(render.window, camera);
+        }
 
-        InputManager(render.window, camera, deltaTime, lookAt);
+        ScriptSystem::FixedUpdate();
+        ScriptSystem::Update();
 
-        editor.DisplayMainWindow();
-
-        if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
         {
             ImGui::End();
         }
 
         editor.DisplaySceneWindow(render, frameBuffer);
         
-        /*if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+        if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
         {
-            if (ImGui::IsWindowFocused())
-                glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            
-                //glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-            //ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-            ImVec2 windowSize = ImGui::GetWindowSize();
-
-            if ((int)windowSize.x != frameBuffer.getWidth() || (int)windowSize.y != frameBuffer.getHeight())
-                frameBuffer.Resize(windowSize.x, windowSize.y);
-
-            ImGui::Image((ImTextureID)frameBuffer.getTexture(), ImVec2(frameBuffer.getWidth(), frameBuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
             ImGui::End();
-        }*/
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 
         glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
         render.Clear();
 
-        scene.Draw();
+        {
+            scene.Draw();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
-        glViewport(0, 0, (int)render.width, (int)render.height);
-        render.Clear();
-
+            glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
+            glViewport(0, 0, (int)render.width, (int)render.height);
+            render.Clear();
+        }
+        
         editor.Update();
         render.Update();
     }

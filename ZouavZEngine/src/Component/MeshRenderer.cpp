@@ -3,7 +3,7 @@
 #include "Maths/Mat4.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Rendering/MeshRenderer.hpp"
+#include "Component/MeshRenderer.hpp"
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture)
 	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }

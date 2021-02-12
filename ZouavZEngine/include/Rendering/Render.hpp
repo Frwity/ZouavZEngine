@@ -4,8 +4,8 @@ class Render
 {
 private:
 public:
-	struct GLFWwindow* window;
-	int width, height;
+	struct GLFWwindow* window{ nullptr };
+	int width{ 0 }, height{ 0 };
 	
 	Render() {};
 	Render(int _width, int _height);
@@ -15,8 +15,6 @@ public:
 	bool Stop();
 	void Clear();
 	~Render() = default;
-
-	//Set int, float, ...
 
 	void Destroy();
 };

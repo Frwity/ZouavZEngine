@@ -37,6 +37,12 @@
     <Filter Include="src\Component">
       <UniqueIdentifier>{f332dd7c-ddc6-40ac-b480-219977366fad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Game">
+      <UniqueIdentifier>{28029a3a-93bd-4b6c-a650-3401fc0b04fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game">
+      <UniqueIdentifier>{71c51119-bac8-465c-99d0-7f0c2336721c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="external_lib\src\glad.c">
@@ -108,9 +114,6 @@
     <ClCompile Include="src\GameObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\MeshRenderer.cpp">
-      <Filter>src\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\Component.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -123,9 +126,6 @@
     <ClCompile Include="src\System\ResourcesManager.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Light.cpp">
-      <Filter>src\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -134,6 +134,30 @@
     </ClCompile>
     <ClCompile Include="src\Rendering\Framebuffer.cpp">
       <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\TimeManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\InputManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\ScriptComponent.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\ScriptSystem.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Player.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Terrain.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Light.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\MeshRenderer.cpp">
+      <Filter>src\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +212,6 @@
     <ClInclude Include="include\Component\Component.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\MeshRenderer.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\Scene.hpp">
       <Filter>include</Filter>
     </ClInclude>
@@ -200,23 +221,35 @@
     <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\Light.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\PointLight.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\DirectionalLight.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\SpotLight.hpp">
-      <Filter>include\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\System\Editor.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\Framebuffer.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\InputManager.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\TimeManager.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\ScriptComponent.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\ScriptSystem.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Player.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Terrain.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Light.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\MeshRenderer.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
