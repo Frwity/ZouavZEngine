@@ -10,6 +10,7 @@
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
 #include "System/TimeManager.hpp"
+#include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
@@ -30,7 +31,7 @@ void InputManager(GLFWwindow* window, Camera& camera)
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
+    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 1.2f;
 
     if (InputManager::GetKeyPressed(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
@@ -54,7 +55,7 @@ void InputManager(GLFWwindow* window, Camera& camera)
 
 Engine::Engine()
 {
-	render.Init(1400, 900);
+    render.Init(1920, 1080);
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
@@ -74,51 +75,19 @@ Engine::~Engine()
 
 void Engine::Load()
 {
-    Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("shader", "resources/shader.vs", "resources/shader.fs"));
-    Mesh* skullMesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
-    Mesh* innMesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Inn Mesh", "resources/fantasy_game_inn.obj"));
-    Texture* skullTexture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Texture", "resources/skull.jpg"));
-    Texture* innTexture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Inn Texture", "resources/fantasy_game_inn_diffuse.png"));
-    GameObject* inn = GameObject::CreateGameObject();
-    GameObject* skull = GameObject::CreateGameObject();
-    inn->AddChild(skull);
-    GameObject* skull2 = GameObject::CreateGameObject();
-    skull2->SetParent(skull);
+    Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
+    ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
 
-    GameObject* light1 = GameObject::CreateGameObject();
-    GameObject* light2 = GameObject::CreateGameObject();
-    GameObject* light3 = GameObject::CreateGameObject();
+    GameObject* light = GameObject::CreateGameObject();
 
-    light1->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
-    light2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
-    light3->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
-
-    light1->scale = { 0.2f, 0.2f, 0.2f };
-    light2->scale = { 0.2f, 0.2f, 0.2f };
-    light3->scale = { 0.2f, 0.2f, 0.2f };
-    light3->position = { -5.0f, 0.0f, 0.0f };
-
-    light1->AddComponent<Light>(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.5f, 0.0f, 0.0f), Vec3(0.5f, 0.0f, 0.0f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Spot);
-    light2->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
-    light3->AddComponent<Light>(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.5f, 0.0f), Vec3(0.0f, 0.5f, 0.0f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Point);
-
-    inn->AddComponent<MeshRenderer>(innMesh, shader, innTexture);
-    skull->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
-    skull2->AddComponent<MeshRenderer>(skullMesh, shader, skullTexture);
-
-    skull->AddComponent<Player>();
-
-    skull2->position.x = -5;
+    light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
+    scene.lights.push_back(light->GetComponent<Light>());
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
 
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
-
-    scene.lights.push_back(light1->GetComponent<Light>());
-    scene.lights.push_back(light2->GetComponent<Light>());
-    scene.lights.push_back(light3->GetComponent<Light>());
 }
 
 void Engine::Update()
@@ -136,6 +105,13 @@ void Engine::Update()
     int sceneWidth, sceneHeight = 0;
 
     bool show = false;
+
+    Terrain terrain;
+
+    terrain.Generate();
+
+    camera.MoveTo({ 650, -150, 500 });
+
     while (!render.Stop())
     {
         TimeManager::Update();
@@ -155,19 +131,43 @@ void Engine::Update()
             editor.DisplayMainWindow();
         }
 
+            if (ImGui::Begin("Procedural Generation", nullptr))
+            {
+                ImGui::Checkbox("Always Actualize", &terrain.alwaysActualize);
+                bool actualized = false;
+                actualized |= ImGui::SliderInt("Chunk Count", &terrain.chunkCount, 1, 16);
+                actualized |= ImGui::SliderInt("Chunk Size", &terrain.chunkSize, 1, 512);
+                actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &terrain.chunkVertexCount, 2, 64);
+
+                actualized |= ImGui::SliderInt("Octaves", &terrain.octaves, 1, 10);
+                actualized |= ImGui::SliderFloat("Persistance", &terrain.persistance, 0, 1);
+                actualized |= ImGui::SliderFloat("Lacunarity", &terrain.lacunarity, 0, 1);
+
+                actualized |= ImGui::SliderFloat("Minimum Height", &terrain.minHeight, -100, terrain.maxHeight);
+                actualized |= ImGui::SliderFloat("Maximum Height", &terrain.maxHeight, terrain.minHeight, 100);
+                actualized |= ImGui::SliderFloat("Height Intensity", &terrain.heightIntensity, 1, 200);
+
+                if (terrain.alwaysActualize && actualized || ImGui::Button("Actualize"))
+                {
+                    terrain.Actualise();
+                }
+
+                ImGui::End();
+            }
+
         editor.DisplaySceneWindow(render, frameBuffer);
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
-
         glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
         render.Clear();
        
+        terrain.Draw(scene.lights);
+
         scene.Draw();
 
         glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
         glViewport(0, 0, (int)render.width, (int)render.height);
         render.Clear();
-        
         
         editor.Update();
         render.Update();

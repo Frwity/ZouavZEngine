@@ -41,6 +41,11 @@ float Vec2::Cross(const Vec2& v) const
     return x * v.y - v.x * y;
 }
 
+std::string Vec2::ToString() const
+{
+    return std::to_string(x) + ", " + std::to_string(y);
+}
+
 Vec2 Vec2::operator+(const Vec2& v) const
 {
     return { x + v.x, y + v.y };

@@ -156,6 +156,9 @@
     <ClCompile Include="src\Component\MeshRenderer.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\Terrain.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\MeshRenderer.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Terrain.hpp">
+      <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,8 @@
 #ifndef _VEC2_HPP_
 #define _VEC2_HPP_
 
+#include <string>
+
 class Vec2
 {
     public:
@@ -18,6 +20,8 @@ class Vec2
         float Cross(const Vec2&) const;
 
         void Normalize();
+
+        std::string ToString() const;
 
         Vec2 operator+(const Vec2& v) const;
         Vec2 operator-(const Vec2& v) const;    

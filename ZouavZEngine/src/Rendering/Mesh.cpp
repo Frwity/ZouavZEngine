@@ -70,7 +70,7 @@ void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsig
     glBufferData(GL_ARRAY_BUFFER, vertSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(int), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
     glEnableVertexAttribArray(0);
@@ -78,6 +78,19 @@ void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsig
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+}
+
+void Mesh::ChangeSizeAndData(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize)
+{
+	nbElements = indicesSize;
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(int), indices, GL_STATIC_DRAW);
+
+
 }
 
 Mesh::~Mesh()
