@@ -9,6 +9,7 @@ struct ChunkCreateArg
 	Vec2 pos;
 
 	int size;
+	int scale;
 	int vertexCount;
 
 	int octaves;
@@ -32,6 +33,7 @@ public:
 
 	Chunk() = default;
 
+	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z, float& _minNoiseHeight, float& _maxNoiseHeight);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);
 
 	const Mesh& GetMesh() { return mesh; }
@@ -53,6 +55,7 @@ public:
 	int chunkCount = 3;
 
 	int chunkSize = 128;
+	int chunkScale = 32;
 	int chunkVertexCount = 16;
 
 	int octaves = 1;

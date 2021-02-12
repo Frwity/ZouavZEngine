@@ -137,6 +137,7 @@ void Engine::Update()
                 bool actualized = false;
                 actualized |= ImGui::SliderInt("Chunk Count", &terrain.chunkCount, 1, 16);
                 actualized |= ImGui::SliderInt("Chunk Size", &terrain.chunkSize, 1, 512);
+                actualized |= ImGui::SliderInt("Chunk Scale", &terrain.chunkScale, 1, 64);
                 actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &terrain.chunkVertexCount, 2, 64);
 
                 actualized |= ImGui::SliderInt("Octaves", &terrain.octaves, 1, 10);

@@ -26,7 +26,7 @@ void Terrain::Generate()
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount, 
+			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkScale, chunkVertexCount, 
 														octaves, persistance, lacunarity, 
 														minHeight, maxHeight, heightIntensity }, false);
 		}
@@ -41,7 +41,7 @@ void Terrain::Actualise()
 		for (float x = 0; x < chunkCount; x++)
 		{
 			pos = { x, z };
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkScale, chunkVertexCount,
 														octaves, persistance, lacunarity,
 														minHeight, maxHeight, heightIntensity }, true);
 		}
@@ -66,6 +66,32 @@ void Terrain::Draw(const std::vector<class Light*>& _lights)
 	}
 }
 
+float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z, float& _minNoiseHeight, float& _maxNoiseHeight)
+{
+	float amplitude = 1;
+	float frequency = 1;
+	float noiseHeight = 0;
+
+	for (int i = 0; i < _cca.octaves; i++)
+	{
+		float sampleX = _x / ((float)_cca.vertexCount - 1) * (_cca.size / _cca.scale) * frequency + _cca.pos.x * (_cca.size / _cca.scale);
+		float sampleY = _z / ((float)_cca.vertexCount - 1) * (_cca.size / _cca.scale) * frequency + _cca.pos.y * (_cca.size / _cca.scale);
+
+		float height = stb_perlin_noise3(sampleX, 0, sampleY, 0, 0, 0);
+		noiseHeight += height * amplitude;
+
+		amplitude *= _cca.persistance;
+		frequency *= _cca.lacunarity;
+	}
+
+	if (noiseHeight > _maxNoiseHeight)
+		_maxNoiseHeight = noiseHeight;
+	else if (noiseHeight < _minNoiseHeight)
+		_minNoiseHeight = noiseHeight;
+
+	return noiseHeight;
+}
+
 void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 {
 	pos = _cca.pos;
@@ -78,17 +104,27 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	float wrap = (float)size / 32.f;
 
+	float minNoiseHeight = 999999;
+	float maxNoiseHeight = -999999;
+
 	for (float z = 0.0f; z < _cca.vertexCount; z++)
 	{
 		for (float x = 0.0f; x < _cca.vertexCount; x++)
 		{
-			// calculate height via perlin
-			float height = stb_perlin_noise3(x / ((float)_cca.vertexCount - 1) * wrap + _cca.pos.x * wrap, 0, z / ((float)_cca.vertexCount - 1) * wrap + _cca.pos.y * wrap, 0, 0, 0) * _cca.heightIntensity + _cca.minHeight;
+
+			float height = CalculateHeigt(_cca, x, z, minNoiseHeight, maxNoiseHeight);
 
 			// create vertices
 			vertices.push_back(Vertex{ Vec3(x / ((float)_cca.vertexCount - 1) * size, height, z / ((float)_cca.vertexCount - 1) * size),
 										Vec3(0.0f, 1.0f, 0.0f),
 										Vec2(x / ((float)_cca.vertexCount - 1), z / ((float)_cca.vertexCount - 1)) });
+		}
+	}
+	for (int y = 0; y < _cca.vertexCount; y++)
+	{
+		for (int x = 0; x < _cca.vertexCount; x++)
+		{
+			//normalize with a inverlerp then scale with intensity
 		}
 	}
 
