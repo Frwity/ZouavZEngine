@@ -31,7 +31,7 @@ void InputManager(GLFWwindow* window, Camera& camera)
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 0.2f;
+    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 1.2f;
 
     if (InputManager::GetKeyPressed(E_KEYS::W))
         camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
@@ -55,7 +55,7 @@ void InputManager(GLFWwindow* window, Camera& camera)
 
 Engine::Engine()
 {
-	render.Init(1400, 900);
+    render.Init(1920, 1080);
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
@@ -110,7 +110,7 @@ void Engine::Update()
 
     terrain.Generate();
 
-    camera.MoveTo({ 256,10,256 });
+    camera.MoveTo({ 650, -150, 500 });
 
     while (!render.Stop())
     {
@@ -130,8 +130,27 @@ void Engine::Update()
 
             editor.DisplayMainWindow();
 
-            if (ImGui::Begin("test1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize))
+            if (ImGui::Begin("Procedural Generation", nullptr))
             {
+                ImGui::Checkbox("Always Actualize", &terrain.alwaysActualize);
+                bool actualized = false;
+                //actualized |= ImGui::SliderInt("Chunk Count", &terrain.chunkCount, 1, 16);
+                actualized |= ImGui::SliderInt("Chunk Size", &terrain.chunkSize, 1, 512);
+                actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &terrain.chunkVertexCount, 2, 64);
+
+                actualized |= ImGui::SliderInt("Octaves", &terrain.octaves, 1, 10);
+                actualized |= ImGui::SliderFloat("Persistance", &terrain.persistance, 0, 1);
+                actualized |= ImGui::SliderFloat("Lacunarity", &terrain.lacunarity, 0, 1);
+
+                actualized |= ImGui::SliderFloat("Minimum Height", &terrain.minHeight, -100, terrain.maxHeight);
+                actualized |= ImGui::SliderFloat("Maximum Height", &terrain.maxHeight, terrain.minHeight, 100);
+                actualized |= ImGui::SliderFloat("Height Intensity", &terrain.heightIntensity, 1, 200);
+
+                if (terrain.alwaysActualize && actualized || ImGui::Button("Actualize"))
+                {
+                    terrain.Actualise();
+                }
+
                 ImGui::End();
             }
         

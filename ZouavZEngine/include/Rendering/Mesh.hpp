@@ -25,16 +25,16 @@ public:
     ~Mesh();
 
     void InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
+    void ChangeSizeAndData(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
     void CreateQuad();
   
     unsigned int GetID() const
     {
         return VAO;
     }
+
     unsigned int GetNbElements() const
     {
         return nbElements;
     }
-
-
 };

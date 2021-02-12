@@ -65,7 +65,7 @@ void Camera::UpdateRotation(const Vec2& newMousePosition)
 	yaw += dx / 1000.0f;
 	pitch += dy / 1000.0f;
 
-    pitch = pitch > -M_PI_2 ? ( pitch < M_PI_2 ? pitch : M_PI_2 ) : -M_PI_2;
+    pitch = pitch > -1.57079632679489661923 ? (pitch < 1.57079632679489661923 ? pitch : 1.57079632679489661923) : -1.57079632679489661923;
 
 	mousePosition = newMousePosition;
-}
+} 
