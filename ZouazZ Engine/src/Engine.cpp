@@ -147,9 +147,17 @@ void Engine::Update()
         {
             ImGui::End();
         }
+
+        editor.DisplaySceneWindow(render, frameBuffer);
         
-        if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+        /*if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
         {
+            if (ImGui::IsWindowFocused())
+                glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            
+                //glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            //ImGui::SetMouseCursor(ImGuiMouseCursor_None);
             ImVec2 windowSize = ImGui::GetWindowSize();
 
             if ((int)windowSize.x != frameBuffer.getWidth() || (int)windowSize.y != frameBuffer.getHeight())
@@ -157,7 +165,7 @@ void Engine::Update()
 
             ImGui::Image((ImTextureID)frameBuffer.getTexture(), ImVec2(frameBuffer.getWidth(), frameBuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
             ImGui::End();
-        }
+        }*/
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 

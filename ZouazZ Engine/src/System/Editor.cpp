@@ -4,6 +4,8 @@
 #include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Rendering/Render.hpp"
+#include "Rendering/Framebuffer.hpp"
 
 Editor::Editor()
 {
@@ -68,10 +70,24 @@ void Editor::Update()
     }
 }
 
-void Editor::DisplaySceneWindow()
+void Editor::DisplaySceneWindow(const Render& _render, Framebuffer& _framebuffer)
 {
     //TODO display scene window
+    if (ImGui::Begin("test", nullptr, ImGuiWindowFlags_NoScrollbar))
+    {
+        if (ImGui::IsWindowFocused())
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+        //glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+        ImVec2 windowSize = ImGui::GetWindowSize();
+
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+            _framebuffer.Resize(windowSize.x, windowSize.y);
+
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::End();
+    }
 }
 
 void Editor::AddWindow(std::string windowName)
