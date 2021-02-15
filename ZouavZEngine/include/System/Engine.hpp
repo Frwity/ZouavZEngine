@@ -4,6 +4,7 @@
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/Editor.hpp"
+#include "System/SoundManager.hpp"
 
 class Engine
 {
@@ -13,6 +14,7 @@ public:
 	Camera camera;
 	Scene scene;
 	Editor editor;
+	SoundManager soundManager;
 
 	void Load();
 

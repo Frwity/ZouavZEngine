@@ -9,13 +9,16 @@
 #include "Rendering/Texture.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include "System/SoundManager.hpp"
 #include "Rendering/Framebuffer.hpp"
-#include "Game/Player.hpp"
+#include "Game/Move.hpp"
+#include "Sound.hpp"
 #include <iostream>
 
 void InputManager(GLFWwindow* window, Camera& camera)
@@ -59,6 +62,7 @@ Engine::Engine()
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
+    InputManager::InitKeys();
 
     //TEMP
     double startCursorX, startCursorY;
@@ -77,11 +81,20 @@ void Engine::Load()
 {
     Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
     ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-
+    Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
+    Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
+    Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
     GameObject* light = GameObject::CreateGameObject();
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
     scene.lights.push_back(light->GetComponent<Light>());
+
+    GameObject* soundSkull = GameObject::CreateGameObject();
+    soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
+    AudioBroadcaster* soundBroadcast = soundSkull->AddComponent<AudioBroadcaster>(sound);
+    soundBroadcast->SetLooping(true);
+    soundBroadcast->Play();
+    soundSkull->AddComponent<Move>();
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
@@ -109,8 +122,6 @@ void Engine::Update()
     Terrain terrain;
 
     terrain.Generate();
-
-    camera.MoveTo({ 650, -150, 500 });
 
     while (!render.Stop())
     {
@@ -161,8 +172,6 @@ void Engine::Update()
         glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
         render.Clear();
        
-        terrain.Draw(scene.lights);
-
         scene.Draw();
 
         glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);

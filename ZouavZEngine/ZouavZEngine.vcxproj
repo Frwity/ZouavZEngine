@@ -127,7 +127,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,6 +160,8 @@
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
+    <ClCompile Include="src\Component\AudioListener.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
@@ -167,6 +169,7 @@
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Game\Move.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
@@ -182,22 +185,27 @@
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\System\Editor.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\InputManager.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
+    <ClCompile Include="src\System\SoundManager.cpp" />
     <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\src\imgui_internal.h" />
+    <ClInclude Include="include\Component\AudioBroadcaster.hpp" />
+    <ClInclude Include="include\Component\AudioListener.hpp" />
     <ClInclude Include="include\Component\Component.hpp" />
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
+    <ClInclude Include="include\Game\Move.hpp" />
     <ClInclude Include="include\Game\Player.hpp" />
     <ClInclude Include="include\Maths\Mat4.hpp" />
     <ClInclude Include="include\Maths\Matrix.hpp" />
@@ -213,12 +221,14 @@
     <ClInclude Include="include\Rendering\Texture.hpp" />
     <ClInclude Include="include\Resource.hpp" />
     <ClInclude Include="include\Scene.hpp" />
+    <ClInclude Include="include\Sound.hpp" />
     <ClInclude Include="include\System\Editor.hpp" />
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
+    <ClInclude Include="include\System\SoundManager.hpp" />
     <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
