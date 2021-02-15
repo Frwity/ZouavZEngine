@@ -114,6 +114,7 @@ void Engine::Update()
 
     while (!render.Stop())
     {
+
         TimeManager::Update();
 
         {
@@ -127,36 +128,11 @@ void Engine::Update()
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
-        {
-            editor.DisplayMainWindow();
-        }
-
-            if (ImGui::Begin("Procedural Generation", nullptr))
-            {
-                ImGui::Checkbox("Always Actualize", &terrain.alwaysActualize);
-                bool actualized = false;
-                actualized |= ImGui::SliderInt("Chunk Count", &terrain.chunkCount, 1, 16);
-                actualized |= ImGui::SliderInt("Chunk Size", &terrain.chunkSize, 1, 512);
-                actualized |= ImGui::SliderInt("Chunk Scale", &terrain.chunkScale, 1, 64);
-                actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &terrain.chunkVertexCount, 2, 64);
-
-                actualized |= ImGui::SliderInt("Octaves", &terrain.octaves, 1, 10);
-                actualized |= ImGui::SliderFloat("Persistance", &terrain.persistance, 0, 1);
-                actualized |= ImGui::SliderFloat("Lacunarity", &terrain.lacunarity, 0, 1);
-
-                actualized |= ImGui::SliderFloat("Minimum Height", &terrain.minHeight, -100, terrain.maxHeight);
-                actualized |= ImGui::SliderFloat("Maximum Height", &terrain.maxHeight, terrain.minHeight, 100);
-                actualized |= ImGui::SliderFloat("Height Intensity", &terrain.heightIntensity, 1, 200);
-
-                if (terrain.alwaysActualize && actualized || ImGui::Button("Actualize"))
-                {
-                    terrain.Actualise();
-                }
-
-                ImGui::End();
-            }
+        editor.DisplayMainWindow();
 
         editor.DisplaySceneWindow(render, frameBuffer);
+
+        terrain.DisplayOptionWindow();
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
         glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());

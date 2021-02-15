@@ -1,20 +1,36 @@
 #pragma once
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
+
+#include <FastNoiseLite.h>
+
 #include <unordered_map>
 
+
+#define MAX_NOISE_COUNT 4
+
+struct NoiseParam
+{
+	FastNoiseLite::NoiseType noiseType = FastNoiseLite::NoiseType::NoiseType_Perlin;
+	float frequency = 0.01f;
+	FastNoiseLite::FractalType fractalType = FastNoiseLite::FractalType::FractalType_None;
+	int octaves = 1;
+	float lacunarity = 2.0f;
+	float gain = 0.5f;
+	float weightedStrength = 0.0f;
+	float pingPongStength = 2.0f;
+};
 
 struct ChunkCreateArg
 {
 	Vec2 pos;
 
 	int size;
-	int scale;
 	int vertexCount;
 
-	int octaves;
-	float persistance;
-	float lacunarity;
+	int seed;
+
+	std::vector<NoiseParam> noiseParams;
 
 	float minHeight;
 	float maxHeight;
@@ -33,7 +49,7 @@ public:
 
 	Chunk() = default;
 
-	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z, float& _minNoiseHeight, float& _maxNoiseHeight);
+	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);
 
 	const Mesh& GetMesh() { return mesh; }
@@ -52,27 +68,35 @@ private:
 
 
 public:
+
 	int chunkCount = 3;
 
 	int chunkSize = 128;
-	int chunkScale = 32;
 	int chunkVertexCount = 16;
 
-	int octaves = 1;
-	float persistance = 1.0f;
-	float lacunarity = 1.0f;
+	int seed = 0;
 
-	float minHeight = 10.0f;
+	int noiseID = 0;
+
+	std::vector<NoiseParam> noiseParams;
+
+	float minHeight = -10.0f;
 	float maxHeight = 30.0f;
 	float heightIntensity = 30.0f;
 
-	bool alwaysActualize = false;
+	bool alwaysActualize = true;
 
 	Terrain();
 
 	void Generate();
 
 	void Actualise();
+
+	void DisplayOptionWindow();
+
+	void AddNoiseLayer();
+
+	void DeleteCurrentNoiseLayer();
 
 	void Draw(const std::vector<class Light*>& _lights);
 };
