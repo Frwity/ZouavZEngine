@@ -17,16 +17,17 @@
 #include "Game/Player.hpp"
 #include <iostream>
 
-void InputManager(GLFWwindow* window, Camera& camera)
+void InputManager(GLFWwindow* window, Camera& camera, bool isKeyboardEnable)
 {
     InputManager::UpdateMouseButtons();
     InputManager::UpdateKeys();
 
-    if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
-        glfwSetWindowShouldClose(window, true);
-
     double cursorX, cursorY;
     glfwGetCursorPos(window, &cursorX, &cursorY);
+
+    if (!isKeyboardEnable)
+        return;
+    
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
@@ -50,7 +51,6 @@ void InputManager(GLFWwindow* window, Camera& camera)
     if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
 }
-
 
 Engine::Engine()
 {
@@ -143,7 +143,7 @@ void Engine::Update()
         {
             glfwPollEvents();
 
-            InputManager(render.window, camera);
+            InputManager(render.window, camera, editor.isKeyboardEnable);
         }
 
         editor.NewFrame();
@@ -151,11 +151,11 @@ void Engine::Update()
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
-        {
-            editor.DisplayMainWindow();
-        }
-
+        
+        editor.DisplayMainWindow();
         editor.DisplaySceneWindow(render, frameBuffer);
+        editor.DisplayInspector();
+        editor.DisplayConsoleWindow();
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 
