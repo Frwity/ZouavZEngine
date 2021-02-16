@@ -299,20 +299,38 @@ void Editor::DisplayConsoleWindow()
         //TODO display error/warning message
 
     }
+        ImGui::End();
 }
 
 void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
-    {     
+    {   
+        //Maybe other solution
+        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+        {
+            isKeyboardEnable = true;
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetCursorPos(_render.window, lastCursorPosX, lastCursorPosY);
+        }
+
+        //best place ?
+        if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
+        {
+            isKeyboardEnable = false;
+            glfwGetCursorPos(_render.window, &lastCursorPosX, &lastCursorPosY);
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            ImGui::SetWindowFocus("Main");
+        }
+
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
             _framebuffer.Resize(windowSize.x, windowSize.y);
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::End();
     }
+        ImGui::End();
 }
 
 void Editor::DisplayHierarchy()
@@ -323,5 +341,5 @@ void Editor::DisplayHierarchy()
         //TODO display game window
 
     }
-    ImGui::End();
+        ImGui::End();
 }

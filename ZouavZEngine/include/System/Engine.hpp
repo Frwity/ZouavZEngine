@@ -4,6 +4,7 @@
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/Editor.hpp"
+#include "System/SoundManager.hpp"
 
 enum ENGINE_STATE
 {

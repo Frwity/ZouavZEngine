@@ -9,13 +9,16 @@
 #include "Rendering/Texture.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include "System/SoundManager.hpp"
 #include "Rendering/Framebuffer.hpp"
-#include "Game/Player.hpp"
+#include "Game/Move.hpp"
+#include "Sound.hpp"
 #include <iostream>
 
 
@@ -25,6 +28,8 @@ Engine::Engine()
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
+    InputManager::InitKeys();
+    SoundManager::Init();
 
     //TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -41,17 +46,27 @@ Engine::Engine()
 Engine::~Engine()
 {
 	render.Destroy();
+    SoundManager::Destroy();
 }
 
 void Engine::Load()
 {
     Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
     ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-
+    Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
+    Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
+    Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
     GameObject* light = GameObject::CreateGameObject();
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
     scene.lights.push_back(light->GetComponent<Light>());
+
+    GameObject* soundSkull = GameObject::CreateGameObject();
+    soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
+    soundSkull->AddComponent<AudioBroadcaster>(sound);
+    soundSkull->AddComponent<Move>();
+
+
 }
 
 void Engine::Update()
@@ -65,11 +80,11 @@ void Engine::Update()
     {
         TimeManager::Update();
         InputManager::Update();
+        SoundManager::Update();
 
         sceneCamera.Update(editor.isKeyboardEnable);
 
         editor.NewFrame();
-
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
         
