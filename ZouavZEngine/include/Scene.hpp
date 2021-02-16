@@ -11,7 +11,7 @@ private:
 
 	GameObject world{ nullptr };
 
-	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix) const;
+	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const class Camera& _camera) const;
 
 public:
 	std::vector<class Light*> lights;
@@ -22,5 +22,5 @@ public:
 	static Scene* GetCurrentScene() { return currentScene; }
 	GameObject& GetWorld() { return world; }
 
-	void Draw() const;
+	void Draw(const class Camera& _camera) const;
 };

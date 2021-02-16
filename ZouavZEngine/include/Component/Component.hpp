@@ -4,6 +4,7 @@ class Component
 {
 private:
 public:
+	// TODO : not private
 	class GameObject* gameObject;
 
 	Component(class GameObject* _gameObject);

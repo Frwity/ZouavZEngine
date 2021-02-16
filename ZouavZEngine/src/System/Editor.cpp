@@ -296,3 +296,17 @@ void Editor::DisplayConsoleWindow()
         ImGui::End();
     }
 }
+
+void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
+{
+    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    {     
+        ImVec2 windowSize = ImGui::GetWindowSize();
+
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+            _framebuffer.Resize(windowSize.x, windowSize.y);
+
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::End();
+    }
+}

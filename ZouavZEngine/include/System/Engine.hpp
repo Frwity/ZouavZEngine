@@ -5,18 +5,27 @@
 #include "Scene.hpp"
 #include "System/Editor.hpp"
 
+enum ENGINE_STATE
+{
+	EDITING,
+	PLAYING
+};
+
+
 class Engine
 {
 private:
 	Render render;
-public:
-	Camera camera;
+	ENGINE_STATE state{EDITING};
+	SceneCamera sceneCamera{Vec2(0, 0), 100, 100 };
 	Scene scene;
 	Editor editor;
 
-	void Load();
+public:
 
 	Engine();
 	~Engine();
+
+	void Load();
 	void Update();
 };

@@ -105,6 +105,11 @@ void Render::Init(int _width, int _height)
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mainFramebuffer);
+    sceneFramebuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
+    gameFramebuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
 void Render::Update()
@@ -124,10 +129,25 @@ void Render::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Render::Draw(const Mesh& _mesh)
+void Render::BindMainFBO()
 {
-    glBindVertexArray(_mesh.GetID());
-    glDrawElements(GL_TRIANGLES, _mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+    glViewport(0, 0, width, height);
+    Clear();
+}
+
+void Render::BindSceneFBO()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, sceneFramebuffer.getId());
+    glViewport(0, 0, sceneFramebuffer.getWidth(), sceneFramebuffer.getHeight());
+    Clear();
+}
+
+void Render::BindGameFBO()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, gameFramebuffer.getId());
+    glViewport(0, 0, gameFramebuffer.getWidth(), gameFramebuffer.getHeight());
+    Clear();
 }
 
 void Render::Destroy()

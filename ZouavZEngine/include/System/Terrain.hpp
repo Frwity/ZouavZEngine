@@ -98,5 +98,5 @@ public:
 
 	void DeleteCurrentNoiseLayer();
 
-	void Draw(const std::vector<class Light*>& _lights);
+	void Draw(const std::vector<class Light*>& _lights, const class Camera& _camera);
 };

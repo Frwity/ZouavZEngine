@@ -51,14 +51,14 @@ void Terrain::Actualise()
 	}
 }
 
-void Terrain::Draw(const std::vector<class Light*>& _lights)
+void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
 {
 	shader->Use();
 	shader->SetLight(_lights);
-	Mat4 matrixCamera = Camera::GetMainCamera().GetMatrix();
+	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reverse());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
-	shader->SetMatrix("projection", Camera::GetMainCamera().GetProjetionMatrix());
+	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
 	for (auto& it : chunks)
 	{
