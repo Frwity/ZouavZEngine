@@ -254,7 +254,8 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
     
     if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::IsWindowFocused() && !isKeyboardEnable)
+        //Maybe other solution
+        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
