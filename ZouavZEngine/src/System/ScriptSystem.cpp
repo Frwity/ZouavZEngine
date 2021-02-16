@@ -1,19 +1,22 @@
 #include "Component/ScriptComponent.hpp"
 #include "System/ScriptSystem.hpp"
 
-std::vector<class ScriptComponent*> ScriptSystem::scripts;
+std::vector<ScriptComponent*> ScriptSystem::scripts;
 
-void ScriptSystem::AddScript(class ScriptComponent* _script)
+void ScriptSystem::AddScript(ScriptComponent* _script)
 {
 	scripts.push_back(_script);
 }
 
-void ScriptSystem::RemoveScript(class ScriptComponent* _script)
+void ScriptSystem::RemoveScript(ScriptComponent* _script)
 {
 	for (auto it = scripts.begin(); it != scripts.end(); )
 	{
 		if (*it == _script)
-			it = scripts.erase(it);
+		{
+			scripts.erase(it);
+			return;
+		}
 		else
 			++it;
 	}

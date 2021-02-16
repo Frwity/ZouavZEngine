@@ -63,6 +63,7 @@ Engine::Engine()
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
     InputManager::InitKeys();
+    SoundManager::Init();
 
     //TEMP
     double startCursorX, startCursorY;
@@ -75,6 +76,7 @@ Engine::Engine()
 Engine::~Engine()
 {
 	render.Destroy();
+    SoundManager::Destroy();
 }
 
 void Engine::Load()
@@ -91,9 +93,7 @@ void Engine::Load()
 
     GameObject* soundSkull = GameObject::CreateGameObject();
     soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
-    AudioBroadcaster* soundBroadcast = soundSkull->AddComponent<AudioBroadcaster>(sound);
-    soundBroadcast->SetLooping(true);
-    soundBroadcast->Play();
+    soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -138,6 +138,8 @@ void Engine::Update()
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
 
+        SoundManager::Update();
+
         {
             editor.DisplayMainWindow();
         }
@@ -162,6 +164,8 @@ void Engine::Update()
                 {
                     terrain.Actualise();
                 }
+
+                ImGui::SliderFloat("Main Volume", &SoundManager::mainVolume, 0.0f, 10.0f);
 
                 ImGui::End();
             }

@@ -1,5 +1,5 @@
 #include "GameObject.hpp"
-#include <al.h>
+#include <AL/al.h>
 #include "Component/AudioListener.hpp"
 
 AudioListener::AudioListener(GameObject* _gameObject)

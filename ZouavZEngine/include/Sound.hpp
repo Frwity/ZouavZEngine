@@ -5,8 +5,8 @@
 class Sound : public Resource
 {
 private:
-	unsigned int buffer;
-	unsigned int source;
+	unsigned int buffer = 0;
+	unsigned int source = 0;
 
 public:
 	Sound() = default;
@@ -17,4 +17,7 @@ public:
 	void Stop();
 	void SetPosition(const Vec3& _position);
 	void SetLooping(bool _loop);
+	void SetVolume(float volume);
+	void SetAmbient(bool _ambient);
+	void SetMaxDistance(float _maxDistance);
 };

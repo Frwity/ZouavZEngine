@@ -5,9 +5,9 @@ class AudioBroadcaster : public Component
 {
 private:
 	class Sound* sound = nullptr;
+	bool updatePosition = true;
 
 public:
-	bool updatePosition = true;
 
 	AudioBroadcaster() = default;
 	AudioBroadcaster(class GameObject* _gameObject, class Sound* _sound);
@@ -19,4 +19,5 @@ public:
 	void Stop();
 	
 	void SetLooping(bool _loop);
+	void SetAmbient(bool _ambient);
 };

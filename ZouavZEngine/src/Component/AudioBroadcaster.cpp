@@ -29,3 +29,13 @@ void AudioBroadcaster::SetLooping(bool _loop)
 	if (sound)
 		sound->SetLooping(_loop);
 }
+
+void AudioBroadcaster::SetAmbient(bool _ambient)
+{
+	if (sound)
+	{
+		sound->SetAmbient(_ambient);
+		sound->SetPosition(Vec3::Zero());
+		updatePosition = !_ambient;
+	}
+}

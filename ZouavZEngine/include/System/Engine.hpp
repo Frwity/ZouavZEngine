@@ -14,7 +14,6 @@ public:
 	Camera camera;
 	Scene scene;
 	Editor editor;
-	SoundManager soundManager;
 
 	void Load();
 
