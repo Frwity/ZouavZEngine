@@ -259,14 +259,14 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorPosX, lastCursorPosY);
+            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
         }
 
         //best place ?
         if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
         {
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorPosX, &lastCursorPosY);
+            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
         }
@@ -304,24 +304,24 @@ void Editor::DisplayConsoleWindow()
 
 void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
-    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse))
     {   
         //Maybe other solution
-        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+        /*if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorPosX, lastCursorPosY);
+            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
         }
 
         //best place ?
         if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
         {
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorPosX, &lastCursorPosY);
+            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
-        }
+        }*/
 
         ImVec2 windowSize = ImGui::GetWindowSize();
 
