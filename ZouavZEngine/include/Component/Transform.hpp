@@ -18,4 +18,11 @@ public:
     ~Transform() = default;
 
     static Transform InitTransform();
+
+    void Translate(const Vec3& _direction);
+    void Rotate(const Quaternion& _rotToAdd);
+
+    Vec3 Right();
+    Vec3 Up();
+    Vec3 Forward();
 };
