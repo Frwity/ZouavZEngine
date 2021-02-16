@@ -92,6 +92,7 @@ private:
 	~InputManager() = delete;
 
 public:
+
 	static void InitMouseButtons();
 
 	static void InitKeys();

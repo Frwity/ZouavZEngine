@@ -20,9 +20,11 @@ bool newClassWindow = false;
 char className[256] = "NewClass";
 std::string actualFolder = ".";
 
+static ImGuiID dockspaceID = 1;
+
 Editor::Editor()
 {
-
+    isKeyboardEnable = true;
 }
 
 void Editor::NewFrame()
@@ -40,6 +42,7 @@ void Editor::DisplayMainWindow()
     ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
     DisplayMenuBar();
+    ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
     ImGui::End();
 }
 
@@ -241,19 +244,25 @@ void Editor::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
+
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     //TODO display scene window
-    if (ImGui::Begin("Scene"), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
+    if (ImGui::Begin("Scene"), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)
     {
         if (ImGui::IsWindowFocused())
+        {
+            isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
 
         //best place ?
-        if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
+        if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
         {
+            isKeyboardEnable = false;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
         }
@@ -268,7 +277,22 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
     }
 }
 
-void Editor::AddWindow(std::string windowName)
+void Editor::DisplayInspector()
 {
+    if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    {
+        
 
+        ImGui::End();
+    }
+}
+
+void Editor::DisplayConsoleWindow()
+{
+    if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    {
+        //TODO display error/warning message
+
+        ImGui::End();
+    }
 }

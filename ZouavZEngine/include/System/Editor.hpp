@@ -6,6 +6,7 @@ class Editor
 private:
 
 public:
+	bool isKeyboardEnable;
 	Editor();
 	void NewFrame();
 	
@@ -13,7 +14,8 @@ public:
 	void DisplayMainWindow();
 	void DisplayMenuBar();
 	void DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer);
+	void DisplayInspector();
+	void DisplayConsoleWindow();
 	void FileMenu();
-	void AddWindow(std::string windowName);
 	void Update();
 };
