@@ -51,8 +51,6 @@ Render::Render(int _width, int _height)
 
 void Render::Init(int _width, int _height)
 {
-    width = _width;
-    height = _height;
 
     // Init glfw
     if (!glfwInit())
@@ -60,6 +58,12 @@ void Render::Init(int _width, int _height)
         fprintf(stderr, "glfwInit failed");
         //TODO EXIT WITH ERROR
     }
+
+    GLFWmonitor* MyMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
+    
+    width = mode ->width;
+    height = mode->height;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

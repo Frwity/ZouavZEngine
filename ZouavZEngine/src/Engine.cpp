@@ -22,11 +22,12 @@ void InputManager(GLFWwindow* window, Camera& camera, bool isKeyboardEnable)
     InputManager::UpdateMouseButtons();
     InputManager::UpdateKeys();
 
-    double cursorX, cursorY;
-    glfwGetCursorPos(window, &cursorX, &cursorY);
 
     if (!isKeyboardEnable)
         return;
+    
+    double cursorX, cursorY;
+    glfwGetCursorPos(window, &cursorX, &cursorY);
     
     camera.UpdateRotation({ (float)cursorX, (float)cursorY });
 
@@ -150,12 +151,14 @@ void Engine::Update()
 
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
-
         
+        //TODO call single editor function
         editor.DisplayMainWindow();
         editor.DisplaySceneWindow(render, frameBuffer);
         editor.DisplayInspector();
         editor.DisplayConsoleWindow();
+        editor.DisplayGameWindow();
+        editor.DisplayHierarchy();
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
 
