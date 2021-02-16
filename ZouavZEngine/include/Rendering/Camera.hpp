@@ -13,6 +13,7 @@ private:
 protected:
 	Mat4 projection;
 	Vec3 position;
+	Vec3 target;
 
 public:
 	Camera(class GameObject* _gameObject, int _width, int _height);
@@ -22,7 +23,9 @@ public:
 	static const Camera* GetMainCamera() { return mainCamera; }
 
 	void SetMainCamera() { mainCamera = this; }
-
+	
+	void SetPosition(const Vec3& _pos) { position = _pos; }
+	void SetTarget(const Vec3& _target) { target = _target; }
 
 	virtual Mat4 GetMatrix() const;
 

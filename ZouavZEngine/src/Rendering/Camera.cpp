@@ -18,14 +18,38 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     if (!mainCamera)
         mainCamera = this;
 
+    target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
     projection = Mat4::CreatePerspectiveProjectionMatrix(_width, _height, 0.01, 5000, 45);
 }
 
 Mat4 Camera::GetMatrix() const
 {
-    return Mat4::CreateTRSMatrix(gameObject->position + position , gameObject->rotation, { 1, 1, 1 });
+    const Vec3 forward = (target - position).Normalized();
+    const Vec3 right = (forward.Cross(Vec3::Up())).Normalized();
+    const Vec3 up = right.Cross(forward);
+
+    Mat4 cameraMatrix;
+
+    cameraMatrix.Accessor(0, 0) = right.x;
+    cameraMatrix.Accessor(0, 1) = right.y;
+    cameraMatrix.Accessor(0, 2) = right.z;
+    cameraMatrix.Accessor(1, 0) = up.x;
+    cameraMatrix.Accessor(1, 1) = up.y;
+    cameraMatrix.Accessor(1, 2) = up.z;
+    cameraMatrix.Accessor(2, 0) = -forward.x;
+    cameraMatrix.Accessor(2, 1) = -forward.y;
+    cameraMatrix.Accessor(2, 2) = -forward.z;
+
+    cameraMatrix.Accessor(0, 3) = -right.Dot(gameObject->position + position);
+    cameraMatrix.Accessor(1, 3) = -up.Dot(gameObject->position + position);
+    cameraMatrix.Accessor(2, 3) = forward.Dot(gameObject->position + position);
+
+    cameraMatrix.Accessor(3, 3) = 1;
+
+    return cameraMatrix.Reverse();
 }
+
 
 SceneCamera::SceneCamera(const Vec2& _mouseStartPosition, int _width, int _height)
     : Camera(nullptr, _width, _height), mousePosition(_mouseStartPosition), pitch(0.0f), yaw(0.0f), speed{ 30.0f }

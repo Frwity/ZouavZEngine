@@ -1,6 +1,8 @@
 #include "Game/Player.hpp"
 #include "System/InputManager.hpp"
+#include "System/TimeManager.hpp"
 #include "GameObject.hpp"
+#include "Rendering/Camera.hpp"
 #include <iostream>
 
 Player::Player(GameObject* _gameobject)
@@ -11,13 +13,27 @@ Player::Player(GameObject* _gameobject)
 
 void Player::Begin()
 {
-	life = 10;
+	gameObject->GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
+	gameObject->GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
+	gameObject->rotation = Quaternion{ {0,0,0} };
+
 }
 
 void Player::Update()
 {
-	if (InputManager::GetKeyPressedOneTime(E_KEYS::SPACEBAR))
-		life--;
-	if (life <= 0)
-		std::cout << "dead" << std::endl;
+	if (InputManager::GetKeyPressed(E_KEYS::RCTRL))
+		speed = 10;
+	else
+		speed = 3;
+
+	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+		gameObject->Translate({ 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed });
+	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+		gameObject->Translate({ 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed });
+	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+		gameObject->Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
+	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+		gameObject->Translate({ -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
+	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
+		gameObject->Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 }

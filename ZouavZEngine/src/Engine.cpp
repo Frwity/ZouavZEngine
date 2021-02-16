@@ -10,6 +10,7 @@
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
 #include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
@@ -18,6 +19,7 @@
 #include "System/SoundManager.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Game/Move.hpp"
+#include "Game/Player.hpp"
 #include "Sound.hpp"
 #include <iostream>
 
@@ -66,6 +68,11 @@ void Engine::Load()
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
+    GameObject* player = GameObject::CreateGameObject();
+    player->AddComponent<MeshRenderer>(mesh, shader, texture);
+    player->AddComponent<AudioListener>();
+    player->AddComponent<Player>();
+    player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 
 }
 

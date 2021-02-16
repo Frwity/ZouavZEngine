@@ -83,6 +83,7 @@ void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsig
 void Mesh::ChangeSizeAndData(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize)
 {
 	nbElements = indicesSize;
+	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertSize * sizeof(Vertex), vertices, GL_STATIC_DRAW);
