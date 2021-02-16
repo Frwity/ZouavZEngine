@@ -72,11 +72,13 @@ void Engine::Update()
 
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
-
+        
+        //TODO call single editor function
         editor.DisplayMainWindow();
         editor.DisplaySceneWindow(render, render.sceneFramebuffer);
         editor.DisplayInspector();
         editor.DisplayConsoleWindow();
+        editor.DisplayHierarchy();
         editor.DisplayGameWindow(render, render.gameFramebuffer);
 
         terrain.DisplayOptionWindow();

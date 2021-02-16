@@ -1,5 +1,6 @@
 #include "System/Editor.hpp"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
@@ -11,6 +12,7 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "System/InputManager.hpp"
+#include <iostream>
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -24,7 +26,7 @@ static ImGuiID dockspaceID = 1;
 
 Editor::Editor()
 {
-    isKeyboardEnable = true;
+    isKeyboardEnable = false;
 }
 
 void Editor::NewFrame()
@@ -42,7 +44,7 @@ void Editor::DisplayMainWindow()
     ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
     DisplayMenuBar();
-    ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton);
     ImGui::End();
 }
 
@@ -244,25 +246,27 @@ void Editor::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    //TODO display scene window
-    if (ImGui::Begin("Scene"), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)
+    
+    if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse))
     {
-        if (ImGui::IsWindowFocused())
+        //Maybe other solution
+        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetCursorPos(_render.window, lastCursorPosX, lastCursorPosY);
         }
 
         //best place ?
-        if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
+        if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
         {
             isKeyboardEnable = false;
+            glfwGetCursorPos(_render.window, &lastCursorPosX, &lastCursorPosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
         }
@@ -273,27 +277,27 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             _framebuffer.Resize(windowSize.x, windowSize.y);
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void Editor::DisplayInspector()
 {
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
         
-
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void Editor::DisplayConsoleWindow()
 {
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
         //TODO display error/warning message
 
-        ImGui::End();
     }
 }
 
@@ -309,4 +313,15 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
     }
+}
+
+void Editor::DisplayHierarchy()
+{
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
+    if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    {
+        //TODO display game window
+
+    }
+    ImGui::End();
 }
