@@ -12,7 +12,7 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "System/InputManager.hpp"
-#include <iostream>
+#include "System/Debug.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -27,6 +27,7 @@ static ImGuiID dockspaceID = 1;
 Editor::Editor()
 {
     isKeyboardEnable = false;
+    Debug::LogError("ceci est un test");
 }
 
 void Editor::NewFrame()
@@ -297,32 +298,24 @@ void Editor::DisplayConsoleWindow()
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
         //TODO display error/warning message
+        for (std::string s : Debug::errorLogs)
+        {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), s.c_str());
+        }
+
+        for (std::string s : Debug::logs)
+        {
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), s.c_str());
+        }
 
     }
-        ImGui::End();
+    ImGui::End();
 }
 
 void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse))
-    {   
-        //Maybe other solution
-        /*if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-        {
-            isKeyboardEnable = true;
-            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
-        }
-
-        //best place ?
-        if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
-        {
-            isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
-            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            ImGui::SetWindowFocus("Main");
-        }*/
-
+    {
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
@@ -330,7 +323,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
     }
-        ImGui::End();
+    ImGui::End();
 }
 
 void Editor::DisplayHierarchy()
@@ -339,7 +332,6 @@ void Editor::DisplayHierarchy()
     if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
         //TODO display game window
-
     }
-        ImGui::End();
+    ImGui::End();
 }

@@ -65,8 +65,6 @@ void Engine::Load()
     soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
-
-
 }
 
 void Engine::Update()
