@@ -37,12 +37,13 @@ class SceneCamera : public Camera
 private:
 	static SceneCamera* sceneCamera;
 
-	Vec2 mousePosition;
-	float pitch, yaw{ 0.0f };
+	Vec2 mousePosition{ 0.0f, 0.0f };
+	float pitch{ 0.0f };
+	float yaw{ 0.0f };
 	float speed{ 0.0f };
 
 public:
-	SceneCamera(const Vec2& _mouseStartPosition, int _width, int _height);
+	SceneCamera(int _width, int _height);
 	SceneCamera() = default;
 	~SceneCamera() = default;
 

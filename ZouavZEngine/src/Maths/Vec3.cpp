@@ -122,6 +122,11 @@ Vec3 Vec3::operator/(float number) const
     return to_return;
 }
 
+Vec3 Vec3::operator-() const
+{
+    return { -x, -y, -z };
+}
+
 Vec3 Vec3::Cross(const Vec3& v) const
 {
     return { y * v.z - z * v.y,

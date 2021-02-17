@@ -16,7 +16,7 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
     texture->Use();
     Mat4 matrixCamera = _camera.GetMatrix();
 
-    shader->SetMatrix("view", matrixCamera.Reverse());
+    shader->SetMatrix("view", matrixCamera.Reversed());
     shader->SetMatrix("projection", _camera.GetProjetionMatrix());
     shader->SetMatrix("model", heritedMatrix * Mat4::CreateTRSMatrix(gameObject->position, gameObject->rotation, gameObject->scale));
     shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));

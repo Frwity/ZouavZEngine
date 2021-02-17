@@ -5,7 +5,8 @@
 #include "System/TimeManager.hpp"
 
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
+#include <iostream>
 
 // TODO : split in different file
 
@@ -41,18 +42,18 @@ Mat4 Camera::GetMatrix() const
     cameraMatrix.Accessor(2, 1) = -forward.y;
     cameraMatrix.Accessor(2, 2) = -forward.z;
 
-    cameraMatrix.Accessor(0, 3) = -right.Dot(gameObject->position + position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(gameObject->position + position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(gameObject->position + position);
+    cameraMatrix.Accessor(0, 3) = -right.Dot(-gameObject->position + position);
+    cameraMatrix.Accessor(1, 3) = -up.Dot(-gameObject->position + position);
+    cameraMatrix.Accessor(2, 3) = forward.Dot(-gameObject->position + position);
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return cameraMatrix.Reverse();
+    return (gameObject->rotation.GetRotationMatrix() * cameraMatrix.Reversed());
 }
 
 
-SceneCamera::SceneCamera(const Vec2& _mouseStartPosition, int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(_mouseStartPosition), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
+SceneCamera::SceneCamera(int _width, int _height)
+    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(M_PI), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;
@@ -104,11 +105,10 @@ void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
 {
 	float dx = mousePosition.x - _newMousePosition.x;
     float dy = mousePosition.y - _newMousePosition.y;
-
     yaw += dx / 1000.0f;
     pitch += dy / 1000.0f;
 
-    pitch = pitch > -1.57079632679489661923 ? (pitch < 1.57079632679489661923 ? pitch : 1.57079632679489661923) : -1.57079632679489661923;
+    pitch = pitch > -M_PI_2 ? (pitch < M_PI_2 ? pitch : M_PI_2) : -M_PI_2;
 
     mousePosition = _newMousePosition;
 } 

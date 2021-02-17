@@ -37,9 +37,7 @@ Engine::Engine()
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
-    glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
-
-    sceneCamera = SceneCamera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
+    sceneCamera = SceneCamera(render.width, render.height);
     sceneCamera.SetSceneCamera();
 
     Load();
@@ -74,6 +72,15 @@ void Engine::Load()
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 
+    GameObject* skullX = GameObject::CreateGameObject();
+    skullX->AddComponent<MeshRenderer>(mesh, shader, texture);
+    skullX->position = Vec3::Right();
+    GameObject* skullY = GameObject::CreateGameObject();
+    skullY->AddComponent<MeshRenderer>(mesh, shader, texture);
+    skullY->position = Vec3::Up();
+    GameObject* skullZ = GameObject::CreateGameObject();
+    skullZ->AddComponent<MeshRenderer>(mesh, shader, texture);
+    skullZ->position = Vec3::Forward();
 }
 
 void Engine::Update()

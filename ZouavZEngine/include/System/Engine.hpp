@@ -18,7 +18,7 @@ class Engine
 private:
 	Render render;
 	ENGINE_STATE state{ ENGINE_STATE::EDITING };
-	SceneCamera sceneCamera{Vec2(0, 0), 100, 100 };
+	SceneCamera sceneCamera{100, 100 };
 	Scene scene;
 	Editor editor;
 

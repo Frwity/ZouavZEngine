@@ -225,11 +225,11 @@ Matrix Matrix::Adjunct() const
     return CoMat().Transpose();
 }
 
-Matrix Matrix::Reverse() const
+Matrix Matrix::Reversed() const
 {
     assert(nbRow == nbCol || Det() != 0);
 
-    Matrix reverse( Adjunct() );
+    Matrix reverse(Adjunct());
     float det = Det();
 
     for (int i = 0; i < nbRow; i++)
@@ -239,7 +239,21 @@ Matrix Matrix::Reverse() const
     return reverse;
 }
 
+void Matrix::Reverse()
+{
+    assert(nbRow == nbCol || Det() != 0);
+
+    Matrix reverse(Adjunct());
+    float det = Det();
+
+    for (int i = 0; i < nbRow; i++)
+        for (int j = 0; j < nbCol; j++)
+            reverse.Accessor(i, j) /= det;
+
+    *this = reverse;
+}
+
 Matrix Matrix::EqResolver(const Matrix& equation, const Matrix& results)
 {
-    return equation.Reverse() * results;
+    return equation.Reversed() * results;
 }
