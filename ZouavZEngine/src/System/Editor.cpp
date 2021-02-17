@@ -13,6 +13,7 @@
 #include "Rendering/Framebuffer.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
+#include "Scene.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -21,6 +22,11 @@ char fileName[256] = "New File";
 bool newClassWindow = false;
 char className[256] = "NewClass";
 std::string actualFolder = ".";
+bool hierarchyMenu = false;
+ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
+char newGameObjectName[256] = "New GameObject";
+GameObject* newGameObjectParent = nullptr;
+GameObject* selectedGameObject = nullptr;
 
 static ImGuiID dockspaceID = 1;
 
@@ -326,12 +332,69 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
     ImGui::End();
 }
 
+void DisplayChild(GameObject* parent)
+{
+    if (ImGui::TreeNodeEx(parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    {
+        if (ImGui::IsItemHovered())
+        {
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
+            {
+                hierarchyMenuPos = ImGui::GetMousePos();
+                hierarchyMenu = true;
+                newGameObjectParent = parent;
+            }
+
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && parent->name != "World")
+                selectedGameObject = parent;
+
+            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject && selectedGameObject != parent)
+            {
+                selectedGameObject->SetParent(parent);
+                selectedGameObject = nullptr;
+            }
+        }
+        for (GameObject* child : parent->GetChildren())
+            DisplayChild(child);
+
+        ImGui::TreePop();
+    }
+}
+
 void Editor::DisplayHierarchy()
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        //TODO display game window
+        DisplayChild(&Scene::GetCurrentScene()->GetWorld());
+
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        {
+            hierarchyMenuPos = ImGui::GetMousePos();
+            hierarchyMenu = true;
+        }
+
+        if (hierarchyMenu)
+        {
+            ImGui::SetNextWindowPos(hierarchyMenuPos);
+            if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+            {
+                ImGui::InputText("New GameObject Name", newGameObjectName, 256);
+                if (ImGui::Button("New GameObject"))
+                {
+                    GameObject* newGameObject = GameObject::CreateGameObject(newGameObjectName);
+                    if (newGameObjectParent)
+                        newGameObject->SetParent(newGameObjectParent);
+                    newGameObjectParent = nullptr;
+                    hierarchyMenu = false;
+                    strcpy_s(newGameObjectName,"New GameObject");
+                }
+            }
+            ImGui::End();
+        }
+
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+            hierarchyMenu = false;
     }
     ImGui::End();
 }

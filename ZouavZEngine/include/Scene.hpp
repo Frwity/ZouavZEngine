@@ -9,7 +9,7 @@ class Scene
 private:
 	static Scene* currentScene;
 
-	GameObject world{ nullptr };
+	GameObject world{ "World" };
 
 	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const class Camera& _camera) const;
 
