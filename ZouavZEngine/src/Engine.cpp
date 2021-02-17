@@ -32,6 +32,7 @@ Engine::Engine()
     InputManager::InitMouseButtons();
     InputManager::InitKeys();
     SoundManager::Init();
+    editor.Init();
 
     //TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -92,18 +93,23 @@ void Engine::Update()
 
     while (!render.Stop())
     {
-        TimeManager::Update();
         InputManager::Update();
-        SoundManager::Update();
-
-        sceneCamera.Update(editor.isKeyboardEnable);
+        TimeManager::Update();
 
         editor.NewFrame();
-        ScriptSystem::FixedUpdate();
-        ScriptSystem::Update();
+
+        if (editor.GetState() == EDITOR_STATE::PLAYING)
+        {
+            SoundManager::Update();
+            ScriptSystem::FixedUpdate();
+            ScriptSystem::Update();
+        }
+
+        sceneCamera.Update(editor.isKeyboardEnable);
         
         //TODO call single editor function
         editor.DisplayMainWindow();
+        editor.DisplayOptionWindow();
         editor.DisplaySceneWindow(render, render.sceneFramebuffer);
         editor.DisplayInspector();
         editor.DisplayConsoleWindow();

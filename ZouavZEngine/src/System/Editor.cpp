@@ -1,4 +1,3 @@
-#include "System/Editor.hpp"
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
@@ -13,6 +12,7 @@
 #include "Rendering/Framebuffer.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
+#include "System/Editor.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -28,6 +28,11 @@ Editor::Editor()
 {
     isKeyboardEnable = false;
     Debug::LogError("ceci est un test");
+}
+
+void Editor::Init()
+{
+    imguiStyle = &ImGui::GetStyle();
 }
 
 void Editor::NewFrame()
@@ -47,6 +52,42 @@ void Editor::DisplayMainWindow()
     DisplayMenuBar();
     ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton);
     ImGui::End();
+}
+
+void Editor::DisplayOptionWindow()
+{
+	ImGui::Begin("Option", NULL, ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoDecoration
+		| ImGuiWindowFlags_NoScrollWithMouse
+		| ImGuiWindowFlags_NoTitleBar
+		| ImGuiWindowFlags_NoScrollbar
+		| ImGuiWindowFlags_NoResize);
+
+
+	ImGui::SameLine();
+	ImGui::SetCursorPosX(800);
+
+	   if (ImGui::Button("Play"))
+	   {
+	       state = EDITOR_STATE::PLAYING;
+	       imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
+       }
+       ImGui::SameLine();
+       if (ImGui::Button("Pause"))
+       {
+           state = EDITOR_STATE::PAUSE;
+
+       }
+       ImGui::SameLine();
+       if (ImGui::Button("Stop"))
+       {
+           state = EDITOR_STATE::EDITING;
+
+           imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
+	   }
+
+
+	ImGui::End();
 }
 
 void ListActualFolder(bool& windowOpened)

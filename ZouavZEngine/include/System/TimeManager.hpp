@@ -16,7 +16,7 @@ public:
 	static float GetDeltaTime() { return deltaTime * scale; }
 	static float GetUnscaledDeltaTime() { return deltaTime; }
 
-	static float SetScale(float _scale) { scale = _scale > 0 ? _scale : 0.0f - _scale; }
+	static float SetScale(float _scale) { scale = _scale > 0 ? _scale : -_scale; }
 
 	static void Update();
 };

@@ -6,21 +6,13 @@
 #include "System/Editor.hpp"
 #include "System/SoundManager.hpp"
 
-enum class ENGINE_STATE
-{
-	EDITING,
-	PLAYING
-};
-
-
 class Engine
 {
 private:
-	Render render;
-	ENGINE_STATE state{ ENGINE_STATE::EDITING };
-	SceneCamera sceneCamera{100, 100 };
-	Scene scene;
 	Editor editor;
+	Render render;
+	Scene scene;
+	SceneCamera sceneCamera{100, 100 };
 
 public:
 
