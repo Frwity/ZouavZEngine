@@ -22,6 +22,5 @@ public:
 	void DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void FileMenu();
 	void Update();
-	void DisplayGameWindow();
 	void DisplayHierarchy();
 };

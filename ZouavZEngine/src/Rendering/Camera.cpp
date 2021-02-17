@@ -91,11 +91,6 @@ void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
 
 void SceneCamera::Update(bool _isKeyboardEnable)
 {
-    if (!_isKeyboardEnable)
-        return;
-
-    UpdateRotation(InputManager::GetCursorPos());
-
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
     float cameraSpeed = TimeManager::GetDeltaTime() * Speed() + Speed() * sprint * 1.2f;
 
@@ -116,4 +111,9 @@ void SceneCamera::Update(bool _isKeyboardEnable)
 
     if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         MoveTo({ 0.0f, -cameraSpeed, 0.0f });
+
+    if (!_isKeyboardEnable)
+        return;
+
+    UpdateRotation(InputManager::GetCursorPos());
 }

@@ -27,7 +27,6 @@ static ImGuiID dockspaceID = 1;
 Editor::Editor()
 {
     isKeyboardEnable = false;
-    Debug::LogError("ceci est un test");
 }
 
 void Editor::NewFrame()
@@ -252,19 +251,17 @@ void Editor::Update()
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    
+
     if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse))
     {
-        //Maybe other solution
-        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+        if (InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT) && !isKeyboardEnable)
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
         }
 
-        //best place ?
-        if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
+        if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             isKeyboardEnable = false;
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
@@ -297,7 +294,7 @@ void Editor::DisplayConsoleWindow()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        //TODO display error/warning message
+        //TODO give possibility to change color of message
         for (std::string s : Debug::errorLogs)
         {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), s.c_str());
@@ -307,7 +304,6 @@ void Editor::DisplayConsoleWindow()
         {
             ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), s.c_str());
         }
-
     }
     ImGui::End();
 }

@@ -16,4 +16,6 @@ public:
 
 	static void Log(std::string log);
 	static void LogError(std::string errorLog);
+	//stop play
+	//static void Assert(bool condition);
 };

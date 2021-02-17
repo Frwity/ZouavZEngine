@@ -84,7 +84,7 @@ void Engine::Update()
 
         editor.NewFrame();
         ScriptSystem::FixedUpdate();
-        ScriptSystem::Update();
+        ScriptSystem::Update();   
         
         //TODO call single editor function
         editor.DisplayMainWindow();
