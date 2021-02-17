@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include "System/Debug.hpp"
 
 class ResourcesManager
 {
@@ -20,11 +21,10 @@ public:
 		auto a = resources.emplace(_name, std::make_unique<T>(_args...));
 		if (a.second)
 		{
-			std::cout << "Resource : " + _name + " loaded" << std::endl;
+			Debug::Log("Resource : " + _name + " loaded" );
 			return a.first->second.get();
 		}
-
-		std::cout << "Resource : " + _name + " not loaded" << std::endl;
+		Debug::LogError("Resource : " + _name + " not loaded");
 		return nullptr;
 	}
 

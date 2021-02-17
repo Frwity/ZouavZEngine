@@ -4,8 +4,10 @@
 class Editor
 {
 private:
-	double lastCursorPosX = 0;
-	double lastCursorPosY = 0;
+	double lastCursorScenePosX = 0;
+	double lastCursorScenePosY = 0;
+	double lastCursorGamePosX = 0;
+	double lastCursorGamePosY = 0;
 public:
 	bool isKeyboardEnable;
 	Editor();
