@@ -11,6 +11,7 @@
 #include <filesystem>
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -27,6 +28,7 @@ ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
 GameObject* selectedGameObject = nullptr;
+GameObject* gameObjectInspector = nullptr;
 
 static ImGuiID dockspaceID = 1;
 
@@ -293,7 +295,24 @@ void Editor::DisplayInspector()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        
+        if (gameObjectInspector)
+        {
+            ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
+
+            ImGui::Text("Position : ");
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->position.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->position.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->position.z);
+
+            ImGui::Text("Scale : ");
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->scale.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->scale.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->scale.z);
+
+            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                if (ImGui::Button("Add Mesh Renderer"))
+                    gameObjectInspector->AddComponent<MeshRenderer>();
+        }
     }
     ImGui::End();
 }
@@ -348,10 +367,16 @@ void DisplayChild(GameObject* parent)
             if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && parent->name != "World")
                 selectedGameObject = parent;
 
-            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject && selectedGameObject != parent)
+            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
             {
-                selectedGameObject->SetParent(parent);
-                selectedGameObject = nullptr;
+                if (selectedGameObject == parent)
+                    gameObjectInspector = selectedGameObject;
+
+                else if (!parent->IsChildOf(selectedGameObject))
+                {
+                    selectedGameObject->SetParent(parent);
+                    selectedGameObject = nullptr;
+                }
             }
         }
         for (GameObject* child : parent->GetChildren())

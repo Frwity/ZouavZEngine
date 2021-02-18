@@ -34,6 +34,8 @@ public:
 
 	const GameObject* GetParent() const { return parent; }
 
+	bool IsChildOf(const GameObject* _gameObject) const;
+		 
 	void SetParent(GameObject* _parent) 
 	{ 
 		if (parent)

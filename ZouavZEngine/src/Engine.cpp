@@ -71,16 +71,6 @@ void Engine::Load()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-
-    GameObject* child1 = GameObject::CreateGameObject("child1");
-    child1->AddComponent<MeshRenderer>(mesh, shader, texture);
-    player->AddChild(child1);
-    GameObject* child2 = GameObject::CreateGameObject("child2");
-    child2->AddComponent<MeshRenderer>(mesh, shader, texture);
-    player->AddChild(child2);
-    GameObject* child1child1 = GameObject::CreateGameObject("child1child1");
-    child1child1->AddComponent<MeshRenderer>(mesh, shader, texture);
-    child1->AddChild(child1child1);
 }
 
 void Engine::Update()

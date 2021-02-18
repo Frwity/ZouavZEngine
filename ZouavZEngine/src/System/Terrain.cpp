@@ -122,8 +122,8 @@ void Terrain::DisplayOptionWindow()
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void Terrain::AddNoiseLayer()
