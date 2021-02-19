@@ -1,12 +1,12 @@
 #include "Component/Transform.hpp"
 
 Transform::Transform(const Vec3& _position, const Vec3& _rotation, const Vec3& _scale)
-	 : position(_position), rotation(_rotation), scale(_scale)
+	 : localPosition(_position), localRotation(_rotation), localScale(_scale)
 {
 }
 
 Transform::Transform(const Vec3& _position, const Quaternion& _rotation, const Vec3& _scale)
-	: position(_position), rotation(_rotation), scale(_scale)
+	: localPosition(_position), localRotation(_rotation), localScale(_scale)
 {
 }
 
@@ -15,27 +15,97 @@ Transform Transform::InitTransform()
 	return Transform({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 }
 
+void Transform::TranslateX(float _x)
+{
+	localPosition.x += _x;
+}
+
+void Transform::TranslateY(float _y)
+{
+	localPosition.y += _y;
+}
+
+void Transform::TranslateZ(float _z)
+{
+	localPosition.z += _z;
+}
+
+void Transform::Translate(float _x, float _y, float _z)
+{
+	localPosition += {_x, _y, _z};
+}
+
 void Transform::Translate(const Vec3& _direction)
 {
-	position += _direction;
+	localPosition += _direction;
+}
+
+void Transform::RotateX(float _angle)
+{
+	localRotation = localRotation * Quaternion({ _angle, 0.0f, 0.0f });
+}
+
+void Transform::RotateY(float _angle)
+{
+	localRotation = localRotation * Quaternion({ 0.0f, _angle, 0.0f });
+}
+
+void Transform::RotateZ(float _angle)
+{
+	localRotation = localRotation * Quaternion({ 0.0f, 0.0f, _angle });
+}
+
+void Transform::Rotate(const Vec3& _angles)
+{
+	localRotation = localRotation * Quaternion(_angles);
 }
 
 void Transform::Rotate(const Quaternion& _rotToAdd)
 {
-	rotation = rotation * _rotToAdd;
+	localRotation = localRotation * _rotToAdd;
+}
+
+void Transform::AddToScale(const Vec3& _toAdd)
+{
+	localScale += _toAdd;
+}
+
+void Transform::MultiplyScaleBy(const Vec3& _coeffs)
+{
+	localScale *= _coeffs;
+}
+
+void Transform::MultiplyScaleBy(float _coeff)
+{
+	localScale *= _coeff;
+}
+
+void Transform::MultiplyScaleXBy(float _coeff)
+{
+	localScale.x *= _coeff;
+}
+
+void Transform::MultiplyScaleYBy(float _coeff)
+{
+	localScale.y *= _coeff;
+}
+
+void Transform::MultiplyScaleZBy(float _coeff)
+{
+	localScale.z *= _coeff;
 }
 
 Vec3 Transform::Right()
 {
-	return rotation.RotateVector(Vec3::Right());
+	return localRotation.RotateVector(Vec3::Right());
 }
 
 Vec3 Transform::Up()
 {
-	return rotation.RotateVector(Vec3::Up());
+	return localRotation.RotateVector(Vec3::Up());
 }
 
 Vec3 Transform::Forward()
 {
-	return rotation.RotateVector(Vec3::Forward());
+	return localRotation.RotateVector(Vec3::Forward());
 }

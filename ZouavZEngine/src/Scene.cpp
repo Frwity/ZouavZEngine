@@ -24,7 +24,7 @@ void Scene::Draw() const
 			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), Camera::GetMainCamera());
 		}
 		for (GameObject* child : gameObject->GetChildren())
-			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->position, gameObject->rotation, gameObject->scale));
+			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->localPosition, gameObject->localRotation, gameObject->localScale));
 	}
 }
 
@@ -37,5 +37,5 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix) const
 	}
 
 	for (GameObject* child : _parent->GetChildren())
-		DrawChild(child, _heritedMatrix * Mat4::CreateTRSMatrix(_parent->position, _parent->rotation, _parent->scale));
+		DrawChild(child, _heritedMatrix * Mat4::CreateTRSMatrix(_parent->localPosition, _parent->localRotation, _parent->localScale));
 }

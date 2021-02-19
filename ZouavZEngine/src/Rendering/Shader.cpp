@@ -140,7 +140,7 @@ void Shader::SetLight(const std::vector<Light*>& lights)
     {
         const std::string index = std::to_string(i++);
         
-        SetVector3(("lights[" + index + "].position").c_str(), l->gameObject->position);
+        SetVector3(("lights[" + index + "].position").c_str(), l->gameObject->localPosition);
         SetVector3(("lights[" + index + "].ambient").c_str(), l->ambient);
         SetVector3(("lights[" + index + "].diffuse").c_str(), l->diffuse);
         SetVector3(("lights[" + index + "].specular").c_str(), l->specular);
