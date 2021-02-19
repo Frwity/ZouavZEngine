@@ -23,7 +23,8 @@ class Matrix
 
         Matrix GetSubMatrix(int excludedRowIndex, int excludedColIndex) const;
         Matrix Adjunct() const;
-        Matrix Reverse() const;
+        void Reverse();
+        Matrix Reversed() const;
         Matrix CoMat() const;
         float MatMinor(int indexRow, int indexCol) const;
         float Cof(int indexRow, int indexCol) const;

@@ -5,7 +5,7 @@
 class Player : public ScriptComponent
 {
 private:
-	int life = 0;
+	int speed = 3;
 public:
 
 	Player(class GameObject* _gameobject);

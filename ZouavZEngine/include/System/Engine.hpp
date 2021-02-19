@@ -4,19 +4,29 @@
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/Editor.hpp"
+#include "System/SoundManager.hpp"
+
+enum class ENGINE_STATE
+{
+	EDITING,
+	PLAYING
+};
+
 
 class Engine
 {
 private:
 	Render render;
-public:
-	Camera camera;
+	ENGINE_STATE state{ ENGINE_STATE::EDITING };
+	SceneCamera sceneCamera{100, 100 };
 	Scene scene;
 	Editor editor;
 
-	void Load();
+public:
 
 	Engine();
 	~Engine();
+
+	void Load();
 	void Update();
 };

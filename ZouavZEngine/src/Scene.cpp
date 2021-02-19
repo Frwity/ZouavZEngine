@@ -14,28 +14,28 @@ Scene::Scene()
 	world.SetParent(nullptr);
 }
 
-void Scene::Draw() const
+void Scene::Draw(const Camera& _camera) const
 {
 	for(GameObject* gameObject : world.GetChildren()) //TODO test call time
 	{
 		if (gameObject->GetComponent<MeshRenderer>())
 		{
 			gameObject->GetComponent<MeshRenderer>()->shader->SetLight(lights);
-			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), Camera::GetMainCamera());
+			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), _camera);
 		}
 		for (GameObject* child : gameObject->GetChildren())
-			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->localPosition, gameObject->localRotation, gameObject->localScale));
+			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()), _camera);
 	}
 }
 
-void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix) const
+void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Camera& _camera) const
 {
 	if (_parent->GetComponent<MeshRenderer>())
 	{
 		_parent->GetComponent<MeshRenderer>()->shader->SetLight(lights);
-		_parent->GetComponent<MeshRenderer>()->Draw(_heritedMatrix, Camera::GetMainCamera());
+		_parent->GetComponent<MeshRenderer>()->Draw(_heritedMatrix, _camera);
 	}
 
 	for (GameObject* child : _parent->GetChildren())
-		DrawChild(child, _heritedMatrix * Mat4::CreateTRSMatrix(_parent->localPosition, _parent->localRotation, _parent->localScale));
+		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
 }

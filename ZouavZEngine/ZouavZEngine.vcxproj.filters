@@ -159,6 +159,24 @@
     <ClCompile Include="src\System\Terrain.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\SoundManager.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\AudioBroadcaster.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\AudioListener.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Move.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Debug.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -249,6 +267,24 @@
       <Filter>include\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\System\Terrain.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\SoundManager.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sound.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\AudioBroadcaster.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\AudioListener.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Move.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\Debug.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>

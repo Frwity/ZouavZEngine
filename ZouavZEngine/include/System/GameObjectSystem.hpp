@@ -12,5 +12,5 @@ public:
 	GameObjectSystem() = delete;
 	~GameObjectSystem() = delete;
 
-	static GameObject* CreateGameObject();
+	static GameObject* CreateGameObject(const std::string& _name);
 };

@@ -1,5 +1,6 @@
 #include "System/Editor.hpp"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
@@ -10,7 +11,10 @@
 #include <filesystem>
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "System/InputManager.hpp"
+#include "System/Debug.hpp"
+#include "Scene.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -19,12 +23,19 @@ char fileName[256] = "New File";
 bool newClassWindow = false;
 char className[256] = "NewClass";
 std::string actualFolder = ".";
+bool hierarchyMenu = false;
+ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
+char newGameObjectName[256] = "New GameObject";
+GameObject* newGameObjectParent = nullptr;
+GameObject* selectedGameObject = nullptr;
+GameObject* gameObjectInspector = nullptr;
 
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor()
 {
-    isKeyboardEnable = true;
+    isKeyboardEnable = false;
+    Debug::LogError("ceci est un test");
 }
 
 void Editor::NewFrame()
@@ -42,7 +53,7 @@ void Editor::DisplayMainWindow()
     ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
     DisplayMenuBar();
-    ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton);
     ImGui::End();
 }
 
@@ -244,25 +255,27 @@ void Editor::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    //TODO display scene window
-    if (ImGui::Begin("Scene"), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)
+    
+    if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse))
     {
-        if (ImGui::IsWindowFocused())
+        //Maybe other solution
+        if (ImGui::IsWindowFocused() && !isKeyboardEnable && !InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
         {
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
         }
 
         //best place ?
-        if (InputManager::GetKeyPressed(E_KEYS::ESCAPE))
+        if (InputManager::GetKeyPressedOneTime(E_KEYS::ESCAPE))
         {
             isKeyboardEnable = false;
+            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
         }
@@ -273,26 +286,156 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             _framebuffer.Resize(windowSize.x, windowSize.y);
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void Editor::DisplayInspector()
 {
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        
+        if (gameObjectInspector)
+        {
+            ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
-        ImGui::End();
+            ImGui::Text("World Position :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().z).c_str());
+
+            ImGui::Text("World Rotation :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
+
+            ImGui::Text("World Scale :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().z).c_str());
+
+            ImGui::Text("Local Position :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+
+            ImGui::Text("Local Scale :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
+
+            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                if (ImGui::Button("Add Mesh Renderer"))
+                    gameObjectInspector->AddComponent<MeshRenderer>();
+        }
     }
+    ImGui::End();
 }
 
 void Editor::DisplayConsoleWindow()
 {
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
         //TODO display error/warning message
+        for (std::string s : Debug::errorLogs)
+        {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), s.c_str());
+        }
 
-        ImGui::End();
+        for (std::string s : Debug::logs)
+        {
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), s.c_str());
+        }
+
     }
+    ImGui::End();
+}
+
+void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
+{
+    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse))
+    {
+        ImVec2 windowSize = ImGui::GetWindowSize();
+
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+            _framebuffer.Resize(windowSize.x, windowSize.y);
+
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+    }
+    ImGui::End();
+}
+
+void DisplayChild(GameObject* parent)
+{
+    if (ImGui::TreeNodeEx(parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    {
+        if (ImGui::IsItemHovered())
+        {
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
+            {
+                hierarchyMenuPos = ImGui::GetMousePos();
+                hierarchyMenu = true;
+                newGameObjectParent = parent;
+            }
+
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && parent->name != "World")
+                selectedGameObject = parent;
+
+            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
+            {
+                if (selectedGameObject == parent)
+                    gameObjectInspector = selectedGameObject;
+
+                else if (!parent->IsChildOf(selectedGameObject))
+                {
+                    selectedGameObject->SetParent(parent);
+                    selectedGameObject = nullptr;
+                }
+            }
+        }
+        for (GameObject* child : parent->GetChildren())
+            DisplayChild(child);
+
+        ImGui::TreePop();
+    }
+}
+
+void Editor::DisplayHierarchy()
+{
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
+    if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    {
+        DisplayChild(&Scene::GetCurrentScene()->GetWorld());
+
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        {
+            hierarchyMenuPos = ImGui::GetMousePos();
+            hierarchyMenu = true;
+        }
+
+        if (hierarchyMenu)
+        {
+            ImGui::SetNextWindowPos(hierarchyMenuPos);
+            if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+            {
+                ImGui::InputText("New GameObject Name", newGameObjectName, 256);
+                if (ImGui::Button("New GameObject"))
+                {
+                    GameObject* newGameObject = GameObject::CreateGameObject(newGameObjectName);
+                    if (newGameObjectParent)
+                        newGameObject->SetParent(newGameObjectParent);
+                    newGameObjectParent = nullptr;
+                    hierarchyMenu = false;
+                    strcpy_s(newGameObjectName,"New GameObject");
+                }
+            }
+            ImGui::End();
+        }
+
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+            hierarchyMenu = false;
+    }
+    ImGui::End();
 }

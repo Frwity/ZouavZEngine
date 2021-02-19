@@ -6,6 +6,11 @@
 
 class Transform
 {
+protected:
+    Vec3       worldPosition{ 0.0f, 0.0f, 0.0f };
+    Quaternion worldRotation{ 1.0f, 0.0f, 0.0f, 0.0f };
+    Vec3       worldScale{ 1.0f, 1.0f, 1.0f };
+
 public:
     Vec3       localPosition{0.0f, 0.0f, 0.0f};
     Quaternion localRotation{1.0f, 0.0f, 0.0f, 0.0f};
@@ -17,6 +22,10 @@ public:
     ~Transform() = default;
 
     static Transform InitTransform();
+
+    const Vec3& WorldPosition() const;
+    const Quaternion& WorldRotation() const;
+    const Vec3& WorldScale() const;
 
     void TranslateX(float _x);
     void TranslateY(float _y);

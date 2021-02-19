@@ -52,7 +52,7 @@ public:
 	float SquaredLength() const;
 
 	void Inverse();
-	Quaternion Inverse() const;
+	Quaternion Inversed() const;
 
     static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t);
     static Quaternion SLerp(const Quaternion& q1, const Quaternion& q2, float t);

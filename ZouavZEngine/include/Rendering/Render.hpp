@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Rendering/Framebuffer.hpp"
+
+class Framebuffer;
+
 class Render
 {
 private:
@@ -7,14 +11,22 @@ public:
 	struct GLFWwindow* window{ nullptr };
 	int width{ 0 }, height{ 0 };
 	
-	Render() {};
+	int mainFramebuffer;
+	Framebuffer gameFramebuffer;
+	Framebuffer sceneFramebuffer;
+
+	Render() = default;
 	Render(int _width, int _height);
+	~Render() = default;
+
 	void Init(int _width, int _height);
 	void Update();
-	void Draw(const class Mesh& mesh);
 	bool Stop();
 	void Clear();
-	~Render() = default;
+
+	void BindMainFBO();
+	void BindSceneFBO();
+	void BindGameFBO();
 
 	void Destroy();
 };

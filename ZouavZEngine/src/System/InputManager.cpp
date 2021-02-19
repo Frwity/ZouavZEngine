@@ -1,5 +1,6 @@
 #include "System/InputManager.hpp"
 #include <GLFW/glfw3.h>
+#include "Maths/Vec2.hpp"
 
 #include <iostream>
 
@@ -37,6 +38,12 @@ void InputManager::UpdateKeys()
 		key.second.second = key.second.first;
 		key.second.first = glfwGetKey(window, static_cast<int>(key.first)) == GLFW_PRESS;
 	}
+}
+void InputManager::Update()
+{
+	glfwPollEvents();
+	UpdateMouseButtons();
+	UpdateKeys();
 }
 
 bool InputManager::GetKeyPressed(E_KEYS _key)
@@ -81,6 +88,13 @@ bool InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button)
 {
 	auto& mouseButton = mouseButtonsState[_button];
 	return !mouseButton.first && mouseButton.second;
+}
+
+Vec2 InputManager::GetCursorPos()
+{
+	double cursorX, cursorY;
+	glfwGetCursorPos(window, &cursorX, &cursorY);
+	return { (float)cursorX , (float)cursorY };
 }
 
 void InputManager::SetWindow(GLFWwindow* _window)

@@ -9,49 +9,20 @@
 #include "Rendering/Texture.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
+#include "System/SoundManager.hpp"
 #include "Rendering/Framebuffer.hpp"
+#include "Game/Move.hpp"
 #include "Game/Player.hpp"
+#include "Sound.hpp"
 #include <iostream>
 
-void InputManager(GLFWwindow* window, Camera& camera, bool isKeyboardEnable)
-{
-    InputManager::UpdateMouseButtons();
-    InputManager::UpdateKeys();
-
-    double cursorX, cursorY;
-    glfwGetCursorPos(window, &cursorX, &cursorY);
-
-    if (!isKeyboardEnable)
-        return;
-    
-    camera.UpdateRotation({ (float)cursorX, (float)cursorY });
-
-    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = TimeManager::GetDeltaTime() * camera.Speed() + camera.Speed() * sprint * 1.2f;
-
-    if (InputManager::GetKeyPressed(E_KEYS::W))
-        camera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::S))
-        camera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::D))
-        camera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::A))
-        camera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
-        camera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
-        camera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-}
 
 Engine::Engine()
 {
@@ -59,94 +30,91 @@ Engine::Engine()
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
+    InputManager::InitKeys();
+    SoundManager::Init();
 
     //TEMP
+    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
-    camera = Camera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
-    camera.SetMainCamera();
+    sceneCamera = SceneCamera(render.width, render.height);
+    sceneCamera.SetSceneCamera();
+
     Load();
 }
 
 Engine::~Engine()
 {
 	render.Destroy();
+    SoundManager::Destroy();
 }
 
 void Engine::Load()
 {
     Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
     ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-
-    GameObject* light = GameObject::CreateGameObject();
+    Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
+    Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
+    Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
+    GameObject* light = GameObject::CreateGameObject("Light");
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
     scene.lights.push_back(light->GetComponent<Light>());
 
-    glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
+    GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
+    soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
+    soundSkull->AddComponent<AudioBroadcaster>(sound);
+    soundSkull->AddComponent<Move>();
 
-    double startCursorX, startCursorY;
-    glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
+    GameObject* player = GameObject::CreateGameObject("Player");
+    player->AddComponent<MeshRenderer>(mesh, shader, texture);
+    player->AddComponent<AudioListener>();
+    player->AddComponent<Player>();
+    player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 }
 
 void Engine::Update()
 {
-    float translation = 0.0f;
     ScriptSystem::Begin();
 
-    int previousFramebuffer;
-
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
-
-    Framebuffer frameBuffer;
-    frameBuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);
-    
-    int sceneWidth, sceneHeight = 0;
-
-    bool show = false;
-
     Terrain terrain;
-
     terrain.Generate();
-
-    camera.MoveTo({ 650, -150, 500 });
 
     while (!render.Stop())
     {
+        scene.GetWorld().UpdateTransform(Mat4::Identity());
 
         TimeManager::Update();
+        InputManager::Update();
+        SoundManager::Update();
 
-        {
-            glfwPollEvents();
-
-            InputManager(render.window, camera, editor.isKeyboardEnable);
-        }
+        sceneCamera.Update(editor.isKeyboardEnable);
 
         editor.NewFrame();
-
         ScriptSystem::FixedUpdate();
         ScriptSystem::Update();
-
+        
+        //TODO call single editor function
         editor.DisplayMainWindow();
-
-        editor.DisplaySceneWindow(render, frameBuffer);
+        editor.DisplaySceneWindow(render, render.sceneFramebuffer);
         editor.DisplayInspector();
         editor.DisplayConsoleWindow();
+        editor.DisplayHierarchy();
+        editor.DisplayGameWindow(render, render.gameFramebuffer);
 
         terrain.DisplayOptionWindow();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getId());
-        glViewport(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
-        render.Clear();
+        render.BindSceneFBO();
        
-        terrain.Draw(scene.lights);
+        terrain.Draw(scene.lights, *SceneCamera::GetSceneCamera());
+        scene.Draw(*SceneCamera::GetSceneCamera());
 
-        scene.Draw();
+        render.BindGameFBO();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, previousFramebuffer);
-        glViewport(0, 0, (int)render.width, (int)render.height);
-        render.Clear();
+        terrain.Draw(scene.lights, *Camera::GetMainCamera());
+        scene.Draw(*Camera::GetMainCamera());
+
+        render.BindMainFBO();
         
         editor.Update();
         render.Update();

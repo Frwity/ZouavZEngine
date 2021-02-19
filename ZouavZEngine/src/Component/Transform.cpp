@@ -15,6 +15,20 @@ Transform Transform::InitTransform()
 	return Transform({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 }
 
+const Vec3& Transform::WorldPosition() const
+{
+	return worldPosition;
+}
+
+const Quaternion& Transform::WorldRotation() const
+{
+	return worldRotation;
+}
+
+const Vec3& Transform::WorldScale() const
+{
+	return worldScale;
+}
 void Transform::TranslateX(float _x)
 {
 	localPosition.x += _x;

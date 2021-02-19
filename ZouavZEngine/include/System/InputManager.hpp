@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Maths/Vec2.hpp"
+
 #include <unordered_map>
 #include <utility>
+
 
 enum class E_KEYS
 {
@@ -98,24 +101,18 @@ public:
 	static void InitKeys();
 
 	static void UpdateMouseButtons();
-
 	static void UpdateKeys();
-
+	static void Update();
 	static bool GetKeyPressed(E_KEYS _key);
-
 	static bool GetKeyPressedOneTime(E_KEYS _key);
-
 	static bool GetKeyReleased(E_KEYS _key);
-
 	static bool GetKeyReleasedOneTime(E_KEYS _key);
-
 	static bool GetMouseButtonPressed(E_MOUSE_BUTTON _button);
-
 	static bool GetMouseButtonPressedOneTime(E_MOUSE_BUTTON _button);
-
 	static bool GetMouseButtonReleased(E_MOUSE_BUTTON _button);
-
 	static bool GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button);
+
+	static Vec2 GetCursorPos();
 
 	static void SetWindow(struct GLFWwindow* _window);
 };
