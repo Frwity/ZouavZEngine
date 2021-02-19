@@ -8,13 +8,14 @@
 class MeshRenderer : public Component
 {
 private:
-    Mesh* mesh;
-    Texture* texture;
 
 public:
-    Shader* shader;
+    Mesh* mesh = nullptr;
+    Texture* texture = nullptr;
+    Shader* shader = nullptr;
 
     MeshRenderer() = default;
+    MeshRenderer(class GameObject* _gameObject);
     MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture);
 
     ~MeshRenderer() = default;

@@ -10,6 +10,7 @@
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
 #include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
@@ -18,6 +19,7 @@
 #include "System/SoundManager.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Game/Move.hpp"
+#include "Game/Player.hpp"
 #include "Sound.hpp"
 #include <iostream>
 
@@ -35,9 +37,7 @@ Engine::Engine()
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
-    glfwSetCursorPos(render.window, (int)render.width / 2, (int)render.height / 2);
-
-    sceneCamera = SceneCamera(Vec2((float)startCursorX, (float)startCursorY), render.width, render.height);
+    sceneCamera = SceneCamera(render.width, render.height);
     sceneCamera.SetSceneCamera();
 
     Load();
@@ -56,15 +56,21 @@ void Engine::Load()
     Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
     Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
     Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
-    GameObject* light = GameObject::CreateGameObject();
+    GameObject* light = GameObject::CreateGameObject("Light");
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
     scene.lights.push_back(light->GetComponent<Light>());
 
-    GameObject* soundSkull = GameObject::CreateGameObject();
+    GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
     soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
+
+    GameObject* player = GameObject::CreateGameObject("Player");
+    player->AddComponent<MeshRenderer>(mesh, shader, texture);
+    player->AddComponent<AudioListener>();
+    player->AddComponent<Player>();
+    player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 }
 
 void Engine::Update()

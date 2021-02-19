@@ -14,12 +14,13 @@ private:
 	GameObject* parent{ nullptr };
 
 public:
+	std::string name;
     
 	GameObject() = delete;
-	GameObject(GameObject* _parent);
+	GameObject(const std::string& _name);
     ~GameObject() = default;
 
-	static GameObject* CreateGameObject();
+	static GameObject* CreateGameObject(const std::string& _name);
 
 	const std::vector<GameObject*>& GetChildren() const { return children; }
 
@@ -33,6 +34,8 @@ public:
 
 	const GameObject* GetParent() const { return parent; }
 
+	bool IsChildOf(const GameObject* _gameObject) const;
+		 
 	void SetParent(GameObject* _parent) 
 	{ 
 		if (parent)

@@ -6,7 +6,7 @@
 #include "System/Editor.hpp"
 #include "System/SoundManager.hpp"
 
-enum ENGINE_STATE
+enum class ENGINE_STATE
 {
 	EDITING,
 	PLAYING
@@ -17,8 +17,8 @@ class Engine
 {
 private:
 	Render render;
-	ENGINE_STATE state{EDITING};
-	SceneCamera sceneCamera{Vec2(0, 0), 100, 100 };
+	ENGINE_STATE state{ ENGINE_STATE::EDITING };
+	SceneCamera sceneCamera{100, 100 };
 	Scene scene;
 	Editor editor;
 

@@ -143,7 +143,7 @@ void Quaternion::Inverse()
 	Scale(1 / Norm());
 }
 
-Quaternion Quaternion::Inverse() const
+Quaternion Quaternion::Inversed() const
 {
 	return Conjugate().Scale(1 / Norm());
 }

@@ -56,7 +56,7 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 	shader->Use();
 	shader->SetLight(_lights);
 	Mat4 matrixCamera = _camera.GetMatrix();
-	shader->SetMatrix("view", matrixCamera.Reverse());
+	shader->SetMatrix("view", matrixCamera.Reversed());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
@@ -122,8 +122,8 @@ void Terrain::DisplayOptionWindow()
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void Terrain::AddNoiseLayer()
