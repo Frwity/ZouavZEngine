@@ -57,10 +57,19 @@ void Editor::DisplayMainWindow()
     ImGui::End();
 }
 
+std::string GetRightName(const std::string& _str)
+{
+    return _str.substr(_str.find_last_of("/\\") + 1);
+}
+
 void ListActualFolder(bool& windowOpened)
 {
     if (ImGui::Button("../"))
         actualFolder.append("/../");
+
+    ImGui::SameLine(ImGui::GetWindowWidth() - 20.0f);
+    if (ImGui::Button("X"))
+        windowOpened = !windowOpened;
 
     std::string currentName;
 
@@ -69,7 +78,7 @@ void ListActualFolder(bool& windowOpened)
         currentName = entry.path().string();
         if (entry.is_directory())
         {
-            if (ImGui::Button(currentName.c_str()))
+            if (ImGui::Button(GetRightName(currentName).c_str()))
                 actualFolder = currentName;
             ImGui::SameLine();
             if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
@@ -85,7 +94,7 @@ void ListActualFolder(bool& windowOpened)
         }
         else
         {
-            ImGui::Text(currentName.c_str());
+            ImGui::Text(GetRightName(currentName).c_str());
             ImGui::SameLine();
             if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
             {
