@@ -30,6 +30,10 @@ GameObject* newGameObjectParent = nullptr;
 GameObject* selectedGameObject = nullptr;
 GameObject* gameObjectInspector = nullptr;
 
+bool consoleText = true;
+bool consoleWarning = true;
+bool consoleError = true;
+
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor()
@@ -347,18 +351,25 @@ void Editor::DisplayConsoleWindow()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
+        ImGui::Checkbox("Text", &consoleText);
+        ImGui::SameLine(); ImGui::Checkbox("Warning", &consoleWarning);
+        ImGui::SameLine(); ImGui::Checkbox("Error", &consoleError);
+
         for (const auto& log : Debug::logs)
         {
             switch (log.second)
             {
                 case E_LOGS_TYPE::TEXT:
-                    ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), log.first.c_str());
+                    if (consoleText)
+                        ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), log.first.c_str());
                     break;
                 case E_LOGS_TYPE::WARNING:
-                    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), log.first.c_str());
+                    if (consoleWarning)
+                        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), log.first.c_str());
                     break;
                 case E_LOGS_TYPE::ERROR:
-                    ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), log.first.c_str());
+                    if (consoleError)
+                        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), log.first.c_str());
                     break;
             }
         }
