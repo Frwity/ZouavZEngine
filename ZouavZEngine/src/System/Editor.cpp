@@ -347,15 +347,20 @@ void Editor::DisplayConsoleWindow()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        //TODO display error/warning message
-        for (std::string s : Debug::errorLogs)
+        for (const auto& log : Debug::logs)
         {
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), s.c_str());
-        }
-
-        for (std::string s : Debug::logs)
-        {
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), s.c_str());
+            switch (log.second)
+            {
+                case E_LOGS_TYPE::TEXT:
+                    ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), log.first.c_str());
+                    break;
+                case E_LOGS_TYPE::WARNING:
+                    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), log.first.c_str());
+                    break;
+                case E_LOGS_TYPE::ERROR:
+                    ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), log.first.c_str());
+                    break;
+            }
         }
 
     }

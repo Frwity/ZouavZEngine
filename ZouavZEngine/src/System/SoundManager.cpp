@@ -33,7 +33,6 @@ void SoundManager::Init()
 
     alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
     alListenerfv(AL_ORIENTATION, values);
-
 }
 
 void SoundManager::Update()
