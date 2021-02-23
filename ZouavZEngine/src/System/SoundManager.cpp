@@ -2,6 +2,7 @@
 #include <AL/alc.h>
 #include <iostream>
 #include "Sound.hpp"
+#include "System/Debug.hpp"
 #include "System/SoundManager.hpp"
 
 float SoundManager::mainVolume = 1.0f;
@@ -12,20 +13,20 @@ void SoundManager::Init()
     ALCdevice* Device = alcOpenDevice(nullptr);
     if (!Device)
     {
-        std::cout << "OpenAL Error : Open Device failed" << std::endl;
+        Debug::LogWarning("OpenAL Error : Open Device failed");
         return;
     }
 
     ALCcontext* Context = alcCreateContext(Device, nullptr);
     if (!Context)
     {
-        std::cout << "OpenAL Error : Create Context failed" << std::endl;
+        Debug::LogWarning("OpenAL Error : Create Context failed");
         return;
     }
 
     if (!alcMakeContextCurrent(Context))
     {
-        std::cout << "OpenAL Error : Make Context failed" << std::endl;
+        Debug::LogWarning("OpenAL Error : Make Context failed");
         return;
     }
 

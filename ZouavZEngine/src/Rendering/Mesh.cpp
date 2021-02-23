@@ -8,6 +8,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "System/Debug.hpp"
+
 #include "Maths/Vec2.hpp"
 #include "Maths/Vec3.hpp"
 #include "Rendering/Mesh.hpp"
@@ -28,7 +30,7 @@ Mesh::Mesh(const char* path)
 													aiProcess_FindInvalidData | 
 													aiProcess_ValidateDataStructure );
     if (!scene)
-        std::cout << "Mesh load failed!: " << path << std::endl;
+        Debug::LogWarning(std::string("Mesh load failed!: ").append(path));
 
     std::vector<Vertex> vertices;
 	std::vector<int> indices;

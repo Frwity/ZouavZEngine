@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 
-#define ZASSERT(condition) if (!(condition)) { std::cerr << "Assertion failed : " << #condition << "\nAt " << __FUNCTION__ << "\nIn " << __FILE__ << "\nLine " << __LINE__; abort(); }
+#define ZASSERT(condition, message) if (!(condition)) { std::cerr << "Assertion failed : " << message << "\nAt " << __FUNCTION__ << "\nIn " << __FILE__ << "\nLine " << __LINE__; abort(); }
 
 enum class E_LOGS_TYPE
 {

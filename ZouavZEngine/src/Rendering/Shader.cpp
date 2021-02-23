@@ -6,6 +6,7 @@
 #include "Maths/Vec2.hpp"
 #include "Component/Light.hpp"
 #include "GameObject.hpp"
+#include "System/Debug.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
@@ -81,7 +82,7 @@ void Shader::DebugCheck(const int& shader, const char* msg, const char* src)
     if (!success)
     {
         glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-        std::cout << msg << " : " << src << std::endl << infoLog << std::endl;
+        Debug::LogWarning(std::string(msg).append(" : ").append(src).append("\n").append(infoLog).append("\n"));
     }
 }
 
