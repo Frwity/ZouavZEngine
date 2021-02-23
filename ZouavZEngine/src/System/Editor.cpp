@@ -15,6 +15,7 @@
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
+#include "System/TimeManager.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -418,4 +419,23 @@ void Editor::DisplayHierarchy()
             hierarchyMenu = false;
     }
     ImGui::End();
+}
+
+void Editor::MoveSelectedGameobject()
+{
+    if (gameObjectInspector == nullptr)
+        return;
+    
+
+    if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * TimeManager::GetDeltaTime());
+
+    if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+            gameObjectInspector->Translate(-gameObjectInspector->Forward() * TimeManager::GetDeltaTime());
+
+    if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+        gameObjectInspector->Translate(gameObjectInspector->Right() * TimeManager::GetDeltaTime());
+
+    if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))    
+        gameObjectInspector->Translate(-gameObjectInspector->Right() * TimeManager::GetDeltaTime());
 }
