@@ -348,9 +348,14 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
     ImGui::End();
 }
 
-void DisplayChild(GameObject* parent)
+void DisplayChild(GameObject* _parent)
 {
-    if (ImGui::TreeNodeEx(parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf;
+    
+    if (selectedGameObject == _parent)
+        flags |= ImGuiTreeNodeFlags_Selected;
+
+    if (ImGui::TreeNodeEx(_parent->name.c_str(), flags))
     {
         if (ImGui::IsItemHovered())
         {
@@ -358,25 +363,25 @@ void DisplayChild(GameObject* parent)
             {
                 hierarchyMenuPos = ImGui::GetMousePos();
                 hierarchyMenu = true;
-                newGameObjectParent = parent;
+                newGameObjectParent = _parent;
             }
 
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && parent->name != "World")
-                selectedGameObject = parent;
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && _parent->name != "World")
+                selectedGameObject = _parent;
 
             if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
             {
-                if (selectedGameObject == parent)
+                if (selectedGameObject == _parent)
                     gameObjectInspector = selectedGameObject;
 
-                else if (!parent->IsChildOf(selectedGameObject))
+                else if (!_parent->IsChildOf(selectedGameObject))
                 {
-                    selectedGameObject->SetParent(parent);
+                    selectedGameObject->SetParent(_parent);
                     selectedGameObject = nullptr;
                 }
             }
         }
-        for (GameObject* child : parent->GetChildren())
+        for (GameObject* child : _parent->GetChildren())
             DisplayChild(child);
 
         ImGui::TreePop();
@@ -423,19 +428,19 @@ void Editor::DisplayHierarchy()
 
 void Editor::MoveSelectedGameobject()
 {
-    if (gameObjectInspector == nullptr)
+    if (selectedGameObject == nullptr)
         return;
     
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        gameObjectInspector->Translate(gameObjectInspector->Forward() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(selectedGameObject->Forward() * TimeManager::GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-            gameObjectInspector->Translate(-gameObjectInspector->Forward() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(-selectedGameObject->Forward() * TimeManager::GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-        gameObjectInspector->Translate(gameObjectInspector->Right() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(selectedGameObject->Right() * TimeManager::GetDeltaTime());
 
-    if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))    
-        gameObjectInspector->Translate(-gameObjectInspector->Right() * TimeManager::GetDeltaTime());
+    if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+        selectedGameObject->Translate(-selectedGameObject->Right() * TimeManager::GetDeltaTime());
 }
