@@ -76,4 +76,6 @@ public:
 		}
 		return nullptr;
 	}
+
+	void UpdateTransform(const class Mat4& _heritedTransform);
 };

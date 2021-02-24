@@ -8,10 +8,10 @@
 class MeshRenderer : public Component
 {
 private:
-
-public:
     Mesh* mesh = nullptr;
     Texture* texture = nullptr;
+
+public:
     Shader* shader = nullptr;
 
     MeshRenderer() = default;

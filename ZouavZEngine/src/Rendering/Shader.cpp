@@ -6,6 +6,7 @@
 #include "Maths/Vec2.hpp"
 #include "Component/Light.hpp"
 #include "GameObject.hpp"
+#include "System/Debug.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
@@ -81,7 +82,7 @@ void Shader::DebugCheck(const int& shader, const char* msg, const char* src)
     if (!success)
     {
         glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-        std::cout << msg << " : " << src << std::endl << infoLog << std::endl;
+        Debug::LogWarning(std::string(msg).append(" : ").append(src).append("\n").append(infoLog).append("\n"));
     }
 }
 
@@ -140,7 +141,7 @@ void Shader::SetLight(const std::vector<Light*>& lights)
     {
         const std::string index = std::to_string(i++);
         
-        SetVector3(("lights[" + index + "].position").c_str(), l->gameObject->position);
+        SetVector3(("lights[" + index + "].position").c_str(), l->gameObject->localPosition);
         SetVector3(("lights[" + index + "].ambient").c_str(), l->ambient);
         SetVector3(("lights[" + index + "].diffuse").c_str(), l->diffuse);
         SetVector3(("lights[" + index + "].specular").c_str(), l->specular);

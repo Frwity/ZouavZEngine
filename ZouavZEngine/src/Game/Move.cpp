@@ -14,7 +14,7 @@ void Move::Begin()
 
 void Move::Update()
 {
-	gameObject->position = gameObject->position + Vec3(sinf(TimeManager::GetTime()),0.0f, cosf(TimeManager::GetTime()));
+	gameObject->localPosition = gameObject->localPosition + Vec3(sinf(TimeManager::GetTime()),0.0f, cosf(TimeManager::GetTime()));
 	gameObject->GetComponent<AudioBroadcaster>()->Update();
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::P))

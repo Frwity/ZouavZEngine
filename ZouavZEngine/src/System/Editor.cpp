@@ -31,6 +31,10 @@ GameObject* newGameObjectParent = nullptr;
 GameObject* selectedGameObject = nullptr;
 GameObject* gameObjectInspector = nullptr;
 
+bool consoleText = true;
+bool consoleWarning = true;
+bool consoleError = true;
+
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor()
@@ -57,10 +61,19 @@ void Editor::DisplayMainWindow()
     ImGui::End();
 }
 
+std::string GetRightName(const std::string& _str)
+{
+    return _str.substr(_str.find_last_of("/\\") + 1);
+}
+
 void ListActualFolder(bool& windowOpened)
 {
     if (ImGui::Button("../"))
         actualFolder.append("/../");
+
+    ImGui::SameLine(ImGui::GetWindowWidth() - 20.0f);
+    if (ImGui::Button("X"))
+        windowOpened = !windowOpened;
 
     std::string currentName;
 
@@ -69,7 +82,7 @@ void ListActualFolder(bool& windowOpened)
         currentName = entry.path().string();
         if (entry.is_directory())
         {
-            if (ImGui::Button(currentName.c_str()))
+            if (ImGui::Button(GetRightName(currentName).c_str()))
                 actualFolder = currentName;
             ImGui::SameLine();
             if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
@@ -85,7 +98,7 @@ void ListActualFolder(bool& windowOpened)
         }
         else
         {
-            ImGui::Text(currentName.c_str());
+            ImGui::Text(GetRightName(currentName).c_str());
             ImGui::SameLine();
             if (ImGui::Button(std::string("Remove##").append(currentName).c_str()))
             {
@@ -297,15 +310,31 @@ void Editor::DisplayInspector()
         {
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
-            ImGui::Text("Position : ");
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->position.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->position.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->position.z);
+            ImGui::Text("World Position :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().z).c_str());
 
-            ImGui::Text("Scale : ");
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->scale.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->scale.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(100.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->scale.z);
+            ImGui::Text("World Rotation :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
+
+            ImGui::Text("World Scale :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().x).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().y).c_str());
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().z).c_str());
+
+            ImGui::Text("Local Position :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+
+            ImGui::Text("Local Scale :");
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
+            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
 
             if (!gameObjectInspector->GetComponent<MeshRenderer>())
                 if (ImGui::Button("Add Mesh Renderer"))
@@ -320,15 +349,27 @@ void Editor::DisplayConsoleWindow()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
-        //TODO give possibility to change color of message
-        for (std::string s : Debug::errorLogs)
-        {
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), s.c_str());
-        }
+        ImGui::Checkbox("Text", &consoleText);
+        ImGui::SameLine(); ImGui::Checkbox("Warning", &consoleWarning);
+        ImGui::SameLine(); ImGui::Checkbox("Error", &consoleError);
 
-        for (std::string s : Debug::logs)
+        for (const auto& log : Debug::logs)
         {
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), s.c_str());
+            switch (log.second)
+            {
+                case E_LOGS_TYPE::TEXT:
+                    if (consoleText)
+                        ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), log.first.c_str());
+                    break;
+                case E_LOGS_TYPE::WARNING:
+                    if (consoleWarning)
+                        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), log.first.c_str());
+                    break;
+                case E_LOGS_TYPE::ERROR:
+                    if (consoleError)
+                        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), log.first.c_str());
+                    break;
+            }
         }
     }
     ImGui::End();

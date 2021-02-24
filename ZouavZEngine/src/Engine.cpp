@@ -82,6 +82,8 @@ void Engine::Update()
 
     while (!render.Stop())
     {
+        scene.GetWorld().UpdateTransform(Mat4::Identity());
+
         TimeManager::Update();
         InputManager::Update();
         SoundManager::Update();

@@ -6,17 +6,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Rendering/Mesh.hpp"
-
+#include "System/Debug.hpp"
 
 Render::Render(int _width, int _height)
     : width(_width), height(_height)
 {
       // Init glfw
-    if (!glfwInit())
-    {
-        fprintf(stderr, "glfwInit failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(glfwInit(), "Failed to init glfw");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -24,26 +20,17 @@ Render::Render(int _width, int _height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window = glfwCreateWindow(width, height, "ZouavZ Engine", nullptr, nullptr);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "glfwCreateWindow failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(window, "Failed to create glfw window");
 
     glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-    {
-        fprintf(stderr, "gladLoadGLLoader failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)), "Failed to load glad");
 
     glViewport(0, 0, width, height);
 
     //TODO PUT IN DEBUG
-    printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
-    printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
-    printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+    Debug::Log(std::string("GL_VENDOR = ").append(((const char*)glGetString(GL_VENDOR))));
+    Debug::Log(std::string("GL_RENDERER = ").append(((const char*)glGetString(GL_RENDERER))));
+    Debug::Log(std::string("GL_VERSION = ").append(((const char*)glGetString(GL_VERSION))));
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -53,11 +40,7 @@ void Render::Init(int _width, int _height)
 {
 
     // Init glfw
-    if (!glfwInit())
-    {
-        fprintf(stderr, "glfwInit failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(glfwInit(), "Failed to init glfw");
 
     GLFWmonitor* MyMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
@@ -71,24 +54,15 @@ void Render::Init(int _width, int _height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window = glfwCreateWindow(width, height, "ZouavZ Engine", nullptr, nullptr);
-    if (window == nullptr)
-    {
-        fprintf(stderr, "glfwCreateWindow failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(window, "Failed to create glfw window");
 
     glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-    {
-        fprintf(stderr, "gladLoadGLLoader failed");
-        //TODO EXIT WITH ERROR
-    }
+    ZASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)), "Failed to load glad");
 
     //TODO PUT IN DEBUG
-    printf("GL_VENDOR = %s\n", glGetString(GL_VENDOR));
-    printf("GL_RENDERER = %s\n", glGetString(GL_RENDERER));
-    printf("GL_VERSION = %s\n", glGetString(GL_VERSION));
+    Debug::Log(std::string("GL_VENDOR = ").append(((const char*)glGetString(GL_VENDOR))));
+    Debug::Log(std::string("GL_RENDERER = ").append(((const char*)glGetString(GL_RENDERER))));
+    Debug::Log(std::string("GL_VERSION = ").append(((const char*)glGetString(GL_VERSION))));
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, (int)width / 2, (int)height / 2);
@@ -109,7 +83,6 @@ void Render::Init(int _width, int _height)
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mainFramebuffer);
     sceneFramebuffer.Generate(400, 400, GL_RGBA, GL_UNSIGNED_BYTE);

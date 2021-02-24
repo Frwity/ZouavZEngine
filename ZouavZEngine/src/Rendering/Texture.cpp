@@ -2,6 +2,7 @@
 #include "stb_image.h"
 #include <glad/glad.h>
 #include <iostream>
+#include "System/Debug.hpp"
 #include "Rendering/Texture.hpp"
 
 Texture::Texture(const char* src)
@@ -25,7 +26,7 @@ Texture::Texture(const char* src)
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
-        std::cout << "Failed to load texture" << std::endl;
+        Debug::LogWarning(std::string("Failed to load texture : ").append(src).append("\n"));
 
     stbi_image_free(data);
 }

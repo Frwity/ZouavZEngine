@@ -27,10 +27,9 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
     shader->SetMatrix("view", matrixCamera.Reversed());
     shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    shader->SetMatrix("model", heritedMatrix * Mat4::CreateTRSMatrix(gameObject->position, gameObject->rotation, gameObject->scale));
+    shader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
     shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 
     glBindVertexArray(mesh->GetID());
     glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
-
 }
