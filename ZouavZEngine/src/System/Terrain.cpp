@@ -71,7 +71,7 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 
 void Terrain::DisplayOptionWindow()
 {
-	if (ImGui::Begin("Procedural Generation", nullptr))
+	if (ImGui::Begin("Procedural Generation", nullptr, ImGuiWindowFlags_NoNavInputs))
 	{
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;

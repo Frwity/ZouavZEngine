@@ -261,7 +261,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
 
-    if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse))
+    if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
         if (InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT) && !isKeyboardEnable)
         {
@@ -291,7 +291,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 void Editor::DisplayInspector()
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
+    if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
         if (gameObjectInspector)
         {
@@ -421,7 +421,10 @@ void Editor::DisplayHierarchy()
         }
 
         if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+        {
             hierarchyMenu = false;
+            selectedGameObject = nullptr;
+        }
     }
     ImGui::End();
 }
