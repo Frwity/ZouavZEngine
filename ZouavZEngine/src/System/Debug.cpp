@@ -1,14 +1,18 @@
 #include "System/Debug.hpp"
 
-std::vector<std::string> Debug::logs;
-std::vector<std::string> Debug::errorLogs;
+std::unordered_map<std::string, E_LOGS_TYPE> Debug::logs;
 
 void Debug::Log(std::string log)
 {
-	logs.push_back(log);
+	logs.emplace(log, E_LOGS_TYPE::TEXT);
+}
+
+void Debug::LogWarning(std::string warningLog)
+{
+	logs.emplace(warningLog, E_LOGS_TYPE::WARNING);
 }
 
 void Debug::LogError(std::string errorLog)
 {
-	errorLogs.push_back(errorLog);
+	logs.emplace(errorLog, E_LOGS_TYPE::ERROR);
 }

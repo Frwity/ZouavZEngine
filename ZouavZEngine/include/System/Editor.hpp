@@ -41,4 +41,5 @@ public:
 	void FileMenu();
 	void Update();
 	void DisplayHierarchy();
+	void MoveSelectedGameobject();
 };

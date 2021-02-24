@@ -57,31 +57,21 @@ void Engine::Load()
     Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
     Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
     Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
-    GameObject* light = GameObject::CreateGameObject();
+    GameObject* light = GameObject::CreateGameObject("Light");
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
     scene.lights.push_back(light->GetComponent<Light>());
 
-    GameObject* soundSkull = GameObject::CreateGameObject();
+    GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
     soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
-    GameObject* player = GameObject::CreateGameObject();
+    GameObject* player = GameObject::CreateGameObject("Player");
     player->AddComponent<MeshRenderer>(mesh, shader, texture);
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-
-    GameObject* skullX = GameObject::CreateGameObject();
-    skullX->AddComponent<MeshRenderer>(mesh, shader, texture);
-    skullX->position = Vec3::Right();
-    GameObject* skullY = GameObject::CreateGameObject();
-    skullY->AddComponent<MeshRenderer>(mesh, shader, texture);
-    skullY->position = Vec3::Up();
-    GameObject* skullZ = GameObject::CreateGameObject();
-    skullZ->AddComponent<MeshRenderer>(mesh, shader, texture);
-    skullZ->position = Vec3::Forward();
 }
 
 void Engine::Update()
@@ -93,8 +83,10 @@ void Engine::Update()
 
     while (!render.Stop())
     {
-        InputManager::Update();
+        scene.GetWorld().UpdateTransform(Mat4::Identity());
+
         TimeManager::Update();
+        InputManager::Update();
 
         editor.NewFrame();
 
@@ -115,6 +107,7 @@ void Engine::Update()
         editor.DisplayConsoleWindow();
         editor.DisplayHierarchy();
         editor.DisplayGameWindow(render, render.gameFramebuffer);
+        editor.MoveSelectedGameobject();
 
         terrain.DisplayOptionWindow();
 

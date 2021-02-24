@@ -18,7 +18,7 @@ void Player::Begin()
 {
 	gameObject->GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
 	gameObject->GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
-	gameObject->rotation = Quaternion{ {0,M_PI,0} };
+	gameObject->localRotation = Quaternion{ {0,M_PI,0} };
 
 }
 

@@ -61,10 +61,10 @@ Mat4 Mat4::CreateXRotationMatrix(float angle)
     rotationMat.Accessor(0, 0) = 1;
     rotationMat.Accessor(3, 3) = 1;
 
-    rotationMat.Accessor(1, 1) = cos(angle);
-    rotationMat.Accessor(1, 2) = -sin(angle);
-    rotationMat.Accessor(2, 1) = sin(angle);
-    rotationMat.Accessor(2, 2) = cos(angle);
+    rotationMat.Accessor(1, 1) = cosf(angle);
+    rotationMat.Accessor(1, 2) = -sinf(angle);
+    rotationMat.Accessor(2, 1) = sinf(angle);
+    rotationMat.Accessor(2, 2) = cosf(angle);
 
     return rotationMat;    
 }
@@ -76,10 +76,10 @@ Mat4 Mat4::CreateYRotationMatrix(float angle)
     rotationMat.Accessor(1, 1) = 1;
     rotationMat.Accessor(3, 3) = 1;
 
-    rotationMat.Accessor(0, 0) = cos(angle);
-    rotationMat.Accessor(0, 2) = sin(angle);
-    rotationMat.Accessor(2, 0) = -sin(angle);
-    rotationMat.Accessor(2, 2) = cos(angle);
+    rotationMat.Accessor(0, 0) = cosf(angle);
+    rotationMat.Accessor(0, 2) = sinf(angle);
+    rotationMat.Accessor(2, 0) = -sinf(angle);
+    rotationMat.Accessor(2, 2) = cosf(angle);
 
     return rotationMat;    
 }
@@ -91,10 +91,10 @@ Mat4 Mat4::CreateZRotationMatrix(float angle)
     rotationMat.Accessor(2, 2) = 1;
     rotationMat.Accessor(3, 3) = 1;
 
-    rotationMat.Accessor(0, 0) = cos(angle);
-    rotationMat.Accessor(0, 1) = -sin(angle);
-    rotationMat.Accessor(1, 0) = sin(angle);
-    rotationMat.Accessor(1, 1) = cos(angle);
+    rotationMat.Accessor(0, 0) = cosf(angle);
+    rotationMat.Accessor(0, 1) = -sinf(angle);
+    rotationMat.Accessor(1, 0) = sinf(angle);
+    rotationMat.Accessor(1, 1) = cosf(angle);
 
     return rotationMat;    
 }
@@ -124,9 +124,9 @@ Mat4 Mat4::CreateUnitVecRotMatrix(const Vec3& v, float angle)
 {
     Mat4 rotationMat = Identity();
 
-    float c = cos(angle);
-    float s = sin(angle);
-    float t = 1 - cos(angle);
+    float c = cosf(angle);
+    float s = sinf(angle);
+    float t = 1 - cosf(angle);
 
     rotationMat.Accessor(0, 0) = (t * v.x) * (t * v.x) + c;
     rotationMat.Accessor(1, 1) = (t * v.y) * (t * v.y) + c;

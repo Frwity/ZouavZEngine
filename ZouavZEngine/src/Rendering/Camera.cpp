@@ -42,13 +42,13 @@ Mat4 Camera::GetMatrix() const
     cameraMatrix.Accessor(2, 1) = -forward.y;
     cameraMatrix.Accessor(2, 2) = -forward.z;
 
-    cameraMatrix.Accessor(0, 3) = -right.Dot(-gameObject->position + position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(-gameObject->position + position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(-gameObject->position + position);
+    cameraMatrix.Accessor(0, 3) = -right.Dot(-gameObject->localPosition + position);
+    cameraMatrix.Accessor(1, 3) = -up.Dot(-gameObject->localPosition + position);
+    cameraMatrix.Accessor(2, 3) = forward.Dot(-gameObject->localPosition + position);
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return (gameObject->rotation.GetRotationMatrix() * cameraMatrix.Reversed());
+    return (gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
 }
 
 
@@ -115,11 +115,6 @@ void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
 
 void SceneCamera::Update(bool _isKeyboardEnable)
 {
-    if (!_isKeyboardEnable)
-        return;
-
-    UpdateRotation(InputManager::GetCursorPos());
-
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
     float cameraSpeed = TimeManager::GetDeltaTime() * Speed() + Speed() * sprint * 1.2f;
 
@@ -140,4 +135,9 @@ void SceneCamera::Update(bool _isKeyboardEnable)
 
     if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         MoveTo({ 0.0f, -cameraSpeed, 0.0f });
+
+    if (!_isKeyboardEnable)
+        return;
+
+    UpdateRotation(InputManager::GetCursorPos());
 }

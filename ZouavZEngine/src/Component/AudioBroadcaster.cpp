@@ -9,7 +9,7 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
 void AudioBroadcaster::Update()
 {
 	if (updatePosition && sound)
-		sound->SetPosition(gameObject->position);
+		sound->SetPosition(gameObject->WorldPosition());
 }
 
 void AudioBroadcaster::Play()

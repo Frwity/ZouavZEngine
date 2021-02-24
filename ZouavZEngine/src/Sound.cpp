@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "System/SoundManager.hpp"
+#include "System/Debug.hpp"
 #include "Sound.hpp"
 
 Sound::Sound(const char* _path)
@@ -13,7 +14,7 @@ Sound::Sound(const char* _path)
     SNDFILE* File = sf_open(_path, SFM_READ, &FileInfos);
     if (!File)
     {
-        std::cout << _path << " not loaded";
+        Debug::LogWarning(std::string(_path).append(" not loaded\n"));
         return;
     }
     ALsizei NbSamples = static_cast<ALsizei>(FileInfos.channels * FileInfos.frames);
@@ -22,7 +23,7 @@ Sound::Sound(const char* _path)
     std::vector<ALshort> Samples(NbSamples);
     if (sf_read_short(File, &Samples[0], NbSamples) < NbSamples)
     {
-        std::cout << _path << " not loaded";
+        Debug::LogWarning(std::string(_path).append(" not loaded\n"));
         return;
     }
 
@@ -33,7 +34,7 @@ Sound::Sound(const char* _path)
     {
         case 1:  Format = AL_FORMAT_MONO16;   break;
         case 2:  Format = AL_FORMAT_STEREO16; break;
-        default: std::cout << _path << " not loaded";  return;
+        Debug::LogWarning(std::string(_path).append(" not loaded\n"));
     }
 
     alGenBuffers(1, &buffer);
@@ -44,7 +45,7 @@ Sound::Sound(const char* _path)
     // Vérification des erreurs
     if (alGetError() != AL_NO_ERROR)
     {
-        std::cout << _path << " not loaded";
+        Debug::LogWarning(std::string(_path).append(" not loaded\n"));
         return;
     }
 
