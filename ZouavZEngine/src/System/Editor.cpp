@@ -15,6 +15,7 @@
 #include "System/Debug.hpp"
 #include "Scene.hpp"
 #include "System/TimeManager.hpp"
+#include "System/Engine.hpp"
 #include "System/Editor.hpp"
 
 bool newFolderWindow = false;
@@ -37,14 +38,19 @@ bool consoleError = true;
 
 static ImGuiID dockspaceID = 1;
 
-Editor::Editor()
+Editor::Editor(class Engine& _engine)
+    : engine(_engine)
 {
     isKeyboardEnable = false;
 }
 
 void Editor::Init()
 {
+    sceneCamera = SceneCamera(engine.render.width, engine.render.height);
+    sceneCamera.SetSceneCamera();
     imguiStyle = &ImGui::GetStyle();
+
+    editorClock = TimeManager::CreateClock();
 }
 
 void Editor::NewFrame()
@@ -90,18 +96,21 @@ void Editor::DisplayOptionWindow()
 	if (ImGui::Button("Play"))
 	{
 	    state = EDITOR_STATE::PLAYING;
+        TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
     }
     ImGui::SameLine();
     if (ImGui::Button("Pause"))
     {
         state = EDITOR_STATE::PAUSE;
+        TimeManager::gameClock->Dehactivate();
 
     }
     ImGui::SameLine();
     if (ImGui::Button("Stop"))
     {
         state = EDITOR_STATE::EDITING;
+        TimeManager::gameClock->Reset();
 
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
 	}
@@ -312,6 +321,8 @@ void Editor::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
+
+    sceneCamera.Update(isKeyboardEnable, editorClock->GetDeltaTime());
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
@@ -338,9 +349,9 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
-            _framebuffer.Resize(windowSize.x, windowSize.y);
+            _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
 
-        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
     }
     ImGui::End();
 }
@@ -426,9 +437,9 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
-            _framebuffer.Resize(windowSize.x, windowSize.y);
+            _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
 
-        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2(_framebuffer.getWidth(), _framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
 }
@@ -521,14 +532,14 @@ void Editor::MoveSelectedGameobject()
     
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        selectedGameObject->Translate(selectedGameObject->Forward() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(selectedGameObject->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        selectedGameObject->Translate(-selectedGameObject->Forward() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(-selectedGameObject->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-        selectedGameObject->Translate(selectedGameObject->Right() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(selectedGameObject->Right() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-        selectedGameObject->Translate(-selectedGameObject->Right() * TimeManager::GetDeltaTime());
+        selectedGameObject->Translate(-selectedGameObject->Right() * editorClock->GetDeltaTime());
 }

@@ -5,14 +5,12 @@ std::vector<std::unique_ptr<Clock>> TimeManager::clocks;
 float TimeManager::time = (float)(glfwGetTime());
 float TimeManager::deltaTime = (float)(glfwGetTime());
 float TimeManager::previousTime = 0.0f;
-float TimeManager::scale = 1.0f;
+Clock* TimeManager::gameClock = nullptr;
 
 
-Clock& TimeManager::CreateClock()
+Clock* TimeManager::CreateClock()
 {
-	clocks.emplace_back();
-
-	return *clocks.back();
+	return clocks.emplace_back(std::make_unique<Clock>()).get();
 }
 
 void TimeManager::RemoveClock(Clock* _clock)
@@ -27,6 +25,12 @@ void TimeManager::RemoveClock(Clock* _clock)
 		else
 			++it;
 	}
+}
+
+void TimeManager::Init()
+{
+	gameClock = CreateClock();
+	gameClock->activate = false;
 }
 
 void TimeManager::Update()
@@ -48,4 +52,12 @@ void Clock::Update(float _deltaTime)
 		deltaTime = time - previousTime;
 		previousTime = time;
 	}
+}
+
+void Clock::Reset()
+{
+	 time = 0.0f;
+	 deltaTime = 0.0f;
+	 previousTime = 0.0f;
+	 scale = 1.0f;
 }

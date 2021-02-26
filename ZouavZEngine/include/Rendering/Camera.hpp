@@ -58,5 +58,5 @@ public:
 	Mat4 GetLookAtMatrix(const Vec3& _target) const;
 	void UpdateRotation(const Vec2& _newMousePosition);
 
-	void Update(bool _isKeyboardEnable);
+	void Update(bool _isKeyboardEnable, float _deltaTime);
 };

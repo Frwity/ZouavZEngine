@@ -1,6 +1,5 @@
 #pragma once
 #include "Rendering/Render.hpp"
-#include "Rendering/Camera.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/Editor.hpp"
@@ -8,11 +7,11 @@
 
 class Engine
 {
+	friend class Editor;
 private:
 	Editor editor;
 	Render render;
 	Scene scene;
-	SceneCamera sceneCamera{100, 100 };
 
 public:
 

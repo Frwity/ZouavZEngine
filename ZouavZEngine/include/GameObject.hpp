@@ -24,39 +24,15 @@ public:
 
 	const std::vector<GameObject*>& GetChildren() const { return children; }
 
-	void AddChild(GameObject* _child)
-	{
-		children.push_back(_child);
-		if (children.back()->parent)
-			children.back()->parent->RemoveChild(children.back());
-		children.back()->parent = this;
-	}
-
 	const GameObject* GetParent() const { return parent; }
 
 	bool IsChildOf(const GameObject* _gameObject) const;
-		 
-	void SetParent(GameObject* _parent) 
-	{ 
-		if (parent)
-			parent->RemoveChild(this);
 
-		parent = _parent;
+	void AddChild(GameObject* _child);
 
-		if (_parent)
-			_parent->children.push_back(this);
-	}
+	void SetParent(GameObject* _parent);
 
-	void RemoveChild(GameObject* _child)
-	{
-		for (auto it = children.begin(); it != children.end(); ) 
-		{
-			if (*it == _child) 
-				it = children.erase(it);
-			else
-				++it;
-		}
-	}
+	void RemoveChild(GameObject* _child);
 
 	template<typename T, typename... Args>
 	T* AddComponent(Args&&... _args) 

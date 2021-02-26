@@ -35,3 +35,33 @@ bool GameObject::IsChildOf(const GameObject* _gameObject) const
 
 	return parent->IsChildOf(_gameObject);
 }
+
+void GameObject::AddChild(GameObject* _child)
+{
+	children.push_back(_child);
+	if (children.back()->parent)
+		children.back()->parent->RemoveChild(children.back());
+	children.back()->parent = this;
+}
+
+void GameObject::SetParent(GameObject* _parent)
+{
+	if (parent)
+		parent->RemoveChild(this);
+
+	parent = _parent;
+
+	if (_parent)
+		_parent->children.push_back(this);
+}
+
+void GameObject::RemoveChild(GameObject* _child)
+{
+	for (auto it = children.begin(); it != children.end(); )
+	{
+		if (*it == _child)
+			it = children.erase(it);
+		else
+			++it;
+	}
+}

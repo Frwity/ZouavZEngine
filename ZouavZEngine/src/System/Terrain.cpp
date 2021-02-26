@@ -65,7 +65,7 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y}));
 
 		glBindVertexArray(it.second.GetMesh().GetID());
-		glDrawElements(GL_TRIANGLES, it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
 	}
 }
 
@@ -131,7 +131,7 @@ void Terrain::AddNoiseLayer()
 	if (noiseParams.size() > MAX_NOISE_COUNT)
 		return;
 	noiseParams.emplace_back(NoiseParam{});
-	noiseID = noiseParams.size() - 1;
+	noiseID = (int)noiseParams.size() - 1;
 }
 
 void Terrain::DeleteCurrentNoiseLayer()

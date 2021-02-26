@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "imgui.h"
+#include "Rendering/Camera.hpp"
 
 enum class EDITOR_STATE
 {
@@ -21,9 +22,15 @@ private:
 
 	EDITOR_STATE state{ EDITOR_STATE::EDITING };
 
+	SceneCamera sceneCamera{ 100, 100 };
+
+	class Clock* editorClock;
+
+	class Engine& engine;
+
 public:
 	bool isKeyboardEnable;
-	Editor();
+	Editor(class Engine& _engine);
 
 	void Init();
 	void NewFrame();

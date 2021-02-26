@@ -21,7 +21,7 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
 
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
-    projection = Mat4::CreatePerspectiveProjectionMatrix(_width, _height, 0.01, 5000, 45);
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, 0.01, 5000.0f, 45.0f);
 }
 
 Mat4 Camera::GetMatrix() const
@@ -53,7 +53,7 @@ Mat4 Camera::GetMatrix() const
 
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(M_PI), speed{ 30.0f }
+    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw((float)M_PI), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;
@@ -108,15 +108,15 @@ void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
     yaw += dx / 1000.0f;
     pitch += dy / 1000.0f;
 
-    pitch = pitch > -M_PI_2 ? (pitch < M_PI_2 ? pitch : M_PI_2) : -M_PI_2;
+    pitch = pitch > -(float)M_PI_2 ? (pitch < (float)M_PI_2 ? pitch : (float)M_PI_2) : -(float)M_PI_2;
 
     mousePosition = _newMousePosition;
 } 
 
-void SceneCamera::Update(bool _isKeyboardEnable)
+void SceneCamera::Update(bool _isKeyboardEnable, float _deltaTime)
 {
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = TimeManager::GetDeltaTime() * Speed() + Speed() * sprint * 1.2f;
+    float cameraSpeed = _deltaTime * Speed() + Speed() * sprint * 1.2f;
 
     if (InputManager::GetKeyPressed(E_KEYS::W))
         MoveTo({ 0.0f, 0.0f, -cameraSpeed });

@@ -5,7 +5,7 @@
 
 class Clock
 {
-	//friend class TimeManager;
+	friend class TimeManager;
 private:
 
 	float time = 0.0f;
@@ -15,10 +15,10 @@ private:
 
 	bool activate = true;
 
-	Clock() = default;
 
 public:
 
+	Clock() = default;
 	~Clock() = default;
 
 	float GetTime() { return time; }
@@ -31,11 +31,13 @@ public:
 
 	void Activate() { activate = true; }
 	void Dehactivate() { activate = false; }
+	void Reset();
 
 };
 
 class TimeManager
 {
+	friend class TimeManager;
 private:
 
 	static std::vector<std::unique_ptr<Clock>> clocks;
@@ -43,17 +45,20 @@ private:
 	static float time;
 	static float deltaTime;
 	static float previousTime;
-	static float scale;
 
 public:
 
-	static float GetTime() { return time; }
-	static float GetDeltaTime() { return deltaTime * scale; }
-	static float GetUnscaledDeltaTime() { return deltaTime; }
+	static Clock* gameClock;
 
-	static float SetScale(float _scale) { scale = _scale > 0 ? _scale : -_scale; }
-	static Clock& CreateClock();
+	static float GetTime() { return gameClock->time; }
+	static float GetDeltaTime() { return gameClock->deltaTime * gameClock->scale; }
+	static float GetUnscaledDeltaTime() { return gameClock->deltaTime; }
+
+	static float SetScale(float _scale) { gameClock->scale = _scale > 0 ? _scale : -_scale; }
+	static Clock* CreateClock();
 	static void RemoveClock(Clock* _clock);
+
+	static void Init();
 
 	static void Update();
 };

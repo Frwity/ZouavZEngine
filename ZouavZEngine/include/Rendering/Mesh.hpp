@@ -17,15 +17,15 @@ class Mesh : public Resource
 private:
     unsigned int VBO, EBO;
     unsigned int VAO;
-    unsigned int nbElements;
+    size_t nbElements;
 
 public:
     Mesh() = default;
     Mesh(const char* path);
     ~Mesh();
 
-    void InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
-    void ChangeSizeAndData(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize);
+    void InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
+    void ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
     void CreateQuad();
   
     unsigned int GetID() const
@@ -33,7 +33,7 @@ public:
         return VAO;
     }
 
-    unsigned int GetNbElements() const
+    size_t GetNbElements() const
     {
         return nbElements;
     }

@@ -58,7 +58,7 @@ Mesh::Mesh(const char* path)
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
-void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize)
+void Mesh::InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize)
 {
 	nbElements = indicesSize;
 
@@ -82,7 +82,7 @@ void Mesh::InitMesh(Vertex* vertices, unsigned int vertSize, int* indices, unsig
     glEnableVertexAttribArray(2);
 }
 
-void Mesh::ChangeSizeAndData(Vertex* vertices, unsigned int vertSize, int* indices, unsigned int indicesSize)
+void Mesh::ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize)
 {
 	nbElements = indicesSize;
 	glBindVertexArray(VAO);

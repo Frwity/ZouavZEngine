@@ -11,7 +11,7 @@ public:
 	struct GLFWwindow* window{ nullptr };
 	int width{ 0 }, height{ 0 };
 	
-	int mainFramebuffer;
+	int mainFramebuffer = 0;
 	Framebuffer gameFramebuffer;
 	Framebuffer sceneFramebuffer;
 

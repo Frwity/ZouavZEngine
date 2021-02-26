@@ -25,21 +25,24 @@
 
 
 Engine::Engine()
+    : editor(*this)
 {
     render.Init(1300, 800);
 
     InputManager::SetWindow(render.window);
     InputManager::InitMouseButtons();
     InputManager::InitKeys();
+
     SoundManager::Init();
+
+    TimeManager::Init();
+
     editor.Init();
 
     //TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
-    sceneCamera = SceneCamera(render.width, render.height);
-    sceneCamera.SetSceneCamera();
 
     Load();
 }
@@ -97,7 +100,6 @@ void Engine::Update()
             ScriptSystem::Update();
         }
 
-        sceneCamera.Update(editor.isKeyboardEnable);
         
         //TODO call single editor function
         editor.DisplayMainWindow();

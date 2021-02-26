@@ -55,8 +55,8 @@ public:
 	const Mesh& GetMesh() { return mesh; }
 
 	Vec2 GetPos() { return pos; }
-	float GetSize() { return size; }
-	Vec2 GetWorldPos() { return pos * size; }
+	int GetSize() { return size; }
+	Vec2 GetWorldPos() { return pos * (float)size; }
 };
 
 class Terrain
