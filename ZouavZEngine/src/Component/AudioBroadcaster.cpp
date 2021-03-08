@@ -35,7 +35,7 @@ void AudioBroadcaster::SetAmbient(bool _ambient)
 	if (sound)
 	{
 		sound->SetAmbient(_ambient);
-		sound->SetPosition(Vec3::Zero());
+		sound->SetPosition(Vec3::zero);
 		updatePosition = !_ambient;
 	}
 }

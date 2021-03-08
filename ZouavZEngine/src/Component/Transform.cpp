@@ -56,17 +56,17 @@ void Transform::Translate(const Vec3& _direction)
 
 void Transform::RotateX(float _angle)
 {
-	localRotation = localRotation * Quaternion({ _angle, 0.0f, 0.0f });
+	localRotation = localRotation * Quaternion(Vec3{ _angle, 0.0f, 0.0f });
 }
 
 void Transform::RotateY(float _angle)
 {
-	localRotation = localRotation * Quaternion({ 0.0f, _angle, 0.0f });
+	localRotation = localRotation * Quaternion(Vec3{ 0.0f, _angle, 0.0f });
 }
 
 void Transform::RotateZ(float _angle)
 {
-	localRotation = localRotation * Quaternion({ 0.0f, 0.0f, _angle });
+	localRotation = localRotation * Quaternion(Vec3{ 0.0f, 0.0f, _angle });
 }
 
 void Transform::Rotate(const Vec3& _angles)
@@ -111,15 +111,15 @@ void Transform::MultiplyScaleZBy(float _coeff)
 
 Vec3 Transform::Right()
 {
-	return localRotation.RotateVector(Vec3::Right());
+	return localRotation.RotateVector(Vec3::right);
 }
 
 Vec3 Transform::Up()
 {
-	return localRotation.RotateVector(Vec3::Up());
+	return localRotation.RotateVector(Vec3::up);
 }
 
 Vec3 Transform::Forward()
 {
-	return localRotation.RotateVector(Vec3::Forward());
+	return localRotation.RotateVector(Vec3::forward);
 }

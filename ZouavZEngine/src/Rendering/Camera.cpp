@@ -27,7 +27,7 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
 Mat4 Camera::GetMatrix() const
 {
     const Vec3 forward = (target - position).Normalized();
-    const Vec3 right = (forward.Cross(Vec3::Up())).Normalized();
+    const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;
@@ -77,7 +77,7 @@ Mat4 SceneCamera::GetMatrix() const
 Mat4 SceneCamera::GetLookAtMatrix(const Vec3& _target) const
 {
     const Vec3 forward = (_target - position).Normalized();
-    const Vec3 right = (forward.Cross(Vec3::Up())).Normalized();
+    const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;

@@ -5,32 +5,43 @@
 
 class Vec2
 {
-    public:
-        float x;
-        float y;
+public:
+    float x;
+    float y;
 
-        Vec2();
-        Vec2(float _x, float _y);
-        Vec2(const Vec2& v);
-        ~Vec2() = default;
+    const static Vec2 zero;
+    const static Vec2 one;
+    const static Vec2 up;
+    const static Vec2 down;
+    const static Vec2 right;
+    const static Vec2 left;
 
-        float GetMagnitude() const;
-        float GetSquaredMagnitude() const;
-        Vec2 Normalized() const;
-        float Cross(const Vec2&) const;
+    Vec2();
+    Vec2(float _x, float _y);
+    Vec2(const Vec2& _v);
+    ~Vec2() = default;
 
-        void Normalize();
+    float DotProduct(const Vec2& _v);
+    float GetMagnitude() const;
+    float GetSquaredMagnitude() const;
+    Vec2 Normalized() const;
+    float Cross(const Vec2& _v) const;
 
-        std::string ToString() const;
+    void Normalize();
 
-        Vec2 operator+(const Vec2& v) const;
-        Vec2 operator-(const Vec2& v) const;    
-        Vec2 operator*(float value) const;
+    std::string ToString() const;
 
-        void operator=(const Vec2& v);
-        void operator+=(const Vec2& v);
-        void operator-=(const Vec2& v);
-        void operator*=(float value);
+    Vec2 operator+(const Vec2& _v) const;
+    Vec2 operator-(const Vec2& _v) const;  
+    Vec2 operator-() const;
+    Vec2 operator*(float _value) const;
+    Vec2 operator/(float _value) const;
+
+    void operator=(const Vec2& _v);
+    void operator+=(const Vec2& _v);
+    void operator-=(const Vec2& _v);
+    void operator*=(float _value);
+    void operator/=(float _value);
 };
 
 #endif

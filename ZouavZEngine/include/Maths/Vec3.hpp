@@ -10,44 +10,45 @@ class Vec3
 
         Vec3();
         Vec3(float _x, float _y, float _z);
-        Vec3(const Vec3& v);
+        Vec3(const Vec3& _v);
         ~Vec3() = default;
 
-        static Vec3 Zero();
-        static Vec3 One();
-        static Vec3 Forward();
-        static Vec3 Backward();
-        static Vec3 Right();
-        static Vec3 Left();
-        static Vec3 Up();
-        static Vec3 Down();
+        const static Vec3 zero;
+        const static Vec3 one;
+        const static Vec3 forward;
+        const static Vec3 backward;
+        const static Vec3 right;
+        const static Vec3 left;
+        const static Vec3 up;
+        const static Vec3 down;
 
         float GetMagnitude() const;
         float GetSquaredMagnitude() const;
         Vec3 Normalized() const;
-        Vec3 Cross(const Vec3& v) const;
-        float Dot(const Vec3& v) const;
-        float AngleToVector(const Vec3& v) const;  
-        float DistanceToVector(const Vec3& v) const;
-        bool Colinear(const Vec3& v) const;
+        Vec3 Cross(const Vec3& _v) const;
+        float Dot(const Vec3& _v) const;
+        float AngleToVector(const Vec3& _v) const;  
+        float DistanceToVector(const Vec3& _v) const;
+        bool Colinear(const Vec3& _v) const;
 
         void Normalize();
 
         Vec3 operator+(const Vec3& v) const;
         Vec3 operator-(const Vec3& v) const;    
         Vec3 operator*(const Vec3& v) const;
-        Vec3 operator*(float value) const;
+        Vec3 operator*(float _value) const;
+        Vec3 operator/(float _value) const;
 
-        void operator=(const Vec3& v);
-        void operator+=(const Vec3& v);
-        void operator-=(const Vec3& v);
-        void operator*=(const Vec3& v);
-        void operator*=(float value);
-        Vec3 operator/(float number) const;
+        void operator=(const Vec3& _v);
+        void operator+=(const Vec3& _v);
+        void operator-=(const Vec3& _v);
+        void operator*=(const Vec3& _v);
+        void operator*=(float _value);
+        void operator/=(float _value);
 
         Vec3 operator-() const;
 };
 
-Vec3 operator*(float number, const Vec3& rhs);
+Vec3 operator*(float _number, const Vec3& _rhs);
 
 #endif

@@ -15,7 +15,8 @@ class Matrix
 
         float Accessor(int indexRow, int indexCol) const;
         float& Accessor(int indexRow, int indexCol);
-        Matrix Transpose() const;
+        Matrix Transposed() const;
+        void Transpose();
 
         Matrix operator+(const Matrix& m) const;
         Matrix operator-(const Matrix& m) const;

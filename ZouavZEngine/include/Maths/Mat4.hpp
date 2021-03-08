@@ -5,6 +5,7 @@
 #include <initializer_list>
 
 class Vec3;
+class Vec4;
 class Quaternion;
 
 class Mat4 : public Matrix
@@ -14,6 +15,9 @@ class Mat4 : public Matrix
         Mat4(std::initializer_list<float> matrix);
         Mat4(const Matrix& m);
         ~Mat4() = default;
+
+        static const Mat4 identity;
+        static const Mat4 zero;
 
         static Mat4 CreateScaleMatrix(const Vec3& v);
         static Mat4 CreateTranslationMatrix(const Vec3& v);
@@ -28,12 +32,18 @@ class Mat4 : public Matrix
         static Mat4 CreateProjMatrix(float d);
         static Mat4 CreateOrthographicProjectionMatrix(float width, float height, float near, float far);
         static Mat4 CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov);
-        static Mat4 Identity();
-        static Mat4 Zero();
 
-        Vec3 operator*(const Vec3& v) const;
-        Mat4 operator*(const Mat4& m) const;
-        Mat4 operator/(float) const;
-        void operator=(const Mat4& m);
+        Vec3 operator*(const Vec3& _v) const;
+        Vec4 operator*(const Vec4& _v) const;
+        Mat4 operator*(const Mat4& _m) const;
+        Mat4 operator*(float _value) const;
+        Mat4 operator/(float _value) const;
+
+        void operator=(const Mat4& _m);
+        void operator+=(const Mat4& _m);
+        void operator-=(const Mat4& _m);
+        void operator*=(const Mat4& _m);
+        void operator*=(float _value);
+        void operator/=(float _value);
 };
 #endif

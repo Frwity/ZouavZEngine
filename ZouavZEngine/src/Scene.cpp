@@ -21,7 +21,7 @@ void Scene::Draw(const Camera& _camera) const
 		if (gameObject->GetComponent<MeshRenderer>())
 		{
 			gameObject->GetComponent<MeshRenderer>()->shader->SetLight(lights);
-			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::Identity(), _camera);
+			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::identity, _camera);
 		}
 		for (GameObject* child : gameObject->GetChildren())
 			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()), _camera);

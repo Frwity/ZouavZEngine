@@ -5,6 +5,9 @@
 
 #include "Maths/Mat4.hpp"
 
+const Mat4 Mat4::identity = Matrix::Identity(4);
+const Mat4 Mat4::zero = Matrix::Zero(4, 4);
+
 Mat4::Mat4() 
     : Matrix(4, 4)
 {
@@ -122,7 +125,7 @@ Mat4 Mat4::CreateTRSMatrix(const Vec3& translation, const Quaternion& rotate, co
 
 Mat4 Mat4::CreateUnitVecRotMatrix(const Vec3& v, float angle)
 {
-    Mat4 rotationMat = Identity();
+    Mat4 rotationMat = identity;
 
     float c = cosf(angle);
     float s = sinf(angle);
@@ -179,7 +182,7 @@ Mat4 Mat4::CreatePerspectiveProjectionMatrix(float width, float height, float ne
 
 Mat4 Mat4::CreateOrthographicProjectionMatrix(float width, float height, float near, float far)
 {
-    Mat4 orthographic = Identity();
+    Mat4 orthographic = identity;
         
     float aspect = (float)width / height;
 
@@ -193,37 +196,43 @@ Mat4 Mat4::CreateOrthographicProjectionMatrix(float width, float height, float n
     return orthographic;
 }
 
-Mat4 Mat4::Identity()
+Vec3 Mat4::operator*(const Vec3& _v) const
 {
-    return Matrix::Identity(4);
+    return {matrix[0] * _v.x + matrix[4] * _v.y + matrix[8] * _v.z + matrix[12],
+            matrix[1] * _v.x + matrix[5] * _v.y + matrix[9] * _v.z + matrix[13],
+            matrix[2] * _v.x + matrix[6] * _v.y + matrix[10] * _v.z + matrix[14]};
 }
 
-Mat4 Mat4::Zero()
+Vec4 Mat4::operator*(const Vec4& _v) const
 {
-    return Matrix::Zero(4, 4);
-}
-
-Vec3 Mat4::operator*(const Vec3& v) const
-{
-    return {matrix[0] * v.x + matrix[4] * v.y + matrix[8] * v.z + matrix[12],
-            matrix[1] * v.x + matrix[5] * v.y + matrix[9] * v.z + matrix[13],
-            matrix[2] * v.x + matrix[6] * v.y + matrix[10] * v.z + matrix[14]};
+    return {matrix[0] * _v.x + matrix[4] * _v.y + matrix[8] * _v.z + matrix[12] * _v.w,
+            matrix[1] * _v.x + matrix[5] * _v.y + matrix[9] * _v.z + matrix[13] * _v.w,
+            matrix[2] * _v.x + matrix[6] * _v.y + matrix[10] * _v.z + matrix[14] * _v.w,
+            matrix[3] * _v.x + matrix[7] * _v.y + matrix[11] * _v.z + matrix[15] * _v.w };
 }
 
 Mat4 Mat4::operator*(const Mat4& m) const
 {
-    Mat4 result = Zero();
+    Mat4 result = zero;
 
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
             for (int k = 0; k < 4; k++)
-            {
-                result.Accessor(i, j) += this->Accessor(i, k) * m.Accessor(k, j);
-            }
+                result.Accessor(i, j) += Accessor(i, k) * m.Accessor(k, j);
         }
     }
+
+    return result;
+}
+
+Mat4 Mat4::operator*(float _value) const
+{
+    Mat4 result = *this;
+
+    for (int i = 0; i < 16; i++)
+        result.matrix[i] *= _value;
 
     return result;
 }
@@ -244,4 +253,29 @@ void Mat4::operator=(const Mat4& m)
     {
         this->matrix[i] = m.matrix[i];
     }
+}
+
+void Mat4::operator+=(const Mat4& _m)
+{
+    *this = *this + _m;
+}
+
+void Mat4::operator-=(const Mat4& _m)
+{
+    *this = *this - _m;
+}
+
+void Mat4::operator*=(const Mat4& _m)
+{
+    *this = *this * _m;
+}
+
+void Mat4::operator*=(float _value)
+{
+    *this = *this * _value;
+}
+
+void Mat4::operator/=(float _value)
+{
+    *this = *this / _value;
 }

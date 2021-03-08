@@ -57,15 +57,24 @@ Matrix Matrix::Zero(int _nbRow, int _nbCol)
     return newMatrix;
 }
 
-Matrix Matrix::Transpose() const
+Matrix Matrix::Transposed() const
 {
-    Matrix tempMatrix = Matrix( nbCol, nbRow );
+    Matrix tempMatrix = Matrix(nbCol, nbRow);
 
     for (int i = 0; i < nbRow; i++)
         for (int j = 0; j < nbCol; j++)
             tempMatrix.Accessor(j, i) = Accessor(i, j);
 
     return tempMatrix;
+}
+
+void Matrix::Transpose()
+{
+    Matrix tempMatrix = Matrix(nbCol, nbRow);
+
+    for (int i = 0; i < nbRow; i++)
+        for (int j = 0; j < nbCol; j++)
+            Accessor(j, i) = tempMatrix.Accessor(i, j);
 }
 
 Matrix Matrix::operator+(const Matrix& m) const
@@ -222,7 +231,7 @@ Matrix Matrix::Adjunct() const
 {
     assert(nbRow == nbCol);
 
-    return CoMat().Transpose();
+    return CoMat().Transposed();
 }
 
 Matrix Matrix::Reversed() const

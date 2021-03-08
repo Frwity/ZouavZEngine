@@ -23,6 +23,7 @@
 #include "Sound.hpp"
 #include <iostream>
 
+#define EDITOR
 
 Engine::Engine()
     : editor(*this)
@@ -37,7 +38,9 @@ Engine::Engine()
 
     TimeManager::Init();
 
+#ifdef EDITOR
     editor.Init();
+#endif
 
     //TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -86,7 +89,7 @@ void Engine::Update()
 
     while (!render.Stop())
     {
-        scene.GetWorld().UpdateTransform(Mat4::Identity());
+        scene.GetWorld().UpdateTransform(Mat4::identity);
 
         TimeManager::Update();
         InputManager::Update();

@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Maths/Vec3.hpp"
+#include "Maths/Vec4.hpp"
 #include "Maths/Mat4.hpp"
 
 
@@ -15,19 +16,22 @@ public:
 	float z;
 
 	Quaternion();
-	Quaternion(const Vec3& eulerAngles);
+	Quaternion(const Vec3& _eulerAngles);
+	Quaternion(const Vec4& _v);
+	Quaternion(const Quaternion& _q);
+	Quaternion(const Vec3& _v, float _f);
 	Quaternion(float _w, float _x, float _y, float _z);
 
-	void Mult(const Quaternion& q2);
-	Quaternion Mult(const Quaternion& q2) const;
+	void Mult(const Quaternion& _q2);
+	Quaternion Mult(const Quaternion& _q2) const;
 
-	static float DotProduct(const Quaternion& q1, const Quaternion& q2);
+	static float DotProduct(const Quaternion& _q1, const Quaternion& _q2);
 
-	void Add(const Quaternion& q2);
-	Quaternion Add(const Quaternion& q2) const;
+	void Add(const Quaternion& _q2);
+	Quaternion Add(const Quaternion& _q2) const;
 
-	void Neg(const Quaternion& q2);
-	Quaternion Neg(const Quaternion& q2) const;
+	void Neg(const Quaternion& _q2);
+	Quaternion Neg(const Quaternion& _q2) const;
 
 	void Scale(float);
 	const Quaternion Scale(float) const;
@@ -42,7 +46,9 @@ public:
 
 	Vec3 GetAxis() const;
 
-	Vec3 RotateVector(const Vec3& vec) const;
+	Vec3 ToEuler() const;
+	 
+	Vec3 RotateVector(const Vec3& _vec) const;
 
 	Mat4 GetRotationMatrix() const;
 
@@ -54,27 +60,28 @@ public:
 	void Inverse();
 	Quaternion Inversed() const;
 
-    static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t);
-    static Quaternion SLerp(const Quaternion& q1, const Quaternion& q2, float t);
-    static Quaternion NLerp(const Quaternion& q1, const Quaternion& q2, float t);
+    static Quaternion Lerp(const Quaternion& _q1, const Quaternion& _q2, float _t);
+    static Quaternion SLerp(const Quaternion& _q1, const Quaternion& _q2, float _t);
+    static Quaternion NLerp(const Quaternion& _q1, const Quaternion& _q2, float _t);
 
 	std::string ToString() const;
 
-	Quaternion operator*(const Quaternion q2) const
+
+	Quaternion operator*(const Quaternion _q2) const
 	{
-		return Mult(q2);
+		return Mult(_q2);
 	}
-	Quaternion operator+(const Quaternion& q2) const
+	Quaternion operator+(const Quaternion& _q2) const
 	{
-		return Add(q2);
+		return Add(_q2);
 	}
-	Quaternion operator*(const float f) const
+	Quaternion operator*(const float _f) const
 	{
-		return Scale(f);
+		return Scale(_f);
 	}
-	Quaternion operator/(const float f) const
+	Quaternion operator/(const float _f) const
 	{
-		return Quaternion(w / f, x / f, y / f, z / f);
+		return Quaternion(w / _f, x / _f, y / _f, z / _f);
 	}
 	Quaternion operator-() const
 	{
