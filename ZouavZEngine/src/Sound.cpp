@@ -29,7 +29,7 @@ Sound::Sound(const char* _path)
 
     sf_close(File);
 
-    ALenum Format;
+    ALenum Format = 0;
     switch (FileInfos.channels)
     {
         case 1:  Format = AL_FORMAT_MONO16;   break;

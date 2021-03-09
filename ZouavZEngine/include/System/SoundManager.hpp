@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+class Vec3;
+
 class SoundManager
 {
 private:
@@ -18,4 +20,7 @@ public:
 
 	static void AddSound(class Sound* _newSound);
 	static void RemoveSound(class Sound* _soundToRemove);
+	
+	static void SetListenerPosition(const Vec3& _position);
+	static void SetListenerVelocity(const Vec3& _velocity);
 };
