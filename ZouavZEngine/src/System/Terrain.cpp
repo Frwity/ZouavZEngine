@@ -1,10 +1,11 @@
-#include "System/Terrain.hpp"
+#include "GameObject.hpp"
 #include "System/ResourcesManager.hpp"
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/Light.hpp"
 #include "Maths/Mat4.hpp"
 #include <FastNoiseLite.h>
+#include "System/Terrain.hpp"
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -19,8 +20,9 @@ Terrain::Terrain()
 	AddNoiseLayer();
 }
 
-void Terrain::Generate()
+void Terrain::Generate(GameObject* _actualizer)
 {
+	actualizer = _actualizer;
 	chunks.reserve((size_t)chunkCount * (size_t)chunkCount);
 	Vec2 pos;
 	for (float z = 0; z < chunkCount; z++)
@@ -47,6 +49,23 @@ void Terrain::Actualise()
 			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
 														seed, noiseParams,
 														minHeight, maxHeight, heightIntensity }, true);
+		}
+	}
+}
+
+void Terrain::Update()
+{
+	if (!actualizer)
+		return;
+
+	Vec2 actualizerPos(actualizer->WorldPosition().x, actualizer->WorldPosition().z);
+
+	for (auto& it : chunks)
+	{
+		Chunk& chunk = it.second;
+		if ((chunk.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius)
+		{
+			chunks.erase(it.first);
 		}
 	}
 }

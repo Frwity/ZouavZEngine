@@ -47,7 +47,10 @@ private:
 	int size = 0;
 public:
 
+	bool shouldRemove = true;
+
 	Chunk() = default;
+	~Chunk() = default;
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);
@@ -66,10 +69,13 @@ private:
 
 	Shader* shader{};
 
-
 public:
 
-	int chunkCount = 3;
+	class GameObject* actualizer = nullptr;
+
+	float chunkDistanceRadius = 512;
+
+	int chunkCount = 5;
 
 	int chunkSize = 128;
 	int chunkVertexCount = 16;
@@ -88,7 +94,9 @@ public:
 
 	Terrain();
 
-	void Generate();
+	void Update();
+
+	void Generate(class GameObject* _actualizer = nullptr);
 
 	void Actualise();
 
