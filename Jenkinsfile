@@ -17,27 +17,8 @@ pipeline
 		{
 			steps
 			{
-				script
-				{
-					if(env.BRANCH.contains("release"))
-					{
-						//String a = "release-04.05.06";
-						def versions = (a =~ /\d+/).findAll();						
-						env.VERSION = versions.join('.');
-						
-						def configFile = readJSON file: "${env.configFilePath}"
-						configFile.Project.Version = versions as String
-						writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
-					}
-					else
-					{
-						echo "Update version number file"
-						
-						def configFile = readJSON file: "${env.configFilePath}"
-						env.VERSION = (configFile.Project.Version as String[]).join('.');
-					}
-					echo env.VERSION
-				}
+				env.VERSION = "00.00.00";
+				echo env.VERSION
 			}			
 		}
 		stage("Build")
