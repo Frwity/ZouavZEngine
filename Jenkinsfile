@@ -9,10 +9,7 @@ pipeline
 	environment
 	{
 		configFilePath = "Config.json"
-		MSBuildPath = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\""
-		
-		def configFile = readJSON file: "${env.configFilePath}"
-		Name = "${configFile.Project.Name}"
+		MSBuildPath = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\""		
 	}
 	stages
 	{
@@ -72,6 +69,7 @@ pipeline
 						bat "dir \"${WORKSPACE}\\${params.Platform}\\${params.Configuration}\""
 						
     					bat "dir"
+						env.Name = "${configFile.Project.Name}"
     					def exists = fileExists "${env.Name}_${env.VERSION}.zip"
     					if(exists)
     					    bat "del \"${env.Name}_${env.VERSION}.zip\""
