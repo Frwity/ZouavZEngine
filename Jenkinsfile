@@ -69,17 +69,7 @@ pipeline
 		{
 	    	when 
     		{
-				anyOf
-				{
-					expression
-					{
-						return env.BRANCH.contains("release")
-					}
-					expression
-					{
-						return env.BRANCH.contains("master")
-					}
-    			}
+				branch "master"
     		}
 		    stages
 		    {
