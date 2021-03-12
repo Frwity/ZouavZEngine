@@ -17,8 +17,11 @@ pipeline
 		{
 			steps
 			{
-				env.VERSION = "00.00.00";
-				echo env.VERSION
+				script	
+				{
+					env.VERSION = "00.00.00"
+					echo env.VERSION
+				}
 			}			
 		}
 		stage("Build")
