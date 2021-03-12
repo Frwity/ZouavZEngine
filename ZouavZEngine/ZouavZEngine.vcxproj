@@ -120,14 +120,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>external_lib/include; include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external_lib/include; include;external_lib/include/PhysX</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation.lib;PhysXCommon.lib;PhysX.lib;PhysXExtensions_static.lib;PhysXCooking.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,6 +192,7 @@
     <ClCompile Include="src\System\Editor.cpp" />
     <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\InputManager.cpp" />
+    <ClCompile Include="src\System\PhysicSystem.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
     <ClCompile Include="src\System\SoundManager.cpp" />
     <ClCompile Include="src\System\Terrain.cpp" />
@@ -204,6 +207,7 @@
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
+    <ClInclude Include="include\Component\ShapeCollision.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />
@@ -228,6 +232,7 @@
     <ClInclude Include="include\System\Engine.hpp" />
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\InputManager.hpp" />
+    <ClInclude Include="include\System\PhysicSystem.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
     <ClInclude Include="include\System\SoundManager.hpp" />

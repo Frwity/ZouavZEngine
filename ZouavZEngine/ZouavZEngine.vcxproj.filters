@@ -177,6 +177,9 @@
     <ClCompile Include="src\System\Debug.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\PhysicSystem.cpp">
+      <Filter>include\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -286,6 +289,12 @@
     </ClInclude>
     <ClInclude Include="include\System\Debug.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\PhysicSystem.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\ShapeCollision.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
