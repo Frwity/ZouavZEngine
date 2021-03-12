@@ -16,20 +16,6 @@ pipeline
 	}
 	stages
 	{
-	    stage('checkout')
-	    {
-	        steps
-	        {
-				cleanWs()
-	            script
-	            {
-	                if( currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) != null )
-                        checkout([$class: 'GitSCM', branches: [[name: Branch[7..-1]]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'e.kraemer_git_SSH', url: 'ssh://git@git.isartintra.com:2424/2020/GP_2023_Engine/Groupe_3.git']]])
-                    else 
-                        checkout([$class: 'GitSCM', branches: [[name: '**']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'e.kraemer_git_SSH', url: 'ssh://git@git.isartintra.com:2424/2020/GP_2023_Engine/Groupe_3.git']]])
-	            }
-            }
-	    }
 		stage('Version')
 		{
 			steps
