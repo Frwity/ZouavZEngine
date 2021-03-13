@@ -17,29 +17,18 @@ pipeline
 		{
 			steps
 			{
-				echo "Hello World"
 				script
 				{
-					echo "Assign branch variable"
-					String branch = env.BRANCH_NAME;
-					echo "Assign success"
-					if(branch != null )
+					String branch = env.BRANCH_NAME
+					if(branch != null && branch.contains("release"))
 					{
-						echo "before contains"
-						if(branch.contains("release"))
-						{
-							echo "Update version with branch name"
-							def versions = (branch =~ /\d+/).findAll()						
-							env.VERSION = versions.join('.')
-							
-							def configFile = readJSON file: "${env.configFilePath}"
-							configFile.Project.Version = versions as String
-							writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
-						}
-						else 
-						{
-							echo "branch is not null"
-						}
+						echo "Update version with branch name"
+						def versions = (branch =~ /\d+/).findAll()						
+						env.VERSION = versions.join('.')
+						
+						def configFile = readJSON file: "${env.configFilePath}"
+						configFile.Project.Version = versions as String
+						writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
 					}
 					else
 					{
