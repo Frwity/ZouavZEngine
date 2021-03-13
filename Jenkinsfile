@@ -22,6 +22,7 @@ pipeline
 				{
 					if(branch != null )
 					{
+						echo "before contains"
 						if(branch.contains("release"))
 						{
 							echo "Update version with branch name"
