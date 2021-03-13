@@ -20,6 +20,9 @@ pipeline
 				echo "Hello World"
 				script
 				{
+					echo "Assign branch variable"
+					String branch = env.BRANCH_NAME;
+					echo "Assign success"
 					if(branch != null )
 					{
 						echo "before contains"
