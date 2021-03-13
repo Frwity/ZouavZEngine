@@ -13,10 +13,11 @@ pipeline
 	}
 	stages
 	{
-		stage('Version')
+		stage("Version")
 		{
 			steps
 			{
+				echo "Hello World"
 				script
 				{
 					if(branch != null )
