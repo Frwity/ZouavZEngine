@@ -19,16 +19,22 @@ pipeline
 			{
 				script
 				{
-					echo "${branch}"
-					if(branch != null && branch.contains("release"))
+					if(branch != null )
 					{
-						echo "Update version with branch name"
-						def versions = (branch =~ /\d+/).findAll()						
-						env.VERSION = versions.join('.')
-						
-						def configFile = readJSON file: "${env.configFilePath}"
-						configFile.Project.Version = versions as String
-						writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
+						if(branch.contains("release"))
+						{
+							echo "Update version with branch name"
+							def versions = (branch =~ /\d+/).findAll()						
+							env.VERSION = versions.join('.')
+							
+							def configFile = readJSON file: "${env.configFilePath}"
+							configFile.Project.Version = versions as String
+							writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
+						}
+						else 
+						{
+							echo "branch is not null"
+						}
 					}
 					else
 					{
