@@ -9,7 +9,7 @@ pipeline
 	environment
 	{
 		configFilePath = "Config.json"
-		MSBuildPath = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\""		
+		MSBuildPath = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\""
 	}
 	stages
 	{
@@ -17,9 +17,26 @@ pipeline
 		{
 			steps
 			{
-				script	
+				script
 				{
-					env.VERSION = "00.00.00"
+					echo "${branch}"
+					if(branch != null && branch.contains("release"))
+					{
+						echo "Update version with branch name"
+						def versions = (branch =~ /\d+/).findAll()						
+						env.VERSION = versions.join('.')
+						
+						def configFile = readJSON file: "${env.configFilePath}"
+						configFile.Project.Version = versions as String
+						writeJSON(file: "${env.configFilePath}", json: configFile, pretty: 4)
+					}
+					else
+					{
+						echo "Update version number with file"
+						
+						def configFile = readJSON file: "${env.configFilePath}"
+						env.VERSION = (configFile.Project.Version as String[]).join('.');
+					}
 					echo env.VERSION
 				}
 			}			
@@ -53,7 +70,9 @@ pipeline
 						bat "dir \"${WORKSPACE}\\${params.Platform}\\${params.Configuration}\""
 						
     					bat "dir"
-						env.Name = "${configFile.Project.Name}"
+						
+    					env.Name = "${configFile.Project.Name}"
+						
     					def exists = fileExists "${env.Name}_${env.VERSION}.zip"
     					if(exists)
     					    bat "del \"${env.Name}_${env.VERSION}.zip\""
@@ -69,7 +88,11 @@ pipeline
 		{
 	    	when 
     		{
-				branch "master"
+				anyOf
+				{
+					branch "release*";
+					branch "master"
+				}
     		}
 		    stages
 		    {
