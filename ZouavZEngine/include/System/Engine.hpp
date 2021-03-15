@@ -4,7 +4,6 @@
 #include "Scene.hpp"
 #include "System/Editor.hpp"
 #include "System/SoundManager.hpp"
-#include "System/PhysicSystem.hpp"
 
 class Engine
 {
@@ -13,7 +12,6 @@ private:
 	Editor editor;
 	Render render;
 	Scene scene;
-	PhysicSystem physicSystem;
 
 public:
 

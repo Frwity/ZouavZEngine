@@ -5,6 +5,9 @@
 #include "Component/Light.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
+#include "System/PhysicSystem.hpp"
+#include "System/TimeManager.hpp"
+#include "PxScene.h"
 
 Scene* Scene::currentScene = nullptr;
 
@@ -38,4 +41,19 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 
 	for (GameObject* child : _parent->GetChildren())
 		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
+}
+
+void Scene::SimulatePhyics() const
+{
+	PhysicSystem::scene->simulate(TimeManager::GetDeltaTime());
+	PhysicSystem::scene->fetchResults();
+
+	physx::PxU32 nbActiveActor;
+
+	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
+
+	for (int i = 0; i < nbActiveActor; i++)
+	{
+		//retrieve modified actor
+	}
 }

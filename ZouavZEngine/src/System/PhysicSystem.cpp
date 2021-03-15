@@ -7,16 +7,10 @@ using namespace physx;
 
 PxDefaultAllocator PhysicSystem::physxAllocator;
 PxDefaultErrorCallback PhysicSystem::physxErrorCallback;
-
-PhysicSystem::PhysicSystem()
-{
-	Init();
-}
-
-PhysicSystem::~PhysicSystem()
-{
-	Destroy();
-}
+PxFoundation* PhysicSystem::foundation = nullptr;
+PxPhysics* PhysicSystem::physics = nullptr;
+PxCooking* PhysicSystem::cooking = nullptr;
+PxScene* PhysicSystem::scene = nullptr;
 
 void PhysicSystem::Init()
 {
@@ -34,6 +28,7 @@ void PhysicSystem::Init()
 
 	PxSceneDesc sceneDesc(scale);
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+
 	if (!sceneDesc.cpuDispatcher)
 	{
 		PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1);
@@ -42,8 +37,13 @@ void PhysicSystem::Init()
 		sceneDesc.cpuDispatcher = mCpuDispatcher;
 		mCpuDispatcher->release();
 	}
+
 	if (!sceneDesc.filterShader)
 		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+
+	if (!sceneDesc.flags)
+		sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS;
+
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");
 }

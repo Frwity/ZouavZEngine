@@ -6,6 +6,14 @@
 #include "PxPhysics.h"
 #include "cooking/PxCooking.h"
 
+namespace physx
+{
+	class PxFoundation;
+	class PxPhysics;
+	class PxCooking;
+	class PxScene;
+}
+
 class PhysicSystem
 {
 private:
@@ -13,14 +21,14 @@ private:
 	static physx::PxDefaultErrorCallback physxErrorCallback;
 
 public:
-	physx::PxFoundation* foundation;
-	physx::PxPhysics* physics;
-	physx::PxCooking* cooking;
-	physx::PxScene* scene;
+	static physx::PxFoundation* foundation;
+	static physx::PxPhysics* physics;
+	static physx::PxCooking* cooking;
+	static physx::PxScene* scene;
 
-	PhysicSystem();
-	~PhysicSystem();
+	PhysicSystem() = delete;
+	~PhysicSystem() = delete;
 
-	void Init();
-	void Destroy();
+	static void Init();
+	static void Destroy();
 };

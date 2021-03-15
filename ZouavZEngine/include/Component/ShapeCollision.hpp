@@ -1,7 +1,16 @@
 #pragma once
+#include "Component.hpp"
 
-class ShapeCollision
+namespace physx
 {
+	class PxActor;
+}
+
+class ShapeCollision: public Component
+{
+public:
+	ShapeCollision(GameObject* _gameObject);
+	~ShapeCollision();
 protected:
-	class PxShape* shape;
+	physx::PxActor* actor;
 };

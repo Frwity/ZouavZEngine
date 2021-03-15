@@ -180,6 +180,12 @@
     <ClCompile Include="src\System\PhysicSystem.cpp">
       <Filter>include\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\ShapeCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\BoxCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -294,6 +300,9 @@
       <Filter>include\System</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\ShapeCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\BoxCollision.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>

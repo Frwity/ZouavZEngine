@@ -23,4 +23,5 @@ public:
 	GameObject& GetWorld() { return world; }
 
 	void Draw(const class Camera& _camera) const;
+	void SimulatePhyics() const;					//Simulate phyics and update transform of affected gameObjects
 };

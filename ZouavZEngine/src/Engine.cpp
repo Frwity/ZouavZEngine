@@ -22,6 +22,7 @@
 #include "Game/Player.hpp"
 #include "Sound.hpp"
 #include <iostream>
+#include "System/PhysicSystem.hpp"
 
 #define EDITOR
 
@@ -35,6 +36,7 @@ Engine::Engine()
     InputManager::InitKeys();
 
     SoundManager::Init();
+    PhysicSystem::Init();
 
     TimeManager::Init();
 
@@ -54,6 +56,7 @@ Engine::~Engine()
 {
 	render.Destroy();
     SoundManager::Destroy();
+    PhysicSystem::Destroy();
 }
 
 void Engine::Load()
