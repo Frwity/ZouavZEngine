@@ -75,8 +75,6 @@ public:
 
 	float chunkDistanceRadius = 512;
 
-	int chunkCount = 5;
-
 	int chunkSize = 128;
 	int chunkVertexCount = 16;
 

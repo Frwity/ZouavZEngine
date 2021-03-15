@@ -23,11 +23,11 @@ Terrain::Terrain()
 void Terrain::Generate(GameObject* _actualizer)
 {
 	actualizer = _actualizer;
-	chunks.reserve((size_t)chunkCount * (size_t)chunkCount);
+	chunks.reserve(16);
 	Vec2 pos;
-	for (float z = 0; z < chunkCount; z++)
+	for (float z = 0; z < 4; z++)
 	{
-		for (float x = 0; x < chunkCount; x++)
+		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk());
@@ -41,15 +41,15 @@ void Terrain::Generate(GameObject* _actualizer)
 void Terrain::Actualise()
 {
 	Vec2 pos;
-	for (float z = 0; z < chunkCount; z++)
+
+	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+
+	while (it != chunks.end())
 	{
-		for (float x = 0; x < chunkCount; x++)
-		{
-			pos = { x, z };
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+			it->second.Generate({ it->second.GetPos(),	chunkSize, chunkVertexCount,
 														seed, noiseParams,
 														minHeight, maxHeight, heightIntensity }, true);
-		}
+			it++;
 	}
 }
 
@@ -58,16 +58,48 @@ void Terrain::Update()
 	if (!actualizer)
 		return;
 
+	Vec2 pos;
+
 	Vec2 actualizerPos(actualizer->WorldPosition().x, actualizer->WorldPosition().z);
 
-	for (auto& it : chunks)
+	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+
+	while (it != chunks.end())
 	{
-		Chunk& chunk = it.second;
-		if ((chunk.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius)
+		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 		{
-			chunks.erase(it.first);
+			//std::cout << "delete " << it->first << " of " << (it->second.GetWorldPos() - actualizerPos).GetMagnitude() << std::endl;
+			it = chunks.erase(it);
+		}
+		else
+			it++;
+	}
+
+	int chunkRadius = chunkDistanceRadius / chunkSize;
+
+	Vec2 actualizerChunkPos = actualizerPos / chunkSize;
+
+	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
+	{
+		for (int y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
+		{
+			pos = { (float)x, (float)y };
+
+			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius)
+				break;
+
+			if (chunks.find(pos.ToString()) == chunks.end())
+			{
+				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
+				chunks.emplace(pos.ToString(), Chunk());
+				chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+															seed, noiseParams,
+															minHeight, maxHeight, heightIntensity }, false);
+			}
 		}
 	}
+
+	return;
 }
 
 void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
@@ -94,7 +126,6 @@ void Terrain::DisplayOptionWindow()
 	{
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
-		actualized |= ImGui::SliderInt("Chunk Count", &chunkCount, 1, 16);
 		actualized |= ImGui::SliderInt("Chunk Size", &chunkSize, 1, 512);
 		actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &chunkVertexCount, 2, 64);
 
@@ -192,6 +223,7 @@ float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
 
 void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 {
+	std::cout << "0" << std::endl;
 	pos = _cca.pos;
 	size = _cca.size;
 
@@ -214,6 +246,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	}
 
 	// indices
+	std::cout << "1" << std::endl;
 	for (int z = 0; z < _cca.vertexCount - 1; z++)
 	{
 		for (int x = 0; x < _cca.vertexCount - 1; x++)
@@ -230,9 +263,10 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			indices.push_back(bottomRight);
 		}
 	}
-
+	std::cout << "2" << std::endl;
 	if (_reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else
 		mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+	std::cout << "3" << std::endl;
 }
