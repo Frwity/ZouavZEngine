@@ -116,7 +116,7 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
-	shader->SetFloat("colorCount", colorCount);
+	shader->SetInt("colorCount", colorCount);
 
 	for (int i = 0; i < colorCount; ++i)
 	{
@@ -124,8 +124,8 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
 	}
 
-	shader->SetFloat("minHeight", minHeight);
-	shader->SetFloat("maxHeight", maxHeight);
+	shader->SetFloat("minHeight", -heightIntensity);
+	shader->SetFloat("maxHeight", heightIntensity);
 
 	for (auto& it : chunks)
 	{
@@ -188,6 +188,13 @@ void Terrain::DisplayOptionWindow()
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
+		ImGui::SliderInt("Color Count", &colorCount, 1, 8);
+
+		for (int i = 0; i < colorCount; ++i)
+		{
+			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
+			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
+		}
 	}
 	ImGui::End();
 }
@@ -196,7 +203,7 @@ void Terrain::AddColor()
 {
 	if (colorCount >= MAX_COLOR_COUNT)
 		return;
-	colors.emplace_back(Vec3{});
+	colors.emplace_back(Vec3{0.1f * colorCount, 0.1f * colorCount, 0.1f * colorCount});
 	colorHeight.emplace_back(0.1f * colorCount);
 	colorCount++;
 }
@@ -243,7 +250,7 @@ float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
 		height += noise.GetNoise(sampleX, sampleZ);
 	}
 
-	return height;
+	return height / _cca.noiseParams.size();
 }
 
 void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)

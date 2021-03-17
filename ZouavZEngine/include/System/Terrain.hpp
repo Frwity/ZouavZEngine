@@ -93,7 +93,7 @@ public:
 	float maxHeight = 30.0f;
 	float heightIntensity = 30.0f;
 
-	float colorCount = 0;
+	int colorCount = 0;
 	std::vector<float> colorHeight;
 	std::vector<Vec3> colors;
 

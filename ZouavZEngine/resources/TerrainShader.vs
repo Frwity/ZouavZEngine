@@ -11,7 +11,7 @@ out vec2 TexCoord;
 out vec3 Normal;
 out vec3 Color;
 
-uniform float colorCount;
+uniform int colorCount;
 uniform float colorHeight[MAX_COLOR];
 uniform vec3 colors[MAX_COLOR];
 
@@ -28,7 +28,7 @@ void main()
 	Normal   = mat3(transpose(inverse(model))) * aNormal;     
 	TexCoord = aTexCoord;
 
-	Color = vec3(0.0, 0.0, 0.0);
+	Color = colors[0];
 	float drawStrength = 0;
 	float heightPercent = smoothstep(minHeight, maxHeight, Pos.y);
 
@@ -37,8 +37,6 @@ void main()
 		drawStrength = clamp(sign(heightPercent - colorHeight[i]), 0.0, 1.0);
 		Color = Color * (1 - drawStrength) + colors[i] * drawStrength;
 	}
-
-	Color = vec3(Pos.y / 30 + 0.1, Pos.y / 30 + 0.1, Pos.y / 30 + 0.1);
 
 	gl_Position = projection * view * vec4(Pos, 1.0);
 }
