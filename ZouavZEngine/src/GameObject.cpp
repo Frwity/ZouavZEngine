@@ -3,6 +3,7 @@
 #include "Maths/Mat4.hpp"
 #include "System/GameObjectSystem.hpp"
 #include "Component/ShapeCollision.hpp"
+#include "System/PhysicUtils.hpp"
 #include "PxRigidDynamic.h"
 #include "PxActor.h"
 
@@ -27,10 +28,11 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
 		ShapeCollision* shapeCollision = _child->GetComponent<ShapeCollision>();
 
+		//update physx transform for simulation
 		if (shapeCollision)
 		{
 			physx::PxRigidDynamic* rigidDynamic = static_cast<physx::PxRigidDynamic*>(shapeCollision->actor);
-			//rigidDynamic->setGlobalPose()
+			rigidDynamic->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
 		}
 	}
 }

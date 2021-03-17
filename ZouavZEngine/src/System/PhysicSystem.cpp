@@ -15,6 +15,22 @@ PxPhysics* PhysicSystem::physics = nullptr;
 PxCooking* PhysicSystem::cooking = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
 
+static PxFilterFlags filterShader(
+    PxFilterObjectAttributes attributes0,
+    PxFilterData filterData0,
+    PxFilterObjectAttributes attributes1,
+    PxFilterData filterData1,
+    PxPairFlags& pairFlags,
+    const void* constantBlock,
+    PxU32 constantBlockSize)
+{
+    pairFlags = PxPairFlag::eSOLVE_CONTACT;
+    pairFlags |= PxPairFlag::eDETECT_DISCRETE_CONTACT;
+    pairFlags |= PxPairFlag::eDETECT_CCD_CONTACT;
+    return PxFilterFlags();
+}
+
+
 void PhysicSystem::Init()
 {
 	foundation = PxCreateFoundation(PX_PHYSICS_VERSION, physxAllocator, physxErrorCallback);
@@ -43,7 +59,7 @@ void PhysicSystem::Init()
 	if (!sceneDesc.filterShader)
 		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 
-	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS;
+	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");

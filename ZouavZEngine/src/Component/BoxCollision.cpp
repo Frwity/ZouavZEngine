@@ -1,6 +1,7 @@
 #include "Component/BoxCollision.hpp"
 #include "GameObject.hpp"
 #include "PxActor.h"
+#include "PxRigidBody.h"
 #include "PxRigidDynamic.h"
 #include "PxRigidStatic.h"
 #include "PxShape.h"
@@ -18,11 +19,20 @@ static PxQuat PxQuatFromQuaternion(Quaternion q) { return { q.x, q.y, q.z, q.w }
 BoxCollision::BoxCollision(GameObject* _gameObject)
 	: ShapeCollision(_gameObject)
 {
+//		actor = PhysicSystem::physics->createRigidStatic(PxTransform(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation())));
+	
 	actor = PhysicSystem::physics->createRigidDynamic(PxTransform(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation())));
+	static_cast<PxRigidBody*>(actor)->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
+	
+	if(PhysicSystem::scene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC) < 1)
+		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(0.5f,0.5f,0.5f), *material);
+	shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+	shape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
 
-	PxRigidBodyExt::updateMassAndInertia(*static_cast<PxRigidDynamic*>(actor), 1.0f);
+	//PxRigidBodyExt::updateMassAndInertia(*static_cast<PxRigidDynamic*>(actor), 1.0f);
 
 	actor->userData = gameObject;
 	

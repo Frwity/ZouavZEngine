@@ -11,6 +11,7 @@
 #include "PxRigidDynamic.h"
 #include "PxScene.h"
 #include "System/Debug.hpp"
+#include "PxSimulationEventCallback.h"
 
 Scene* Scene::currentScene = nullptr;
 

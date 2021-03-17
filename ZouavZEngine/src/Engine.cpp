@@ -114,7 +114,6 @@ void Engine::Update()
             scene.SimulatePhyics();
         }
 
-        
         //TODO call single editor function
         editor.DisplayMainWindow();
         editor.DisplayOptionWindow();
