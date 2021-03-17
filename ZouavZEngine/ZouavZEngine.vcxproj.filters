@@ -305,6 +305,9 @@
     <ClInclude Include="include\Component\BoxCollision.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\System\PhysicUtils.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.vs">
