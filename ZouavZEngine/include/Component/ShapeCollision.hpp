@@ -13,8 +13,10 @@ class ShapeCollision: public Component
 public:
 	ShapeCollision(GameObject* _gameObject);
 	~ShapeCollision();
-protected:
+
+	void releasePhysXComponent();
 	physx::PxActor* actor;
+protected:
 	physx::PxShape* shape;
 	physx::PxMaterial* material;
 };

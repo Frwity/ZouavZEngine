@@ -2,6 +2,9 @@
 #include "PxPhysicsAPI.h"
 #include "pvd/PxPvd.h"
 #include "System/PhysicSystem.hpp"
+#include "System/TimeManager.hpp"
+#include "GameObject.hpp"
+#include "Component/ShapeCollision.hpp"
 
 using namespace physx;
 
@@ -35,7 +38,6 @@ void PhysicSystem::Init()
 		if (!mCpuDispatcher)
 			std::cerr << "PxDefaultCpuDispatcherCreate failed!";
 		sceneDesc.cpuDispatcher = mCpuDispatcher;
-		mCpuDispatcher->release();
 	}
 
 	if (!sceneDesc.filterShader)
@@ -47,8 +49,27 @@ void PhysicSystem::Init()
 	ZASSERT(scene != nullptr, "CreateScene failed !");
 }
 
+void PhysicSystem::DestroyCollisionComponent()
+{
+	PhysicSystem::scene->simulate(1.0f);
+	PhysicSystem::scene->fetchResults(true);
+
+	physx::PxU32 nbActiveActor;
+
+	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
+
+	for (int i = 0; i < nbActiveActor; i++)
+	{
+		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
+
+		ShapeCollision* collision = go->GetComponent<ShapeCollision>();
+		collision->releasePhysXComponent();
+	}
+}
+
 void PhysicSystem::Destroy()
 {
+	DestroyCollisionComponent();
 	scene->release();
 	cooking->release();
 	physics->release();

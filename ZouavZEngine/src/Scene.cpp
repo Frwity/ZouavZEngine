@@ -49,7 +49,7 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 void Scene::SimulatePhyics() const
 {
 	PhysicSystem::scene->simulate(TimeManager::GetDeltaTime());
-	//PhysicSystem::scene->fetchResults(true);
+	PhysicSystem::scene->fetchResults(true);
 
 	physx::PxU32 nbActiveActor;
 

@@ -79,11 +79,11 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-	ImGui::Begin("Option", NULL,  ImGuiWindowFlags_NoMove
-                                | ImGuiWindowFlags_NoDocking
-                                | ImGuiWindowFlags_NoNav
-                                | ImGuiWindowFlags_NoBackground
-		                        | ImGuiWindowFlags_NoScrollWithMouse
+	ImGui::Begin("Option", NULL, // ImGuiWindowFlags_NoMove
+                               // | ImGuiWindowFlags_NoDocking
+                              //  | ImGuiWindowFlags_NoNav
+                              //  | ImGuiWindowFlags_NoBackground
+		                         ImGuiWindowFlags_NoScrollWithMouse
 		                        | ImGuiWindowFlags_NoTitleBar
 		                        | ImGuiWindowFlags_NoScrollbar
                                 | ImGuiWindowFlags_NoCollapse
@@ -363,6 +363,7 @@ void Editor::DisplayInspector()
     {
         if (gameObjectInspector)
         {
+            //TODO one line code
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
             ImGui::Text("World Position :");

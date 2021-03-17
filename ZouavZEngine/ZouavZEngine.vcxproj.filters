@@ -177,14 +177,14 @@
     <ClCompile Include="src\System\Debug.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\PhysicSystem.cpp">
-      <Filter>include\System</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\ShapeCollision.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\BoxCollision.cpp">
       <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\PhysicSystem.cpp">
+      <Filter>src\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

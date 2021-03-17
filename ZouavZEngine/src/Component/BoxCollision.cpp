@@ -2,6 +2,7 @@
 #include "GameObject.hpp"
 #include "PxActor.h"
 #include "PxRigidDynamic.h"
+#include "PxRigidStatic.h"
 #include "PxShape.h"
 #include "foundation/PxTransform.h"
 #include "PxMaterial.h"
@@ -20,6 +21,7 @@ BoxCollision::BoxCollision(GameObject* _gameObject)
 	actor = PhysicSystem::physics->createRigidDynamic(PxTransform(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation())));
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(0.5f,0.5f,0.5f), *material);
+
 	PxRigidBodyExt::updateMassAndInertia(*static_cast<PxRigidDynamic*>(actor), 1.0f);
 
 	actor->userData = gameObject;
