@@ -7,7 +7,10 @@
 #include "Scene.hpp"
 #include "System/PhysicSystem.hpp"
 #include "System/TimeManager.hpp"
+#include "PxActor.h"
+#include "PxRigidDynamic.h"
 #include "PxScene.h"
+#include "System/Debug.hpp"
 
 Scene* Scene::currentScene = nullptr;
 
@@ -46,7 +49,7 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 void Scene::SimulatePhyics() const
 {
 	PhysicSystem::scene->simulate(TimeManager::GetDeltaTime());
-	PhysicSystem::scene->fetchResults();
+	//PhysicSystem::scene->fetchResults(true);
 
 	physx::PxU32 nbActiveActor;
 
@@ -54,6 +57,19 @@ void Scene::SimulatePhyics() const
 
 	for (int i = 0; i < nbActiveActor; i++)
 	{
-		//retrieve modified actor
+		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
+
+		if(go)
+		{
+			physx::PxRigidDynamic* rd = static_cast<physx::PxRigidDynamic*>(activeActors[i]);
+
+			if (rd)
+			{
+				physx::PxTransform transform = rd->getGlobalPose();
+
+				go->localPosition = { transform.p.x, transform.p.y, transform.p.z };
+				go->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+			}
+		}
 	}
 }

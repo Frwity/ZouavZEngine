@@ -41,8 +41,7 @@ void PhysicSystem::Init()
 	if (!sceneDesc.filterShader)
 		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 
-	if (!sceneDesc.flags)
-		sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS;
+	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS;
 
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");

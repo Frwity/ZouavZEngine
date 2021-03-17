@@ -23,6 +23,7 @@
 #include "Sound.hpp"
 #include <iostream>
 #include "System/PhysicSystem.hpp"
+#include "Component/BoxCollision.hpp"
 
 #define EDITOR
 
@@ -81,6 +82,7 @@ void Engine::Load()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
+   // player->AddComponent<BoxCollision>();
 }
 
 void Engine::Update()
@@ -104,6 +106,7 @@ void Engine::Update()
             SoundManager::Update();
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
+            scene.SimulatePhyics();
         }
 
         

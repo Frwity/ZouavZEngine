@@ -8,6 +8,4 @@ public:
 	BoxCollision(GameObject* _gameObject);
 	~BoxCollision();
 
-private:
-
 };

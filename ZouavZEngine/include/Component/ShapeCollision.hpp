@@ -4,6 +4,8 @@
 namespace physx
 {
 	class PxActor;
+	class PxShape;
+	class PxMaterial;
 }
 
 class ShapeCollision: public Component
@@ -13,4 +15,6 @@ public:
 	~ShapeCollision();
 protected:
 	physx::PxActor* actor;
+	physx::PxShape* shape;
+	physx::PxMaterial* material;
 };
