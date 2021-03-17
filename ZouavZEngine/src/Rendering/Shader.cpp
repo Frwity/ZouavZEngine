@@ -128,7 +128,6 @@ void Shader::SetVector2(const std::string& name, const Vec2& v) const
     glUniform2f(glGetUniformLocation(id, name.c_str()), v.x, v.y);
 }
 
-
 void Shader::SetVector3(const std::string& name, const Vec3& v) const
 {
     glUniform3f(glGetUniformLocation(id, name.c_str()), v.x, v.y, v.z);

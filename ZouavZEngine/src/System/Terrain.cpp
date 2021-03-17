@@ -18,6 +18,9 @@ Terrain::Terrain()
 {
 	shader = static_cast<Shader*>(ResourcesManager::GetResource("TerrainShader"));
 	AddNoiseLayer();
+	AddColor();
+	AddColor();
+	AddColor();
 }
 
 void Terrain::Generate(GameObject* _actualizer)
@@ -31,8 +34,8 @@ void Terrain::Generate(GameObject* _actualizer)
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount, 
-														seed, noiseParams,															
+			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+														seed, noiseParams,
 														minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
@@ -46,10 +49,10 @@ void Terrain::Actualise()
 
 	while (it != chunks.end())
 	{
-			it->second.Generate({ it->second.GetPos(),	chunkSize, chunkVertexCount,
-														seed, noiseParams,
-														minHeight, maxHeight, heightIntensity }, true);
-			it++;
+		it->second.Generate({ it->second.GetPos(),	chunkSize, chunkVertexCount,
+													seed, noiseParams,
+													minHeight, maxHeight, heightIntensity }, true);
+		it++;
 	}
 }
 
@@ -64,6 +67,7 @@ void Terrain::Update()
 
 	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
 
+	// delete far Chunk
 	while (it != chunks.end())
 	{
 		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
@@ -79,13 +83,14 @@ void Terrain::Update()
 
 	Vec2 actualizerChunkPos = actualizerPos / chunkSize;
 
+	// create near Chunk
 	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
 	{
 		for (int y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
 		{
 			pos = { (float)x, (float)y };
 
-			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius)
+			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 				break;
 
 			if (chunks.find(pos.ToString()) == chunks.end())
@@ -111,9 +116,20 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
+	shader->SetFloat("colorCount", colorCount);
+
+	for (int i = 0; i < colorCount; ++i)
+	{
+		shader->SetFloat("colorHeight[" + std::to_string(i) + "]", colorHeight[i]);
+		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
+	}
+
+	shader->SetFloat("minHeight", minHeight);
+	shader->SetFloat("maxHeight", maxHeight);
+
 	for (auto& it : chunks)
 	{
-		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y}));
+		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y }));
 
 		glBindVertexArray(it.second.GetMesh().GetID());
 		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
@@ -176,9 +192,18 @@ void Terrain::DisplayOptionWindow()
 	ImGui::End();
 }
 
+void Terrain::AddColor()
+{
+	if (colorCount >= MAX_COLOR_COUNT)
+		return;
+	colors.emplace_back(Vec3{});
+	colorHeight.emplace_back(0.1f * colorCount);
+	colorCount++;
+}
+
 void Terrain::AddNoiseLayer()
 {
-	if (noiseParams.size() > MAX_NOISE_COUNT)
+	if (noiseParams.size() >= MAX_NOISE_COUNT)
 		return;
 	noiseParams.emplace_back(NoiseParam{});
 	noiseID = (int)noiseParams.size() - 1;
@@ -223,7 +248,6 @@ float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
 
 void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 {
-	std::cout << "0" << std::endl;
 	pos = _cca.pos;
 	size = _cca.size;
 
@@ -246,7 +270,6 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	}
 
 	// indices
-	std::cout << "1" << std::endl;
 	for (int z = 0; z < _cca.vertexCount - 1; z++)
 	{
 		for (int x = 0; x < _cca.vertexCount - 1; x++)
@@ -263,10 +286,8 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			indices.push_back(bottomRight);
 		}
 	}
-	std::cout << "2" << std::endl;
 	if (_reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else
 		mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
-	std::cout << "3" << std::endl;
 }

@@ -86,6 +86,7 @@ void Engine::Update()
 
     Terrain terrain;
     terrain.Generate(Scene::GetCurrentScene()->GetWorld().GetChildren().at(2));
+    terrain.Update();
 
     while (!render.Stop())
     {
