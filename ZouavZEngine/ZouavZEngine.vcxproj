@@ -236,6 +236,7 @@
     <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\PhysicSystem.hpp" />
+    <ClInclude Include="include\System\PhysicUtils.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
     <ClInclude Include="include\System\SoundManager.hpp" />
