@@ -365,21 +365,11 @@ void Editor::DisplayInspector()
         {
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
-            ImGui::Text("World Position :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().z).c_str());
+            ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
 
-            ImGui::Text("World Rotation :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
+            ImGui::Text("World Rotation : %.3f %.3f %.3f %.3f", gameObjectInspector->WorldRotation().x, gameObjectInspector->WorldRotation().y, gameObjectInspector->WorldRotation().z, gameObjectInspector->WorldRotation().w);
 
-            ImGui::Text("World Scale :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().z).c_str());
+            ImGui::Text("World Scale :  %.3f %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
