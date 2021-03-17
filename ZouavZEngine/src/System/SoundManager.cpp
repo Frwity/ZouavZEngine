@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Sound.hpp"
 #include "System/Debug.hpp"
+#include "Maths/Vec3.hpp"
 #include "System/SoundManager.hpp"
 
 float SoundManager::mainVolume = 1.0f;
@@ -39,7 +40,7 @@ void SoundManager::Init()
 void SoundManager::Update()
 {
     for (Sound* sound : sounds)
-        sound->SetVolume(mainVolume);
+        sound->SetVolume(mainVolume * sound->volumeIntensity);
 }
 
 void SoundManager::Destroy()
@@ -71,4 +72,14 @@ void SoundManager::RemoveSound(Sound* _newSound)
         else
             ++it;
     }
+}
+
+void SoundManager::SetListenerPosition(const Vec3& _position)
+{
+    alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
+}
+
+void SoundManager::SetListenerVelocity(const Vec3& _velocity)
+{
+    alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z);
 }

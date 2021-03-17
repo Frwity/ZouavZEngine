@@ -9,6 +9,8 @@ private:
 	unsigned int source = 0;
 
 public:
+	float volumeIntensity = 1.0f;
+
 	Sound() = default;
 	Sound(const char* _path);
 	~Sound();
