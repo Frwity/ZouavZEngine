@@ -4,9 +4,15 @@
 class Vec3
 {
     public:
-        float x;
-        float y;
-        float z;
+        union
+        {
+            struct {
+                float x;
+                float y;
+                float z;
+            };
+            float xyz[3];
+        };
 
         Vec3();
         Vec3(float _x, float _y, float _z);

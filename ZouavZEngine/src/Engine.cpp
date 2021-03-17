@@ -85,7 +85,8 @@ void Engine::Update()
     ScriptSystem::Begin();
 
     Terrain terrain;
-    terrain.Generate();
+    terrain.Generate(Scene::GetCurrentScene()->GetWorld().GetChildren().at(2));
+    terrain.Update();
 
     while (!render.Stop())
     {
@@ -101,6 +102,7 @@ void Engine::Update()
             SoundManager::Update();
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
+            terrain.Update();
         }
 
         

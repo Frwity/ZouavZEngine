@@ -79,9 +79,9 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-	ImGui::Begin("Option", NULL,  ImGuiWindowFlags_NoMove
-                                | ImGuiWindowFlags_NoDocking
-                                | ImGuiWindowFlags_NoNav
+	ImGui::Begin("Option", NULL,  //ImGuiWindowFlags_NoMove
+                                //| ImGuiWindowFlags_NoDocking
+                                 ImGuiWindowFlags_NoNav
                                 | ImGuiWindowFlags_NoBackground
 		                        | ImGuiWindowFlags_NoScrollWithMouse
 		                        | ImGuiWindowFlags_NoTitleBar

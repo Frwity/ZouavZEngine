@@ -1,3 +1,7 @@
+
+
+
+
 #pragma once
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
@@ -8,6 +12,7 @@
 
 
 #define MAX_NOISE_COUNT 4
+#define MAX_COLOR_COUNT 8 // need to change the TerrainShader.vs define too // TODO change only one
 
 struct NoiseParam
 {
@@ -47,7 +52,10 @@ private:
 	int size = 0;
 public:
 
+	bool shouldRemove = true;
+
 	Chunk() = default;
+	~Chunk() = default;
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);
@@ -66,10 +74,11 @@ private:
 
 	Shader* shader{};
 
-
 public:
 
-	int chunkCount = 3;
+	class GameObject* actualizer = nullptr;
+
+	float chunkDistanceRadius = 512;
 
 	int chunkSize = 128;
 	int chunkVertexCount = 16;
@@ -84,19 +93,25 @@ public:
 	float maxHeight = 30.0f;
 	float heightIntensity = 30.0f;
 
+	int colorCount = 0;
+	std::vector<float> colorHeight;
+	std::vector<Vec3> colors;
+
 	bool alwaysActualize = true;
 
 	Terrain();
 
-	void Generate();
-
+	void Generate(class GameObject* _actualizer = nullptr);
 	void Actualise();
+
+	void Update();
+	void Draw(const std::vector<class Light*>& _lights, const class Camera& _camera);
 
 	void DisplayOptionWindow();
 
 	void AddNoiseLayer();
-
 	void DeleteCurrentNoiseLayer();
 
-	void Draw(const std::vector<class Light*>& _lights, const class Camera& _camera);
+	void AddColor();
+
 };

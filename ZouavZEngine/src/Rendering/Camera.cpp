@@ -32,6 +32,8 @@ Mat4 Camera::GetMatrix() const
 
     Mat4 cameraMatrix;
 
+    const Vec3 pos(-gameObject->localPosition.x + position.x, gameObject->localPosition.y + position.y, -gameObject->localPosition.z + position.z);
+
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;
     cameraMatrix.Accessor(0, 2) = right.z;
@@ -42,9 +44,9 @@ Mat4 Camera::GetMatrix() const
     cameraMatrix.Accessor(2, 1) = -forward.y;
     cameraMatrix.Accessor(2, 2) = -forward.z;
 
-    cameraMatrix.Accessor(0, 3) = -right.Dot(-gameObject->localPosition + position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(-gameObject->localPosition + position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(-gameObject->localPosition + position);
+    cameraMatrix.Accessor(0, 3) = -right.Dot(pos);
+    cameraMatrix.Accessor(1, 3) = -up.Dot(pos);
+    cameraMatrix.Accessor(2, 3) = forward.Dot(pos);
 
     cameraMatrix.Accessor(3, 3) = 1;
 

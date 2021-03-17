@@ -24,8 +24,8 @@ void Player::Begin()
 
 void Player::Update()
 {
-	if (InputManager::GetKeyPressed(E_KEYS::RCTRL))
-		speed = 10;
+	if (InputManager::GetKeyPressed(E_KEYS::RSHIFT))
+		speed = 100;
 	else
 		speed = 3;
 
