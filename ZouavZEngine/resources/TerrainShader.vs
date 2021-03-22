@@ -13,7 +13,10 @@ out vec3 Color;
 
 uniform int colorCount;
 uniform float colorHeight[MAX_COLOR];
+uniform float colorBlend[MAX_COLOR];
 uniform vec3 colors[MAX_COLOR];
+
+uniform sampler2D textures[MAX_COLOR];
 
 uniform float minHeight;
 uniform float maxHeight;
@@ -34,7 +37,7 @@ void main()
 
 	for(int i = 0; i < colorCount; i++)
 	{
-		drawStrength = clamp(sign(heightPercent - colorHeight[i]), 0.0, 1.0);
+		drawStrength = smoothstep(-colorBlend[i]/2 - 0.0001, colorBlend[i]/2, heightPercent - colorHeight[i]);
 		Color = Color * (1 - drawStrength) + colors[i] * drawStrength;
 	}
 

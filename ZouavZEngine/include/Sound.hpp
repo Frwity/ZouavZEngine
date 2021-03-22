@@ -11,8 +11,7 @@ private:
 public:
 	float volumeIntensity = 1.0f;
 
-	Sound() = default;
-	Sound(const char* _path);
+	Sound(const std::string& _name, const char* _path);
 	~Sound();
 
 	void Play();

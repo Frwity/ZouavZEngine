@@ -16,7 +16,7 @@
 
 Terrain::Terrain()
 {
-	shader = static_cast<Shader*>(ResourcesManager::GetResource("TerrainShader"));
+	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
 	AddNoiseLayer();
 	AddColor();
 	AddColor();
@@ -118,9 +118,11 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 
 	shader->SetInt("colorCount", colorCount);
 
+	shader->SetFloatArray("colorHeight",  colorHeight.data(), colorCount);
+	shader->SetFloatArray("colorBlend", colorBlend.data(), colorCount);
+
 	for (int i = 0; i < colorCount; ++i)
 	{
-		shader->SetFloat("colorHeight[" + std::to_string(i) + "]", colorHeight[i]);
 		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
 	}
 
@@ -193,7 +195,11 @@ void Terrain::DisplayOptionWindow()
 		for (int i = 0; i < colorCount; ++i)
 		{
 			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
+			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
 			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
+			static int index = 0;
+			if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
+				textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
 		}
 	}
 	ImGui::End();
@@ -205,6 +211,7 @@ void Terrain::AddColor()
 		return;
 	colors.emplace_back(Vec3{0.1f * colorCount, 0.1f * colorCount, 0.1f * colorCount});
 	colorHeight.emplace_back(0.1f * colorCount);
+	colorBlend.emplace_back(0);
 	colorCount++;
 }
 

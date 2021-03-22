@@ -15,7 +15,8 @@
 #include "Rendering/Mesh.hpp"
 
 
-Mesh::Mesh(const char* path)
+Mesh::Mesh(const std::string& _name, const char* path)
+	: Resource(_name)
 {
     Assimp::Importer importer;
 		

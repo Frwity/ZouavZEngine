@@ -52,8 +52,6 @@ private:
 	int size = 0;
 public:
 
-	bool shouldRemove = true;
-
 	Chunk() = default;
 	~Chunk() = default;
 
@@ -76,9 +74,13 @@ private:
 
 public:
 
+	// infinite variable
+	
 	class GameObject* actualizer = nullptr;
 
 	float chunkDistanceRadius = 512;
+
+	// chunk variable
 
 	int chunkSize = 128;
 	int chunkVertexCount = 16;
@@ -93,9 +95,17 @@ public:
 	float maxHeight = 30.0f;
 	float heightIntensity = 30.0f;
 
+	// texture and color variable
+
 	int colorCount = 0;
-	std::vector<float> colorHeight;
 	std::vector<Vec3> colors;
+	std::vector<float> colorHeight;
+	std::vector<float> colorBlend;
+
+	std::vector<std::string> textureNames;
+	std::vector<class Texture*> textureID;
+
+	// editor variable
 
 	bool alwaysActualize = true;
 

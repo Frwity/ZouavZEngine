@@ -243,6 +243,12 @@
   <ItemGroup>
     <None Include="resources\shader.fs" />
     <None Include="resources\shader.vs" />
+    <None Include="resources\TerrainShader.fs">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="resources\TerrainShader.vs">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\texture.jpg" />

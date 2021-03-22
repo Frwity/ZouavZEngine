@@ -17,6 +17,7 @@
 #include "System/TimeManager.hpp"
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
+#include "System/ResourcesManager.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -392,11 +393,30 @@ void Editor::DisplayInspector()
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
 
             if (!gameObjectInspector->GetComponent<MeshRenderer>())
+            {
                 if (ImGui::Button("Add Mesh Renderer"))
                     gameObjectInspector->AddComponent<MeshRenderer>();
+            }
+            else
+            {
+                ResourceChanger<Texture>("Texture", gameObjectInspector->GetComponent<MeshRenderer>()->texture);
+                ResourceChanger<Mesh>("mesh", gameObjectInspector->GetComponent<MeshRenderer>()->mesh);
+                ResourceChanger<Shader>("shader", gameObjectInspector->GetComponent<MeshRenderer>()->shader);
+            }
         }
     }
     ImGui::End();
+}
+
+
+template<typename T>
+void Editor::ResourceChanger(const char* _label, T*& _ressource)
+{
+    const std::vector<const char*>& resourceNames = ResourcesManager::GetResourceNames<T>();
+    int index = ResourcesManager::GetIndexByName<T>(_ressource->GetName());
+
+    if (ImGui::Combo(_label, &index, resourceNames.data(), resourceNames.size()))
+        _ressource = ResourcesManager::GetResource<T>(resourceNames.at(index));
 }
 
 void Editor::DisplayConsoleWindow()
@@ -468,7 +488,10 @@ void DisplayChild(GameObject* _parent)
             if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
             {
                 if (selectedGameObject == _parent)
+                {
                     gameObjectInspector = selectedGameObject;
+                   
+                }
 
                 else if (!_parent->IsChildOf(selectedGameObject))
                 {

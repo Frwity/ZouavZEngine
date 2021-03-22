@@ -5,7 +5,8 @@
 #include "System/Debug.hpp"
 #include "Rendering/Texture.hpp"
 
-Texture::Texture(const char* src)
+Texture::Texture(const std::string& _name, const char* src)
+    : Resource(_name)
 {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);

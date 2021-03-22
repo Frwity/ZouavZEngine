@@ -58,11 +58,21 @@ Engine::~Engine()
 
 void Engine::Load()
 {
-    Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
-    ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
-    Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
-    Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
+    Shader* shader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
+    Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
+    Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
+
+    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+
+    ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
+
+    ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
+    ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
+    ResourcesManager::AddResourceTexture("Grass", "resources/Grass.png");
+    ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
+    ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
+
     GameObject* light = GameObject::CreateGameObject("Light");
 
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
@@ -96,6 +106,8 @@ void Engine::Update()
         InputManager::Update();
 
         editor.NewFrame();
+
+        ImGui::ShowDemoWindow();
 
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {

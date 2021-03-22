@@ -13,9 +13,9 @@ MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject)
     : Component(_gameObject), 
-      mesh{ static_cast<Mesh*>(ResourcesManager::GetResource("Skull Mesh")) }, 
-      shader{static_cast<Shader*>(ResourcesManager::GetResource("BlinnPhongShader")) }, 
-      texture{ static_cast<Texture*>(ResourcesManager::GetResource("Skull Tex")) }
+      mesh{ ResourcesManager::GetResource<Mesh>("Skull Mesh") }, 
+      shader{ResourcesManager::GetResource<Shader>("BlinnPhongShader") },
+      texture{ ResourcesManager::GetResource<Texture>("Skull Tex") }
 {}
 
 void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)

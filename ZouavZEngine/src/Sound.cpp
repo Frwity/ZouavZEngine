@@ -8,7 +8,8 @@
 #include "System/Debug.hpp"
 #include "Sound.hpp"
 
-Sound::Sound(const char* _path)
+Sound::Sound(const std::string& _name, const char* _path)
+    : Resource(_name)
 {
     SF_INFO FileInfos;
     SNDFILE* File = sf_open(_path, SFM_READ, &FileInfos);

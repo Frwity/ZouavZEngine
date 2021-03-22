@@ -5,9 +5,8 @@ class Texture: public Resource
 {
 public:
 
-    unsigned int texture;
-    Texture() = default;
+    unsigned int texture = 0;
+    Texture(const std::string& _name, const char* textPath);
     ~Texture() = default;
-    Texture(const char* textPath);
     void Use();
 };

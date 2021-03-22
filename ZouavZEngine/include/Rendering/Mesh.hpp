@@ -21,7 +21,7 @@ private:
 
 public:
     Mesh() = default;
-    Mesh(const char* path);
+    Mesh(const std::string& _name, const char* path);
     ~Mesh();
 
     void InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
