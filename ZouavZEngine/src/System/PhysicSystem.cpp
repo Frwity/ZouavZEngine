@@ -1,6 +1,7 @@
 #include "System/Debug.hpp"
 #include "PxPhysicsAPI.h"
 #include "pvd/PxPvd.h"
+#include "pvd/PxPvdSceneClient.h"
 #include "System/PhysicSystem.hpp"
 #include "System/TimeManager.hpp"
 #include "GameObject.hpp"
@@ -13,7 +14,10 @@ PxDefaultErrorCallback PhysicSystem::physxErrorCallback;
 PxFoundation* PhysicSystem::foundation = nullptr;
 PxPhysics* PhysicSystem::physics = nullptr;
 PxCooking* PhysicSystem::cooking = nullptr;
+PxPvd* PhysicSystem::pvd = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
+PxPvdSceneClient* PhysicSystem::pvdClient = nullptr;
+PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
 
 static PxFilterFlags filterShader(
     PxFilterObjectAttributes attributes0,
@@ -24,12 +28,14 @@ static PxFilterFlags filterShader(
     const void* constantBlock,
     PxU32 constantBlockSize)
 {
-    pairFlags = PxPairFlag::eSOLVE_CONTACT;
-    pairFlags |= PxPairFlag::eDETECT_DISCRETE_CONTACT;
-    pairFlags |= PxPairFlag::eDETECT_CCD_CONTACT;
-    return PxFilterFlags();
+	pairFlags = PxPairFlag::eCONTACT_DEFAULT
+		| PxPairFlag::eDETECT_CCD_CONTACT
+		| PxPairFlag::eNOTIFY_TOUCH_CCD
+		| PxPairFlag::eNOTIFY_TOUCH_FOUND
+		| PxPairFlag::eNOTIFY_CONTACT_POINTS
+		| PxPairFlag::eCONTACT_EVENT_POSE;
+    return PxFilterFlag::eDEFAULT;
 }
-
 
 void PhysicSystem::Init()
 {
@@ -38,8 +44,11 @@ void PhysicSystem::Init()
 
 	PxTolerancesScale scale = PxTolerancesScale();
 
+	pvd = PxCreatePvd(*foundation);
+	ZASSERT(pvd != nullptr, "PxCreatePvd failed !");
+
 	physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
-		scale, true, nullptr);
+		scale, true, pvd);
 	ZASSERT(physics != nullptr, "PxCreatePhysics failed !");
 
 	cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(scale));
@@ -56,13 +65,20 @@ void PhysicSystem::Init()
 		sceneDesc.cpuDispatcher = mCpuDispatcher;
 	}
 
-	if (!sceneDesc.filterShader)
-		sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 
+	sceneDesc.simulationEventCallback = physicEventCallback;
 	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");
+
+	pvdClient = scene->getScenePvdClient();
+	ZASSERT(pvdClient != nullptr, "getScenePvdClient failed !");
+
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 }
 
 void PhysicSystem::DestroyCollisionComponent()
@@ -89,5 +105,7 @@ void PhysicSystem::Destroy()
 	scene->release();
 	cooking->release();
 	physics->release();
+	pvd->release();
 	foundation->release();
+	delete physicEventCallback;
 }

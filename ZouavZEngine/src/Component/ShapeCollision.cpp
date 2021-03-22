@@ -16,7 +16,7 @@ ShapeCollision::~ShapeCollision()
 
 void ShapeCollision::releasePhysXComponent()
 {
-	shape->release();
+	//shape->release();
 	material->release();
 	actor->release();
 }
