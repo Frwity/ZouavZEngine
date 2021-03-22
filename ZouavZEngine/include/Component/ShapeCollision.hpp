@@ -6,23 +6,22 @@
 namespace physx
 {
 	class PxActor;
-	class PxShape;
 	class PxMaterial;
 }
 
 class ShapeCollision: public Component
 {
 public:
-	ShapeCollision(GameObject* _gameObject);
+	ShapeCollision(GameObject* _gameObject, float _density = 1.0f);
 	~ShapeCollision();
 
 	void releasePhysXComponent();
 	physx::PxActor* actor;
+	float density;
 
 private:
 	
 
 protected:
-	physx::PxShape* shape;
 	physx::PxMaterial* material;
 };

@@ -165,11 +165,13 @@
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
     <ClCompile Include="src\Component\AudioListener.cpp" />
     <ClCompile Include="src\Component\BoxCollision.cpp" />
+    <ClCompile Include="src\Component\CapsuleCollision.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
+    <ClCompile Include="src\Component\SphereCollision.cpp" />
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -206,11 +208,13 @@
     <ClInclude Include="include\Component\AudioBroadcaster.hpp" />
     <ClInclude Include="include\Component\AudioListener.hpp" />
     <ClInclude Include="include\Component\BoxCollision.hpp" />
+    <ClInclude Include="include\Component\CapsuleCollision.hpp" />
     <ClInclude Include="include\Component\Component.hpp" />
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\ShapeCollision.hpp" />
+    <ClInclude Include="include\Component\SphereCollision.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />

@@ -1,4 +1,3 @@
-#include "GameObject.hpp"
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
 #include "System/GameObjectSystem.hpp"
@@ -6,6 +5,7 @@
 #include "System/PhysicUtils.hpp"
 #include "PxRigidDynamic.h"
 #include "PxActor.h"
+#include "GameObject.hpp"
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {

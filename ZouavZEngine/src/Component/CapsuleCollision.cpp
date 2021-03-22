@@ -1,38 +1,31 @@
-#include "Component/BoxCollision.hpp"
+#include "Component/CapsuleCollision.hpp"
 #include "GameObject.hpp"
-#include "PxActor.h"
 #include "PxRigidBody.h"
 #include "PxRigidDynamic.h"
-#include "PxRigidStatic.h"
 #include "PxShape.h"
 #include "foundation/PxTransform.h"
 #include "PxMaterial.h"
 #include "System/PhysicSystem.hpp"
 #include "PxScene.h"
 #include "extensions/PxSimpleFactory.h"
-#include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
 
 using namespace physx;
 
-
-BoxCollision::BoxCollision(GameObject* _gameObject, float _density)
-	: ShapeCollision(_gameObject, _density)
+CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, float _density)
+	: ShapeCollision(_gameObject, _density), radius(_radius), halfHeight(_halfHeight)
 {
 	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
-	actor = PxCreateDynamic(*PhysicSystem::physics, t, PxBoxGeometry(0.5f, 0.5f, 0.5f), *material, density);
-
-	actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+	actor = PxCreateDynamic(*PhysicSystem::physics, t, PxCapsuleGeometry(radius, halfHeight), *material, density);
 
 	actor->userData = gameObject;
-	
+
 	PhysicSystem::scene->addActor(*actor);
 }
 
-BoxCollision::~BoxCollision()
+CapsuleCollision::~CapsuleCollision()
 {
-	
 }
