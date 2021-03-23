@@ -17,14 +17,8 @@ class ResourcesManager
 private:
 	static std::unordered_map<std::string, std::unique_ptr<Sound>> soundResources;
 	static std::unordered_map<std::string, std::unique_ptr<Mesh>> meshResources;
-	static std::vector<const char*> meshNames;
-	static bool isMeshesDirty;
 	static std::unordered_map<std::string, std::unique_ptr<Texture>> textureResources;
-	static std::vector<const char*> textureNames; 
-	static bool isTexturesDirty;
 	static std::unordered_map<std::string, std::unique_ptr<Shader>> shaderResources;
-	static std::vector<const char*> shaderNames;
-	static bool isShadersDirty;
 
 public:
 	ResourcesManager() = delete;
@@ -56,7 +50,6 @@ public:
 		if (a.second)
 		{
 			Debug::Log("Mesh Resource : " + _name + " loaded");
-			isMeshesDirty = true;
 			return a.first->second.get();
 		}
 		Debug::LogError("Mesh Resource : " + _name + " not loaded");
@@ -70,7 +63,6 @@ public:
 		if (a.second)
 		{
 			Debug::Log("Texture Resource : " + _name + " loaded");
-			isTexturesDirty = true;
 			return a.first->second.get();
 		}
 		Debug::LogError("Texture Resource : " + _name + " not loaded");
@@ -84,7 +76,6 @@ public:
 		if (a.second)
 		{
 			Debug::Log("Shader Resource : " + _name + " loaded");
-			isShadersDirty = true;
 			return a.first->second.get();
 		}
 		Debug::LogError("Shader Resource : " + _name + " not loaded");
@@ -122,104 +113,32 @@ public:
 	}
 
 	template<typename T>
-	static const std::vector<const char*>& GetResourceNames()
+	static const std::unordered_map<std::string, std::unique_ptr<T>>& GetResources()
 	{
 		Debug::LogWarning("Wrong get resources");
 	}
 
 	template<>
-	static const std::vector<const char*>& GetResourceNames<Texture>()
+	static const std::unordered_map<std::string, std::unique_ptr<Texture>>& GetResources<Texture>()
 	{
-		if (isTexturesDirty)
-		{
-			textureNames.clear();
-			for (const auto& texture : textureResources)
-			{
-				textureNames.push_back(texture.first.c_str());
-			}
-			isTexturesDirty = false;
-		}
-
-		return textureNames;
+		return textureResources;
 	}
 
 	template<>
-	static const std::vector<const char*>& GetResourceNames<Mesh>()
+	static const std::unordered_map<std::string, std::unique_ptr<Mesh>>& GetResources<Mesh>()
 	{
-		if (isMeshesDirty)
-		{
-			meshNames.clear();
-			for (const auto& mesh : meshResources)
-			{
-				meshNames.push_back(mesh.first.c_str());
-			}
-			isMeshesDirty = false;
-		}
-
-		return meshNames;
+		return meshResources;
 	}
 
 	template<>
-	static const std::vector<const char*>& GetResourceNames<Shader>()
+	static const std::unordered_map<std::string, std::unique_ptr<Shader>>& GetResources<Shader>()
 	{
-		if (isShadersDirty)
-		{
-			shaderNames.clear();
-			for (const auto& shader : shaderResources)
-			{
-				shaderNames.push_back(shader.first.c_str());
-			}
-			isShadersDirty = false;
-		}
-
-		return shaderNames;
-	}
-
-	template<typename T>
-	static int GetIndexByName(std::string _name)
-	{
-		Debug::LogWarning("Wrong GetIndexByName");
+		return shaderResources;
 	}
 
 	template<>
-	static int GetIndexByName<Texture>(std::string _name)
+	static const std::unordered_map<std::string, std::unique_ptr<Sound>>& GetResources<Sound>()
 	{
-		int cnt = 0;
-		for (auto& texture : textureResources)
-		{
-			if (texture.first == _name)
-				return cnt;
-			cnt++;
-		}
-
-		return -1;
-	}
-
-	template<>
-	static int GetIndexByName<Mesh>(std::string _name)
-	{
-		int cnt = 0;
-		for (auto& mesh : meshResources)
-		{
-			if (mesh.first == _name)
-				return cnt;
-			cnt++;
-		}
-
-		return -1;
-	}
-
-	template<>
-	static int GetIndexByName<Shader>(std::string _name)
-	{
-		int cnt = 0;
-		for (auto& shader : shaderResources)
-		{
-			if (shader.first == _name)
-				return cnt;
-			cnt++;
-		}
-
-		return -1;
+		return soundResources;
 	}
 };

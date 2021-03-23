@@ -51,5 +51,5 @@ public:
 	void MoveSelectedGameobject();
 
 	template<typename T>
-	void ResourceChanger(const char* _label, T*& _ressource);
+	void ResourceChanger(const char* _label, T*& _resource);
 };

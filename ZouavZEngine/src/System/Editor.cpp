@@ -410,13 +410,19 @@ void Editor::DisplayInspector()
 
 
 template<typename T>
-void Editor::ResourceChanger(const char* _label, T*& _ressource)
+void Editor::ResourceChanger(const char* _label, T*& _resource)
 {
-    const std::vector<const char*>& resourceNames = ResourcesManager::GetResourceNames<T>();
-    int index = ResourcesManager::GetIndexByName<T>(_ressource->GetName());
+    const auto& resources = ResourcesManager::GetResources<T>();
 
-    if (ImGui::Combo(_label, &index, resourceNames.data(), resourceNames.size()))
-        _ressource = ResourcesManager::GetResource<T>(resourceNames.at(index));
+    if (ImGui::BeginCombo(_label, _resource ? _resource->GetName().c_str() : ""))
+    {
+        for (auto& resource : resources)
+        {
+            if (ImGui::Selectable(resource.first.c_str(), resource.second.get() == _resource))
+                _resource = resource.second.get();
+        }
+        ImGui::EndCombo();
+    }
 }
 
 void Editor::DisplayConsoleWindow()

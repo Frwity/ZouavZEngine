@@ -197,9 +197,9 @@ void Terrain::DisplayOptionWindow()
 			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
 			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
 			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
-			static int index = 0;
-			if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
-				textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
+			//static int index = 0;
+			//if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
+			//	textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
 		}
 	}
 	ImGui::End();
