@@ -514,7 +514,7 @@ void Editor::DisplayHierarchy()
     {
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             hierarchyMenuPos = ImGui::GetMousePos();
             hierarchyMenu = true;

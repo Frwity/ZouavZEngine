@@ -5,16 +5,18 @@
 #include "System/Debug.hpp"
 #include "Rendering/Texture.hpp"
 
+const Texture* Texture::errorTexture;
+
 Texture::Texture(const std::string& _name, const char* src)
     : Resource(_name)
 {
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
@@ -32,7 +34,10 @@ Texture::Texture(const std::string& _name, const char* src)
     stbi_image_free(data);
 }
 
-void Texture::Use()
+void Texture::Use(Texture* texture)
 {
-    glBindTexture(GL_TEXTURE_2D, texture);
+    if (texture)
+        glBindTexture(GL_TEXTURE_2D, texture->textureID);
+    else
+        glBindTexture(GL_TEXTURE_2D, errorTexture->textureID);
 }

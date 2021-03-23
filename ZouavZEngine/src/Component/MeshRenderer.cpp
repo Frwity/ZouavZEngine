@@ -22,7 +22,7 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 {
     shader->Use();
     glActiveTexture(GL_TEXTURE0);
-    texture->Use();
+    Texture::Use(texture);
     Mat4 matrixCamera = _camera.GetMatrix();
 
     shader->SetMatrix("view", matrixCamera.Reversed());

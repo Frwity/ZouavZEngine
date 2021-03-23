@@ -110,6 +110,7 @@ void Terrain::Update()
 void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
 {
 	shader->Use();
+
 	shader->SetLight(_lights);
 	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reversed());
@@ -120,9 +121,15 @@ void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera&
 
 	shader->SetFloatArray("colorHeight",  colorHeight.data(), colorCount);
 	shader->SetFloatArray("colorBlend", colorBlend.data(), colorCount);
+	shader->SetFloatArray("colorStrength", colorStrength.data(), colorCount);
+	shader->SetFloatArray("textureScale", textureScale.data(), colorCount);
 
 	for (int i = 0; i < colorCount; ++i)
 	{
+		glUniform1i(glGetUniformLocation(shader->id, ("textures[" + std::to_string(i) + "]").c_str()), i);
+		glActiveTexture(GL_TEXTURE0 + i);
+		if (textureID.at(i))
+			Texture::Use(textureID.at(i));
 		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
 	}
 
@@ -196,10 +203,17 @@ void Terrain::DisplayOptionWindow()
 		{
 			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
 			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
+			ImGui::SliderFloat(("Color Strengh " + std::to_string(i)).c_str(), &colorStrength[i], 0.0f, 1.0f);
 			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
-			static int index = 0;
-			if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
-				textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
+			
+			ImGui::SliderFloat(("Texture Scale " + std::to_string(i)).c_str(), &textureScale[i], 0.0f, 32.0f);
+			const std::vector<const char*>& resourceNames = ResourcesManager::GetResourceNames<Texture>();
+			int index = 0;
+			if (textureID.at(i))
+				index = ResourcesManager::GetIndexByName<Texture>(textureID.at(i)->GetName());
+			if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, resourceNames.data(), resourceNames.size()))
+				textureID.at(i) = ResourcesManager::GetResource<Texture>(resourceNames.at(index));
+			
 		}
 	}
 	ImGui::End();
@@ -212,6 +226,9 @@ void Terrain::AddColor()
 	colors.emplace_back(Vec3{0.1f * colorCount, 0.1f * colorCount, 0.1f * colorCount});
 	colorHeight.emplace_back(0.1f * colorCount);
 	colorBlend.emplace_back(0);
+	textureID.emplace_back(nullptr);
+	colorStrength.emplace_back(0);
+	textureScale.emplace_back(1);
 	colorCount++;
 }
 

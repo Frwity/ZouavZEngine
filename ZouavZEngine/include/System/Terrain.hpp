@@ -101,6 +101,8 @@ public:
 	std::vector<Vec3> colors;
 	std::vector<float> colorHeight;
 	std::vector<float> colorBlend;
+	std::vector<float> colorStrength;
+	std::vector<float> textureScale;
 
 	std::vector<std::string> textureNames;
 	std::vector<class Texture*> textureID;

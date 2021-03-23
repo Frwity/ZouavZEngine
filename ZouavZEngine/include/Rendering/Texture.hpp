@@ -3,10 +3,14 @@
 
 class Texture: public Resource
 {
+    friend class Engine;
+private:
+    static const Texture* errorTexture;
 public:
 
-    unsigned int texture = 0;
+    unsigned int textureID = 0;
     Texture(const std::string& _name, const char* textPath);
     ~Texture() = default;
-    void Use();
+
+    static void Use(Texture* _texture);
 };

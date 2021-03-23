@@ -63,9 +63,9 @@ void Engine::Load()
     Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
     Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
 
-    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
 
-    ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
+    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
 
     ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
     ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
