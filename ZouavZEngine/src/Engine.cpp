@@ -21,6 +21,7 @@
 #include "Game/Move.hpp"
 #include "Game/Player.hpp"
 #include "Sound.hpp"
+#include "cereal/archives/json.hpp"
 #include <iostream>
 
 #define EDITOR
@@ -52,12 +53,16 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+    Save();
+
 	render.Destroy();
     SoundManager::Destroy();
 }
 
 void Engine::Load()
 {
+    scene.Load();
+
     Shader* shader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
     Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
@@ -88,6 +93,11 @@ void Engine::Load()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
+}
+
+void Engine::Save()
+{
+    scene.Save();
 }
 
 void Engine::Update()

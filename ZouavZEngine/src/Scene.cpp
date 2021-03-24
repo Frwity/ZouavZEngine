@@ -6,12 +6,39 @@
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 
+#include <fstream>
+#include "cereal/archives/json.hpp"
+#include <iostream>
+
 Scene* Scene::currentScene = nullptr;
 
 Scene::Scene()
 {
 	currentScene = this;
 	world.SetParent(nullptr);
+}
+
+void Scene::Load()
+{
+	//std::ifstream saveFile;
+	//saveFile.open("save.json", std::ios::binary);
+	//cereal::JSONInputArchive iarchive(saveFile);
+
+
+
+	//saveFile.close();
+}
+
+void Scene::Save()
+{
+	std::ofstream saveFile;
+	saveFile.open("save.json", std::ios::binary);
+	{
+		cereal::JSONOutputArchive oArchive(saveFile);
+
+		world.save(oArchive);
+	}
+	saveFile.close();
 }
 
 void Scene::Draw(const Camera& _camera) const

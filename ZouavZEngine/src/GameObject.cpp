@@ -3,14 +3,16 @@
 #include "Maths/Mat4.hpp"
 #include "System/GameObjectSystem.hpp"
 
-GameObject* GameObject::CreateGameObject(const std::string& _name)
-{
+
+GameObject* GameObject::CreateGameObject(const std::string& _name) 
+{ // TODO merge both
 	return GameObjectSystem::CreateGameObject(_name);
 }
 
 GameObject::GameObject(const std::string& _name)
 	: name(_name)
 {
+	id = (int)this;
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

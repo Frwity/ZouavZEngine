@@ -4,6 +4,7 @@
 #include "Scene.hpp"
 #include "System/Editor.hpp"
 #include "System/SoundManager.hpp"
+#include <iostream>
 
 class Engine
 {
@@ -17,7 +18,9 @@ public:
 
 	Engine();
 	~Engine();
-
+	
 	void Load();
 	void Update();
+	void Save();
+
 };
