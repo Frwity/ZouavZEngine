@@ -2,7 +2,6 @@
 #include "GameObject.hpp"
 #include "PxActor.h"
 #include "PxRigidBody.h"
-#include "PxRigidDynamic.h"
 #include "PxRigidStatic.h"
 #include "PxShape.h"
 #include "foundation/PxTransform.h"
@@ -14,8 +13,7 @@
 #include "System/PhysicUtils.hpp"
 
 using namespace physx;
-
-
+	
 BoxCollision::BoxCollision(GameObject* _gameObject, float _density)
 	: ShapeCollision(_gameObject, _density)
 {
@@ -23,9 +21,7 @@ BoxCollision::BoxCollision(GameObject* _gameObject, float _density)
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
-	actor = PxCreateDynamic(*PhysicSystem::physics, t, PxBoxGeometry(0.5f, 0.5f, 0.5f), *material, density);
-
-	actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+	actor = PxCreateStatic(*PhysicSystem::physics, t, PxBoxGeometry(0.5f, 0.5f, 0.5f), *material);
 
 	actor->userData = gameObject;
 	

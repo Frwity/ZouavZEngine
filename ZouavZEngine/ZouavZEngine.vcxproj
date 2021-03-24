@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -169,6 +169,7 @@
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
+    <ClCompile Include="src\Component\RigidBody.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
     <ClCompile Include="src\Component\SphereCollision.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="include\Component\Component.hpp" />
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
+    <ClInclude Include="include\Component\RigidBody.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\ShapeCollision.hpp" />
     <ClInclude Include="include\Component\SphereCollision.hpp" />

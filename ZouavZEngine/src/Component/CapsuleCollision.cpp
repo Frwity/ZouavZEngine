@@ -1,8 +1,7 @@
 #include "Component/CapsuleCollision.hpp"
 #include "GameObject.hpp"
 #include "PxRigidBody.h"
-#include "PxRigidDynamic.h"
-#include "PxShape.h"
+#include "PxRigidStatic.h"
 #include "foundation/PxTransform.h"
 #include "PxMaterial.h"
 #include "System/PhysicSystem.hpp"
@@ -19,7 +18,7 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
-	actor = PxCreateDynamic(*PhysicSystem::physics, t, PxCapsuleGeometry(radius, halfHeight), *material, density);
+	actor = PxCreateStatic(*PhysicSystem::physics, t, PxCapsuleGeometry(radius, halfHeight), *material);
 
 	actor->userData = gameObject;
 

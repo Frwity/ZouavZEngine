@@ -25,6 +25,7 @@
 #include "System/PhysicSystem.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Component/SphereCollision.hpp"
+#include "Component/RigidBody.hpp"
 
 #define EDITOR
 
@@ -88,7 +89,8 @@ void Engine::Load()
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 2.0f, 0.0f };
     test->AddComponent<MeshRenderer>(mesh, shader, texture);
-    test->AddComponent<SphereCollision>();
+    //test->AddComponent<BoxCollision>();
+    test->AddComponent<Rigidody>();
 }
 
 void Engine::Update()

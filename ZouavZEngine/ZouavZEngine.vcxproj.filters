@@ -192,6 +192,9 @@
     <ClCompile Include="src\Component\CapsuleCollision.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\RigidBody.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -318,6 +321,9 @@
       <Filter>include\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\CapsuleCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RigidBody.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
