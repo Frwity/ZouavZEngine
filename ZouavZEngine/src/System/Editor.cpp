@@ -11,6 +11,9 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -370,7 +373,7 @@ void Editor::DisplayInspector()
 
             ImGui::Text("World Rotation : %.3f %.3f %.3f %.3f", gameObjectInspector->WorldRotation().x, gameObjectInspector->WorldRotation().y, gameObjectInspector->WorldRotation().z, gameObjectInspector->WorldRotation().w);
 
-            ImGui::Text("World Scale :  %.3f %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
+            ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
@@ -387,21 +390,45 @@ void Editor::DisplayInspector()
             if (ImGui::Button("Non"))
                 gameObjectInspector->localRotation = Quaternion(eulerAngles);
 
-            ImGui::Text("Local Scale :");
+            ImGui::Text("Local Scale    :");
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
             ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
 
-            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+            for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
-                if (ImGui::Button("Add Mesh Renderer"))
-                    gameObjectInspector->AddComponent<MeshRenderer>();
+                component->Editor();
             }
-            else
+
+            const std::vector<std::string>& componentsList = Component::GetComponentsList();
+
+            for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
             {
-                ResourceChanger<Texture>("Texture", gameObjectInspector->GetComponent<MeshRenderer>()->texture);
-                ResourceChanger<Mesh>("mesh", gameObjectInspector->GetComponent<MeshRenderer>()->mesh);
-                ResourceChanger<Shader>("shader", gameObjectInspector->GetComponent<MeshRenderer>()->shader);
+                if (ImGui::Button(std::string("Add ").append(componentsList[i]).c_str()))
+                {
+                    switch (i)
+                    {
+                        case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
+                            if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
+                                gameObjectInspector->AddComponent<AudioBroadcaster>();
+                            break;
+
+                        case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
+                            if (!gameObjectInspector->GetComponent<AudioListener>())
+                                gameObjectInspector->AddComponent<AudioListener>();
+                            break;
+
+                        case static_cast<int>(E_COMPONENT::LIGHT) :
+                            if (!gameObjectInspector->GetComponent<Light>())
+                                gameObjectInspector->AddComponent<Light>();
+                            break;
+
+                        case static_cast<int>(E_COMPONENT::MESHRENDERER) :
+                            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                                gameObjectInspector->AddComponent<MeshRenderer>();
+                            break;
+                    }
+                }
             }
         }
     }
@@ -409,21 +436,6 @@ void Editor::DisplayInspector()
 }
 
 
-template<typename T>
-void Editor::ResourceChanger(const char* _label, T*& _resource)
-{
-    const auto& resources = ResourcesManager::GetResources<T>();
-
-    if (ImGui::BeginCombo(_label, _resource ? _resource->GetName().c_str() : ""))
-    {
-        for (auto& resource : resources)
-        {
-            if (ImGui::Selectable(resource.first.c_str(), resource.second.get() == _resource))
-                _resource = resource.second.get();
-        }
-        ImGui::EndCombo();
-    }
-}
 
 void Editor::DisplayConsoleWindow()
 {
@@ -494,10 +506,7 @@ void DisplayChild(GameObject* _parent)
             if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
             {
                 if (selectedGameObject == _parent)
-                {
                     gameObjectInspector = selectedGameObject;
-                   
-                }
 
                 else if (!_parent->IsChildOf(selectedGameObject))
                 {

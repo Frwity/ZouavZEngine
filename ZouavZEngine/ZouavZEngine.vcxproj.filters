@@ -192,6 +192,9 @@
     <ClCompile Include="src\Multithread\Task.cpp">
       <Filter>src\Multithread</Filter>
     </ClCompile>
+    <ClCompile Include="src\Resource.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">

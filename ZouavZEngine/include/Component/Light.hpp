@@ -5,21 +5,24 @@
 
 enum class E_LIGHT_TYPE
 {
-	Directional,
-	Point,
-	Spot
+	DIRECTIONAL,
+	POINT,
+	SPOT
 };
 
 class Light : public Component
 {
 public:
-	Vec3 ambient;
-	Vec3 diffuse;
-	Vec3 specular;
-	Vec3 constLineQuad;
-	Vec3 direction;
-	Vec2 cutOffOuterCutOff;
-	E_LIGHT_TYPE type;
+	Vec3 ambient{ 0.5f, 0.5f, 0.5f };
+	Vec3 diffuse{ 0.5f, 0.5f, 0.5f };
+	Vec3 specular{ 0.5f, 0.5f, 0.5f };
+	Vec3 constLineQuad{ 1.0f, 0.01f, 0.001f };
+	Vec3 direction{ 0.0f, -1.0f, 0.0f };
+	Vec2 cutOffOuterCutOff{ 0.9f, 0.8f };
+	E_LIGHT_TYPE type{ E_LIGHT_TYPE::DIRECTIONAL };
 
+	Light(class GameObject* _gameObject);
 	Light(class GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type);
+
+	void Editor() override;
 };

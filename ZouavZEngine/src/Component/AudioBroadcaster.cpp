@@ -1,6 +1,11 @@
 #include "GameObject.hpp"
 #include "Sound.hpp"
 #include "Component/AudioBroadcaster.hpp"
+#include "imgui.h"
+
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
+	: Component(_gameObject)
+{}
 
 AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
 	: Component(_gameObject), sound{_sound}
@@ -8,7 +13,7 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
 
 void AudioBroadcaster::Update()
 {
-	if (updatePosition && sound)
+	if (!ambient && sound)
 		sound->SetPosition(gameObject->WorldPosition());
 }
 
@@ -27,7 +32,10 @@ void AudioBroadcaster::Stop()
 void AudioBroadcaster::SetLooping(bool _loop)
 {
 	if (sound)
+	{
 		sound->SetLooping(_loop);
+		loop = _loop;
+	}
 }
 
 void AudioBroadcaster::SetAmbient(bool _ambient)
@@ -36,6 +44,20 @@ void AudioBroadcaster::SetAmbient(bool _ambient)
 	{
 		sound->SetAmbient(_ambient);
 		sound->SetPosition(Vec3::zero);
-		updatePosition = !_ambient;
+		ambient = _ambient;
 	}
+}
+
+void AudioBroadcaster::Editor()
+{
+	ImGui::Text("AudioBroadcaster");
+	//Resource::ResourceChanger<Sound>("Sound", sound);
+	ImGui::Text("Ambient : "); 
+	ImGui::SameLine();
+	if (ImGui::Checkbox("##ambient", &ambient))
+		SetAmbient(ambient);
+	ImGui::Text("Loop    : "); 
+	ImGui::SameLine();
+	if (ImGui::Checkbox("##loop", &loop))
+		SetAmbient(loop);
 }

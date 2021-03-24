@@ -21,4 +21,6 @@ public:
     ~MeshRenderer() = default;
 
     void Draw(const class Mat4& _transform, const class Camera& _camera);
+
+    void Editor() override;
 };

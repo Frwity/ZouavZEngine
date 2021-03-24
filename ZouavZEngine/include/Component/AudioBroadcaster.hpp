@@ -5,11 +5,12 @@ class AudioBroadcaster : public Component
 {
 private:
 	class Sound* sound = nullptr;
-	bool updatePosition = true;
+	bool ambient = false;
+	bool loop = false;
 
 public:
-
 	AudioBroadcaster() = default;
+	AudioBroadcaster(class GameObject* _gameObject);
 	AudioBroadcaster(class GameObject* _gameObject, class Sound* _sound);
 
 	~AudioBroadcaster() = default;
@@ -20,4 +21,6 @@ public:
 	
 	void SetLooping(bool _loop);
 	void SetAmbient(bool _ambient);
+
+	void Editor() override;
 };

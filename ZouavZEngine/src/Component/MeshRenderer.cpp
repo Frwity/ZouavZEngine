@@ -6,6 +6,7 @@
 #include "System/ResourcesManager.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "System/Debug.hpp"
+#include "imgui.h"
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture)
 	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
@@ -32,4 +33,12 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
     glBindVertexArray(mesh->GetID());
     glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+}
+
+void MeshRenderer::Editor()
+{
+    ImGui::Text("MeshRenderer");
+    //Resource::ResourceChanger<Texture>("Texture", texture);
+    //Resource::ResourceChanger<Mesh>("mesh", mesh);
+    //Resource::ResourceChanger<Shader>("shader", shader);
 }

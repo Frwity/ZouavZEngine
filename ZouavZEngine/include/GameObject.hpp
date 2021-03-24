@@ -8,6 +8,7 @@
 
 class GameObject : public Transform
 {
+	friend class Editor;
 private:
     std::vector<std::unique_ptr<Component>> components;
 	std::vector<GameObject*> children;

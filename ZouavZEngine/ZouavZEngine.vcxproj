@@ -187,6 +187,7 @@
     <ClCompile Include="src\Rendering\Render.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Texture.cpp" />
+    <ClCompile Include="src\Resource.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\System\Debug.cpp" />

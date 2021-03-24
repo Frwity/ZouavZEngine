@@ -10,4 +10,6 @@ public:
 	~AudioListener() = default;
 
 	void Update();
+
+	void Editor() override;
 };
