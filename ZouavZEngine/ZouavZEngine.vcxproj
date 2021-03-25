@@ -192,7 +192,6 @@
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\System\Debug.cpp" />
     <ClCompile Include="src\System\Editor.cpp" />
-    <ClCompile Include="src\System\GameObjectSystem.cpp" />
     <ClCompile Include="src\System\InputManager.cpp" />
     <ClCompile Include="src\System\ResourcesManager.cpp" />
     <ClCompile Include="src\System\SoundManager.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="include\System\Debug.hpp" />
     <ClInclude Include="include\System\Editor.hpp" />
     <ClInclude Include="include\System\Engine.hpp" />
-    <ClInclude Include="include\System\GameObjectSystem.hpp" />
     <ClInclude Include="include\System\InputManager.hpp" />
     <ClInclude Include="include\System\ResourcesManager.hpp" />
     <ClInclude Include="include\System\ScriptSystem.hpp" />
@@ -242,8 +240,6 @@
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shader.fs" />
-    <None Include="resources\shader.vs" />
     <None Include="resources\TerrainShader.fs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>

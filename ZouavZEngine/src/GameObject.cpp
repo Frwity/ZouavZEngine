@@ -1,11 +1,14 @@
 #include "GameObject.hpp"
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
-#include "System/GameObjectSystem.hpp"
+
+std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
-	return GameObjectSystem::CreateGameObject(_name);
+	gameObjects.emplace_back(std::make_unique<GameObject>(_name));
+	Scene::GetCurrentScene()->GetWorld().AddChild(gameObjects.back().get());
+	return gameObjects.back().get();
 }
 
 GameObject::GameObject(const std::string& _name)
@@ -64,4 +67,63 @@ void GameObject::RemoveChild(GameObject* _child)
 		else
 			++it;
 	}
+}
+
+const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()
+{
+	return components;
+}
+
+GameObject* GameObject::GetGameObjectByName(std::string _name)
+{
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->name == _name)
+			return gameObject.get();
+	}
+
+	return nullptr;
+}
+
+std::vector<GameObject*> GameObject::GetGameObjectsByName(std::string _name)
+{
+	std::vector<GameObject*> toReturn;
+
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->name == _name)
+			toReturn.push_back(gameObject.get());
+	}
+
+	return toReturn;
+}
+
+GameObject* GameObject::GetGameObjectByTag(std::string _tag)
+{
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		for (std::string& tag : gameObject->tags)
+		{
+			if (tag == _tag)
+				return gameObject.get();
+		}
+	}
+
+	return nullptr;
+}
+
+std::vector<GameObject*> GameObject::GetGameObjectsByTag(std::string _tag)
+{
+	std::vector<GameObject*> toReturn;
+
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		for (std::string& tag : gameObject->tags)
+		{
+			if (tag == _tag)
+				toReturn.push_back(gameObject.get());
+		}
+	}
+
+	return toReturn;
 }
