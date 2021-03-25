@@ -368,19 +368,20 @@ void Editor::DisplayInspector()
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
-            ImGui::Text("World Rotation : %.3f %.3f %.3f %.3f", gameObjectInspector->WorldRotation().x, gameObjectInspector->WorldRotation().y, gameObjectInspector->WorldRotation().z, gameObjectInspector->WorldRotation().w);
+            
+            Vec3 worldEulerAngles = gameObjectInspector->WorldRotation().ToEuler();
+            ImGui::Text("World Rotation : %.3f %.3f %.3f", worldEulerAngles.x, worldEulerAngles.y, worldEulerAngles.z);
+            
             ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
             ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
 
-            static  Vec3 eulerAngles;// = gameObjectInspector->localRotation.ToEuler();
+            static Vec3 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
             ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); ImGui::InputFloat3("##rotation", &eulerAngles.x);
-
-            if (ImGui::Button("Non"))
-                gameObjectInspector->localRotation = Quaternion(eulerAngles);
+            ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
             ImGui::Text("Local Scale    :");
             ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
