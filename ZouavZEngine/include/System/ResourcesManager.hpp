@@ -141,4 +141,13 @@ public:
 	{
 		return soundResources;
 	}
+
+	template<typename T>
+	static void ResourceChanger(const char* _label, T*& _resource)
+	{
+		const std::unordered_map<std::string, std::unique_ptr<Resource>>* resources = reinterpret_cast<const std::unordered_map<std::string, std::unique_ptr<Resource>>*>(&GetResources<T>());
+		_resource = (T*)ResourceChangerImpl(_label, _resource, *resources);
+	}
+
+	static Resource* ResourceChangerImpl(const char* _label, Resource* _resource, const std::unordered_map<std::string, std::unique_ptr<Resource>>& _resources);
 };

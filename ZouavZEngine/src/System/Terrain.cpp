@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include "Scene.hpp"
 
 
 Terrain::Terrain()
@@ -107,10 +108,10 @@ void Terrain::Update()
 	return;
 }
 
-void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
+void Terrain::Draw(const class Camera& _camera)
 {
 	shader->Use();
-	shader->SetLight(_lights);
+	shader->SetLight(Scene::GetCurrentScene()->GetLights());
 	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reversed());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));

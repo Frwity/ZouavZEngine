@@ -39,3 +39,8 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 	for (GameObject* child : _parent->GetChildren())
 		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
 }
+
+void Scene::AddLight(Light* _newLight)
+{
+	lights.push_back(_newLight);
+}

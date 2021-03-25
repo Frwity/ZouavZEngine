@@ -2,6 +2,7 @@
 #include "Sound.hpp"
 #include "Component/AudioBroadcaster.hpp"
 #include "imgui.h"
+#include "System/ResourcesManager.hpp"
 
 AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
 	: Component(_gameObject)
@@ -51,11 +52,13 @@ void AudioBroadcaster::SetAmbient(bool _ambient)
 void AudioBroadcaster::Editor()
 {
 	ImGui::Text("AudioBroadcaster");
-	//Resource::ResourceChanger<Sound>("Sound", sound);
+	ResourcesManager::ResourceChanger<Sound>("Sound", sound);
+
 	ImGui::Text("Ambient : "); 
 	ImGui::SameLine();
 	if (ImGui::Checkbox("##ambient", &ambient))
 		SetAmbient(ambient);
+
 	ImGui::Text("Loop    : "); 
 	ImGui::SameLine();
 	if (ImGui::Checkbox("##loop", &loop))

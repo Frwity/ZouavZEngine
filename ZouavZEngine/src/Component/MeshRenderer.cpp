@@ -38,7 +38,7 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 void MeshRenderer::Editor()
 {
     ImGui::Text("MeshRenderer");
-    //Resource::ResourceChanger<Texture>("Texture", texture);
-    //Resource::ResourceChanger<Mesh>("mesh", mesh);
-    //Resource::ResourceChanger<Shader>("shader", shader);
+    ResourcesManager::ResourceChanger<Texture>("Texture", texture);
+    ResourcesManager::ResourceChanger<Mesh>("mesh", mesh);
+    ResourcesManager::ResourceChanger<Shader>("shader", shader);
 }

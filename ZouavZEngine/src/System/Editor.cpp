@@ -367,6 +367,7 @@ void Editor::DisplayInspector()
     {
         if (gameObjectInspector)
         {
+            ImGui::PushItemWidth(70.0f);
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
@@ -376,24 +377,26 @@ void Editor::DisplayInspector()
             ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+            ImGui::SameLine(); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
+            ImGui::SameLine(); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
+            ImGui::SameLine(); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
 
             static  Vec3 eulerAngles;// = gameObjectInspector->localRotation.ToEuler();
 
             ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationx", &eulerAngles.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationy", &eulerAngles.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationz", &eulerAngles.z);
+            ImGui::SameLine(); ImGui::InputFloat("##rotationx", &eulerAngles.x);
+            ImGui::SameLine(); ImGui::InputFloat("##rotationy", &eulerAngles.y);
+            ImGui::SameLine(); ImGui::InputFloat("##rotationz", &eulerAngles.z);
 
             if (ImGui::Button("Non"))
                 gameObjectInspector->localRotation = Quaternion(eulerAngles);
 
             ImGui::Text("Local Scale    :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
+            ImGui::SameLine(); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
+            ImGui::SameLine(); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
+            ImGui::SameLine(); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
+
+            ImGui::PushItemWidth(200.0f);
 
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {

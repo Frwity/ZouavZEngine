@@ -1,7 +1,3 @@
-
-
-
-
 #pragma once
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
@@ -115,7 +111,7 @@ public:
 	void Actualise();
 
 	void Update();
-	void Draw(const std::vector<class Light*>& _lights, const class Camera& _camera);
+	void Draw(const class Camera& _camera);
 
 	void DisplayOptionWindow();
 
