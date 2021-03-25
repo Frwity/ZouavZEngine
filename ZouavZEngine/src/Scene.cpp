@@ -20,13 +20,14 @@ Scene::Scene()
 
 void Scene::Load()
 {
-	//std::ifstream saveFile;
-	//saveFile.open("save.json", std::ios::binary);
-	//cereal::JSONInputArchive iarchive(saveFile);
+	std::ifstream saveFile;
+	saveFile.open("save.json", std::ios::binary);
+	{
+		cereal::JSONInputArchive iarchive(saveFile);
 
-
-
-	//saveFile.close();
+		world.load(iarchive);
+	}
+	saveFile.close();
 }
 
 void Scene::Save()

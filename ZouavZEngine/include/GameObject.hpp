@@ -5,7 +5,11 @@
 #include <vector>
 #include <list>
 #include <memory>
+#include <cereal/types/base_class.hpp>
 #include "cereal/archives/json.hpp"
+#include "cereal/types/vector.hpp"
+#include <cereal/types/memory.hpp>
+#include <cereal/types/string.hpp>
 #include "cereal/access.hpp"
 
 namespace cereal
@@ -18,28 +22,74 @@ class GameObject : public Transform
 private:
 	friend class cereal::access;
 
-    std::vector<std::unique_ptr<Component>> components;
+	std::vector<std::unique_ptr<Component>> components;
 	std::vector<GameObject*> children;
 	GameObject* parent{ nullptr };
 
-	int id;
-
 public:
 	std::string name;
-    
+
 	GameObject() = delete;
 	GameObject(const std::string& _name);
-    ~GameObject() = default;
+	~GameObject() = default;
+
+	template <class Archive>
+	void load(Archive& _ar)
+	{
+		int nbChild;
+
+		_ar(name, nbChild, components);
+
+		for (std::unique_ptr<Component>& component : components)
+			component->gameObject = this;
+
+		std::string childName;
+		int nbChild2;
+
+		for (int i = 0; i < nbChild; ++i)
+		{
+			_ar(childName, nbChild2);
+
+			GameObject* gameobject = CreateGameObject(childName);
+
+			_ar(gameobject->components);
+
+			for (std::unique_ptr<Component>& component : gameobject->components)
+				component->gameObject = gameobject;
+
+			loadRecurss(_ar, gameobject, nbChild2);
+		}
+	}
+
+	template <class Archive>
+	void loadRecurss(Archive& _ar, GameObject* _gameobject, int _nbChild)
+	{
+		std::string childName;
+		int nbChild2;
+
+		for (int i = 0; i < _nbChild; ++i)
+		{
+			_ar(childName, nbChild2);
+
+			GameObject* gameobject = CreateGameObject(childName);
+
+			_ar(gameobject->components);
+
+			for (std::unique_ptr<Component>& component : gameobject->components)
+				component->gameObject = gameobject;
+
+			_gameobject->AddChild(gameobject);
+
+			loadRecurss(_ar, gameobject, nbChild2);
+		}
+	}
 
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		_ar(id, name);
+		int nbChild = children.size();
+		_ar(name, nbChild, components);
 
-		for(const std::unique_ptr<Component>& component : components)
-			component->save(_ar);
-		for (const GameObject* child : children)
-			_ar((int)child);
 		for (const GameObject* child : children)
 			child->save(_ar);
 	}
@@ -55,7 +105,7 @@ public:
 	void RemoveChild(GameObject* _child);
 
 	template<typename T, typename... Args>
-	T* AddComponent(Args&&... _args) 
+	T* AddComponent(Args&&... _args)
 	{
 		components.emplace_back(std::make_unique<T>(this, _args...));
 		return static_cast<T*>(components.back().get());

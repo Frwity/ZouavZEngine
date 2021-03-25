@@ -86,12 +86,12 @@ void Engine::Load()
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
     soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
-    soundSkull->AddComponent<Move>();
+    //soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
     player->AddComponent<MeshRenderer>(mesh, shader, texture);
     player->AddComponent<AudioListener>();
-    player->AddComponent<Player>();
+    //player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 }
 

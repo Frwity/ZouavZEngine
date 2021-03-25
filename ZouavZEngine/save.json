@@ -1,61 +1,117 @@
 {
-    "value0": 1156576520,
-    "value1": "World",
-    "value2": -263798656,
-    "value3": -263798112,
-    "value4": -263797840,
-    "value5": -263798656,
-    "value6": "Light",
-    "value7": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value8": -263798112,
-    "value9": "SoundSkull",
-    "value10": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value11": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value12": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value13": -263797840,
-    "value14": "Player",
-    "value15": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value16": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value17": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    },
-    "value18": {
-        "value0": 111,
-        "value1": 117,
-        "value2": 105,
-        "value3": 0
-    }
+    "value0": "World",
+    "value1": 3,
+    "value2": [],
+    "value3": "Light",
+    "value4": 0,
+    "value5": [
+        {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "Light",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 0.5,
+                    "value1": 0.5,
+                    "value2": 0.5,
+                    "value3": 0.5,
+                    "value4": 0.5,
+                    "value5": 0.5,
+                    "value6": 0.5,
+                    "value7": 0.5,
+                    "value8": 0.5,
+                    "value9": 1.0,
+                    "value10": 0.009999999776482582,
+                    "value11": 0.0010000000474974514,
+                    "value12": 0.0,
+                    "value13": -1.0,
+                    "value14": 0.0,
+                    "value15": 0.8999999761581421,
+                    "value16": 0.800000011920929,
+                    "value17": 0
+                }
+            }
+        }
+    ],
+    "value6": "SoundSkull",
+    "value7": 0,
+    "value8": [
+        {
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "MeshRenderer",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Skull Mesh",
+                    "value1": "Skull Tex",
+                    "value2": "BlinnPhongShader"
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483651,
+            "polymorphic_name": "AudioBroadcaster",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": "TestSon"
+                }
+            }
+        }
+    ],
+    "value9": "Player",
+    "value10": 0,
+    "value11": [
+        {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Skull Mesh",
+                    "value1": "Skull Tex",
+                    "value2": "BlinnPhongShader"
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483652,
+            "polymorphic_name": "AudioListener",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {}
+            }
+        },
+        {
+            "polymorphic_id": 2147483653,
+            "polymorphic_name": "Camera",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.5088834762573243,
+                    "value1": 0.0,
+                    "value2": 0.0,
+                    "value3": 0.0,
+                    "value4": 0.0,
+                    "value5": 2.4142136573791506,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": -1.0000039339065552,
+                    "value11": -1.0,
+                    "value12": 0.0,
+                    "value13": 0.0,
+                    "value14": -0.020000038668513299,
+                    "value15": 0.0,
+                    "value16": 0.0,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0
+                }
+            }
+        }
+    ]
 }

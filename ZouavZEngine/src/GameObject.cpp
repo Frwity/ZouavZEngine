@@ -12,7 +12,6 @@ GameObject* GameObject::CreateGameObject(const std::string& _name)
 GameObject::GameObject(const std::string& _name)
 	: name(_name)
 {
-	id = (int)this;
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

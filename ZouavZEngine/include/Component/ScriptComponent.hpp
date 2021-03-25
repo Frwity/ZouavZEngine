@@ -4,6 +4,8 @@
 
 class ScriptComponent: public Component
 {
+private:
+
 public:
 	ScriptComponent() = delete;
 	ScriptComponent(class GameObject* _gameObject);
