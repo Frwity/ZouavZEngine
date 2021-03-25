@@ -39,6 +39,6 @@ void MeshRenderer::Editor()
 {
     ImGui::Text("MeshRenderer");
     ResourcesManager::ResourceChanger<Texture>("Texture", texture);
-    ResourcesManager::ResourceChanger<Mesh>("mesh", mesh);
-    ResourcesManager::ResourceChanger<Shader>("shader", shader);
+    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+    ResourcesManager::ResourceChanger<Shader>("Shader", shader);
 }

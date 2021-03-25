@@ -14,12 +14,7 @@ enum class E_COMPONENT
 
 class Component
 {
-private:
-	static std::vector<std::string> componentsList;
-
 public:
-	static const std::vector<std::string>& GetComponentsList();
-
 	// TODO : not private
 	class GameObject* gameObject;
 

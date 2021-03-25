@@ -33,7 +33,6 @@ bool hierarchyMenu = false;
 ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
-GameObject* selectedGameObject = nullptr;
 GameObject* gameObjectInspector = nullptr;
 
 bool consoleText = true;
@@ -43,10 +42,8 @@ bool consoleError = true;
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor(class Engine& _engine)
-    : engine(_engine)
-{
-    isKeyboardEnable = false;
-}
+    : engine(_engine), isKeyboardEnable(false)
+{}
 
 void Editor::Init()
 {
@@ -367,78 +364,65 @@ void Editor::DisplayInspector()
     {
         if (gameObjectInspector)
         {
-            ImGui::PushItemWidth(70.0f);
+            ImGui::PushItemWidth(200.0f);
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
-
             ImGui::Text("World Rotation : %.3f %.3f %.3f %.3f", gameObjectInspector->WorldRotation().x, gameObjectInspector->WorldRotation().y, gameObjectInspector->WorldRotation().z, gameObjectInspector->WorldRotation().w);
-
             ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
-            ImGui::SameLine(); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
-            ImGui::SameLine(); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
-            ImGui::SameLine(); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+            ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
 
             static  Vec3 eulerAngles;// = gameObjectInspector->localRotation.ToEuler();
 
             ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); ImGui::InputFloat("##rotationx", &eulerAngles.x);
-            ImGui::SameLine(); ImGui::InputFloat("##rotationy", &eulerAngles.y);
-            ImGui::SameLine(); ImGui::InputFloat("##rotationz", &eulerAngles.z);
+            ImGui::SameLine(); ImGui::InputFloat3("##rotation", &eulerAngles.x);
 
             if (ImGui::Button("Non"))
                 gameObjectInspector->localRotation = Quaternion(eulerAngles);
 
             ImGui::Text("Local Scale    :");
-            ImGui::SameLine(); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
-            ImGui::SameLine(); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
-            ImGui::SameLine(); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
-
-            ImGui::PushItemWidth(200.0f);
+            ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
 
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
                 component->Editor();
             }
 
-            const std::vector<std::string>& componentsList = Component::GetComponentsList();
-
             for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
             {
-                if (ImGui::Button(std::string("Add ").append(componentsList[i]).c_str()))
+                switch (i)
                 {
-                    switch (i)
-                    {
-                        case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
-                            if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
+                    case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
+                        if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
+                            if (ImGui::Button("Add AudioBroadcaster"))
                                 gameObjectInspector->AddComponent<AudioBroadcaster>();
-                            break;
+                        break;
 
-                        case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
-                            if (!gameObjectInspector->GetComponent<AudioListener>())
+                    case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
+                        if (!gameObjectInspector->GetComponent<AudioListener>())
+                            if (ImGui::Button("Add AudioListener"))
                                 gameObjectInspector->AddComponent<AudioListener>();
-                            break;
+                        break;
 
-                        case static_cast<int>(E_COMPONENT::LIGHT) :
-                            if (!gameObjectInspector->GetComponent<Light>())
+                    case static_cast<int>(E_COMPONENT::LIGHT) :
+                        if (!gameObjectInspector->GetComponent<Light>())
+                            if (ImGui::Button("Add Light"))
                                 gameObjectInspector->AddComponent<Light>();
-                            break;
+                        break;
 
-                        case static_cast<int>(E_COMPONENT::MESHRENDERER) :
-                            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                    case static_cast<int>(E_COMPONENT::MESHRENDERER) :
+                        if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                            if (ImGui::Button("Add MeshRenderer"))
                                 gameObjectInspector->AddComponent<MeshRenderer>();
-                            break;
-                    }
+                        break;
                 }
             }
         }
     }
     ImGui::End();
 }
-
-
 
 void Editor::DisplayConsoleWindow()
 {
@@ -487,12 +471,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 
 void DisplayChild(GameObject* _parent)
 {
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf;
-
-    if (selectedGameObject == _parent)
-        flags |= ImGuiTreeNodeFlags_Selected;
-
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), flags))
+    if (ImGui::TreeNodeEx(_parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
@@ -566,29 +545,25 @@ void Editor::DisplayHierarchy()
         }
 
         if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-        {
             hierarchyMenu = false;
-            selectedGameObject = nullptr;
-        }
     }
     ImGui::End();
 }
 
 void Editor::MoveSelectedGameobject()
 {
-    if (selectedGameObject == nullptr)
+    if (gameObjectInspector == nullptr)
         return;
-    
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        selectedGameObject->Translate(selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        selectedGameObject->Translate(-selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-        selectedGameObject->Translate(selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-        selectedGameObject->Translate(-selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Right() * editorClock->GetDeltaTime());
 }
