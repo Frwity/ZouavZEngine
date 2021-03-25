@@ -12,6 +12,7 @@
 #include "PxScene.h"
 #include "System/Debug.hpp"
 #include "PxSimulationEventCallback.h"
+#include "PxRigidStatic.h"
 #include "pvd/PxPvd.h"
 
 Scene* Scene::currentScene = nullptr;
@@ -50,13 +51,8 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 
 void Scene::SimulatePhyics() const
 {
-	PhysicSystem::physicEventCallback->gContactPositions.clear();
-	PhysicSystem::physicEventCallback->gContactImpulses.clear();
-
 	PhysicSystem::scene->simulate(TimeManager::GetDeltaTime());
 	PhysicSystem::scene->fetchResults(true);
-
-
 
 	physx::PxU32 nbActiveActor;
 
@@ -72,9 +68,6 @@ void Scene::SimulatePhyics() const
 
 			if (rd)
 			{
-				if (rd->isSleeping())
-					std::cout << "Sleep" << std::endl;
-				
 				physx::PxTransform transform = rd->getGlobalPose();
 
 				go->localPosition = { transform.p.x, transform.p.y, transform.p.z };

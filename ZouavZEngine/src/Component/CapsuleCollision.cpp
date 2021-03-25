@@ -11,18 +11,14 @@
 
 using namespace physx;
 
-CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, float _density)
-	: ShapeCollision(_gameObject, _density), radius(_radius), halfHeight(_halfHeight)
+CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight)
+	: ShapeCollision(_gameObject), radius(_radius), halfHeight(_halfHeight)
 {
-	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
-
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
-	actor = PxCreateStatic(*PhysicSystem::physics, t, PxCapsuleGeometry(radius, halfHeight), *material);
+	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
 
-	actor->userData = gameObject;
-
-	PhysicSystem::scene->addActor(*actor);
+	AttachToRigidComponent();
 }
 
 CapsuleCollision::~CapsuleCollision()

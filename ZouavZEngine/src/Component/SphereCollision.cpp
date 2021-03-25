@@ -12,16 +12,18 @@
 
 using namespace physx;
 
-SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, float _density)
-	: ShapeCollision(_gameObject, _density), radius(_radius)
+SphereCollision::SphereCollision(GameObject* _gameObject, float _radius)
+	: ShapeCollision(_gameObject), radius(_radius)
 {
-	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
-
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
-	actor = PxCreateStatic(*PhysicSystem::physics, t, PxSphereGeometry(radius), *material);
+	shape = PhysicSystem::physics->createShape(PxSphereGeometry(0.5f), *material);
 
-	actor->userData = gameObject;
+	//attach shape to rigidbody or rigidstatic if exist
+	AttachToRigidComponent();
+}
 
-	PhysicSystem::scene->addActor(*actor);
+SphereCollision::~SphereCollision()
+{
+
 }

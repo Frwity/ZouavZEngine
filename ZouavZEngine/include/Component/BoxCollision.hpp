@@ -5,7 +5,7 @@
 class BoxCollision: public ShapeCollision
 {
 public:
-	BoxCollision(GameObject* _gameObject, float _density = 1.0f);
+	BoxCollision(GameObject* _gameObject);
 	~BoxCollision();
 
 };

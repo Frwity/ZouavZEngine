@@ -13,19 +13,20 @@
 #include "System/PhysicUtils.hpp"
 
 using namespace physx;
-	
-BoxCollision::BoxCollision(GameObject* _gameObject, float _density)
-	: ShapeCollision(_gameObject, _density)
+
+BoxCollision::BoxCollision(GameObject* _gameObject)
+	: ShapeCollision(_gameObject)
 {
 	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
-	actor = PxCreateStatic(*PhysicSystem::physics, t, PxBoxGeometry(0.5f, 0.5f, 0.5f), *material);
-
-	actor->userData = gameObject;
+	//temp
+	Vec3 v{ 0.5f, 0.5f, 0.5f };
 	
-	PhysicSystem::scene->addActor(*actor);
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+
+	AttachToRigidComponent();
 }
 
 BoxCollision::~BoxCollision()

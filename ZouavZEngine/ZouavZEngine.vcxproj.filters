@@ -195,6 +195,12 @@
     <ClCompile Include="src\Component\RigidBody.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="include\Component\RigidStatic.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Plane.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -324,6 +330,12 @@
       <Filter>include\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\RigidBody.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RigidStatic.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Plane.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>

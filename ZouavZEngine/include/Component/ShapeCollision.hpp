@@ -12,16 +12,15 @@ namespace physx
 class ShapeCollision: public Component
 {
 public:
-	ShapeCollision(GameObject* _gameObject, float _density = 1.0f);
+	physx::PxShape* shape = nullptr;
+	bool isAttach = false;
+
+	ShapeCollision(GameObject* _gameObject);
 	~ShapeCollision();
 
 	void releasePhysXComponent();
-	physx::PxActor* actor;
-	float density;
-
-private:
-	
 
 protected:
-	physx::PxMaterial* material;
+	physx::PxMaterial* material = nullptr;
+	void AttachToRigidComponent();
 };

@@ -162,6 +162,7 @@
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
+    <ClCompile Include="include\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
     <ClCompile Include="src\Component\AudioListener.cpp" />
     <ClCompile Include="src\Component\BoxCollision.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
+    <ClCompile Include="src\Component\Plane.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
@@ -213,7 +215,9 @@
     <ClInclude Include="include\Component\Component.hpp" />
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
+    <ClInclude Include="include\Component\Plane.hpp" />
     <ClInclude Include="include\Component\RigidBody.hpp" />
+    <ClInclude Include="include\Component\RigidStatic.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
     <ClInclude Include="include\Component\ShapeCollision.hpp" />
     <ClInclude Include="include\Component\SphereCollision.hpp" />

@@ -26,6 +26,7 @@
 #include "Component/BoxCollision.hpp"
 #include "Component/SphereCollision.hpp"
 #include "Component/RigidBody.hpp"
+#include "Component/RigidStatic.hpp"
 
 #define EDITOR
 
@@ -84,13 +85,14 @@ void Engine::Load()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-    player->AddComponent<BoxCollision>();
+    player->AddComponent<RigidStatic>();
+    player->AddComponent<SphereCollision>();
 
     GameObject* test = GameObject::CreateGameObject("test");
-    test->localPosition = { 0.0f, 2.0f, 0.0f };
+    test->localPosition = { 0.0f, 5.0f, 0.0f };
     test->AddComponent<MeshRenderer>(mesh, shader, texture);
-    //test->AddComponent<BoxCollision>();
-    test->AddComponent<Rigidody>();
+    test->AddComponent<SphereCollision>();
+    test->AddComponent<RigidBody>();
 }
 
 void Engine::Update()
