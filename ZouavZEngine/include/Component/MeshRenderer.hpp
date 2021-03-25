@@ -14,7 +14,7 @@ public:
     Texture* texture = nullptr;
     Shader* shader = nullptr;
 
-    MeshRenderer() = default;
+    MeshRenderer() = delete;
     MeshRenderer(class GameObject* _gameObject);
     MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture);
 

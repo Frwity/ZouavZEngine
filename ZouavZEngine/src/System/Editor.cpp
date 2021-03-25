@@ -488,7 +488,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 void DisplayChild(GameObject* _parent)
 {
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf;
-    
+
     if (selectedGameObject == _parent)
         flags |= ImGuiTreeNodeFlags_Selected;
 
@@ -503,21 +503,29 @@ void DisplayChild(GameObject* _parent)
                 newGameObjectParent = _parent;
             }
 
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && _parent->name != "World")
-                selectedGameObject = _parent;
-
-            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
-            {
-                if (selectedGameObject == _parent)
-                    gameObjectInspector = selectedGameObject;
-
-                else if (!_parent->IsChildOf(selectedGameObject))
-                {
-                    selectedGameObject->SetParent(_parent);
-                    selectedGameObject = nullptr;
-                }
-            }
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                gameObjectInspector = _parent;
         }
+
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload("Gameobject Hierarchy", &_parent, sizeof(_parent));
+            ImGui::Text(_parent->name.c_str());
+
+            ImGui::EndDragDropSource();
+        }
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Gameobject Hierarchy"))
+            {
+                GameObject* gameObject = * (GameObject**)(payload->Data);
+                if (!_parent->IsChildOf(gameObject))
+                    gameObject->SetParent(_parent);
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         for (GameObject* child : _parent->GetChildren())
             DisplayChild(child);
 
