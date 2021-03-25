@@ -143,11 +143,13 @@ public:
 	}
 
 	template<typename T>
-	static void ResourceChanger(const char* _label, T*& _resource)
+	static bool ResourceChanger(const char* _label, T*& _resource)
 	{
 		const std::unordered_map<std::string, std::unique_ptr<Resource>>* resources = reinterpret_cast<const std::unordered_map<std::string, std::unique_ptr<Resource>>*>(&GetResources<T>());
-		_resource = (T*)ResourceChangerImpl(_label, _resource, *resources);
+		bool changed = false;
+		_resource = (T*)ResourceChangerImpl(_label, _resource, *resources, changed);
+		return changed;
 	}
 
-	static Resource* ResourceChangerImpl(const char* _label, Resource* _resource, const std::unordered_map<std::string, std::unique_ptr<Resource>>& _resources);
+	static Resource* ResourceChangerImpl(const char* _label, Resource* _resource, const std::unordered_map<std::string, std::unique_ptr<Resource>>& _resources, bool& _changed);
 };
