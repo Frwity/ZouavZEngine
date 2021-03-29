@@ -7,7 +7,8 @@ AudioListener::AudioListener(GameObject* _gameObject)
 	: Component(_gameObject)
 {
 	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
-	SoundManager::SetListenerPosition(_gameObject->WorldPosition());
+	if (_gameObject)
+		SoundManager::SetListenerPosition(_gameObject->WorldPosition());
 }
 
 void AudioListener::Update()

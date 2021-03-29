@@ -7,15 +7,15 @@
 #include "Component/MeshRenderer.hpp"
 #include "System/Debug.hpp"
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture)
-	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
+MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader)
+	: Component(_gameObject), mesh{ _mesh }, texture{ _texture }, shader{ _shader }
 {}
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject)
     : Component(_gameObject), 
       mesh{ ResourcesManager::GetResource<Mesh>("Skull Mesh") }, 
-      shader{ResourcesManager::GetResource<Shader>("BlinnPhongShader") },
-      texture{ ResourcesManager::GetResource<Texture>("Skull Tex") }
+      texture{ ResourcesManager::GetResource<Texture>("Skull Tex") },
+      shader{ResourcesManager::GetResource<Shader>("BlinnPhongShader") }
 {}
 
 void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)

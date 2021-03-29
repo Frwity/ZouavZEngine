@@ -20,7 +20,7 @@ public:
 
     MeshRenderer() = delete;
     MeshRenderer(class GameObject* _gameObject);
-    MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture);
+    MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader);
 
     ~MeshRenderer() = default;
 
@@ -36,14 +36,14 @@ public:
 	static void load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct)
 	{
 		std::string meshName;
-		std::string shaderName;
 		std::string textureName;
+		std::string shaderName;
 
-		_ar(meshName, shaderName, textureName);
+		_ar(meshName, textureName, shaderName);
 
 		_construct(nullptr, ResourcesManager::GetResource<Mesh>(meshName),
-							ResourcesManager::GetResource<Shader>(shaderName),
-							ResourcesManager::GetResource<Texture>(textureName));
+							ResourcesManager::GetResource<Texture>(textureName),
+							ResourcesManager::GetResource<Shader>(shaderName));
 	}
 };
 

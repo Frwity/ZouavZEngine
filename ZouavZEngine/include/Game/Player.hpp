@@ -28,8 +28,23 @@ public:
 	{
 		ar(speed, vie, distance);
 	}
+
+	template <class Archive>
+	static void load_and_construct(Archive& _ar, cereal::construct<Player>& _construct)
+	{
+		int _speed;
+		int _vie;
+		float _distance;
+
+		_ar(_speed, _vie, _distance);
+
+		_construct(nullptr);
+		_construct->speed = _speed;
+		_construct->vie = _vie;
+		_construct->distance = _distance;
+	}
 };
 
-//
-//CEREAL_REGISTER_TYPE(Player)
-//CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Player)
+
+CEREAL_REGISTER_TYPE(Player)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Player)

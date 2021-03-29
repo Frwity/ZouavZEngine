@@ -10,8 +10,20 @@ class Move : public ScriptComponent
         Move(class GameObject* _gameobject);
         void Begin() final;
         void Update() final;
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			
+		}
+
+		template <class Archive>
+		static void load_and_construct(Archive& _ar, cereal::construct<Move>& _construct)
+		{
+			_construct(nullptr);
+		}
 };
 
-//
-//CEREAL_REGISTER_TYPE(Move)
-//CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Move)
+
+CEREAL_REGISTER_TYPE(Move)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Move)

@@ -43,7 +43,7 @@ Engine::Engine()
     editor.Init();
 #endif
 
-    //TEMP
+    //TODO TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -61,7 +61,6 @@ Engine::~Engine()
 
 void Engine::Load()
 {
-    scene.Load();
 
     Shader* shader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
@@ -84,15 +83,17 @@ void Engine::Load()
     scene.lights.push_back(light->GetComponent<Light>());
 
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
+    soundSkull->AddComponent<MeshRenderer>(mesh, texture, shader);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
-    //soundSkull->AddComponent<Move>();
+    soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
-    player->AddComponent<MeshRenderer>(mesh, shader, texture);
+    player->AddComponent<MeshRenderer>(mesh, texture, shader);
     player->AddComponent<AudioListener>();
-    //player->AddComponent<Player>();
+    player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
+
+    scene.Load();
 }
 
 void Engine::Save()
