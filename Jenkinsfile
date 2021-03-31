@@ -92,6 +92,7 @@ pipeline
 				{
 					branch "release*";
 					branch "master"
+					branch "dev"
 				}
     		}
 		    stages
