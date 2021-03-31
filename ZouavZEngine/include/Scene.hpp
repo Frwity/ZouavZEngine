@@ -9,10 +9,11 @@ private:
 
 	GameObject world{ "World" };
 
-	void DrawChild(GameObject* _parent, const class Mat4& _heritedMatrix, const class Camera& _camera) const;
+	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const class Camera& _camera) const;
+	
+	std::vector<class Light*> lights;
 
 public:
-	std::vector<class Light*> lights;
 
 	Scene();
 	~Scene() = default;
@@ -24,4 +25,7 @@ public:
 	void Save();
 
 	void Draw(const class Camera& _camera) const;
+
+	void AddLight(class Light* _newLight);
+	const std::vector<class Light*>& GetLights() { return lights; }
 };

@@ -126,9 +126,6 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\GameObjectSystem.cpp">
-      <Filter>src\System</Filter>
-    </ClCompile>
     <ClCompile Include="src\System\ResourcesManager.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
@@ -192,6 +189,9 @@
     <ClCompile Include="src\Multithread\Task.cpp">
       <Filter>src\Multithread</Filter>
     </ClCompile>
+    <ClCompile Include="src\Resource.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -247,9 +247,6 @@
     </ClInclude>
     <ClInclude Include="include\Scene.hpp">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\System\GameObjectSystem.hpp">
-      <Filter>include\System</Filter>
     </ClInclude>
     <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
@@ -313,12 +310,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shader.vs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\shader.fs">
-      <Filter>resources</Filter>
-    </None>
     <None Include="resources\TerrainShader.fs">
       <Filter>resources</Filter>
     </None>

@@ -26,6 +26,8 @@ public:
 
     void Draw(const class Mat4& _transform, const class Camera& _camera);
 
+    void Editor() override;
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

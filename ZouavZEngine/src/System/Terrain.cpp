@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include "Scene.hpp"
 
 
 Terrain::Terrain()
@@ -107,11 +108,10 @@ void Terrain::Update()
 	return;
 }
 
-void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
+void Terrain::Draw(const class Camera& _camera)
 {
 	shader->Use();
-
-	shader->SetLight(_lights);
+	shader->SetLight(Scene::GetCurrentScene()->GetLights());
 	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reversed());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
@@ -205,15 +205,9 @@ void Terrain::DisplayOptionWindow()
 			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
 			ImGui::SliderFloat(("Color Strengh " + std::to_string(i)).c_str(), &colorStrength[i], 0.0f, 1.0f);
 			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
-			
-			ImGui::SliderFloat(("Texture Scale " + std::to_string(i)).c_str(), &textureScale[i], 0.0f, 32.0f);
-			const std::vector<const char*>& resourceNames = ResourcesManager::GetResourceNames<Texture>();
-			int index = 0;
-			if (textureID.at(i))
-				index = ResourcesManager::GetIndexByName<Texture>(textureID.at(i)->GetName());
-			if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, resourceNames.data(), resourceNames.size()))
-				textureID.at(i) = ResourcesManager::GetResource<Texture>(resourceNames.at(index));
-			
+			//static int index = 0;
+			//if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
+			//	textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
 		}
 	}
 	ImGui::End();

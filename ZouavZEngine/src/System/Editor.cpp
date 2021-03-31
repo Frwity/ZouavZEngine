@@ -11,6 +11,9 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -30,7 +33,6 @@ bool hierarchyMenu = false;
 ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
-GameObject* selectedGameObject = nullptr;
 GameObject* gameObjectInspector = nullptr;
 
 bool consoleText = true;
@@ -40,10 +42,8 @@ bool consoleError = true;
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor(class Engine& _engine)
-    : engine(_engine)
-{
-    isKeyboardEnable = false;
-}
+    : engine(_engine), isKeyboardEnable(false)
+{}
 
 void Editor::Init()
 {
@@ -364,59 +364,65 @@ void Editor::DisplayInspector()
     {
         if (gameObjectInspector)
         {
+            ImGui::PushItemWidth(200.0f);
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
-
-            ImGui::Text("World Rotation : %.3f %.3f %.3f %.3f", gameObjectInspector->WorldRotation().x, gameObjectInspector->WorldRotation().y, gameObjectInspector->WorldRotation().z, gameObjectInspector->WorldRotation().w);
-
-            ImGui::Text("World Scale :  %.3f %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
+            
+            Vec3 worldEulerAngles = gameObjectInspector->WorldRotation().ToEuler();
+            ImGui::Text("World Rotation : %.3f %.3f %.3f", worldEulerAngles.x, worldEulerAngles.y, worldEulerAngles.z);
+            
+            ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+            ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
 
-            static  Vec3 eulerAngles;// = gameObjectInspector->localRotation.ToEuler();
+            static Vec3 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
             ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationx", &eulerAngles.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationy", &eulerAngles.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationz", &eulerAngles.z);
+            ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
-            if (ImGui::Button("Non"))
-                gameObjectInspector->localRotation = Quaternion(eulerAngles);
+            ImGui::Text("Local Scale    :");
+            ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
 
-            ImGui::Text("Local Scale :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
-
-            if (!gameObjectInspector->GetComponent<MeshRenderer>())
+            for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
-                if (ImGui::Button("Add Mesh Renderer"))
-                    gameObjectInspector->AddComponent<MeshRenderer>();
+                component->Editor();
             }
-            else
+
+            for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
             {
-                ResourceChanger<Texture>("Texture", gameObjectInspector->GetComponent<MeshRenderer>()->texture);
-                ResourceChanger<Mesh>("mesh", gameObjectInspector->GetComponent<MeshRenderer>()->mesh);
-                ResourceChanger<Shader>("shader", gameObjectInspector->GetComponent<MeshRenderer>()->shader);
+                switch (i)
+                {
+                    case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
+                        if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
+                            if (ImGui::Button("Add AudioBroadcaster"))
+                                gameObjectInspector->AddComponent<AudioBroadcaster>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
+                        if (!gameObjectInspector->GetComponent<AudioListener>())
+                            if (ImGui::Button("Add AudioListener"))
+                                gameObjectInspector->AddComponent<AudioListener>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::LIGHT) :
+                        if (!gameObjectInspector->GetComponent<Light>())
+                            if (ImGui::Button("Add Light"))
+                                gameObjectInspector->AddComponent<Light>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::MESHRENDERER) :
+                        if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                            if (ImGui::Button("Add MeshRenderer"))
+                                gameObjectInspector->AddComponent<MeshRenderer>();
+                        break;
+                }
             }
         }
     }
     ImGui::End();
-}
-
-
-template<typename T>
-void Editor::ResourceChanger(const char* _label, T*& _ressource)
-{
-    const std::vector<const char*>& resourceNames = ResourcesManager::GetResourceNames<T>();
-    int index = ResourcesManager::GetIndexByName<T>(_ressource->GetName());
-
-    if (ImGui::Combo(_label, &index, resourceNames.data(), resourceNames.size()))
-        _ressource = ResourcesManager::GetResource<T>(resourceNames.at(index));
 }
 
 void Editor::DisplayConsoleWindow()
@@ -466,12 +472,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 
 void DisplayChild(GameObject* _parent)
 {
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf;
-    
-    if (selectedGameObject == _parent)
-        flags |= ImGuiTreeNodeFlags_Selected;
-
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), flags))
+    if (ImGui::TreeNodeEx(_parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
@@ -482,24 +483,29 @@ void DisplayChild(GameObject* _parent)
                 newGameObjectParent = _parent;
             }
 
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && _parent->name != "World")
-                selectedGameObject = _parent;
-
-            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
-            {
-                if (selectedGameObject == _parent)
-                {
-                    gameObjectInspector = selectedGameObject;
-                   
-                }
-
-                else if (!_parent->IsChildOf(selectedGameObject))
-                {
-                    selectedGameObject->SetParent(_parent);
-                    selectedGameObject = nullptr;
-                }
-            }
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                gameObjectInspector = _parent;
         }
+
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload("Gameobject Hierarchy", &_parent, sizeof(_parent));
+            ImGui::Text(_parent->name.c_str());
+
+            ImGui::EndDragDropSource();
+        }
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Gameobject Hierarchy"))
+            {
+                GameObject* gameObject = * (GameObject**)(payload->Data);
+                if (!_parent->IsChildOf(gameObject))
+                    gameObject->SetParent(_parent);
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         for (GameObject* child : _parent->GetChildren())
             DisplayChild(child);
 
@@ -540,29 +546,25 @@ void Editor::DisplayHierarchy()
         }
 
         if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-        {
             hierarchyMenu = false;
-            selectedGameObject = nullptr;
-        }
     }
     ImGui::End();
 }
 
 void Editor::MoveSelectedGameobject()
 {
-    if (selectedGameObject == nullptr)
+    if (gameObjectInspector == nullptr)
         return;
-    
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        selectedGameObject->Translate(selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        selectedGameObject->Translate(-selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-        selectedGameObject->Translate(selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-        selectedGameObject->Translate(-selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Right() * editorClock->GetDeltaTime());
 }

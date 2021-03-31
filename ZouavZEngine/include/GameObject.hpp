@@ -19,15 +19,18 @@ namespace cereal
 
 class GameObject : public Transform
 {
+	friend class Editor;
 private:
 	friend class cereal::access;
 
+	static std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<std::unique_ptr<Component>> components;
 	std::vector<GameObject*> children;
 	GameObject* parent{ nullptr };
 
 public:
 	std::string name;
+	std::vector<std::string> tags;
 
 	GameObject() = delete;
 	GameObject(const std::string& _name);
@@ -124,4 +127,11 @@ public:
 	}
 
 	void UpdateTransform(const class Mat4& _heritedTransform);
+
+	const std::vector<std::unique_ptr<Component>>& GetComponents();
+
+	static GameObject* GetGameObjectByName(std::string _name);
+	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);
+	static GameObject* GetGameObjectByTag(std::string _tag);
+	static std::vector<GameObject*> GetGameObjectsByTag(std::string _tag);
 };

@@ -14,5 +14,4 @@ public:
 	~Resource() = default;
 
 	const std::string& GetName() { return name; }
-
 };

@@ -1,6 +1,6 @@
 {
     "value0": "World",
-    "value1": 3,
+    "value1": 4,
     "value2": [],
     "value3": "Light",
     "value4": 0,
@@ -54,8 +54,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": true,
-                    "value1": "TestSon"
+                    "value0": false,
+                    "value1": false,
+                    "value2": "TestSon"
                 }
             }
         },
@@ -133,5 +134,8 @@
                 }
             }
         }
-    ]
+    ],
+    "value12": "New GameObject",
+    "value13": 0,
+    "value14": []
 }

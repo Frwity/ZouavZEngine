@@ -10,20 +10,17 @@ Quaternion::Quaternion()
 
 Quaternion::Quaternion(const Vec3& _eulerAngles)
 {
-	float cosx = cosf(_eulerAngles.x / 2),
-	      cosy = cosf(_eulerAngles.y / 2),
-	      cosz = cosf(_eulerAngles.z / 2),
-	      sinx = sinf(_eulerAngles.x / 2),
-	      siny = sinf(_eulerAngles.y / 2),
-	      sinz = sinf(_eulerAngles.z / 2);
+	Vec3 angles = _eulerAngles * (3.14159265f / 180.0f) / 2;
 
-	//w = cosx * cosy * cosz - sinx * siny * sinz;
-	//x = sinx * cosy * cosz + cosx * siny * sinz;
-	//y = cosx * siny * cosz + sinx * cosy * sinz;
-	//z = cosx * cosy * sinz - sinx * siny * cosz;
+	float cosx = cosf(angles.x),
+		  cosy = cosf(angles.y),
+		  cosz = cosf(angles.z),
+		  sinx = sinf(angles.x),
+		  siny = sinf(angles.y),
+		  sinz = sinf(angles.z);
 
-	w = cosx * cosy * cosz + sinx * siny * sinz;
-	x = sinx * cosy * cosz - cosx * siny * sinz;
+	w = cosx * cosy * cosz - sinx * siny * sinz;
+	x = sinx * cosy * cosz + cosx * siny * sinz;
 	y = cosx * siny * cosz + sinx * cosy * sinz;
 	z = cosx * cosy * sinz - sinx * siny * cosz;
 
@@ -199,20 +196,25 @@ Vec3 Quaternion::ToEuler() const
 	float sqx = x * x;
 	float sqy = y * y;
 	float sqz = z * z;
-	float unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+	float unit = sqx + sqy + sqz + sqw;
 	float test = x * y + z * w;
-	if (test > 0.499f * unit) { // singularity at north pole
+
+	if (test > 0.499f * unit) 
+	{ 
 		angles.x = 1.57079632f;
 		angles.y = 2.0f * atan2(x, w);
 		angles.z = 0.0f;
 		return angles * (180.0f / 3.14159265f);
 	}
-	if (test < -0.499f * unit) { // singularity at south pole
+
+	if (test < -0.499f * unit) 
+	{ 
 		angles.x = -1.57079632f;
 		angles.y = -2.0f * atan2(x, w);
 		angles.z = 0.0f;
 		return angles * (180.0f / 3.14159265f);
 	}
+
 	angles.x = asinf(2.0f * test / unit);
 	angles.y = atan2f(2.0f * y * w - 2.0f * x * z, sqx - sqy - sqz + sqw);
 	angles.z = atan2f(2.0f * x * w - 2.0f * y * z, -sqx + sqy - sqz + sqw);

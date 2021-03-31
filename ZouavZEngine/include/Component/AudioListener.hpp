@@ -13,6 +13,8 @@ public:
 
 	void Update();
 
+	void Editor() override;
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

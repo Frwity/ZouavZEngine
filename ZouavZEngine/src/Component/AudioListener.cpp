@@ -2,6 +2,7 @@
 #include <AL/al.h>
 #include "System/SoundManager.hpp"
 #include "Component/AudioListener.hpp"
+#include "imgui.h"
 
 AudioListener::AudioListener(GameObject* _gameObject)
 	: Component(_gameObject)
@@ -14,4 +15,9 @@ AudioListener::AudioListener(GameObject* _gameObject)
 void AudioListener::Update()
 {
 	SoundManager::SetListenerPosition(gameObject->WorldPosition());
+}
+
+void AudioListener::Editor()
+{
+	ImGui::Text("AudioListener");
 }

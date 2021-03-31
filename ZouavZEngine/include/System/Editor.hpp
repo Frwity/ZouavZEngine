@@ -49,7 +49,4 @@ public:
 	void Update();
 	void DisplayHierarchy();
 	void MoveSelectedGameobject();
-
-	template<typename T>
-	void ResourceChanger(const char* _label, T*& _ressource);
 };
