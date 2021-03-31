@@ -504,7 +504,7 @@ void Editor::DisplayProject()
                         ZASSERT(payload->DataSize == sizeof(std::string), "Error in project manager");
                         std::string name = *(const std::string*)payload->Data;
                         std::string newName = name.substr(0, name.size() - GetRightName(name).size()).append(currentName).append("/").append(GetRightName(name));
-                        std::rename(name.c_str(), newName.c_str()) != 0
+                        std::rename(name.c_str(), newName.c_str());
                     }
                     ImGui::EndDragDropTarget();
                 }
@@ -600,6 +600,16 @@ void Editor::DisplayHierarchy()
                     newGameObjectParent = nullptr;
                     hierarchyMenu = false;
                     strcpy_s(newGameObjectName,"New GameObject");
+                }
+                if (ImGui::Button("Delete") && newGameObjectParent->parent)
+                {
+                    for (GameObject* child : newGameObjectParent->children)
+                    {
+                        child->SetParent(newGameObjectParent->parent);
+                    }
+                    newGameObjectParent->SetParent(nullptr);
+                    newGameObjectParent->toDestroy = true;
+                    GameObject::destroyGameObject = true;
                 }
             }
             ImGui::End();

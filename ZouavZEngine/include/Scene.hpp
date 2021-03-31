@@ -27,5 +27,6 @@ public:
 	void Draw(const class Camera& _camera) const;
 
 	void AddLight(class Light* _newLight);
+	void DeleteLight(class Light* _lightToDestroy);
 	const std::vector<class Light*>& GetLights() { return lights; }
 };

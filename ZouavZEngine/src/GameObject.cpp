@@ -2,6 +2,7 @@
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
 
+bool GameObject::destroyGameObject = false;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
@@ -72,6 +73,22 @@ void GameObject::RemoveChild(GameObject* _child)
 const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()
 {
 	return components;
+}
+
+void GameObject::DestroyGameObjectIfNeedTo()
+{
+	if (destroyGameObject)
+	{
+		for (auto iter = gameObjects.begin(); iter != gameObjects.end();)
+		{
+			if (iter->get()->toDestroy)
+			{
+				iter = gameObjects.erase(iter);
+			}
+			else
+				iter++;
+		}
+	}
 }
 
 GameObject* GameObject::GetGameObjectByName(std::string _name)

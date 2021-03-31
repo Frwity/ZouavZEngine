@@ -72,3 +72,17 @@ void Scene::AddLight(Light* _newLight)
 {
 	lights.push_back(_newLight);
 }
+
+void Scene::DeleteLight(Light* _lightToDestroy)
+{
+	for (auto light = lights.begin(); light != lights.end();)
+	{
+		if ((*light)->toDestroy)
+		{
+			lights.erase(light);
+			return;
+		}
+		else
+			light++;
+	}
+}

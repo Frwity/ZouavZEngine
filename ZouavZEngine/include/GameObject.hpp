@@ -23,10 +23,12 @@ class GameObject : public Transform
 private:
 	friend class cereal::access;
 
+	static bool destroyGameObject;
 	static std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<std::unique_ptr<Component>> components;
 	std::vector<GameObject*> children;
 	GameObject* parent{ nullptr };
+	bool toDestroy{ false };
 
 public:
 	std::string name;
@@ -130,6 +132,7 @@ public:
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 
+	static void DestroyGameObjectIfNeedTo();
 	static GameObject* GetGameObjectByName(std::string _name);
 	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);
 	static GameObject* GetGameObjectByTag(std::string _tag);

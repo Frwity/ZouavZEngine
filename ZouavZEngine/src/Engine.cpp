@@ -109,6 +109,8 @@ void Engine::Update()
 
     while (!render.Stop())
     {
+        GameObject::DestroyGameObjectIfNeedTo();
+
         scene.GetWorld().UpdateTransform(Mat4::identity);
 
         TimeManager::Update();

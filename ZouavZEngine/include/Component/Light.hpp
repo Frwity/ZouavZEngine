@@ -27,6 +27,9 @@ public:
 	Light() = delete;
 	Light(class GameObject* _gameObject);
 	Light(class GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type);
+	~Light();
+
+	bool toDestroy{ false };
 
 	void Editor() override;
 
