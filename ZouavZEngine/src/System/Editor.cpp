@@ -34,6 +34,8 @@ ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
 GameObject* gameObjectInspector = nullptr;
+std::string currentProjectFolder = "resources";
+std::string currentMovingProjectFile;
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -466,6 +468,64 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+    }
+    ImGui::End();
+}
+
+void Editor::DisplayProject()
+{
+    if (ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
+    {
+        if (ImGui::Button("resources"))
+            currentProjectFolder = "resources";
+        int i = 0;
+        float windowWidth = ImGui::GetWindowWidth();
+        for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
+        {
+            std::string currentName = GetRightName(entry.path().string());
+            if (entry.is_directory())
+            {
+                ImGui::PushID(i);
+                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
+                {
+                    currentProjectFolder.append("/").append(currentName);
+                }
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                {
+                    currentMovingProjectFile = entry.path().string();
+                    ImGui::SetDragDropPayload("ProjectFile", &currentMovingProjectFile, sizeof(std::string));
+                    ImGui::Text(currentName.c_str());
+                    ImGui::EndDragDropSource();
+                }
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+                    {
+                        ZASSERT(payload->DataSize == sizeof(std::string), "Error in project manager");
+                        std::string name = *(const std::string*)payload->Data;
+                        std::string newName = name.substr(0, name.size() - GetRightName(name).size()).append(currentName).append("/").append(GetRightName(name));
+                        std::rename(name.c_str(), newName.c_str()) != 0
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+                ImGui::PopID();
+            }
+            else
+            {
+                ImGui::PushID(i);
+                ImGui::Button(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f));
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                {
+                    currentMovingProjectFile = entry.path().string();
+                    ImGui::SetDragDropPayload("ProjectFile", &currentMovingProjectFile, sizeof(std::string));
+                    ImGui::Text(currentName.c_str());
+                    ImGui::EndDragDropSource();
+                }
+                ImGui::PopID();
+            }
+            if (++i % 3 != 0)
+                ImGui::SameLine();
+        }
     }
     ImGui::End();
 }

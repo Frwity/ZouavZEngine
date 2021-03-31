@@ -45,6 +45,7 @@ public:
 	void DisplayInspector();
 	void DisplayConsoleWindow();
 	void DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer);
+	void DisplayProject();
 	void FileMenu();
 	void Update();
 	void DisplayHierarchy();

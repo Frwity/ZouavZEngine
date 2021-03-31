@@ -135,6 +135,7 @@ void Engine::Update()
         editor.DisplayConsoleWindow();
         editor.DisplayHierarchy();
         editor.DisplayGameWindow(render, render.gameFramebuffer);
+        editor.DisplayProject();
         editor.MoveSelectedGameobject();
 
         terrain.DisplayOptionWindow();
