@@ -53,7 +53,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    Save();
+    //Save();
 
 	render.Destroy();
     SoundManager::Destroy();
@@ -77,21 +77,20 @@ void Engine::Load()
     ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
     ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
 
-    GameObject* light = GameObject::CreateGameObject("Light");
+    //GameObject* light = GameObject::CreateGameObject("Light");
+    //light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
+    //scene.lights.push_back(light->GetComponent<Light>());
 
-    light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
-    scene.lights.push_back(light->GetComponent<Light>());
+    //GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
+    //soundSkull->AddComponent<MeshRenderer>(mesh, texture, shader);
+    //soundSkull->AddComponent<AudioBroadcaster>(sound);
+    //soundSkull->AddComponent<Move>();
 
-    GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, texture, shader);
-    soundSkull->AddComponent<AudioBroadcaster>(sound);
-    soundSkull->AddComponent<Move>();
-
-    GameObject* player = GameObject::CreateGameObject("Player");
-    player->AddComponent<MeshRenderer>(mesh, texture, shader);
-    player->AddComponent<AudioListener>();
-    player->AddComponent<Player>();
-    player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
+    //GameObject* player = GameObject::CreateGameObject("Player");
+    //player->AddComponent<MeshRenderer>(mesh, texture, shader);
+    //player->AddComponent<AudioListener>();
+    //player->AddComponent<Player>();
+    //player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 
     scene.Load();
 }
