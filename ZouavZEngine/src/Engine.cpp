@@ -53,7 +53,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    Save();
+    //Save();
 
 	render.Destroy();
     SoundManager::Destroy();
@@ -61,13 +61,18 @@ Engine::~Engine()
 
 void Engine::Load()
 {
+    MeshRenderer::defaultMesh = ResourcesManager::AddResourceMesh("CubeMesh");
+    MeshRenderer::defaultMesh->CreateQuad();
+    MeshRenderer::defaultShader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    MeshRenderer::defaultTexture = ResourcesManager::AddResourceTexture("White", "resources/white.png");
 
-    Shader* shader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
+
+
     Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
     Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
     Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
 
-    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
 
     ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
 
@@ -81,16 +86,19 @@ void Engine::Load()
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::DIRECTIONAL);
     
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, texture, shader);
+    soundSkull->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
-    player->AddComponent<MeshRenderer>(mesh, texture, shader);
+    player->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
 
+    GameObject* test = GameObject::CreateGameObject("test");
+    //test->AddComponent<MeshRenderer>(cubeMesh, texture, shader);
+    test->TranslateY(-3.f);
     //scene.Load();
 }
 

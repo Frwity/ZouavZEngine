@@ -41,14 +41,14 @@ struct ChunkCreateArg
 class Chunk
 {
 private:
-	Mesh mesh{};
+	Mesh mesh{"chunkMesh"};
 
 	Vec2 pos{};
 
 	int size = 0;
 public:
 
-	Chunk() = default;
+	Chunk() = default; 
 	~Chunk() = default;
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
