@@ -18,7 +18,8 @@ Light::Light(GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, 
 Light::~Light()
 {
 	toDestroy = true;
-	Scene::GetCurrentScene()->DeleteLight(this);
+	if (Scene::GetCurrentScene())
+		Scene::GetCurrentScene()->DeleteLight();
 }
 
 void Light::Editor()

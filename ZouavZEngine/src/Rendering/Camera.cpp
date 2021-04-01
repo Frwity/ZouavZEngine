@@ -24,6 +24,12 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, 0.01, 5000.0f, 45.0f);
 }
 
+Camera::~Camera()
+{
+    if (mainCamera == this)
+        mainCamera = nullptr;
+}
+
 Mat4 Camera::GetMatrix() const
 {
     const Vec3 forward = (target - position).Normalized();

@@ -149,8 +149,11 @@ void Engine::Update()
 
         render.BindGameFBO();
 
-        terrain.Draw(*Camera::GetMainCamera());
-        scene.Draw(*Camera::GetMainCamera());
+        if (Camera::GetMainCamera())
+        {
+            terrain.Draw(*Camera::GetMainCamera());
+            scene.Draw(*Camera::GetMainCamera());
+        }
 
         render.BindMainFBO();
         
