@@ -34,7 +34,7 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk());
+			chunks.emplace(pos.ToString(), Chunk{});
 			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
 														seed, noiseParams,
 														minHeight, maxHeight, heightIntensity }, false);

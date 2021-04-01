@@ -12,6 +12,10 @@
 class MeshRenderer : public Component
 {
 private:
+	friend class Engine;
+	static Mesh* defaultMesh;
+	static Texture* defaultTexture;
+	static Shader* defaultShader;
 
 public:
     Mesh* mesh = nullptr;

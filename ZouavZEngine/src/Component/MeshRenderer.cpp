@@ -8,15 +8,20 @@
 #include "System/Debug.hpp"
 #include "imgui.h"
 
+Mesh* MeshRenderer::defaultMesh;
+Texture* MeshRenderer::defaultTexture;
+Shader* MeshRenderer::defaultShader;
+
+
 MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader)
 	: Component(_gameObject), mesh{ _mesh }, texture{ _texture }, shader{ _shader }
 {}
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject)
     : Component(_gameObject), 
-      mesh{ ResourcesManager::GetResource<Mesh>("Skull Mesh") }, 
-      texture{ ResourcesManager::GetResource<Texture>("Skull Tex") },
-      shader{ResourcesManager::GetResource<Shader>("BlinnPhongShader") }
+      mesh{ defaultMesh },
+      texture{ defaultTexture },
+      shader{ defaultShader }
 {}
 
 void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
