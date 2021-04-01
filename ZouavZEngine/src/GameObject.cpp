@@ -1,6 +1,13 @@
-#include "GameObject.hpp"
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
+#include "System/GameObjectSystem.hpp"
+#include "Component/RigidBody.hpp"
+#include "Component/RigidStatic.hpp"
+#include "System/PhysicUtils.hpp"
+#include "PxRigidDynamic.h"
+#include "PxRigidStatic.h"
+#include "PxActor.h"
+#include "GameObject.hpp"
 
 bool GameObject::destroyGameObject = false;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
@@ -26,6 +33,17 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	for (GameObject* _child : children)
 	{
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
+		
+		RigidBody* rd = _child->GetComponent<RigidBody>();
+
+		//update physx transform for simulation
+		if (rd)
+			rd->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+
+		RigidStatic* rs = _child->GetComponent<RigidStatic>();
+
+		if (rs)
+			rs->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
 	}
 }
 

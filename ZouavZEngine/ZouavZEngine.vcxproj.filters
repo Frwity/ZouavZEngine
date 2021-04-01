@@ -180,6 +180,30 @@
     <ClCompile Include="src\System\Debug.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\ShapeCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\BoxCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\PhysicSystem.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\SphereCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\CapsuleCollision.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\RigidBody.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Component\RigidStatic.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Plane.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
     <ClCompile Include="src\Multithread\TaskSystem.cpp">
       <Filter>src\Multithread</Filter>
     </ClCompile>
@@ -298,6 +322,33 @@
     </ClInclude>
     <ClInclude Include="include\System\Debug.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\PhysicSystem.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\ShapeCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\BoxCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\PhysicUtils.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\SphereCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\CapsuleCollision.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RigidBody.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RigidStatic.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Plane.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\Multithread\TaskSystem.h">
       <Filter>include\Multithread</Filter>

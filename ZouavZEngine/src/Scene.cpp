@@ -5,6 +5,15 @@
 #include "Component/Light.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
+#include "System/PhysicSystem.hpp"
+#include "System/TimeManager.hpp"
+#include "PxActor.h"
+#include "PxRigidDynamic.h"
+#include "PxScene.h"
+#include "System/Debug.hpp"
+#include "PxSimulationEventCallback.h"
+#include "PxRigidStatic.h"
+#include "pvd/PxPvd.h"
 
 #include <fstream>
 #include "cereal/archives/json.hpp"
@@ -72,6 +81,34 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 
 	for (GameObject* child : _parent->GetChildren())
 		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
+}
+
+void Scene::SimulatePhyics() const
+{
+	PhysicSystem::scene->simulate(TimeManager::GetDeltaTime());
+	PhysicSystem::scene->fetchResults(true);
+
+	physx::PxU32 nbActiveActor;
+
+	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
+
+	for (int i = 0; i < nbActiveActor; i++)
+	{
+		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
+
+		if(go)
+		{
+			physx::PxRigidDynamic* rd = static_cast<physx::PxRigidDynamic*>(activeActors[i]);
+
+			if (rd)
+			{
+				physx::PxTransform transform = rd->getGlobalPose();
+
+				go->localPosition = { transform.p.x, transform.p.y, transform.p.z };
+				go->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+			}
+		}
+	}
 }
 
 void Scene::AddLight(Light* _newLight)

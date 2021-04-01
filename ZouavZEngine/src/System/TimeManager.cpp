@@ -33,6 +33,8 @@ void TimeManager::Init()
 	gameClock->activate = false;
 }
 
+#include <iostream>
+
 void TimeManager::Update()
 {
 	time = (float)(glfwGetTime());

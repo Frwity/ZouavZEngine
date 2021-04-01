@@ -23,6 +23,11 @@
 #include "Sound.hpp"
 #include "cereal/archives/json.hpp"
 #include <iostream>
+#include "System/PhysicSystem.hpp"
+#include "Component/BoxCollision.hpp"
+#include "Component/SphereCollision.hpp"
+#include "Component/RigidBody.hpp"
+#include "Component/RigidStatic.hpp"
 
 #define EDITOR
 
@@ -36,6 +41,7 @@ Engine::Engine()
     InputManager::InitKeys();
 
     SoundManager::Init();
+    PhysicSystem::Init();
 
     TimeManager::Init();
 
@@ -57,6 +63,7 @@ Engine::~Engine()
 
 	render.Destroy();
     SoundManager::Destroy();
+    PhysicSystem::Destroy();
 }
 
 void Engine::Load()
@@ -95,11 +102,15 @@ void Engine::Load()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
+    player->AddComponent<RigidStatic>();
+    player->AddComponent<SphereCollision>();
 
     GameObject* test = GameObject::CreateGameObject("test");
-    //test->AddComponent<MeshRenderer>(cubeMesh, texture, shader);
-    test->TranslateY(-3.f);
-    //scene.Load();
+    test->localPosition = { 0.0f, 5.0f, 0.0f };
+    test->AddComponent<MeshRenderer>(mesh, shader, texture);
+    test->AddComponent<SphereCollision>();
+    test->AddComponent<RigidBody>();
+
 }
 
 void Engine::Save()
@@ -134,9 +145,9 @@ void Engine::Update()
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
             terrain.Update();
+            scene.SimulatePhyics();
         }
 
-        
         //TODO call single editor function
         editor.DisplayMainWindow();
         editor.DisplayOptionWindow();
