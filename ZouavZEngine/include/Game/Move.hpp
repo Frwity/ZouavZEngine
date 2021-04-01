@@ -20,7 +20,7 @@ class Move : public ScriptComponent
 		template <class Archive>
 		static void load_and_construct(Archive& _ar, cereal::construct<Move>& _construct)
 		{
-			_construct(nullptr);
+			_construct(GameObject::currentLoadedGameObject);
 		}
 };
 

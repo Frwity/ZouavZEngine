@@ -47,9 +47,9 @@ public:
 
 		_ar(meshName, textureName, shaderName);
 
-		_construct(nullptr, ResourcesManager::GetResource<Mesh>(meshName),
-							ResourcesManager::GetResource<Texture>(textureName),
-							ResourcesManager::GetResource<Shader>(shaderName));
+		_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
+														ResourcesManager::GetResource<Texture>(textureName),
+														ResourcesManager::GetResource<Shader>(shaderName));
 	}
 };
 

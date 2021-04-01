@@ -75,6 +75,7 @@ public:
 	~PhysicSystem() = delete;
 
 	static void Init();
+	static void InitScene();
 	static void Destroy();
 	static void DestroyCollisionComponent();
 };

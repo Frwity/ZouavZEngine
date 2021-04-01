@@ -38,7 +38,7 @@ public:
 
 		_ar(_speed, _vie, _distance);
 
-		_construct(nullptr);
+		_construct(GameObject::currentLoadedGameObject);
 		_construct->speed = _speed;
 		_construct->vie = _vie;
 		_construct->distance = _distance;

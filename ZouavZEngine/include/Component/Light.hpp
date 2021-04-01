@@ -64,7 +64,7 @@ public:
 			cutOffOuterCutOff.x, cutOffOuterCutOff.y,
 			type);
 
-		_construct(nullptr, ambient, diffuse, specular, constLineQuad, direction, cutOffOuterCutOff, (E_LIGHT_TYPE)type);
+		_construct(GameObject::currentLoadedGameObject, ambient, diffuse, specular, constLineQuad, direction, cutOffOuterCutOff, (E_LIGHT_TYPE)type);
 	}
 };
 

@@ -19,6 +19,7 @@ public:
 	Engine();
 	~Engine();
 	
+	void TempLoad();
 	void Load();
 	void Update();
 	void Save();

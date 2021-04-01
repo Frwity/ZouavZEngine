@@ -19,9 +19,11 @@ namespace cereal
 
 class GameObject : public Transform
 {
-	friend class Editor;
 private:
+	friend class Editor;
+	friend class Scene;
 	friend class cereal::access;
+
 
 	static bool destroyGameObject;
 	static std::vector<std::unique_ptr<GameObject>> gameObjects;
@@ -31,6 +33,8 @@ private:
 	bool toDestroy{ false };
 
 public:
+	static GameObject* currentLoadedGameObject;
+
 	std::string name;
 	std::vector<std::string> tags;
 
@@ -38,29 +42,35 @@ public:
 	GameObject(const std::string& _name);
 	~GameObject() = default;
 
+	void Destroy();
+
 	template <class Archive>
 	void load(Archive& _ar)
 	{
 		int nbChild;
 
-		_ar(name, nbChild, components);
+		_ar(name, nbChild, components,
+			localPosition.x, localPosition.y, localPosition.z,
+			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
+			localScale.x, localScale.y, localScale.z);
 
-		for (std::unique_ptr<Component>& component : components)
-			component->gameObject = this;
+		currentLoadedGameObject = this;
 
 		std::string childName;
 		int nbChild2;
 
-		for (int i = 0; i < nbChild; ++i)
+		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
 		{
 			_ar(childName, nbChild2);
 
 			GameObject* gameobject = CreateGameObject(childName);
+			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components);
+			_ar(gameobject->components,
+				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
+				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
+				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z);
 
-			for (std::unique_ptr<Component>& component : gameobject->components)
-				component->gameObject = gameobject;
 
 			loadRecurss(_ar, gameobject, nbChild2);
 		}
@@ -77,11 +87,13 @@ public:
 			_ar(childName, nbChild2);
 
 			GameObject* gameobject = CreateGameObject(childName);
+			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components);
+			_ar(gameobject->components,
+				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
+				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
+				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z);
 
-			for (std::unique_ptr<Component>& component : gameobject->components)
-				component->gameObject = gameobject;
 
 			_gameobject->AddChild(gameobject);
 
@@ -93,7 +105,10 @@ public:
 	void save(Archive& _ar) const
 	{
 		int nbChild = children.size();
-		_ar(name, nbChild, components);
+		_ar(name, nbChild, components, 
+			localPosition.x, localPosition.y, localPosition.z,
+			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
+			localScale.x, localScale.y, localScale.z);
 
 		for (const GameObject* child : children)
 			child->save(_ar);
@@ -137,4 +152,5 @@ public:
 	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);
 	static GameObject* GetGameObjectByTag(std::string _tag);
 	static std::vector<GameObject*> GetGameObjectsByTag(std::string _tag);
+	
 };

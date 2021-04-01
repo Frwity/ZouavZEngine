@@ -34,6 +34,6 @@ public:
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<Component>& _construct)
 	{
-		_construct(nullptr);
+		_construct(GameObject::currentLoadedGameObject);
 	}
 };

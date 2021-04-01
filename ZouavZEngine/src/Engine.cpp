@@ -54,7 +54,7 @@ Engine::Engine()
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
-    Load();
+    TempLoad();
 }
 
 Engine::~Engine()
@@ -66,22 +66,20 @@ Engine::~Engine()
     PhysicSystem::Destroy();
 }
 
-void Engine::Load()
+void Engine::TempLoad()
 {
+    // engine base resource
     MeshRenderer::defaultMesh = ResourcesManager::AddResourceMesh("CubeMesh");
     MeshRenderer::defaultMesh->CreateQuad();
     MeshRenderer::defaultShader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
     MeshRenderer::defaultTexture = ResourcesManager::AddResourceTexture("White", "resources/white.png");
-
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
 
-
+    // other resource
     Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
     Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
     Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
-
-
-    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
 
     ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
     ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
@@ -89,9 +87,10 @@ void Engine::Load()
     ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
     ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
 
+    // coded scene
     GameObject* light = GameObject::CreateGameObject("Light");
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::DIRECTIONAL);
-    
+
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
     soundSkull->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
@@ -107,10 +106,14 @@ void Engine::Load()
 
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 5.0f, 0.0f };
-    test->AddComponent<MeshRenderer>(mesh, shader, texture);
+    test->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     test->AddComponent<SphereCollision>();
     test->AddComponent<RigidBody>();
+}
 
+void Engine::Load()
+{
+    scene.Load();
 }
 
 void Engine::Save()

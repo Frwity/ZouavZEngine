@@ -6,7 +6,6 @@
 #include "cereal/archives/json.hpp"
 
 class ResourceManager;
-
 class Vec3;
 
 class AudioBroadcaster : public Component
@@ -45,17 +44,7 @@ public:
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<AudioBroadcaster>& _construct)
-	{
-		std::string soundName;
-		bool _ambient;
-		bool _loop;
-		_ar(_ambient, _loop, soundName);
-
-		_construct(nullptr, ResourcesManager::GetResource<Sound>(soundName));
-		_construct->ambient = _ambient;
-		_construct->loop = _loop;
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<AudioBroadcaster>& _construct);
 };
 
 

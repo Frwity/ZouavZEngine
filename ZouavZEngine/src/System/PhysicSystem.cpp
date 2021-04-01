@@ -54,6 +54,16 @@ void PhysicSystem::Init()
 	cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(scale));
 	ZASSERT(cooking != nullptr, "PxCreateCooking failed !");
 
+	InitScene();
+
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+}
+
+void PhysicSystem::InitScene()
+{
+	PxTolerancesScale scale = PxTolerancesScale();
 	PxSceneDesc sceneDesc(scale);
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 
@@ -75,10 +85,6 @@ void PhysicSystem::Init()
 
 	pvdClient = scene->getScenePvdClient();
 	ZASSERT(pvdClient != nullptr, "getScenePvdClient failed !");
-
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 }
 
 void PhysicSystem::DestroyCollisionComponent()

@@ -1,6 +1,5 @@
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
-#include "System/GameObjectSystem.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "System/PhysicUtils.hpp"
@@ -10,6 +9,7 @@
 #include "GameObject.hpp"
 
 bool GameObject::destroyGameObject = false;
+GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
@@ -22,6 +22,11 @@ GameObject* GameObject::CreateGameObject(const std::string& _name)
 GameObject::GameObject(const std::string& _name)
 	: name(_name)
 {
+}
+
+void GameObject::Destroy() 
+{ 
+	toDestroy = true;
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

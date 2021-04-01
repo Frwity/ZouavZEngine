@@ -92,12 +92,22 @@ void Editor::DisplayOptionWindow()
                                 | ImGuiWindowFlags_NoCollapse
 		                        | ImGuiWindowFlags_NoResize
     );
-
+    ImGui::SameLine();
+    if (ImGui::Button("Save"))
+    {
+        engine.Save();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load"))
+    {
+        engine.Load();
+    }
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(800);
 
 	if (ImGui::Button("Play"))
 	{
+        engine.Save();
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
@@ -114,8 +124,9 @@ void Editor::DisplayOptionWindow()
     {
         state = EDITOR_STATE::EDITING;
         TimeManager::gameClock->Reset();
-
+        gameObjectInspector = nullptr;
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
+        engine.Load();
 	}
 
 
@@ -286,8 +297,8 @@ void Editor::DisplayMenuBar()
             ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
             ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("New Class", nullptr, &newClassWindow);
-            ImGui::MenuItem("Open", NULL);
-            ImGui::MenuItem("Save", NULL);
+            ImGui::MenuItem("Load", nullptr);
+            ImGui::MenuItem("Save", nullptr);
             ImGui::EndMenu();
         }
 

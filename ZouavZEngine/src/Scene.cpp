@@ -35,6 +35,11 @@ Scene::~Scene()
 
 void Scene::Load()
 {
+	GameObject::gameObjects.clear();
+	world.children.clear();
+	PhysicSystem::scene->release();
+	PhysicSystem::InitScene();
+
 	std::ifstream saveFile;
 	saveFile.open("save.json", std::ios::binary);
 	{

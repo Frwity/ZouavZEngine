@@ -124,3 +124,16 @@ void AudioBroadcaster::Editor()
 	if (ImGui::Checkbox("##loop", &loop))
 		SetAmbient(loop);
 }
+
+template <class Archive>
+static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct<AudioBroadcaster>& _construct)
+{
+	std::string soundName;
+	bool _ambient;
+	bool _loop;
+	_ar(_ambient, _loop, soundName);
+
+	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Sound>(soundName));
+	_construct->ambient = _ambient;
+	_construct->loop = _loop;
+}

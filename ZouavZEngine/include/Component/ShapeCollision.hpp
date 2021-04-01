@@ -2,6 +2,8 @@
 #include "Component.hpp"
 #include "PxSimulationEventCallback.h"
 #include "System/Debug.hpp"
+#include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/json.hpp"
 
 namespace physx
 {
@@ -11,6 +13,9 @@ namespace physx
 
 class ShapeCollision: public Component
 {
+protected:
+	physx::PxMaterial* material = nullptr;
+	void AttachToRigidComponent();
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
@@ -19,8 +24,19 @@ public:
 	~ShapeCollision();
 
 	void releasePhysXComponent();
+		
+	template <class Archive>
+	void serialize(Archive& _ar)
+	{
+	}
 
-protected:
-	physx::PxMaterial* material = nullptr;
-	void AttachToRigidComponent();
+	template <class Archive>
+	static void load_and_construct(Archive& _ar, cereal::construct<ShapeCollision>& _construct)
+	{
+		_construct(GameObject::currentLoadedGameObject);
+	}
+
 };
+
+CEREAL_REGISTER_TYPE(ShapeCollision)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, ShapeCollision)

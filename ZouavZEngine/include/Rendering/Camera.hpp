@@ -7,7 +7,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
-
+#include <iostream>
 class Camera : public Component
 {
 private:
@@ -24,6 +24,8 @@ protected:
 public: // TODO callback resize
 	Camera(class GameObject* _gameObject, int _width, int _height);
 	Camera() = delete;
+	Camera(const Camera&) = delete;
+	//Camera& operator= (const Camera&) = delete; TODO
 	~Camera();
 
 	static const Camera* GetMainCamera() { return mainCamera; }
@@ -40,12 +42,12 @@ public: // TODO callback resize
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(projection.matrix[0], projection.matrix[1], projection.matrix[2], projection.matrix[3], 
+		_ar(projection.matrix[0], projection.matrix[1], projection.matrix[2], projection.matrix[3],
 			projection.matrix[4], projection.matrix[5], projection.matrix[6], projection.matrix[7],
-			projection.matrix[8], projection.matrix[9], projection.matrix[10], projection.matrix[11], 
+			projection.matrix[8], projection.matrix[9], projection.matrix[10], projection.matrix[11],
 			projection.matrix[12], projection.matrix[13], projection.matrix[14], projection.matrix[15],
 			position.x, position.y, position.z,
-			target.x, target.y, target.z);
+			target.x, target.y, target.z, mainCamera == this ? true : false);
 	}
 
 	template <class Archive>
@@ -54,16 +56,19 @@ public: // TODO callback resize
 		Mat4 _projection;
 		Vec3 _position;
 		Vec3 _target;
+		bool _wasMainCamera = false;
 		_ar(_projection.matrix[0], _projection.matrix[1], _projection.matrix[2], _projection.matrix[3],
 			_projection.matrix[4], _projection.matrix[5], _projection.matrix[6], _projection.matrix[7],
 			_projection.matrix[8], _projection.matrix[9], _projection.matrix[10], _projection.matrix[11],
 			_projection.matrix[12], _projection.matrix[13], _projection.matrix[14], _projection.matrix[15],
 			_position.x, _position.y, _position.z,
-			_target.x, _target.y, _target.z);
-		_construct(nullptr, 10, 10);
+			_target.x, _target.y, _target.z, _wasMainCamera);
+		_construct(GameObject::currentLoadedGameObject, 10, 10);
 		_construct->projection = _projection;
 		_construct->position = _position;
 		_construct->target = _target;
+		if (_wasMainCamera)
+			_construct->SetMainCamera();
 	}
 };
 

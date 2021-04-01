@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Component/Component.hpp"
+#include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/json.hpp"
 
 namespace physx
 {
@@ -10,9 +12,13 @@ namespace physx
 
 class RigidBody: public Component
 {
+private:
+	void AttachShape();
+
 public:
 	physx::PxRigidDynamic* actor = nullptr;
 
+	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject);
 	~RigidBody();
 
@@ -21,7 +27,18 @@ public:
 	void DisableGravity();
 	void EnableGravity();
 
-private:
-	void AttachShape();
 
+	template <class Archive>
+	void serialize(Archive& _ar)
+	{
+	}
+
+	template <class Archive>
+	static void load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
+	{
+		_construct(GameObject::currentLoadedGameObject);
+	}
 };
+
+CEREAL_REGISTER_TYPE(RigidBody)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RigidBody)
