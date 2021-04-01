@@ -16,7 +16,7 @@ private:
 public:
 
 	Scene();
-	~Scene() = default;
+	~Scene();
 
 	static Scene* GetCurrentScene() { return currentScene; }
 	GameObject& GetWorld() { return world; }
@@ -27,5 +27,6 @@ public:
 	void Draw(const class Camera& _camera) const;
 
 	void AddLight(class Light* _newLight);
+	void DeleteLight();
 	const std::vector<class Light*>& GetLights() { return lights; }
 };

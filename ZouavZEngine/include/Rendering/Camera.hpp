@@ -24,7 +24,7 @@ protected:
 public: // TODO callback resize
 	Camera(class GameObject* _gameObject, int _width, int _height);
 	Camera() = delete;
-	~Camera() = default;
+	~Camera();
 
 	static const Camera* GetMainCamera() { return mainCamera; }
 

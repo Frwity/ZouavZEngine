@@ -117,6 +117,8 @@ void Engine::Update()
 
     while (!render.Stop())
     {
+        GameObject::DestroyGameObjectIfNeedTo();
+
         scene.GetWorld().UpdateTransform(Mat4::identity);
 
         TimeManager::Update();
@@ -143,6 +145,7 @@ void Engine::Update()
         editor.DisplayConsoleWindow();
         editor.DisplayHierarchy();
         editor.DisplayGameWindow(render, render.gameFramebuffer);
+        editor.DisplayProject();
         editor.MoveSelectedGameobject();
 
         terrain.DisplayOptionWindow();
@@ -154,8 +157,11 @@ void Engine::Update()
 
         render.BindGameFBO();
 
-        terrain.Draw(*Camera::GetMainCamera());
-        scene.Draw(*Camera::GetMainCamera());
+        if (Camera::GetMainCamera())
+        {
+            terrain.Draw(*Camera::GetMainCamera());
+            scene.Draw(*Camera::GetMainCamera());
+        }
 
         render.BindMainFBO();
         

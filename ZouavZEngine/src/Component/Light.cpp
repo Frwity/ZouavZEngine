@@ -15,6 +15,13 @@ Light::Light(GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, 
 	Scene::GetCurrentScene()->AddLight(this);
 }
 
+Light::~Light()
+{
+	toDestroy = true;
+	if (Scene::GetCurrentScene())
+		Scene::GetCurrentScene()->DeleteLight();
+}
+
 void Light::Editor()
 {
 	ImGui::Text("Light");
