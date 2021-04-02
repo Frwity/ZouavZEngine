@@ -36,7 +36,7 @@ public:
 	static GameObject* currentLoadedGameObject;
 
 	std::string name;
-	std::vector<std::string> tags;
+	std::string tag;
 
 	GameObject() = delete;
 	GameObject(const std::string& _name);

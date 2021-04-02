@@ -142,11 +142,8 @@ GameObject* GameObject::GetGameObjectByTag(std::string _tag)
 {
 	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
 	{
-		for (std::string& tag : gameObject->tags)
-		{
-			if (tag == _tag)
-				return gameObject.get();
-		}
+		if (gameObject->tag == _tag)
+			return gameObject.get();
 	}
 
 	return nullptr;
@@ -158,11 +155,8 @@ std::vector<GameObject*> GameObject::GetGameObjectsByTag(std::string _tag)
 
 	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
 	{
-		for (std::string& tag : gameObject->tags)
-		{
-			if (tag == _tag)
-				toReturn.push_back(gameObject.get());
-		}
+		if (gameObject->tag == _tag)
+			toReturn.push_back(gameObject.get());
 	}
 
 	return toReturn;

@@ -70,7 +70,7 @@ void Engine::TempLoad()
 {
     // engine base resource
     MeshRenderer::defaultMesh = ResourcesManager::AddResourceMesh("CubeMesh");
-    MeshRenderer::defaultMesh->CreateQuad();
+    MeshRenderer::defaultMesh->CreateCube();
     MeshRenderer::defaultShader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
     MeshRenderer::defaultTexture = ResourcesManager::AddResourceTexture("White", "resources/white.png");

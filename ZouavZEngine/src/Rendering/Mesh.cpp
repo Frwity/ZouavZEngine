@@ -103,7 +103,7 @@ Mesh::~Mesh()
     glDeleteVertexArrays(1, &VAO);
 }
 
-void Mesh::CreateQuad()
+void Mesh::CreateCube()
 {
 	std::vector<Vertex> vertices;
 	std::vector<int> indices;
