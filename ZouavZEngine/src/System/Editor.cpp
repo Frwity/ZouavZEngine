@@ -36,6 +36,9 @@ GameObject* newGameObjectParent = nullptr;
 GameObject* gameObjectInspector = nullptr;
 std::string currentProjectFolder = "resources";
 std::string currentMovingProjectFile;
+ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
+bool projectNewFolder = false;
+
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -489,8 +492,10 @@ void Editor::DisplayProject()
     {
         if (ImGui::Button("resources"))
             currentProjectFolder = "resources";
+
         int i = 0;
         float windowWidth = ImGui::GetWindowWidth();
+        
         for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
         {
             std::string currentName = GetRightName(entry.path().string());
@@ -536,6 +541,31 @@ void Editor::DisplayProject()
             }
             if (++i % 3 != 0)
                 ImGui::SameLine();
+        }
+    
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        {
+            projectNewFolderPos = ImGui::GetMousePos();
+            projectNewFolder = true;
+        }
+
+        if (projectNewFolder)
+        {
+            ImGui::SetNextWindowPos(projectNewFolderPos);
+            if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+            {
+                static char newHierarchyFolderName[256] = "New Folder";
+                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName, 256);
+                if (ImGui::Button("Create"))
+                {
+                    if (_mkdir(std::string(currentProjectFolder).append("/").append(newHierarchyFolderName).c_str()) == 0)
+                        std::cout << "Folder " << newHierarchyFolderName << " created" << std::endl;
+                    else
+                        std::cout << "Folder " << newHierarchyFolderName << " not created" << std::endl;
+                    projectNewFolder = !projectNewFolder;
+                }
+            }
+            ImGui::End();
         }
     }
     ImGui::End();
