@@ -66,7 +66,7 @@ class Terrain
 private:
 	std::unordered_map<std::string, Chunk> chunks;
 
-	Shader* shader{};
+	Shader* shader = nullptr;
 
 public:
 

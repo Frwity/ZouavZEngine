@@ -131,8 +131,6 @@ void Engine::Update()
 
     while (!render.Stop())
     {
-        GameObject::DestroyGameObjectIfNeedTo();
-
         scene.GetWorld().UpdateTransform(Mat4::identity);
 
         TimeManager::Update();
@@ -150,6 +148,7 @@ void Engine::Update()
             terrain.Update();
             scene.SimulatePhyics();
         }
+        GameObject::DestroyGameObjectIfNeedTo();
 
         //TODO call single editor function
         editor.DisplayMainWindow();

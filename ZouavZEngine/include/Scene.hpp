@@ -22,6 +22,7 @@ public:
 	GameObject& GetWorld() { return world; }
 
 	void Load();
+	void Load(const std::string& path);
 	void Save();
 
 	void Draw(const class Camera& _camera) const;

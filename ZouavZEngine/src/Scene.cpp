@@ -41,7 +41,23 @@ void Scene::Load()
 	PhysicSystem::InitScene();
 
 	std::ifstream saveFile;
-	saveFile.open("save.json", std::ios::binary);
+	saveFile.open(std::string("resources/" + world.name + ".zes"), std::ios::binary);
+	{
+		cereal::JSONInputArchive iarchive(saveFile);
+
+		world.load(iarchive);
+	}
+	saveFile.close();
+}
+void Scene::Load(const std::string& path)
+{
+	GameObject::gameObjects.clear();
+	world.children.clear();
+	PhysicSystem::scene->release();
+	PhysicSystem::InitScene();
+
+	std::ifstream saveFile;
+	saveFile.open(std::string(path), std::ios::binary);
 	{
 		cereal::JSONInputArchive iarchive(saveFile);
 
@@ -53,7 +69,8 @@ void Scene::Load()
 void Scene::Save()
 {
 	std::ofstream saveFile;
-	saveFile.open("save.json", std::ios::binary);
+	
+	saveFile.open(std::string("resources/" + world.name + ".zes"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
 

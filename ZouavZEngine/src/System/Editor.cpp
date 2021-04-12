@@ -381,7 +381,10 @@ void Editor::DisplayInspector()
         if (gameObjectInspector)
         {
             ImGui::PushItemWidth(200.0f);
-            ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
+            
+            std::string name = gameObjectInspector->name;
+            if (ImGui::InputText("##name", name.data(), 256))
+                gameObjectInspector->name = name.data();
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
             
@@ -504,6 +507,7 @@ void Editor::DisplayProject()
                 ImGui::PushID(i);
                 if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
                 {
+
                     currentProjectFolder.append("/").append(currentName);
                 }
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -529,7 +533,12 @@ void Editor::DisplayProject()
             else
             {
                 ImGui::PushID(i);
-                ImGui::Button(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f));
+                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick)
+                && entry.path().extension().string().compare(".zes") == 0)
+                {
+                    gameObjectInspector = nullptr;
+                    engine.scene.Load(entry.path().string());
+                }
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
                 {
                     currentMovingProjectFile = entry.path().string();

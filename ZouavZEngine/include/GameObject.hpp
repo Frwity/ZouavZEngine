@@ -95,6 +95,7 @@ public:
 				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z);
 
 
+
 			_gameobject->AddChild(gameobject);
 
 			loadRecurss(_ar, gameobject, nbChild2);
