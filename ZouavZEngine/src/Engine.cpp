@@ -97,6 +97,7 @@ void Engine::TempLoad()
     soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
+    player->tag = "Player";
     player->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
@@ -125,10 +126,6 @@ void Engine::Update()
 {
     ScriptSystem::Begin();
 
-    Terrain terrain;
-    terrain.Generate(Scene::GetCurrentScene()->GetWorld().GetChildren().at(2));
-    terrain.Update();
-
     while (!render.Stop())
     {
         scene.GetWorld().UpdateTransform(Mat4::identity);
@@ -145,8 +142,7 @@ void Engine::Update()
             SoundManager::Update();
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
-            terrain.Update();
-            scene.SimulatePhyics();
+            scene.Update();
         }
         GameObject::DestroyGameObjectIfNeedTo();
 
@@ -161,21 +157,17 @@ void Engine::Update()
         editor.DisplayProject();
         editor.MoveSelectedGameobject();
 
-        terrain.DisplayOptionWindow();
+        scene.DisplayTerrainOptionWindow();
 
         render.BindSceneFBO();
        
-        terrain.Draw(*SceneCamera::GetSceneCamera());
         scene.Draw(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
-
+        
         if (Camera::GetMainCamera())
-        {
-            terrain.Draw(*Camera::GetMainCamera());
             scene.Draw(*Camera::GetMainCamera());
-        }
-
+        
         render.BindMainFBO();
         
         editor.Update();

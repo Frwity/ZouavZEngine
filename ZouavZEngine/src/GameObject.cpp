@@ -14,13 +14,23 @@ std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
-	gameObjects.emplace_back(std::make_unique<GameObject>(_name));
+	return CreateGameObject(_name, "");
+}
+GameObject* GameObject::CreateGameObject(const std::string& _name, const std::string& _tag)
+{
+	gameObjects.emplace_back(std::make_unique<GameObject>(_name, _tag));
 	Scene::GetCurrentScene()->GetWorld().AddChild(gameObjects.back().get());
 	return gameObjects.back().get();
 }
 
 GameObject::GameObject(const std::string& _name)
 	: name(_name)
+{
+}
+
+GameObject::GameObject(const std::string& _name, const std::string& _tag)
+	: name(_name), tag(_tag)
+
 {
 }
 

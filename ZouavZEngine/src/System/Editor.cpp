@@ -103,6 +103,7 @@ void Editor::DisplayOptionWindow()
     ImGui::SameLine();
     if (ImGui::Button("Load"))
     {
+        gameObjectInspector = nullptr;
         engine.Load();
     }
 	ImGui::SameLine();
@@ -382,9 +383,18 @@ void Editor::DisplayInspector()
         {
             ImGui::PushItemWidth(200.0f);
             
+            ImGui::Text("Name : ");
+            ImGui::SameLine();
             std::string name = gameObjectInspector->name;
             if (ImGui::InputText("##name", name.data(), 256))
                 gameObjectInspector->name = name.data();
+
+            ImGui::SameLine();
+            ImGui::Text("Tag : ");
+            ImGui::SameLine();
+            std::string tag = gameObjectInspector->tag;
+            if (ImGui::InputText("##tag", tag.data(), 256))
+                gameObjectInspector->tag = tag.data();
 
             ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
             

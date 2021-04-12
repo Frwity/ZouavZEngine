@@ -36,10 +36,10 @@ public:
 		auto a = soundResources.emplace(_name, std::make_unique<Sound>(_name, _args...));
 		if (a.second)
 		{
-			Debug::Log("Sound Resource : " + _name + " loaded");
+			Debug::Log("Sound resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
-		Debug::LogError("Sound Resource : " + _name + " not loaded");
+		Debug::LogError("Sound resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -49,10 +49,10 @@ public:
 		auto a = meshResources.emplace(_name, std::make_unique<Mesh>(_name, _args...));
 		if (a.second)
 		{
-			Debug::Log("Mesh Resource : " + _name + " loaded");
+			Debug::Log("Mesh resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
-		Debug::LogError("Mesh Resource : " + _name + " not loaded");
+		Debug::LogError("Mesh resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -62,10 +62,10 @@ public:
 		auto a = textureResources.emplace(_name, std::make_unique<Texture>(_name, _args...));
 		if (a.second)
 		{
-			Debug::Log("Texture Resource : " + _name + " loaded");
+			Debug::Log("Texture resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
-		Debug::LogError("Texture Resource : " + _name + " not loaded");
+		Debug::LogError("Texture resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -75,47 +75,59 @@ public:
 		auto a = shaderResources.emplace(_name, std::make_unique<Shader>(_name, _args...));
 		if (a.second)
 		{
-			Debug::Log("Shader Resource : " + _name + " loaded");
+			Debug::Log("Shader resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
-		Debug::LogError("Shader Resource : " + _name + " not loaded");
+		Debug::LogError("Shader resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
 	template<typename T>
 	static T* GetResource(std::string _name)
 	{
-		Debug::LogWarning("Wrong get resource");
+		Debug::LogWarning("Wrong GetResource()");
 	}
 
 	template<>
 	static Sound* GetResource<Sound>(std::string _name)
 	{
-		return soundResources.at(_name).get();
+		if (soundResources.find(_name) != soundResources.end())
+			return soundResources.at(_name).get();
+		else
+			Debug::LogError("Sound resource : " + _name + " not found");	
 	}
 
 	template<>
 	static Mesh* GetResource<Mesh>(std::string _name)
 	{
-		return meshResources.at(_name).get();
+		if (meshResources.find(_name) != meshResources.end())
+			return meshResources.at(_name).get();
+		else
+			Debug::LogError("Mesh resource : " + _name + " not found");
 	}
 
 	template<>
 	static Texture* GetResource<Texture>(std::string _name)
 	{
-		return textureResources.at(_name).get();
+		if (textureResources.find(_name) != textureResources.end())
+			return textureResources.at(_name).get();
+		else
+			Debug::LogError("Texture resource : " + _name + " not found");
 	}
 
 	template<>
 	static Shader* GetResource<Shader>(std::string _name)
 	{
-		return shaderResources.at(_name).get();
+		if (shaderResources.find(_name) != shaderResources.end())
+			return shaderResources.at(_name).get();
+		else
+			Debug::LogError("Shader resource : " + _name + " not found");
 	}
 
 	template<typename T>
 	static const std::unordered_map<std::string, std::unique_ptr<T>>& GetResources()
 	{
-		Debug::LogWarning("Wrong get resources");
+		Debug::LogWarning("Wrong GetResources()");
 	}
 
 	template<>

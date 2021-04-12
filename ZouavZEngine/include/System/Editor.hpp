@@ -18,13 +18,13 @@ private:
 	double lastCursorGamePosX = 0;
 	double lastCursorGamePosY = 0;
 
-	ImGuiStyle* imguiStyle{nullptr};
+	ImGuiStyle* imguiStyle = nullptr;
 
 	EDITOR_STATE state{ EDITOR_STATE::EDITING };
 
 	SceneCamera sceneCamera{ 100, 100 };
 
-	class Clock* editorClock;
+	class Clock* editorClock = nullptr;
 
 	class Engine& engine;
 

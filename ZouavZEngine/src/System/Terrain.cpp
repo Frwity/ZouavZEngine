@@ -3,6 +3,7 @@
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/Light.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "Maths/Mat4.hpp"
 #include <FastNoiseLite.h>
 #include "System/Terrain.hpp"
@@ -15,17 +16,14 @@
 #include "Scene.hpp"
 
 
-Terrain::Terrain()
-{
-	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
-	AddNoiseLayer();
-	AddColor();
-	AddColor();
-	AddColor();
-}
-
 void Terrain::Generate(GameObject* _actualizer)
 {
+	if (noiseCount <= 0)
+		AddNoiseLayer();
+	if (colorCount <= 0)
+		AddColorLayer();
+
+	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
 	actualizer = _actualizer;
 	chunks.reserve(16);
 	Vec2 pos;
@@ -40,10 +38,14 @@ void Terrain::Generate(GameObject* _actualizer)
 														minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
+
+	isGenerated = true;
 }
 
 void Terrain::Actualise()
 {
+	if (!isGenerated)
+		return;
 	Vec2 pos;
 
 	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
@@ -59,7 +61,7 @@ void Terrain::Actualise()
 
 void Terrain::Update()
 {
-	if (!actualizer)
+	if (!actualizer || !isGenerated)
 		return;
 
 	Vec2 pos;
@@ -108,8 +110,11 @@ void Terrain::Update()
 	return;
 }
 
-void Terrain::Draw(const class Camera& _camera)
+void Terrain::Draw(const class Camera& _camera) const
 {
+	if (!shader || !isGenerated)
+		return;
+
 	shader->Use();
 	shader->SetLight(Scene::GetCurrentScene()->GetLights());
 	Mat4 matrixCamera = _camera.GetMatrix();
@@ -136,7 +141,7 @@ void Terrain::Draw(const class Camera& _camera)
 	shader->SetFloat("minHeight", -heightIntensity);
 	shader->SetFloat("maxHeight", heightIntensity);
 
-	for (auto& it : chunks)
+	for (const auto& it : chunks)
 	{
 		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y }));
 
@@ -149,6 +154,13 @@ void Terrain::DisplayOptionWindow()
 {
 	if (ImGui::Begin("Procedural Generation", nullptr, ImGuiWindowFlags_NoNavInputs))
 	{
+		if (!isGenerated)
+		{
+			if (ImGui::Button("Generate"))
+				Generate();
+			ImGui::End();
+			return;
+		}
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
 		actualized |= ImGui::SliderInt("Chunk Size", &chunkSize, 1, 512);
@@ -157,12 +169,25 @@ void Terrain::DisplayOptionWindow()
 		actualized |= ImGui::SliderInt("Seed", &seed, 0, 214748364);
 
 		if (ImGui::Button("<"))
-			noiseID = (noiseID - 1) % (int)noiseParams.size();
+			noiseID = (noiseID - 1 + noiseCount) % (noiseCount - 1);
 		ImGui::SameLine();
 		ImGui::Text("%d/%d", noiseID + 1, noiseParams.size());
 		ImGui::SameLine();
 		if (ImGui::Button(">"))
 			noiseID = (noiseID + 1) % (int)noiseParams.size();
+		ImGui::SameLine();
+
+		if (ImGui::Button("Add Noise Layer"))
+		{
+			actualized = true;
+			AddNoiseLayer();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Noise Layer"))
+		{
+			actualized = true;
+			DeleteCurrentNoiseLayer();
+		}
 
 		actualized |= ImGui::Combo("Noise Type", (int*)&noiseParams[noiseID].noiseType, "Perlin\0OpenSimplex2\0OpenSimplex2S\0Cellular\0ValueCubic\0");
 		actualized |= ImGui::SliderFloat("Frequency", &noiseParams[noiseID].frequency, 0.0f, 2.0f);
@@ -178,68 +203,84 @@ void Terrain::DisplayOptionWindow()
 				actualized |= ImGui::SliderFloat("PingPong Stength", &noiseParams[noiseID].pingPongStength, 0.0f, 16.0f);
 		}
 
-		if (ImGui::Button("Add Layer"))
-		{
-			actualized = true;
-			AddNoiseLayer();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Remove Layer"))
-		{
-			actualized = true;
-			DeleteCurrentNoiseLayer();
-		}
-
 		actualized |= ImGui::SliderFloat("Minimum Height", &minHeight, -100, maxHeight);
 		actualized |= ImGui::SliderFloat("Maximum Height", &maxHeight, minHeight, 100);
 		actualized |= ImGui::SliderFloat("Height Intensity", &heightIntensity, 1, 200);
 
+		
+		if (ImGui::Button("< "))
+			colorID = (colorID - 1 + colorCount) % (colorCount);
+		ImGui::SameLine();
+		ImGui::Text("%d/%d", colorID + 1, colorCount);
+		ImGui::SameLine();
+		if (ImGui::Button("> "))
+			colorID = (colorID + 1) % (colorCount);
+		ImGui::SameLine();
+		if (ImGui::Button("Add Color Layer"))
+		{
+			actualized = true;
+			AddColorLayer();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Color Layer"))
+		{
+			actualized = true;
+			DeleteCurrentColorLayer();
+		}
+		ImGui::SliderFloat("Color Height", &colorHeight[colorID], 0.0f, 1.0f);
+		ImGui::SliderFloat("Color Blend", &colorBlend[colorID], 0.0f, 1.0f);
+		ImGui::SliderFloat("Color Strengh", &colorStrength[colorID], 0.0f, 1.0f);
+		ImGui::ColorEdit3("Color", colors[colorID].xyz);
+		ImGui::SliderFloat("Texture Scale", &textureScale[colorID], 0.0f, 100.0f);
+		ResourcesManager::ResourceChanger<Texture>("Texture", textureID.at(colorID));
+
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
-		ImGui::SliderInt("Color Count", &colorCount, 1, 8);
-
-		for (int i = 0; i < colorCount; ++i)
-		{
-			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
-			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
-			ImGui::SliderFloat(("Color Strengh " + std::to_string(i)).c_str(), &colorStrength[i], 0.0f, 1.0f);
-			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
-			//static int index = 0;
-			//if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
-			//	textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
-		}
 	}
 	ImGui::End();
 }
 
-void Terrain::AddColor()
-{
-	if (colorCount >= MAX_COLOR_COUNT)
-		return;
-	colors.emplace_back(Vec3{0.1f * colorCount, 0.1f * colorCount, 0.1f * colorCount});
-	colorHeight.emplace_back(0.1f * colorCount);
-	colorBlend.emplace_back(0);
-	textureID.emplace_back(nullptr);
-	colorStrength.emplace_back(0);
-	textureScale.emplace_back(1);
-	colorCount++;
-}
-
 void Terrain::AddNoiseLayer()
 {
-	if (noiseParams.size() >= MAX_NOISE_COUNT)
+	if (noiseCount >= MAX_NOISE_COUNT)
 		return;
 	noiseParams.emplace_back(NoiseParam{});
-	noiseID = (int)noiseParams.size() - 1;
+	noiseID = noiseCount++;
 }
 
 void Terrain::DeleteCurrentNoiseLayer()
 {
-	if (noiseParams.size() <= 1)
+	if (noiseCount <= 1)
 		return;
 	noiseParams.erase(noiseParams.begin() + noiseID);
-	noiseID = (noiseID - 1) % (int)noiseParams.size();
+	noiseID = (noiseID - 1) % --noiseCount;
+}
+
+void Terrain::AddColorLayer()
+{
+	if (colorCount >= MAX_COLOR_COUNT)
+		return;
+	colors.emplace_back(Vec3{ 0.25f * colorCount, 0.25f * colorCount, 0.25f * colorCount });
+	colorHeight.emplace_back(0.25f * colorCount);
+	colorBlend.emplace_back(0);
+	textureID.emplace_back(nullptr);
+	colorStrength.emplace_back(0);
+	textureScale.emplace_back(1);
+	colorID = colorCount++;
+}
+
+void Terrain::DeleteCurrentColorLayer()
+{
+	if (noiseParams.size() <= 1)
+		return;
+	colors.erase(colors.begin() + colorID);
+	colorHeight.erase(colorHeight.begin() + colorID);
+	colorBlend.erase(colorBlend.begin() + colorID);
+	textureID.erase(textureID.begin() + colorID);
+	colorStrength.erase(colorStrength.begin() + colorID);
+	textureScale.erase(textureScale.begin() + colorID);
+	colorID = (colorID - 1) % --colorCount;
 }
 
 float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)

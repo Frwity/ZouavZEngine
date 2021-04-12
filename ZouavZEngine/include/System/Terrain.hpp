@@ -1,11 +1,15 @@
 #pragma once
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
+#include "Rendering/Texture.hpp"
 
 #include <FastNoiseLite.h>
 
 #include <unordered_map>
-
+#include "cereal/archives/json.hpp"
+#include "cereal/types/vector.hpp"
+#include <cereal/types/string.hpp>
+#include "cereal/access.hpp"
 
 #define MAX_NOISE_COUNT 4
 #define MAX_COLOR_COUNT 8 // need to change the TerrainShader.vs define too // TODO change only one
@@ -13,14 +17,15 @@
 struct NoiseParam
 {
 	FastNoiseLite::NoiseType noiseType = FastNoiseLite::NoiseType::NoiseType_Perlin;
-	float frequency = 0.01f;
 	FastNoiseLite::FractalType fractalType = FastNoiseLite::FractalType::FractalType_None;
 	int octaves = 1;
+	float frequency = 0.01f;
 	float lacunarity = 2.0f;
 	float gain = 0.5f;
 	float weightedStrength = 0.0f;
 	float pingPongStength = 2.0f;
 };
+
 
 struct ChunkCreateArg
 {
@@ -54,11 +59,11 @@ public:
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);
 
-	const Mesh& GetMesh() { return mesh; }
+	const Mesh& GetMesh() const { return mesh; }
 
-	Vec2 GetPos() { return pos; }
-	int GetSize() { return size; }
-	Vec2 GetWorldPos() { return pos * (float)size; }
+	Vec2 GetPos() const { return pos; }
+	int GetSize() const { return size; }
+	Vec2 GetWorldPos() const { return pos * (float)size; }
 };
 
 class Terrain
@@ -67,6 +72,8 @@ private:
 	std::unordered_map<std::string, Chunk> chunks;
 
 	Shader* shader = nullptr;
+	
+	bool isGenerated = false;
 
 public:
 
@@ -83,8 +90,8 @@ public:
 
 	int seed = 0;
 
+	int noiseCount = 0;
 	int noiseID = 0;
-
 	std::vector<NoiseParam> noiseParams;
 
 	float minHeight = -10.0f;
@@ -94,32 +101,65 @@ public:
 	// texture and color variable
 
 	int colorCount = 0;
+	int colorID = 0;
 	std::vector<Vec3> colors;
 	std::vector<float> colorHeight;
 	std::vector<float> colorBlend;
 	std::vector<float> colorStrength;
 	std::vector<float> textureScale;
-
-	std::vector<std::string> textureNames;
-	std::vector<class Texture*> textureID;
+	std::vector<Texture*> textureID;
 
 	// editor variable
 
 	bool alwaysActualize = true;
 
-	Terrain();
+	Terrain() = default;
+
+	bool IsGenerated() { return isGenerated; }
 
 	void Generate(class GameObject* _actualizer = nullptr);
 	void Actualise();
 
 	void Update();
-	void Draw(const class Camera& _camera);
+	void Draw(const class Camera& _camera) const;
 
 	void DisplayOptionWindow();
 
 	void AddNoiseLayer();
 	void DeleteCurrentNoiseLayer();
 
-	void AddColor();
+	void AddColorLayer();
+	void DeleteCurrentColorLayer();
 
+	template <class Archive>
+	void load(Archive& _ar)
+	{
+		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
+			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
+
+		for (int i = 0; i < noiseCount; ++i)
+		{
+			AddNoiseLayer();
+		}
+		
+		for (int i = 0; i < colorCount; ++i)
+		{
+			AddColorLayer();
+		}
+	}
+	
+	template <class Archive>
+	void save(Archive& _ar) const
+	{
+		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
+			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
+
+		for (int i = 0; i < noiseCount; ++i)
+			_ar((int)noiseParams[i].noiseType, (int)noiseParams[i].fractalType, 
+					noiseParams[i].octaves, noiseParams[i].frequency, noiseParams[i].lacunarity, 
+					noiseParams[i].gain, noiseParams[i].weightedStrength, noiseParams[i].pingPongStength);
+
+		for (int i = 0; i < colorCount; ++i)
+			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], textureID[i] ? "nullptr" : textureID[i]->GetName());
+	}
 };

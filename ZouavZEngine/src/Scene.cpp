@@ -35,20 +35,9 @@ Scene::~Scene()
 
 void Scene::Load()
 {
-	GameObject::gameObjects.clear();
-	world.children.clear();
-	PhysicSystem::scene->release();
-	PhysicSystem::InitScene();
-
-	std::ifstream saveFile;
-	saveFile.open(std::string("resources/" + world.name + ".zes"), std::ios::binary);
-	{
-		cereal::JSONInputArchive iarchive(saveFile);
-
-		world.load(iarchive);
-	}
-	saveFile.close();
+	Load("resources/" + world.name + ".zes");
 }
+
 void Scene::Load(const std::string& path)
 {
 	GameObject::gameObjects.clear();
@@ -62,8 +51,13 @@ void Scene::Load(const std::string& path)
 		cereal::JSONInputArchive iarchive(saveFile);
 
 		world.load(iarchive);
+		terrain = Terrain{};
+		terrain.load(iarchive);
 	}
 	saveFile.close();
+
+	terrain.Generate(GameObject::GetGameObjectByTag("Player"));
+	terrain.Update();
 }
 
 void Scene::Save()
@@ -75,12 +69,15 @@ void Scene::Save()
 		cereal::JSONOutputArchive oArchive(saveFile);
 
 		world.save(oArchive);
+		terrain.save(oArchive);
 	}
 	saveFile.close();
 }
 
 void Scene::Draw(const Camera& _camera) const
 {
+	terrain.Draw(_camera);
+
 	for(GameObject* gameObject : world.GetChildren()) //TODO test call time
 	{
 		if (gameObject->GetComponent<MeshRenderer>())
@@ -103,6 +100,12 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 
 	for (GameObject* child : _parent->GetChildren())
 		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
+}
+
+void Scene::Update()
+{
+	terrain.Update();
+	SimulatePhyics();
 }
 
 void Scene::SimulatePhyics() const
@@ -131,6 +134,10 @@ void Scene::SimulatePhyics() const
 			}
 		}
 	}
+}
+void Scene::DisplayTerrainOptionWindow()
+{
+	terrain.DisplayOptionWindow();
 }
 
 void Scene::AddLight(Light* _newLight)

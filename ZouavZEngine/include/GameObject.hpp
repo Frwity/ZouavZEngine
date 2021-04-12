@@ -40,6 +40,7 @@ public:
 
 	GameObject() = delete;
 	GameObject(const std::string& _name);
+	GameObject(const std::string& _name, const std::string& _tag);
 	~GameObject() = default;
 
 	void Destroy();
@@ -49,7 +50,7 @@ public:
 	{
 		int nbChild;
 
-		_ar(name, nbChild, components,
+		_ar(name, tag, nbChild, components,
 			localPosition.x, localPosition.y, localPosition.z,
 			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
 			localScale.x, localScale.y, localScale.z);
@@ -57,13 +58,14 @@ public:
 		currentLoadedGameObject = this;
 
 		std::string childName;
+		std::string childTag;
 		int nbChild2;
 
 		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
 		{
-			_ar(childName, nbChild2);
+			_ar(childName, childTag, nbChild2);
 
-			GameObject* gameobject = CreateGameObject(childName);
+			GameObject* gameobject = CreateGameObject(childName, childTag);
 			currentLoadedGameObject = gameobject;
 
 			_ar(gameobject->components,
@@ -80,13 +82,14 @@ public:
 	void loadRecurss(Archive& _ar, GameObject* _gameobject, int _nbChild)
 	{
 		std::string childName;
+		std::string childTag;
 		int nbChild2;
 
 		for (int i = 0; i < _nbChild; ++i)
 		{
-			_ar(childName, nbChild2);
+			_ar(childName, childTag, nbChild2);
 
-			GameObject* gameobject = CreateGameObject(childName);
+			GameObject* gameobject = CreateGameObject(childName, childTag);
 			currentLoadedGameObject = gameobject;
 
 			_ar(gameobject->components,
@@ -106,7 +109,7 @@ public:
 	void save(Archive& _ar) const
 	{
 		int nbChild = children.size();
-		_ar(name, nbChild, components, 
+		_ar(name, tag, nbChild, components, 
 			localPosition.x, localPosition.y, localPosition.z,
 			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
 			localScale.x, localScale.y, localScale.z);
@@ -116,6 +119,7 @@ public:
 	}
 
 	static GameObject* CreateGameObject(const std::string& _name);
+	static GameObject* CreateGameObject(const std::string& _name, const std::string& _tag);
 
 	const std::vector<GameObject*>& GetChildren() const { return children; }
 	const GameObject* GetParent() const { return parent; }
