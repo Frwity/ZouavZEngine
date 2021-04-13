@@ -20,6 +20,7 @@ out vec4 FragColor;
 in vec3 Pos;
 in vec2 TexCoord;
 in vec3 Normal;
+in vec4 Color;
 
 uniform sampler2D ourTexture;
 uniform vec3      viewPos; 
@@ -51,7 +52,7 @@ void main()
             result += CalcSpotLight(lights[i], norm, Pos, viewDir);    
     }
     
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 1.0) * Color;
 }
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)

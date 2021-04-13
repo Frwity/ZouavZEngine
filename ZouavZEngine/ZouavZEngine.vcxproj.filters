@@ -216,6 +216,9 @@
     <ClCompile Include="src\Resource.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Material.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="include\Multithread\Task.h">
       <Filter>include\Multithread</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Material.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

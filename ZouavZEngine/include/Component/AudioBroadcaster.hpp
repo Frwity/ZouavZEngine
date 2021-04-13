@@ -5,7 +5,6 @@
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
 
-class ResourceManager;
 class Vec3;
 
 class AudioBroadcaster : public Component

@@ -45,6 +45,8 @@ Engine::Engine()
 
     TimeManager::Init();
 
+    ResourcesManager::InitDefaultResources();
+
 #ifdef EDITOR
     editor.Init();
 #endif
@@ -69,11 +71,7 @@ Engine::~Engine()
 void Engine::TempLoad()
 {
     // engine base resource
-    MeshRenderer::defaultMesh = ResourcesManager::AddResourceMesh("CubeMesh");
-    MeshRenderer::defaultMesh->CreateCube();
-    MeshRenderer::defaultShader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    MeshRenderer::defaultTexture = ResourcesManager::AddResourceTexture("White", "resources/white.png");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
 
     // other resource
@@ -92,12 +90,12 @@ void Engine::TempLoad()
     light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::DIRECTIONAL);
 
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
+    soundSkull->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
-    player->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
+    player->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
@@ -106,7 +104,7 @@ void Engine::TempLoad()
 
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 5.0f, 0.0f };
-    test->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
+    test->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
     test->AddComponent<SphereCollision>();
     test->AddComponent<RigidBody>();
 }

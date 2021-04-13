@@ -23,6 +23,8 @@ private:
 public:
 	ResourcesManager() = delete;
 
+	static void InitDefaultResources();
+
 	//template<typename T, typename... Args>
 	//static T* AddResource(std::string _name, Args... _args)
 	//{

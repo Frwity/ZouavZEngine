@@ -68,7 +68,7 @@ void Scene::Draw(const Camera& _camera) const
 	{
 		if (gameObject->GetComponent<MeshRenderer>())
 		{
-			gameObject->GetComponent<MeshRenderer>()->shader->SetLight(lights);
+			gameObject->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::identity, _camera);
 		}
 		for (GameObject* child : gameObject->GetChildren())
@@ -80,7 +80,7 @@ void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Cam
 {
 	if (_parent->GetComponent<MeshRenderer>())
 	{
-		_parent->GetComponent<MeshRenderer>()->shader->SetLight(lights);
+		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_heritedMatrix, _camera);
 	}
 
