@@ -6,7 +6,6 @@
 #include "Component/MeshRenderer.hpp"
 #include "Maths/Mat4.hpp"
 #include <FastNoiseLite.h>
-#include "System/Terrain.hpp"
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,7 +13,13 @@
 #include <algorithm>
 #include <cstdlib>
 #include "Scene.hpp"
+#include "System/Terrain.hpp"
 
+Terrain::Terrain()
+{
+	AddColorLayer();
+	AddNoiseLayer();
+}
 
 void Terrain::Generate(GameObject* _actualizer)
 {
@@ -163,10 +168,14 @@ void Terrain::DisplayOptionWindow()
 		}
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
+		actualized |= ImGui::SliderInt("Seed", &seed, 0, 214748364);
+
 		actualized |= ImGui::SliderInt("Chunk Size", &chunkSize, 1, 512);
 		actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &chunkVertexCount, 2, 64);
 
-		actualized |= ImGui::SliderInt("Seed", &seed, 0, 214748364);
+		actualized |= ImGui::SliderFloat("Minimum Height", &minHeight, -100, maxHeight);
+		actualized |= ImGui::SliderFloat("Maximum Height", &maxHeight, minHeight, 100);
+		actualized |= ImGui::SliderFloat("Height Intensity", &heightIntensity, 1, 200);
 
 		if (ImGui::Button("<"))
 			noiseID = (noiseID - 1 + noiseCount) % (noiseCount - 1);
@@ -202,11 +211,6 @@ void Terrain::DisplayOptionWindow()
 			if (noiseParams[noiseID].fractalType == 3)
 				actualized |= ImGui::SliderFloat("PingPong Stength", &noiseParams[noiseID].pingPongStength, 0.0f, 16.0f);
 		}
-
-		actualized |= ImGui::SliderFloat("Minimum Height", &minHeight, -100, maxHeight);
-		actualized |= ImGui::SliderFloat("Maximum Height", &maxHeight, minHeight, 100);
-		actualized |= ImGui::SliderFloat("Height Intensity", &heightIntensity, 1, 200);
-
 		
 		if (ImGui::Button("< "))
 			colorID = (colorID - 1 + colorCount) % (colorCount);
@@ -272,7 +276,7 @@ void Terrain::AddColorLayer()
 
 void Terrain::DeleteCurrentColorLayer()
 {
-	if (noiseParams.size() <= 1)
+	if (colorCount <= 1)
 		return;
 	colors.erase(colors.begin() + colorID);
 	colorHeight.erase(colorHeight.begin() + colorID);

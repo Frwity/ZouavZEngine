@@ -2,6 +2,7 @@
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
+#include "System/ResourcesManager.hpp"
 
 #include <FastNoiseLite.h>
 
@@ -113,7 +114,7 @@ public:
 
 	bool alwaysActualize = true;
 
-	Terrain() = default;
+	Terrain();
 
 	bool IsGenerated() { return isGenerated; }
 
@@ -134,17 +135,32 @@ public:
 	template <class Archive>
 	void load(Archive& _ar)
 	{
-		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
-			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
+		int _noiseCount = 0;
+		int _colorCount = 0;
+		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
+			minHeight, maxHeight, heightIntensity, _colorCount, colorID, alwaysActualize);
 
-		for (int i = 0; i < noiseCount; ++i)
+		int _noiseType;
+		int _fractalType;
+		for (int i = 0; i < _noiseCount; ++i)
 		{
-			AddNoiseLayer();
+			if (i != 0)
+				AddNoiseLayer();
+
+			_ar(_noiseType, _fractalType,
+				noiseParams[i].octaves, noiseParams[i].frequency, noiseParams[i].lacunarity,
+				noiseParams[i].gain, noiseParams[i].weightedStrength, noiseParams[i].pingPongStength);
+
+			noiseParams[i].noiseType = (FastNoiseLite::NoiseType)_noiseType;
+			noiseParams[i].fractalType = (FastNoiseLite::FractalType)_fractalType;
 		}
-		
-		for (int i = 0; i < colorCount; ++i)
+		std::string _textureName;
+		for (int i = 0; i < _colorCount; ++i)
 		{
-			AddColorLayer();
+			if (i != 0)
+				AddColorLayer();
+			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], _textureName);
+			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : ResourcesManager::GetResource<Texture>(_textureName);
 		}
 	}
 	
@@ -159,7 +175,9 @@ public:
 					noiseParams[i].octaves, noiseParams[i].frequency, noiseParams[i].lacunarity, 
 					noiseParams[i].gain, noiseParams[i].weightedStrength, noiseParams[i].pingPongStength);
 
+		std::string null = "nullptr";
+
 		for (int i = 0; i < colorCount; ++i)
-			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], textureID[i] ? "nullptr" : textureID[i]->GetName());
+			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], textureID[i] == nullptr ? null : textureID[i]->GetName());
 	}
 };
