@@ -46,19 +46,23 @@ void PhysicSystem::Init()
 
 	pvd = PxCreatePvd(*foundation);
 	ZASSERT(pvd != nullptr, "PxCreatePvd failed !");
+	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+	pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
 	physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
 		scale, true, pvd);
 	ZASSERT(physics != nullptr, "PxCreatePhysics failed !");
+	PxInitExtensions(*physics, pvd);
 
 	cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(scale));
 	ZASSERT(cooking != nullptr, "PxCreateCooking failed !");
-
 	InitScene();
 
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-	pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+	PxPvdSceneClient* pvdClient = scene->getScenePvdClient();
+	if (pvdClient)
+	{
+		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+	}
 }
 
 void PhysicSystem::InitScene()
@@ -107,11 +111,11 @@ void PhysicSystem::DestroyCollisionComponent()
 
 void PhysicSystem::Destroy()
 {
-	DestroyCollisionComponent();
+	/*DestroyCollisionComponent();
 	scene->release();
 	cooking->release();
 	physics->release();
 	pvd->release();
 	foundation->release();
-	delete physicEventCallback;
+	delete physicEventCallback;*/
 }

@@ -22,7 +22,7 @@ public:
 	RigidBody(GameObject* _gameObject);
 	~RigidBody();
 
-	void SetLinearVelocity(class Vec3& v);
+	void SetLinearVelocity(const class Vec3& v);
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();

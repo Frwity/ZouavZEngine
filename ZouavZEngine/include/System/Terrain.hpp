@@ -27,9 +27,17 @@ struct NoiseParam
 	float pingPongStength = 2.0f;
 };
 
+namespace physx
+{
+	class PxRigidStatic;
+	class PxMaterial;
+	class PxShape;
+}	
 
 struct ChunkCreateArg
 {
+	std::vector<physx::PxMaterial*>* material;
+
 	Vec2 pos;
 
 	int size;
@@ -44,14 +52,19 @@ struct ChunkCreateArg
 	float heightIntensity;
 };
 
+
 class Chunk
 {
 private:
 	Mesh mesh{"chunkMesh"};
 
+	physx::PxRigidStatic* actor = nullptr;
+	physx::PxShape* shape = nullptr;
+
 	Vec2 pos{};
 
 	int size = 0;
+	int vertexCount = 0;
 public:
 
 	Chunk() = default; 
@@ -71,6 +84,8 @@ class Terrain
 {
 private:
 	std::unordered_map<std::string, Chunk> chunks;
+
+	std::vector<physx::PxMaterial*> material;
 
 	Shader* shader = nullptr;
 	

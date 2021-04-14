@@ -13,16 +13,35 @@
 #include <algorithm>
 #include <cstdlib>
 #include "Scene.hpp"
+
+#include "PxRigidStatic.h"
+#include "PxScene.h"
+#include "PxShape.h"
+#include "PxMaterial.h"
+#include "System/PhysicUtils.hpp"
+#include "System/PhysicSystem.hpp"
+#include "foundation/PxTransform.h"
+#include "geometry/PxHeightField.h"
+#include "geometry/PxHeightFieldFlag.h"
+#include "geometry/PxHeightFieldDesc.h"
+#include "geometry/PxHeightFieldSample.h"
+#include "geometry/PxHeightFieldGeometry.h"
+#include "extensions/PxRigidActorExt.h"
 #include "System/Terrain.hpp"
+
+using namespace physx;
 
 Terrain::Terrain()
 {
+
 	AddColorLayer();
 	AddNoiseLayer();
 }
 
 void Terrain::Generate(GameObject* _actualizer)
 {
+	material.emplace_back(PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f));
+
 	if (noiseCount <= 0)
 		AddNoiseLayer();
 	if (colorCount <= 0)
@@ -32,15 +51,15 @@ void Terrain::Generate(GameObject* _actualizer)
 	actualizer = _actualizer;
 	chunks.reserve(16);
 	Vec2 pos;
-	for (float z = 0; z < 4; z++)
+	for (float z = 4; z < 4; z++)
 	{
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk{});
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
-														seed, noiseParams,
-														minHeight, maxHeight, heightIntensity }, false);
+			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
+															seed, noiseParams,
+															minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
 
@@ -57,9 +76,9 @@ void Terrain::Actualise()
 
 	while (it != chunks.end())
 	{
-		it->second.Generate({ it->second.GetPos(),	chunkSize, chunkVertexCount,
-													seed, noiseParams,
-													minHeight, maxHeight, heightIntensity }, true);
+		it->second.Generate({ &material,	it->second.GetPos(), chunkSize, chunkVertexCount,
+											seed, noiseParams,
+											minHeight, maxHeight, heightIntensity }, true);
 		it++;
 	}
 }
@@ -105,9 +124,9 @@ void Terrain::Update()
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
 				chunks.emplace(pos.ToString(), Chunk());
-				chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
-															seed, noiseParams,
-															minHeight, maxHeight, heightIntensity }, false);
+				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
+																seed, noiseParams,
+																minHeight, maxHeight, heightIntensity }, false);
 			}
 		}
 	}
@@ -320,33 +339,34 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 {
 	pos = _cca.pos;
 	size = _cca.size;
+	vertexCount = _cca.vertexCount;
 
 	std::vector<Vertex> vertices;
-	vertices.reserve((size_t)_cca.vertexCount * (size_t)_cca.vertexCount);
+	vertices.reserve((size_t)vertexCount * (size_t)vertexCount);
 	std::vector<int> indices;
-	indices.reserve(6 * ((size_t)_cca.vertexCount - 1) * ((size_t)_cca.vertexCount - 1));
+	indices.reserve(6 * ((size_t)vertexCount - 1) * ((size_t)vertexCount - 1));
 
-	for (float z = 0.0f; z < _cca.vertexCount; z++)
+	for (float z = 0.0f; z < vertexCount; z++)
 	{
-		for (float x = 0.0f; x < _cca.vertexCount; x++)
+		for (float x = 0.0f; x < vertexCount; x++)
 		{
 			float height = std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight);
 
 			// create vertices
-			vertices.push_back(Vertex{ Vec3(x / ((float)_cca.vertexCount - 1) * size, height, z / ((float)_cca.vertexCount - 1) * size),
+			vertices.push_back(Vertex{ Vec3(x / ((float)vertexCount - 1) * size, height, z / ((float)vertexCount - 1) * size),
 										Vec3(0.0f, 1.0f, 0.0f),
-										Vec2(x / ((float)_cca.vertexCount - 1), z / ((float)_cca.vertexCount - 1)) });
+										Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
 		}
 	}
 
 	// indices
-	for (int z = 0; z < _cca.vertexCount - 1; z++)
+	for (int z = 0; z < vertexCount - 1; z++)
 	{
-		for (int x = 0; x < _cca.vertexCount - 1; x++)
+		for (int x = 0; x < vertexCount - 1; x++)
 		{
-			int topLeft = (z * _cca.vertexCount) + x;
+			int topLeft = (z * vertexCount) + x;
 			int topRight = topLeft + 1;
-			int bottomLeft = ((z + 1) * _cca.vertexCount) + x;
+			int bottomLeft = ((z + 1) * vertexCount) + x;
 			int bottomRight = bottomLeft + 1;
 			indices.push_back(topLeft);
 			indices.push_back(bottomLeft);
@@ -360,4 +380,47 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else
 		mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+
+	//physxq
+	std::vector<PxHeightFieldSample> samples;
+	samples.reserve(vertexCount * vertexCount);
+
+	for (int i = 0; i < vertexCount * vertexCount; ++i)
+	{
+		samples.push_back({});
+		samples[i].height = vertices[i].pos.y;
+	}
+
+	PxHeightFieldDesc hfDesc;
+	hfDesc.format = PxHeightFieldFormat::eS16_TM;
+	hfDesc.nbColumns = vertexCount;
+	hfDesc.nbRows = vertexCount;
+	hfDesc.samples.data = samples.data();
+	hfDesc.samples.stride = sizeof(PxHeightFieldSample);
+
+	PxHeightField* aHeightField = PhysicSystem::cooking->createHeightField(hfDesc,
+		PhysicSystem::physics->getPhysicsInsertionCallback());
+
+	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1, (float)size / (float)(vertexCount -1),
+		(float)size / (float)(vertexCount -1));
+
+	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)), PxQuatFromQuaternion(Quaternion(Vec3{ 0.f,90.f, 0.f })));
+	
+	if (shape)
+	{
+		shape->release();
+		shape = nullptr;
+	}
+	if (actor)
+	{
+		PhysicSystem::scene->removeActor(*actor);
+		actor = nullptr;
+	}
+
+	actor = PhysicSystem::physics->createRigidStatic(t);
+
+	actor->userData = this;
+
+	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material->data(), 1);
+	PhysicSystem::scene->addActor(*actor);
 }

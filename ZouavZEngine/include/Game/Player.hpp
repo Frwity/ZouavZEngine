@@ -5,11 +5,15 @@
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
 
+
+
 class Player : public ScriptComponent
 {
 private:
 
 	friend class cereal::access;
+
+	class RigidBody* rb;
 
 	int speed = 3;
 	int vie = 10;

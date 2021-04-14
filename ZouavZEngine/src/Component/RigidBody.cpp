@@ -34,9 +34,9 @@ RigidBody::~RigidBody()
 	//actor->release();
 }
 
-void RigidBody::SetLinearVelocity(class Vec3& v)
+void RigidBody::SetLinearVelocity(const class Vec3& v)
 {
-	actor->setLinearVelocity(PxVec3FromVec3(v));
+ 	actor->setLinearVelocity(PxVec3FromVec3(v));
 }
 
 Vec3 RigidBody::GetLinearVelocity()
