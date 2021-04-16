@@ -8,6 +8,11 @@
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
 #include <iostream>
+
+#define CAMERA_NEAR 0.01f
+#define CAMERA_FAR  5000.0f
+#define CAMERA_FOV  45.0f
+
 class Camera : public Component
 {
 private:
@@ -28,7 +33,7 @@ public: // TODO callback resize
 	//Camera& operator= (const Camera&) = delete; TODO
 	~Camera();
 
-	static const Camera* GetMainCamera() { return mainCamera; }
+	static /*const */Camera* GetMainCamera() { return mainCamera; }
 
 	void SetMainCamera() { mainCamera = this; }
 	
@@ -36,6 +41,8 @@ public: // TODO callback resize
 	void SetTarget(const Vec3& _target) { target = _target; }
 
 	virtual Mat4 GetMatrix() const;
+
+	void Resize(int _width, int _height);
 
 	Mat4 GetProjetionMatrix() const { return projection; }
 

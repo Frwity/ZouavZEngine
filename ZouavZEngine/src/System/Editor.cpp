@@ -367,7 +367,10 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+        {
+            SceneCamera::GetSceneCamera()->Resize((int)windowSize.x, (int)windowSize.y);
             _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
+        }
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
     }
@@ -492,8 +495,11 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+        {
+            if (Camera::GetMainCamera())
+                Camera::GetMainCamera()->Resize((int)windowSize.x, (int)windowSize.y);
             _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
-
+        }
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
