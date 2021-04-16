@@ -43,6 +43,12 @@
     <Filter Include="src\Game">
       <UniqueIdentifier>{71c51119-bac8-465c-99d0-7f0c2336721c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Multithread">
+      <UniqueIdentifier>{1d150c90-c381-4385-a441-44c1fb562db6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Multithread">
+      <UniqueIdentifier>{5949b4c1-014e-476a-9afd-d64f06941db8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="external_lib\src\glad.c">
@@ -119,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="src\Scene.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\System\GameObjectSystem.cpp">
-      <Filter>src\System</Filter>
     </ClCompile>
     <ClCompile Include="src\System\ResourcesManager.cpp">
       <Filter>src\System</Filter>
@@ -201,6 +204,18 @@
     <ClCompile Include="src\Component\Plane.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Multithread\TaskSystem.cpp">
+      <Filter>src\Multithread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Multithread\ThreadPool.cpp">
+      <Filter>src\Multithread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Multithread\Task.cpp">
+      <Filter>src\Multithread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resource.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -256,9 +271,6 @@
     </ClInclude>
     <ClInclude Include="include\Scene.hpp">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\System\GameObjectSystem.hpp">
-      <Filter>include\System</Filter>
     </ClInclude>
     <ClInclude Include="include\System\ResourcesManager.hpp">
       <Filter>include\System</Filter>
@@ -338,12 +350,21 @@
     <ClInclude Include="include\Component\Plane.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Multithread\TaskSystem.h">
+      <Filter>include\Multithread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Multithread\ThreadPool.h">
+      <Filter>include\Multithread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Multithread\Task.h">
+      <Filter>include\Multithread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shader.vs">
+    <None Include="resources\TerrainShader.fs">
       <Filter>resources</Filter>
     </None>
-    <None Include="resources\shader.fs">
+    <None Include="resources\TerrainShader.vs">
       <Filter>resources</Filter>
     </None>
   </ItemGroup>
