@@ -89,7 +89,7 @@ public:
 	SceneCamera() = default;
 	~SceneCamera() = default;
 
-	static const Camera* GetSceneCamera() { return sceneCamera; }
+	static /*const */Camera* GetSceneCamera() { return sceneCamera; }
 
 	void SetSceneCamera() { sceneCamera = this; }
 
