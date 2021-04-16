@@ -12,6 +12,7 @@
 #include "System/PhysicUtils.hpp"
 #include "Component/ShapeCollision.hpp"
 #include "Component/ScriptComponent.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
@@ -88,4 +89,9 @@ void RigidBody::OnTrigger(GameObject* _other)
 
 	if (script)
 		script->OnTrigger(_other);
+}
+
+void RigidBody::Editor()
+{
+	ImGui::Text("RigidBody");
 }

@@ -20,6 +20,7 @@ public:
 	RigidStatic(GameObject* _gameObject);
 	~RigidStatic();
 
+	void Editor() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

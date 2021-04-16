@@ -8,6 +8,7 @@
 #include "PxScene.h"
 #include "extensions/PxSimpleFactory.h"
 #include "System/PhysicUtils.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
@@ -24,4 +25,11 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 CapsuleCollision::~CapsuleCollision()
 {
 
+}
+
+void CapsuleCollision::Editor()
+{
+	ImGui::Text("CapsuleCollision : ");
+	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
+	ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f);
 }

@@ -12,6 +12,8 @@ public:
 	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false);
 	~SphereCollision();
 
+	void Editor() override;
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

@@ -5,6 +5,7 @@
 #include "Component/BoxCollision.hpp"
 #include "PxScene.h"
 #include "System/PhysicSystem.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
@@ -38,4 +39,9 @@ void RigidStatic::AttachShape()
 RigidStatic::~RigidStatic()
 {
 	//actor->release();
+}
+
+void RigidStatic::Editor()
+{
+	ImGui::Text("RigidStatic");
 }

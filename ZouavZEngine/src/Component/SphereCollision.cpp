@@ -9,6 +9,7 @@
 #include "PxScene.h"
 #include "extensions/PxSimpleFactory.h"
 #include "System/PhysicUtils.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
@@ -26,4 +27,10 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 SphereCollision::~SphereCollision()
 {
 
+}
+
+void SphereCollision::Editor()
+{
+	ImGui::Text("SphereCollision");
+	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
 }

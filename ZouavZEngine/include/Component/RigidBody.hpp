@@ -22,6 +22,8 @@ public:
 	RigidBody(GameObject* _gameObject);
 	~RigidBody();
 
+	void Editor() override;
+
 	void SetLinearVelocity(class Vec3& v);
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
