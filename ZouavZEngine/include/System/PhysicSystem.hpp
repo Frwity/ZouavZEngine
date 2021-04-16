@@ -31,14 +31,14 @@ public:
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
-		RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
-		RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
+		//RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
+		//RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
 
-		rigidbody1->OnContact(rigidbody2->gameObject);
-		rigidbody2->OnContact(rigidbody1->gameObject);
+		//rigidbody1->OnContact(rigidbody2->gameObject);
+		//rigidbody2->OnContact(rigidbody1->gameObject);
 
-		PX_UNUSED((pairs));
-		PX_UNUSED((nbPairs));
+		//PX_UNUSED((pairs));
+		//PX_UNUSED((nbPairs));
 	}
 
 public:
