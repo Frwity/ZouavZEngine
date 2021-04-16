@@ -605,7 +605,13 @@ void DisplayChild(GameObject* _parent)
 
             if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                 gameObjectInspector = _parent;
+            
+            if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            {
+                SceneCamera::GetSceneCamera()->SetPosition(_parent->WorldPosition());
+            }
         }
+
 
         if (ImGui::BeginDragDropSource())
         {
