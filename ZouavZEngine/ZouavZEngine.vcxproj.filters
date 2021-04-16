@@ -362,7 +362,7 @@
     <ClInclude Include="include\Multithread\Task.h">
       <Filter>include\Multithread</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\Material.hpp">
+    <ClInclude Include="include\Rendering\Material.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

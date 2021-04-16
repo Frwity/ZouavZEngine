@@ -67,7 +67,7 @@
                 "data": {
                     "value0": "Skull Mesh",
                     "value1": "Skull Tex",
-                    "value2": "BlinnPhongShader"
+                    "value2": "Default"
                 }
             }
         },
@@ -113,7 +113,7 @@
                 "data": {
                     "value0": "Skull Mesh",
                     "value1": "Skull Tex",
-                    "value2": "BlinnPhongShader"
+                    "value2": "Default"
                 }
             }
         },
@@ -143,7 +143,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.3579951524734498,
+                    "value0": 0.7962130904197693,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -175,7 +175,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0
+                    "value0": 0.5
                 }
             }
         },
@@ -207,9 +207,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "CubeMesh",
-                    "value1": "White",
-                    "value2": "BlinnPhongShader"
+                    "value0": "Default",
+                    "value1": "Skull Tex",
+                    "value2": "Default"
                 }
             }
         },
@@ -240,8 +240,8 @@
             }
         }
     ],
-    "value60": 10.0,
-    "value61": 10.0,
+    "value60": 0.0,
+    "value61": 0.0,
     "value62": 0.0,
     "value63": 0.0,
     "value64": 1.0,
@@ -259,9 +259,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "CubeMesh",
-                    "value1": "White",
-                    "value2": "BlinnPhongShader"
+                    "value0": "Default",
+                    "value1": "Skull Tex",
+                    "value2": "Default"
                 }
             }
         },
@@ -291,8 +291,8 @@
             }
         }
     ],
-    "value74": 5.0,
-    "value75": 10.0,
+    "value74": 0.0,
+    "value75": 0.0,
     "value76": 0.0,
     "value77": 0.0,
     "value78": 1.0,
@@ -310,9 +310,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "CubeMesh",
-                    "value1": "White",
-                    "value2": "BlinnPhongShader"
+                    "value0": "Default",
+                    "value1": "Skull Tex",
+                    "value2": "Default"
                 }
             }
         },
@@ -342,8 +342,8 @@
             }
         }
     ],
-    "value88": -5.0,
-    "value89": 10.0,
+    "value88": 0.0,
+    "value89": 0.0,
     "value90": 0.0,
     "value91": 0.0,
     "value92": 1.0,
@@ -361,9 +361,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "CubeMesh",
-                    "value1": "White",
-                    "value2": "BlinnPhongShader"
+                    "value0": "Default",
+                    "value1": "Skull Tex",
+                    "value2": "Default"
                 }
             }
         },
@@ -393,8 +393,8 @@
             }
         }
     ],
-    "value102": -10.0,
-    "value103": 10.0,
+    "value102": 0.0,
+    "value103": 0.0,
     "value104": 0.0,
     "value105": 0.0,
     "value106": 1.0,
@@ -414,7 +414,7 @@
                 "data": {
                     "value0": "Skull Mesh",
                     "value1": "Skull Tex",
-                    "value2": "BlinnPhongShader"
+                    "value2": "Default"
                 }
             }
         },
@@ -423,7 +423,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0
+                    "value0": 0.5
                 }
             }
         },
@@ -448,14 +448,14 @@
     "value126": 512.0,
     "value127": 128,
     "value128": 16,
-    "value129": 0,
+    "value129": 102736760,
     "value130": 1,
     "value131": 0,
-    "value132": -19.608999252319337,
-    "value133": 77.12699890136719,
-    "value134": 89.7969970703125,
-    "value135": 4,
-    "value136": 3,
+    "value132": -10.0,
+    "value133": 30.0,
+    "value134": 30.0,
+    "value135": 1,
+    "value136": 0,
     "value137": true,
     "value138": 0,
     "value139": 0,
@@ -469,32 +469,8 @@
     "value147": 0.0,
     "value148": 0.0,
     "value149": 0.0,
-    "value150": 0.12700000405311585,
+    "value150": 0.0,
     "value151": 0.0,
-    "value152": 92.8290023803711,
-    "value153": "Water",
-    "value154": 0.25,
-    "value155": 0.25,
-    "value156": 0.25,
-    "value157": 0.414000004529953,
-    "value158": 0.16300000250339509,
-    "value159": 0.0,
-    "value160": 65.33899688720703,
-    "value161": "Grass",
-    "value162": 1.0,
-    "value163": 0.0,
-    "value164": 0.0,
-    "value165": 0.578000009059906,
-    "value166": 0.2150000035762787,
-    "value167": 0.0,
-    "value168": 11.95199966430664,
-    "value169": "Rocks",
-    "value170": 0.75,
-    "value171": 0.75,
-    "value172": 0.75,
-    "value173": 0.6850000023841858,
-    "value174": 0.1550000011920929,
-    "value175": 0.0,
-    "value176": 1.0,
-    "value177": "Snow"
+    "value152": 70.76399993896485,
+    "value153": "Grass"
 }

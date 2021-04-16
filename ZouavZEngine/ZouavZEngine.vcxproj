@@ -241,6 +241,7 @@
     <ClInclude Include="include\Multithread\ThreadPool.h" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\Framebuffer.hpp" />
+    <ClInclude Include="include\Rendering\Material.hpp" />
     <ClInclude Include="include\Rendering\Mesh.hpp" />
     <ClInclude Include="include\Rendering\Render.hpp" />
     <ClInclude Include="include\Rendering\Shader.hpp" />
@@ -259,7 +260,6 @@
     <ClInclude Include="include\System\SoundManager.hpp" />
     <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
-    <ClInclude Include="src\Rendering\Material.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\TerrainShader.fs">
