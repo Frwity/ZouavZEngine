@@ -22,10 +22,14 @@ public:
 	RigidBody(GameObject* _gameObject);
 	~RigidBody();
 
+	void Editor() override;
+
 	void SetLinearVelocity(const class Vec3& v);
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
+	void OnContact(GameObject* _other);
+	void OnTrigger(GameObject* _other);
 
 
 	template <class Archive>

@@ -2,6 +2,7 @@
 #include "GameObject.hpp"
 #include "extensions/PxSimpleFactory.h"
 #include "System/PhysicSystem.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
@@ -18,4 +19,9 @@ Plane::Plane(GameObject* _gameObject)
 Plane::~Plane()
 {
 
+}
+
+void Plane::Editor()
+{
+	ImGui::Text("Plane");
 }

@@ -153,7 +153,7 @@ void Engine::Update()
 
         editor.NewFrame();
 
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
 
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {

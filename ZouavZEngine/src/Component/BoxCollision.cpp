@@ -11,20 +11,21 @@
 #include "extensions/PxSimpleFactory.h"
 #include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
-BoxCollision::BoxCollision(GameObject* _gameObject)
-	: ShapeCollision(_gameObject)
+
+BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger)
+	: ShapeCollision(_gameObject, _isTrigger), halfExtends(_halfExtends)
 {
 	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-
-	//temp
-	Vec3 v{ 0.5f, 0.5f, 0.5f };
 	
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
+
+	shape->userData = gameObject;
 
 	AttachToRigidComponent();
 }
@@ -32,4 +33,10 @@ BoxCollision::BoxCollision(GameObject* _gameObject)
 BoxCollision::~BoxCollision()
 {
 	
+}
+
+void BoxCollision::Editor()
+{
+	ImGui::Text("BoxCollision");
+	ImGui::SliderFloat3("Half Extends : ", &halfExtends.x, 0.0f, 100.0f);
 }

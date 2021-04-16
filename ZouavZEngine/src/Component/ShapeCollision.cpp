@@ -9,8 +9,8 @@
 #include "Component/RigidStatic.hpp"
 #include "System/Debug.hpp"
 
-ShapeCollision::ShapeCollision(GameObject* _gameObject)
-	 : Component(_gameObject)
+ShapeCollision::ShapeCollision(GameObject* _gameObject, bool _isTrigger)
+	 : Component(_gameObject), isTrigger(_isTrigger)
 {
 	
 }
@@ -31,6 +31,8 @@ void ShapeCollision::AttachToRigidComponent()
 {
 	if (shape)
 	{
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+
 		RigidBody* rd = gameObject->GetComponent<RigidBody>();
 		RigidStatic* rs = gameObject->GetComponent<RigidStatic>();
 

@@ -7,8 +7,12 @@
 class BoxCollision: public ShapeCollision
 {
 public:
-	BoxCollision(GameObject* _gameObject);
+	Vec3 halfExtends;
+
+	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false);
 	~BoxCollision();
+
+	void Editor() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

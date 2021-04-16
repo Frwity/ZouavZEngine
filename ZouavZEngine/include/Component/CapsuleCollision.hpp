@@ -10,8 +10,10 @@ public:
 	float radius;
 	float halfHeight;
 
-	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f);
+	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false);
 	~CapsuleCollision();
+
+	void Editor() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

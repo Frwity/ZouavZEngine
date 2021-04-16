@@ -14,6 +14,12 @@
 #include "Component/Light.hpp"
 #include "Component/AudioBroadcaster.hpp"
 #include "Component/AudioListener.hpp"
+#include "Component/BoxCollision.hpp"
+#include "Component/CapsuleCollision.hpp"
+#include "Component/SphereCollision.hpp"
+#include "Component/Plane.hpp"
+#include "Component/RigidBody.hpp"
+#include "Component/RigidStatic.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -377,6 +383,13 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
     ImGui::End();
 }
 
+template <typename T>
+void ComponentButton(std::string _text)
+{
+    if (!gameObjectInspector->GetComponent<T>() && ImGui::Button(_text.c_str()))
+        gameObjectInspector->AddComponent<T>();
+}
+
 void Editor::DisplayInspector()
 {
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
@@ -425,30 +438,37 @@ void Editor::DisplayInspector()
 
             for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
             {
-                switch (i)
+                switch (static_cast<E_COMPONENT>(i))
                 {
-                    case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
-                        if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
-                            if (ImGui::Button("Add AudioBroadcaster"))
-                                gameObjectInspector->AddComponent<AudioBroadcaster>();
+                    case E_COMPONENT::AUDIO_BROADCASTER :
+                        ComponentButton<AudioBroadcaster>("Add AudioBroadcaster");
                         break;
-
-                    case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
-                        if (!gameObjectInspector->GetComponent<AudioListener>())
-                            if (ImGui::Button("Add AudioListener"))
-                                gameObjectInspector->AddComponent<AudioListener>();
+                    case E_COMPONENT::AUDIO_LISTENER :
+                        ComponentButton<AudioListener>("Add AudioListener");
                         break;
-
-                    case static_cast<int>(E_COMPONENT::LIGHT) :
-                        if (!gameObjectInspector->GetComponent<Light>())
-                            if (ImGui::Button("Add Light"))
-                                gameObjectInspector->AddComponent<Light>();
+                    case E_COMPONENT::LIGHT :
+                        ComponentButton<Light>("Add Light");
                         break;
-
-                    case static_cast<int>(E_COMPONENT::MESHRENDERER) :
-                        if (!gameObjectInspector->GetComponent<MeshRenderer>())
-                            if (ImGui::Button("Add MeshRenderer"))
-                                gameObjectInspector->AddComponent<MeshRenderer>();
+                    case E_COMPONENT::MESHRENDERER :
+                        ComponentButton<MeshRenderer>("Add MeshRenderer");
+                        break;
+                    case E_COMPONENT::BOX_COLLISION :
+                        ComponentButton<BoxCollision>("Add BoxCollision");
+                        break;
+                    case E_COMPONENT::CAPSULE_COLLISION :
+                        ComponentButton<CapsuleCollision>("Add CapsuleCollision");
+                        break;
+                    case E_COMPONENT::SPHERE_COLLISION :
+                        ComponentButton<SphereCollision>("Add SphereCollision");
+                        break;
+                    case E_COMPONENT::PLANE :
+                        ComponentButton<Plane>("Add Plane");
+                        break;
+                    case E_COMPONENT::RIGID_BODY :
+                        ComponentButton<RigidBody>("Add RigidBody");
+                        break;
+                    case E_COMPONENT::RIGID_STATIC :
+                        ComponentButton<RigidStatic>("Add RigidStatic");
                         break;
                 }
             }

@@ -11,6 +11,8 @@ public:
 	Plane(GameObject* _gameObject);
 	~Plane();
 
+	void Editor() override;
+	
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

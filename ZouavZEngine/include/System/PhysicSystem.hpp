@@ -6,7 +6,10 @@
 #include "PxPhysics.h"
 #include "cooking/PxCooking.h"
 #include "PxSimulationEventCallback.h"
+#include "PxRigidActor.h"
 #include "System/Debug.hpp"
+
+#include "Component/RigidBody.hpp"
 
 namespace physx
 {
@@ -15,37 +18,27 @@ namespace physx
 	class PxCooking;
 	class PxScene;
 	class PxPvdSceneClient;
+	class PxRigidActor;
 }
 
 class PhysicEventCallback : public physx::PxSimulationEventCallback
 {
-	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) { PX_UNUSED(constraints); PX_UNUSED(count); }
-	void onWake(physx::PxActor** actors, physx::PxU32 count) { Debug::Log("AWAKE !"); PX_UNUSED(actors); PX_UNUSED(count); }
-	void onSleep(physx::PxActor** actors, physx::PxU32 count) { Debug::Log("SLEEP !");  PX_UNUSED(actors); PX_UNUSED(count); }
-	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) { Debug::Log("Trigger");  PX_UNUSED(pairs); PX_UNUSED(count); }
-	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) { Debug::Log("Avance !"); }
-	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs)
+public:
+	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) override { PX_UNUSED(constraints); PX_UNUSED(count); }
+	void onWake(physx::PxActor** actors, physx::PxU32 count) override { Debug::Log("AWAKE !"); PX_UNUSED(actors); PX_UNUSED(count); }
+	void onSleep(physx::PxActor** actors, physx::PxU32 count) override { Debug::Log("SLEEP !");  PX_UNUSED(actors); PX_UNUSED(count); }
+	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override { Debug::Log("Trigger");  PX_UNUSED(pairs); PX_UNUSED(count); }
+	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
+	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
-		Debug::Log("Contact !");
+		RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
+		RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
 
-		PX_UNUSED((pairHeader));
-		std::vector<physx::PxContactPairPoint> contactPoints;
+		rigidbody1->OnContact(rigidbody2->gameObject);
+		rigidbody2->OnContact(rigidbody1->gameObject);
 
-		for (physx::PxU32 i = 0; i < nbPairs; i++)
-		{
-			physx::PxU32 contactCount = pairs[i].contactCount;
-			if (contactCount)
-			{
-				contactPoints.resize(contactCount);
-				pairs[i].extractContacts(&contactPoints[0], contactCount);
-
-				for (physx::PxU32 j = 0; j < contactCount; j++)
-				{
-					gContactPositions.push_back(contactPoints[j].position);
-					gContactImpulses.push_back(contactPoints[j].impulse);
-				}
-			}
-		}
+		PX_UNUSED((pairs));
+		PX_UNUSED((nbPairs));
 	}
 
 public:

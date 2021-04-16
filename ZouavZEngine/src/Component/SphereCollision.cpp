@@ -9,15 +9,16 @@
 #include "PxScene.h"
 #include "extensions/PxSimpleFactory.h"
 #include "System/PhysicUtils.hpp"
+#include "imgui.h"
 
 using namespace physx;
 
-SphereCollision::SphereCollision(GameObject* _gameObject, float _radius)
-	: ShapeCollision(_gameObject), radius(_radius)
+SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger)
+	: ShapeCollision(_gameObject, _isTrigger), radius(_radius)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(0.5f), *material);
+	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
 
 	//attach shape to rigidbody or rigidstatic if exist
 	AttachToRigidComponent();
@@ -26,4 +27,10 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius)
 SphereCollision::~SphereCollision()
 {
 
+}
+
+void SphereCollision::Editor()
+{
+	ImGui::Text("SphereCollision");
+	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
 }

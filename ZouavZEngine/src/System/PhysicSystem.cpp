@@ -28,12 +28,11 @@ static PxFilterFlags filterShader(
     const void* constantBlock,
     PxU32 constantBlockSize)
 {
-	pairFlags = PxPairFlag::eCONTACT_DEFAULT
-		| PxPairFlag::eDETECT_CCD_CONTACT
-		| PxPairFlag::eNOTIFY_TOUCH_CCD
+	pairFlags = PxPairFlag::eSOLVE_CONTACT | PxPairFlag::eDETECT_DISCRETE_CONTACT
 		| PxPairFlag::eNOTIFY_TOUCH_FOUND
+		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
 		| PxPairFlag::eNOTIFY_CONTACT_POINTS
-		| PxPairFlag::eCONTACT_EVENT_POSE;
+		| PxPairFlag::eTRIGGER_DEFAULT;
     return PxFilterFlag::eDEFAULT;
 }
 
@@ -80,7 +79,7 @@ void PhysicSystem::InitScene()
 		sceneDesc.cpuDispatcher = mCpuDispatcher;
 	}
 
-	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+	sceneDesc.filterShader = filterShader;
 
 	sceneDesc.simulationEventCallback = physicEventCallback;
 	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
@@ -101,13 +100,14 @@ void PhysicSystem::DestroyCollisionComponent()
 
 	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
 
-	for (int i = 0; i < nbActiveActor; i++)
+	//TODO fix destruction
+	/*for (int i = 0; i < nbActiveActor; i++)
 	{
 		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
 
-		ShapeCollision* collision = go->GetComponent<ShapeCollision>();
-		collision->releasePhysXComponent();
-	}
+		//ShapeCollision* collision = go->GetComponent<ShapeCollision>();
+		//collision->releasePhysXComponent();
+	}*/
 }
 
 void PhysicSystem::Destroy()
