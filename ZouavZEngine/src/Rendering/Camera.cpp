@@ -21,7 +21,7 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
 
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
-    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, 0.01, 5000.0f, 45.0f);
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
 }
 
 Camera::~Camera()
@@ -59,6 +59,10 @@ Mat4 Camera::GetMatrix() const
     return (gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
 }
 
+void Camera::Resize(int _width, int _height)
+{
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+}
 
 SceneCamera::SceneCamera(int _width, int _height)
     : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw((float)M_PI), speed{ 30.0f }
