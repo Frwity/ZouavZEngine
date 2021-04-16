@@ -26,7 +26,8 @@ public:
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
-	void OnContact();
+	void OnContact(GameObject* _other);
+	void OnTrigger(GameObject* _other);
 
 
 	template <class Archive>

@@ -15,4 +15,6 @@ public:
 	virtual void FixedUpdate() {};
 	virtual void Update() {};
 	virtual void OnDestroy() {};
+	virtual void OnTrigger(class GameObject* _other) {};
+	virtual void OnContact(class GameObject* _other) {};
 };

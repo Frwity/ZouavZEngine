@@ -32,12 +32,10 @@ public:
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
 		RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
-
-		rigidbody1->OnContact();
-
 		RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
 
-		rigidbody2->OnContact();
+		rigidbody1->OnContact(rigidbody2->gameObject);
+		rigidbody2->OnContact(rigidbody1->gameObject);
 
 		PX_UNUSED((pairs));
 		PX_UNUSED((nbPairs));

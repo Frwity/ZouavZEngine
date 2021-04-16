@@ -20,8 +20,9 @@ protected:
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
+	bool isTrigger = false;
 
-	ShapeCollision(GameObject* _gameObject);
+	ShapeCollision(GameObject* _gameObject, bool _isTrigger = false);
 	~ShapeCollision();
 
 	void releasePhysXComponent();

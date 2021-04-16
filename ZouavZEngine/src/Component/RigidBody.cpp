@@ -10,9 +10,12 @@
 #include "extensions/PxSimpleFactory.h"
 #include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
-#include "Component/BoxCollision.hpp"
+#include "Component/ShapeCollision.hpp"
+#include "Component/ScriptComponent.hpp"
 
 using namespace physx;
+
+static int i = 0;
 
 
 RigidBody::RigidBody(GameObject* _gameObject)
@@ -24,8 +27,7 @@ RigidBody::RigidBody(GameObject* _gameObject)
 
 	actor->userData = this;
 
-	static int i = 0;
-	if (i++ == 0)	
+	if (i++ == 0)
 		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 
 	AttachShape();
@@ -72,7 +74,18 @@ void RigidBody::AttachShape()
 	}
 }
 
-void RigidBody::OnContact()
+void RigidBody::OnContact(GameObject* _other)
 {
-	gameObject->OnContact();
+	ScriptComponent* script = gameObject->GetComponent<ScriptComponent>();
+
+	if (script)
+		script->OnContact(_other);
+}
+
+void RigidBody::OnTrigger(GameObject* _other)
+{
+	ScriptComponent* script = gameObject->GetComponent<ScriptComponent>();
+
+	if (script)
+		script->OnTrigger(_other);
 }
