@@ -11,8 +11,8 @@
 
 using namespace physx;
 
-CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight)
-	: ShapeCollision(_gameObject), radius(_radius), halfHeight(_halfHeight)
+CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger)
+	: ShapeCollision(_gameObject, _isTrigger), radius(_radius), halfHeight(_halfHeight)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
@@ -23,4 +23,5 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 
 CapsuleCollision::~CapsuleCollision()
 {
+
 }

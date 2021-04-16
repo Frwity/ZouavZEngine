@@ -147,6 +147,8 @@ public:
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 
+	virtual void OnContact();
+
 	static void DestroyGameObjectIfNeedTo();
 	static GameObject* GetGameObjectByName(std::string _name);
 	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);

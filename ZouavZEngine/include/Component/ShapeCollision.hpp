@@ -4,6 +4,7 @@
 #include "System/Debug.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
+#include "GameObject.hpp"
 
 namespace physx
 {
@@ -19,8 +20,9 @@ protected:
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
+	bool isTrigger = false;
 
-	ShapeCollision(GameObject* _gameObject);
+	ShapeCollision(GameObject* _gameObject, bool _isTrigger = false);
 	~ShapeCollision();
 
 	void releasePhysXComponent();

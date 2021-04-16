@@ -10,7 +10,7 @@ public:
 	float radius;
 	float halfHeight;
 
-	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f);
+	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false);
 	~CapsuleCollision();
 
 	template <class Archive>

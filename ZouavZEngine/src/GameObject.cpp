@@ -161,3 +161,8 @@ std::vector<GameObject*> GameObject::GetGameObjectsByTag(std::string _tag)
 
 	return toReturn;
 }
+
+void GameObject::OnContact()
+{
+
+}

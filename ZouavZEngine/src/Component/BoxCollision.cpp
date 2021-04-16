@@ -14,17 +14,17 @@
 
 using namespace physx;
 
-BoxCollision::BoxCollision(GameObject* _gameObject)
-	: ShapeCollision(_gameObject)
+
+BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger)
+	: ShapeCollision(_gameObject, _isTrigger)
 {
 	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
 
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-
-	//temp
-	Vec3 v{ 0.5f, 0.5f, 0.5f };
 	
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
+
+	shape->userData = gameObject;
 
 	AttachToRigidComponent();
 }

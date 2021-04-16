@@ -7,7 +7,7 @@
 class BoxCollision: public ShapeCollision
 {
 public:
-	BoxCollision(GameObject* _gameObject);
+	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false);
 	~BoxCollision();
 
 	template <class Archive>

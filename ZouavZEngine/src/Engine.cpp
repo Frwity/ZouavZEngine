@@ -101,8 +101,8 @@ void Engine::TempLoad()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-    player->AddComponent<RigidStatic>();
     player->AddComponent<SphereCollision>();
+    player->AddComponent<RigidBody>();
 
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 5.0f, 0.0f };
@@ -140,7 +140,7 @@ void Engine::Update()
 
         editor.NewFrame();
 
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
 
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {

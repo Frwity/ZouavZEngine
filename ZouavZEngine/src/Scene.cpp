@@ -14,6 +14,7 @@
 #include "PxSimulationEventCallback.h"
 #include "PxRigidStatic.h"
 #include "pvd/PxPvd.h"
+#include "Component/RigidBody.hpp"
 
 #include <fstream>
 #include "cereal/archives/json.hpp"
@@ -99,20 +100,12 @@ void Scene::SimulatePhyics() const
 
 	for (int i = 0; i < nbActiveActor; i++)
 	{
-		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
+		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
 
-		if(go)
-		{
-			physx::PxRigidDynamic* rd = static_cast<physx::PxRigidDynamic*>(activeActors[i]);
+		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
 
-			if (rd)
-			{
-				physx::PxTransform transform = rd->getGlobalPose();
-
-				go->localPosition = { transform.p.x, transform.p.y, transform.p.z };
-				go->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
-			}
-		}
+		rigidbody->gameObject->localPosition = { transform.p.x, transform.p.y, transform.p.z };
+		rigidbody->gameObject->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
 
