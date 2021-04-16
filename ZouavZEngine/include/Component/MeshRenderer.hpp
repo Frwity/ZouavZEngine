@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Rendering/Mesh.hpp"
-#include "Rendering/Shader.hpp"
-#include "Rendering/Texture.hpp"
+#include "Rendering/Material.hpp"
 #include "Component/Component.hpp"
 #include "System/ResourcesManager.hpp"
 #include "cereal/types/polymorphic.hpp"
@@ -13,14 +12,10 @@ class MeshRenderer : public Component
 {
 private:
 	friend class Engine;
-	static Mesh* defaultMesh;
-	static Texture* defaultTexture;
-	static Shader* defaultShader;
 
 public:
     Mesh* mesh = nullptr;
-    Texture* texture = nullptr;
-    Shader* shader = nullptr;
+	Material material;
 
     MeshRenderer() = delete;
     MeshRenderer(class GameObject* _gameObject);
@@ -35,7 +30,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(mesh->GetName(), texture->GetName(), shader->GetName());
+		_ar(mesh->GetName(), material.texture->GetName(), material.shader->GetName());
 	}
 
 	template <class Archive>

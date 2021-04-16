@@ -12,8 +12,10 @@
 
 #include "Maths/Vec2.hpp"
 #include "Maths/Vec3.hpp"
-#include "Rendering/Mesh.hpp"
 
+#include "System/ResourcesManager.hpp"
+
+#include "Rendering/Mesh.hpp"
 
 Mesh::Mesh(const std::string& _name)
 	: Resource(_name)

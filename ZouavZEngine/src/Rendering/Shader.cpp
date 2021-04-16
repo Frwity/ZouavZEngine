@@ -4,6 +4,7 @@
 #include "Maths/Mat4.hpp"
 #include "Maths/Vec3.hpp"
 #include "Maths/Vec2.hpp"
+#include "Maths/Vec4.hpp"
 #include "Component/Light.hpp"
 #include "GameObject.hpp"
 #include "System/Debug.hpp"
@@ -124,19 +125,29 @@ void Shader::SetMatrix(const std::string& name, const Mat4& mat) const
     glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, mat.matrix);
 }
 
-void Shader::SetVector3(const std::string& name, float x, float y, float z) const
-{
-    glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
-}
-
 void Shader::SetVector2(const std::string& name, const Vec2& v) const
 {
     glUniform2f(glGetUniformLocation(id, name.c_str()), v.x, v.y);
 }
 
+void Shader::SetVector3(const std::string& name, float x, float y, float z) const
+{
+    glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
+}
+
 void Shader::SetVector3(const std::string& name, const Vec3& v) const
 {
     glUniform3f(glGetUniformLocation(id, name.c_str()), v.x, v.y, v.z);
+}
+
+void Shader::SetVector4(const std::string& name, float w, float x, float y, float z) const
+{
+    glUniform4f(glGetUniformLocation(id, name.c_str()), w, x, y, z);
+}
+
+void Shader::SetVector4(const std::string& name, const Vec4& v) const
+{
+    glUniform4f(glGetUniformLocation(id, name.c_str()), v.w, v.x, v.y, v.z);
 }
 
 void Shader::SetLight(const std::vector<Light*>& lights)
