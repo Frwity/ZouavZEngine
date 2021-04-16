@@ -6,23 +6,29 @@
 #include "System/ResourcesManager.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "System/Debug.hpp"
+#include "imgui.h"
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Shader* _shader, Texture* _texture)
-	: Component(_gameObject), mesh{ _mesh }, shader{ _shader }, texture{ _texture }
+Mesh* MeshRenderer::defaultMesh;
+Texture* MeshRenderer::defaultTexture;
+Shader* MeshRenderer::defaultShader;
+
+
+MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader)
+	: Component(_gameObject), mesh{ _mesh }, texture{ _texture }, shader{ _shader }
 {}
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject)
     : Component(_gameObject), 
-      mesh{ static_cast<Mesh*>(ResourcesManager::GetResource("Skull Mesh")) }, 
-      shader{static_cast<Shader*>(ResourcesManager::GetResource("BlinnPhongShader")) }, 
-      texture{ static_cast<Texture*>(ResourcesManager::GetResource("Skull Tex")) }
+      mesh{ defaultMesh },
+      texture{ defaultTexture },
+      shader{ defaultShader }
 {}
 
 void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 {
     shader->Use();
     glActiveTexture(GL_TEXTURE0);
-    texture->Use();
+    Texture::Use(texture);
     Mat4 matrixCamera = _camera.GetMatrix();
 
     shader->SetMatrix("view", matrixCamera.Reversed());
@@ -32,4 +38,12 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
     glBindVertexArray(mesh->GetID());
     glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+}
+
+void MeshRenderer::Editor()
+{
+    ImGui::Text("MeshRenderer");
+    ResourcesManager::ResourceChanger<Texture>("Texture", texture);
+    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+    ResourcesManager::ResourceChanger<Shader>("Shader", shader);
 }

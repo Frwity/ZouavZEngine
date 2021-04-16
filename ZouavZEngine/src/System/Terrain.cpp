@@ -1,36 +1,42 @@
-#include "System/Terrain.hpp"
+#include "GameObject.hpp"
 #include "System/ResourcesManager.hpp"
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/Light.hpp"
 #include "Maths/Mat4.hpp"
 #include <FastNoiseLite.h>
+#include "System/Terrain.hpp"
 #include <imgui.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include "Scene.hpp"
 
 
 Terrain::Terrain()
 {
-	shader = static_cast<Shader*>(ResourcesManager::GetResource("TerrainShader"));
+	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
 	AddNoiseLayer();
+	AddColor();
+	AddColor();
+	AddColor();
 }
 
-void Terrain::Generate()
+void Terrain::Generate(GameObject* _actualizer)
 {
-	chunks.reserve((size_t)chunkCount * (size_t)chunkCount);
+	actualizer = _actualizer;
+	chunks.reserve(16);
 	Vec2 pos;
-	for (float z = 0; z < chunkCount; z++)
+	for (float z = 0; z < 4; z++)
 	{
-		for (float x = 0; x < chunkCount; x++)
+		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount, 
-														seed, noiseParams,															
+			chunks.emplace(pos.ToString(), Chunk{});
+			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+														seed, noiseParams,
 														minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
@@ -39,30 +45,100 @@ void Terrain::Generate()
 void Terrain::Actualise()
 {
 	Vec2 pos;
-	for (float z = 0; z < chunkCount; z++)
+
+	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+
+	while (it != chunks.end())
 	{
-		for (float x = 0; x < chunkCount; x++)
-		{
-			pos = { x, z };
-			chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
-														seed, noiseParams,
-														minHeight, maxHeight, heightIntensity }, true);
-		}
+		it->second.Generate({ it->second.GetPos(),	chunkSize, chunkVertexCount,
+													seed, noiseParams,
+													minHeight, maxHeight, heightIntensity }, true);
+		it++;
 	}
 }
 
-void Terrain::Draw(const std::vector<class Light*>& _lights, const class Camera& _camera)
+void Terrain::Update()
+{
+	if (!actualizer)
+		return;
+
+	Vec2 pos;
+
+	Vec2 actualizerPos(actualizer->WorldPosition().x, actualizer->WorldPosition().z);
+
+	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+
+	// delete far Chunk
+	while (it != chunks.end())
+	{
+		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
+		{
+			//std::cout << "delete " << it->first << " of " << (it->second.GetWorldPos() - actualizerPos).GetMagnitude() << std::endl;
+			it = chunks.erase(it);
+		}
+		else
+			it++;
+	}
+
+	int chunkRadius = chunkDistanceRadius / chunkSize;
+
+	Vec2 actualizerChunkPos = actualizerPos / chunkSize;
+
+	// create near Chunk
+	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
+	{
+		for (int y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
+		{
+			pos = { (float)x, (float)y };
+
+			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
+				break;
+
+			if (chunks.find(pos.ToString()) == chunks.end())
+			{
+				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
+				chunks.emplace(pos.ToString(), Chunk());
+				chunks.at(pos.ToString()).Generate({ pos,	chunkSize, chunkVertexCount,
+															seed, noiseParams,
+															minHeight, maxHeight, heightIntensity }, false);
+			}
+		}
+	}
+
+	return;
+}
+
+void Terrain::Draw(const class Camera& _camera)
 {
 	shader->Use();
-	shader->SetLight(_lights);
+	shader->SetLight(Scene::GetCurrentScene()->GetLights());
 	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reversed());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
+	shader->SetInt("colorCount", colorCount);
+
+	shader->SetFloatArray("colorHeight",  colorHeight.data(), colorCount);
+	shader->SetFloatArray("colorBlend", colorBlend.data(), colorCount);
+	shader->SetFloatArray("colorStrength", colorStrength.data(), colorCount);
+	shader->SetFloatArray("textureScale", textureScale.data(), colorCount);
+
+	for (int i = 0; i < colorCount; ++i)
+	{
+		glUniform1i(glGetUniformLocation(shader->id, ("textures[" + std::to_string(i) + "]").c_str()), i);
+		glActiveTexture(GL_TEXTURE0 + i);
+		if (textureID.at(i))
+			Texture::Use(textureID.at(i));
+		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
+	}
+
+	shader->SetFloat("minHeight", -heightIntensity);
+	shader->SetFloat("maxHeight", heightIntensity);
+
 	for (auto& it : chunks)
 	{
-		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y}));
+		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y }));
 
 		glBindVertexArray(it.second.GetMesh().GetID());
 		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
@@ -75,7 +151,6 @@ void Terrain::DisplayOptionWindow()
 	{
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
-		actualized |= ImGui::SliderInt("Chunk Count", &chunkCount, 1, 16);
 		actualized |= ImGui::SliderInt("Chunk Size", &chunkSize, 1, 512);
 		actualized |= ImGui::SliderInt("Chunk Vertex Count (LOD)", &chunkVertexCount, 2, 64);
 
@@ -122,13 +197,38 @@ void Terrain::DisplayOptionWindow()
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
+		ImGui::SliderInt("Color Count", &colorCount, 1, 8);
+
+		for (int i = 0; i < colorCount; ++i)
+		{
+			ImGui::SliderFloat(("Color Height " + std::to_string(i)).c_str(), &colorHeight[i], 0.0f, 1.0f);
+			ImGui::SliderFloat(("Color Blend " + std::to_string(i)).c_str(), &colorBlend[i], 0.0f, 1.0f);
+			ImGui::SliderFloat(("Color Strengh " + std::to_string(i)).c_str(), &colorStrength[i], 0.0f, 1.0f);
+			ImGui::ColorEdit3(("Color " + std::to_string(i)).c_str(), colors[i].xyz);
+			//static int index = 0;
+			//if (ImGui::Combo(("Texture " + std::to_string(i)).c_str(), &index, ResourcesManager::GetResourceNames<Texture>().data(), ResourcesManager::GetResourceNames<Texture>().size()))
+			//	textureID.at(i) = ResourcesManager::GetResource<Texture>(ResourcesManager::GetResourceNames<Texture>().at(index));
+		}
 	}
 	ImGui::End();
 }
 
+void Terrain::AddColor()
+{
+	if (colorCount >= MAX_COLOR_COUNT)
+		return;
+	colors.emplace_back(Vec3{0.1f * colorCount, 0.1f * colorCount, 0.1f * colorCount});
+	colorHeight.emplace_back(0.1f * colorCount);
+	colorBlend.emplace_back(0);
+	textureID.emplace_back(nullptr);
+	colorStrength.emplace_back(0);
+	textureScale.emplace_back(1);
+	colorCount++;
+}
+
 void Terrain::AddNoiseLayer()
 {
-	if (noiseParams.size() > MAX_NOISE_COUNT)
+	if (noiseParams.size() >= MAX_NOISE_COUNT)
 		return;
 	noiseParams.emplace_back(NoiseParam{});
 	noiseID = (int)noiseParams.size() - 1;
@@ -168,7 +268,7 @@ float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
 		height += noise.GetNoise(sampleX, sampleZ);
 	}
 
-	return height;
+	return height / _cca.noiseParams.size();
 }
 
 void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
@@ -211,7 +311,6 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			indices.push_back(bottomRight);
 		}
 	}
-
 	if (_reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else

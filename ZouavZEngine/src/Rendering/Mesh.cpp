@@ -15,17 +15,17 @@
 #include "Rendering/Mesh.hpp"
 
 
-Mesh::Mesh(const char* path)
+Mesh::Mesh(const std::string& _name)
+	: Resource(_name)
+{
+
+}
+
+Mesh::Mesh(const std::string& _name, const char* path)
+	: Resource(_name)
 {
     Assimp::Importer importer;
 		
-	//const aiScene* scene = importer.ReadFile(path, aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
-	//	aiProcess_CalcTangentSpace |
-	//	aiProcess_GenSmoothNormals |
-	//	aiProcess_Triangulate |
-	//	aiProcess_FixInfacingNormals |
-	//	aiProcess_FindInvalidData |
-	//	aiProcess_ValidateDataStructure | 0);
 	const aiScene* scene = importer.ReadFile(path,	aiProcess_Triangulate | 
 													aiProcess_FindInvalidData | 
 													aiProcess_ValidateDataStructure );
@@ -103,66 +103,95 @@ Mesh::~Mesh()
     glDeleteVertexArrays(1, &VAO);
 }
 
-void Mesh::CreateQuad()
+void Mesh::CreateCube()
 {
 	std::vector<Vertex> vertices;
 	std::vector<int> indices;
 
 	Vertex vert;
 
-	vert = {Vec3(-0.5f, -0.5f, 0.f),
+	vert = {Vec3(-0.5f, -0.5f, -0.5f),
 			Vec3(0.f, 0.f, 1.f),
 			Vec2(0.f, 0.f)};
 	vertices.push_back(vert);
 
-	vert = {Vec3(0.5f, -0.5f, 0.f),
+	vert = {Vec3(0.5f, -0.5f, -0.5f),
 			Vec3(0.f, 0.f, 1.f),
 			Vec2(1.f, 0.f)};
 	vertices.push_back(vert);
 
-	vert = {Vec3(0.5f, 0.5f, 0.f),
+	vert = {Vec3(0.5f, 0.5f, -0.5f),
 			Vec3(0.f, 0.f, 1.f),
 			Vec2(1.f, 1.f)};
 	vertices.push_back(vert);
 
-	vert = {Vec3(-0.5f, 0.5f, 0.f),
+	vert = {Vec3(-0.5f, 0.5f, -0.5f),
 			Vec3(0.f, 0.f, 1.f),
 			Vec2(0.f, 1.f)};
 	vertices.push_back(vert);
+	
+	vert = { Vec3(-0.5f, -0.5f, 0.5f),
+		Vec3(0.f, 0.f, 1.f),
+		Vec2(0.f, 0.f) };
+	vertices.push_back(vert);
 
+	vert = { Vec3(0.5f, -0.5f, 0.5f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(1.f, 0.f) };
+	vertices.push_back(vert);
+
+	vert = { Vec3(0.5f, 0.5f, 0.5f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(1.f, 1.f) };
+	vertices.push_back(vert);
+
+	vert = { Vec3(-0.5f, 0.5f, 0.5f),
+			Vec3(0.f, 0.f, 1.f),
+			Vec2(0.f, 1.f) };
+	vertices.push_back(vert);
+
+	// forward
 	indices.push_back(0);
 	indices.push_back(1);
 	indices.push_back(2);
 	indices.push_back(0);
 	indices.push_back(2);
 	indices.push_back(3);
-	
-	vert = { Vec3(-0.5f, -0.5f, 1.f),
-		Vec3(0.f, 0.f, 1.f),
-		Vec2(0.f, 0.f) };
-	vertices.push_back(vert);
-
-	vert = { Vec3(0.5f, -0.5f, 1.f),
-			Vec3(0.f, 0.f, 1.f),
-			Vec2(1.f, 0.f) };
-	vertices.push_back(vert);
-
-	vert = { Vec3(0.5f, 0.5f, 1.f),
-			Vec3(0.f, 0.f, 1.f),
-			Vec2(1.f, 1.f) };
-	vertices.push_back(vert);
-
-	vert = { Vec3(-0.5f, 0.5f, 1.f),
-			Vec3(0.f, 0.f, 1.f),
-			Vec2(0.f, 1.f) };
-	vertices.push_back(vert);
-
+	// backward
 	indices.push_back(4);
 	indices.push_back(5);
 	indices.push_back(6);
 	indices.push_back(4);
 	indices.push_back(6);
 	indices.push_back(7);
+	// up
+	indices.push_back(2);
+	indices.push_back(3);
+	indices.push_back(6);
+	indices.push_back(3);
+	indices.push_back(7);
+	indices.push_back(6);
+	// down
+	indices.push_back(1);
+	indices.push_back(0);
+	indices.push_back(4);
+	indices.push_back(4);
+	indices.push_back(5);
+	indices.push_back(1);
+	// left
+	indices.push_back(2);
+	indices.push_back(6);
+	indices.push_back(5);
+	indices.push_back(5);
+	indices.push_back(1);
+	indices.push_back(2);
+	// right
+	indices.push_back(3);
+	indices.push_back(7);
+	indices.push_back(4);
+	indices.push_back(4);
+	indices.push_back(0);
+	indices.push_back(3);
 
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }

@@ -24,6 +24,12 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, 0.01, 5000.0f, 45.0f);
 }
 
+Camera::~Camera()
+{
+    if (mainCamera == this)
+        mainCamera = nullptr;
+}
+
 Mat4 Camera::GetMatrix() const
 {
     const Vec3 forward = (target - position).Normalized();
@@ -31,6 +37,8 @@ Mat4 Camera::GetMatrix() const
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;
+
+    const Vec3 pos(-gameObject->localPosition.x + position.x, gameObject->localPosition.y + position.y, -gameObject->localPosition.z + position.z);
 
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;
@@ -42,9 +50,9 @@ Mat4 Camera::GetMatrix() const
     cameraMatrix.Accessor(2, 1) = -forward.y;
     cameraMatrix.Accessor(2, 2) = -forward.z;
 
-    cameraMatrix.Accessor(0, 3) = -right.Dot(-gameObject->localPosition + position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(-gameObject->localPosition + position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(-gameObject->localPosition + position);
+    cameraMatrix.Accessor(0, 3) = -right.Dot(pos);
+    cameraMatrix.Accessor(1, 3) = -up.Dot(pos);
+    cameraMatrix.Accessor(2, 3) = forward.Dot(pos);
 
     cameraMatrix.Accessor(3, 3) = 1;
 

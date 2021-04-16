@@ -9,7 +9,8 @@
 #include "System/Debug.hpp"
 #include "Rendering/Shader.hpp"
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const std::string& _name, const char* vertexPath, const char* fragmentPath)
+    : Resource(_name) 
 {
     unsigned int vertexShader = CreateVertexShader(vertexPath);
     unsigned int fragmentShader = CreateFragmentShader(fragmentPath);
@@ -113,6 +114,11 @@ void Shader::SetFloat(const std::string& name, float value) const
     glUniform1f(glGetUniformLocation(id, name.c_str()), value);
 }
 
+void Shader::SetFloatArray(const std::string& name, float* value, unsigned int size) const
+{
+    glUniform1fv(glGetUniformLocation(id, name.c_str()), size, value);
+}
+
 void Shader::SetMatrix(const std::string& name, const Mat4& mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, mat.matrix);
@@ -127,7 +133,6 @@ void Shader::SetVector2(const std::string& name, const Vec2& v) const
 {
     glUniform2f(glGetUniformLocation(id, name.c_str()), v.x, v.y);
 }
-
 
 void Shader::SetVector3(const std::string& name, const Vec3& v) const
 {

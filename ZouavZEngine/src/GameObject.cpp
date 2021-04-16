@@ -1,6 +1,5 @@
 #include "Scene.hpp"
 #include "Maths/Mat4.hpp"
-#include "System/GameObjectSystem.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "System/PhysicUtils.hpp"
@@ -9,14 +8,25 @@
 #include "PxActor.h"
 #include "GameObject.hpp"
 
+bool GameObject::destroyGameObject = false;
+GameObject* GameObject::currentLoadedGameObject = nullptr;
+std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
+
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
-	return GameObjectSystem::CreateGameObject(_name);
+	gameObjects.emplace_back(std::make_unique<GameObject>(_name));
+	Scene::GetCurrentScene()->GetWorld().AddChild(gameObjects.back().get());
+	return gameObjects.back().get();
 }
 
 GameObject::GameObject(const std::string& _name)
 	: name(_name)
 {
+}
+
+void GameObject::Destroy() 
+{ 
+	toDestroy = true;
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)
@@ -81,4 +91,78 @@ void GameObject::RemoveChild(GameObject* _child)
 		else
 			++it;
 	}
+}
+
+const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()
+{
+	return components;
+}
+
+void GameObject::DestroyGameObjectIfNeedTo()
+{
+	if (destroyGameObject)
+	{
+		for (auto iter = gameObjects.begin(); iter != gameObjects.end();)
+		{
+			if (iter->get()->toDestroy)
+			{
+				iter = gameObjects.erase(iter);
+			}
+			else
+				iter++;
+		}
+	}
+}
+
+GameObject* GameObject::GetGameObjectByName(std::string _name)
+{
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->name == _name)
+			return gameObject.get();
+	}
+
+	return nullptr;
+}
+
+std::vector<GameObject*> GameObject::GetGameObjectsByName(std::string _name)
+{
+	std::vector<GameObject*> toReturn;
+
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->name == _name)
+			toReturn.push_back(gameObject.get());
+	}
+
+	return toReturn;
+}
+
+GameObject* GameObject::GetGameObjectByTag(std::string _tag)
+{
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->tag == _tag)
+			return gameObject.get();
+	}
+
+	return nullptr;
+}
+
+std::vector<GameObject*> GameObject::GetGameObjectsByTag(std::string _tag)
+{
+	std::vector<GameObject*> toReturn;
+
+	for (std::unique_ptr<GameObject>& gameObject : gameObjects)
+	{
+		if (gameObject->tag == _tag)
+			toReturn.push_back(gameObject.get());
+	}
+
+	return toReturn;
+}
+
+void GameObject::OnContact()
+{
+
 }

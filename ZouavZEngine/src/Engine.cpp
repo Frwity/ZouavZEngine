@@ -21,6 +21,7 @@
 #include "Game/Move.hpp"
 #include "Game/Player.hpp"
 #include "Sound.hpp"
+#include "cereal/archives/json.hpp"
 #include <iostream>
 #include "System/PhysicSystem.hpp"
 #include "Component/BoxCollision.hpp"
@@ -48,51 +49,76 @@ Engine::Engine()
     editor.Init();
 #endif
 
-    //TEMP
+    //TODO TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
-    Load();
+    TempLoad();
 }
 
 Engine::~Engine()
 {
+    //Save();
+
 	render.Destroy();
     SoundManager::Destroy();
     PhysicSystem::Destroy();
 }
 
-void Engine::Load()
+void Engine::TempLoad()
 {
-    Shader* shader = static_cast<Shader*>(ResourcesManager::AddResource<Shader>("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs"));
-    ResourcesManager::AddResource<Shader>("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    Sound* sound = static_cast<Sound*>(ResourcesManager::AddResource<Sound>("TestSon", "resources/Test.wav"));
-    Mesh* mesh = static_cast<Mesh*>(ResourcesManager::AddResource<Mesh>("Skull Mesh", "resources/Skull.obj"));
-    Texture* texture = static_cast<Texture*>(ResourcesManager::AddResource<Texture>("Skull Tex", "resources/skull.jpg"));
-    GameObject* light = GameObject::CreateGameObject("Light");
+    // engine base resource
+    MeshRenderer::defaultMesh = ResourcesManager::AddResourceMesh("CubeMesh");
+    MeshRenderer::defaultMesh->CreateCube();
+    MeshRenderer::defaultShader = ResourcesManager::AddResourceShader("BlinnPhongShader", "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    MeshRenderer::defaultTexture = ResourcesManager::AddResourceTexture("White", "resources/white.png");
+    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
 
-    light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::Directional);
-    scene.lights.push_back(light->GetComponent<Light>());
+    // other resource
+    Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
+    Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
+    Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
+
+    ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
+    ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
+    ResourcesManager::AddResourceTexture("Grass", "resources/Grass.png");
+    ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
+    ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
+
+    // coded scene
+    GameObject* light = GameObject::CreateGameObject("Light");
+    light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::DIRECTIONAL);
 
     GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, shader, texture);
+    soundSkull->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     soundSkull->AddComponent<AudioBroadcaster>(sound);
     soundSkull->AddComponent<Move>();
 
     GameObject* player = GameObject::CreateGameObject("Player");
-    player->AddComponent<MeshRenderer>(mesh, shader, texture);
+    player->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-    player->AddComponent<RigidStatic>();
     player->AddComponent<SphereCollision>();
+    player->AddComponent<RigidBody>();
 
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 5.0f, 0.0f };
-    test->AddComponent<MeshRenderer>(mesh, shader, texture);
+    test->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
     test->AddComponent<SphereCollision>();
     test->AddComponent<RigidBody>();
+}
+
+void Engine::Load()
+{
+    scene.Load();
+}
+
+void Engine::Save()
+{
+    scene.Save();
 }
 
 void Engine::Update()
@@ -100,10 +126,13 @@ void Engine::Update()
     ScriptSystem::Begin();
 
     Terrain terrain;
-    terrain.Generate();
+    terrain.Generate(Scene::GetCurrentScene()->GetWorld().GetChildren().at(2));
+    terrain.Update();
 
     while (!render.Stop())
     {
+        GameObject::DestroyGameObjectIfNeedTo();
+
         scene.GetWorld().UpdateTransform(Mat4::identity);
 
         TimeManager::Update();
@@ -111,11 +140,14 @@ void Engine::Update()
 
         editor.NewFrame();
 
+        ImGui::ShowDemoWindow();
+
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {
             SoundManager::Update();
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
+            terrain.Update();
             scene.SimulatePhyics();
         }
 
@@ -127,19 +159,23 @@ void Engine::Update()
         editor.DisplayConsoleWindow();
         editor.DisplayHierarchy();
         editor.DisplayGameWindow(render, render.gameFramebuffer);
+        editor.DisplayProject();
         editor.MoveSelectedGameobject();
 
         terrain.DisplayOptionWindow();
 
         render.BindSceneFBO();
        
-        terrain.Draw(scene.lights, *SceneCamera::GetSceneCamera());
+        terrain.Draw(*SceneCamera::GetSceneCamera());
         scene.Draw(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
 
-        terrain.Draw(scene.lights, *Camera::GetMainCamera());
-        scene.Draw(*Camera::GetMainCamera());
+        if (Camera::GetMainCamera())
+        {
+            terrain.Draw(*Camera::GetMainCamera());
+            scene.Draw(*Camera::GetMainCamera());
+        }
 
         render.BindMainFBO();
         

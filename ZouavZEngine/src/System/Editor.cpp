@@ -11,12 +11,16 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/Light.hpp"
+#include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
+#include "System/ResourcesManager.hpp"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -29,8 +33,12 @@ bool hierarchyMenu = false;
 ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
-GameObject* selectedGameObject = nullptr;
 GameObject* gameObjectInspector = nullptr;
+std::string currentProjectFolder = "resources";
+std::string currentMovingProjectFile;
+ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
+bool projectNewFolder = false;
+
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -39,10 +47,8 @@ bool consoleError = true;
 static ImGuiID dockspaceID = 1;
 
 Editor::Editor(class Engine& _engine)
-    : engine(_engine)
-{
-    isKeyboardEnable = false;
-}
+    : engine(_engine), isKeyboardEnable(false)
+{}
 
 void Editor::Init()
 {
@@ -79,22 +85,32 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-	ImGui::Begin("Option", NULL, // ImGuiWindowFlags_NoMove
-                               // | ImGuiWindowFlags_NoDocking
-                              //  | ImGuiWindowFlags_NoNav
-                              //  | ImGuiWindowFlags_NoBackground
-		                         ImGuiWindowFlags_NoScrollWithMouse
+	ImGui::Begin("Option", NULL,  //ImGuiWindowFlags_NoMove
+                                //| ImGuiWindowFlags_NoDocking
+                                 ImGuiWindowFlags_NoNav
+                                | ImGuiWindowFlags_NoBackground
+		                        | ImGuiWindowFlags_NoScrollWithMouse
 		                        | ImGuiWindowFlags_NoTitleBar
 		                        | ImGuiWindowFlags_NoScrollbar
                                 | ImGuiWindowFlags_NoCollapse
 		                        | ImGuiWindowFlags_NoResize
     );
-
+    ImGui::SameLine();
+    if (ImGui::Button("Save"))
+    {
+        engine.Save();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load"))
+    {
+        engine.Load();
+    }
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(800);
 
 	if (ImGui::Button("Play"))
 	{
+        engine.Save();
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
@@ -111,8 +127,9 @@ void Editor::DisplayOptionWindow()
     {
         state = EDITOR_STATE::EDITING;
         TimeManager::gameClock->Reset();
-
+        gameObjectInspector = nullptr;
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
+        engine.Load();
 	}
 
 
@@ -283,8 +300,8 @@ void Editor::DisplayMenuBar()
             ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
             ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("New Class", nullptr, &newClassWindow);
-            ImGui::MenuItem("Open", NULL);
-            ImGui::MenuItem("Save", NULL);
+            ImGui::MenuItem("Load", nullptr);
+            ImGui::MenuItem("Save", nullptr);
             ImGui::EndMenu();
         }
 
@@ -363,48 +380,62 @@ void Editor::DisplayInspector()
     {
         if (gameObjectInspector)
         {
-            //TODO one line code
+            ImGui::PushItemWidth(200.0f);
             ImGui::InputText("##name", gameObjectInspector->name.data(), 256);
 
-            ImGui::Text("World Position :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldPosition().z).c_str());
-
-            ImGui::Text("World Rotation :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldRotation().z).c_str());
-
-            ImGui::Text("World Scale :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().x).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().y).c_str());
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::Text(std::to_string(gameObjectInspector->WorldScale().z).c_str());
+            ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
+            
+            Vec3 worldEulerAngles = gameObjectInspector->WorldRotation().ToEuler();
+            ImGui::Text("World Rotation : %.3f %.3f %.3f", worldEulerAngles.x, worldEulerAngles.y, worldEulerAngles.z);
+            
+            ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
             ImGui::Text("Local Position :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionx", &gameObjectInspector->localPosition.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positiony", &gameObjectInspector->localPosition.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##positionz", &gameObjectInspector->localPosition.z);
+            ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
 
-            static  Vec3 eulerAngles;// = gameObjectInspector->localRotation.ToEuler();
+            static Vec3 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
             ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationx", &eulerAngles.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationy", &eulerAngles.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##rotationz", &eulerAngles.z);
+            ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
-            if (ImGui::Button("Non"))
-                gameObjectInspector->localRotation = Quaternion(eulerAngles);
+            ImGui::Text("Local Scale    :");
+            ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
 
-            ImGui::Text("Local Scale :");
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalex", &gameObjectInspector->localScale.x);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scaley", &gameObjectInspector->localScale.y);
-            ImGui::SameLine(); ImGui::PushItemWidth(70.0f); ImGui::InputFloat("##scalez", &gameObjectInspector->localScale.z);
+            for (std::unique_ptr<Component>& component : gameObjectInspector->components)
+            {
+                component->Editor();
+            }
 
-            if (!gameObjectInspector->GetComponent<MeshRenderer>())
-                if (ImGui::Button("Add Mesh Renderer"))
-                    gameObjectInspector->AddComponent<MeshRenderer>();
+            for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+            {
+                switch (i)
+                {
+                    case static_cast<int>(E_COMPONENT::AUDIO_BROADCASTER) :
+                        if (!gameObjectInspector->GetComponent<AudioBroadcaster>())
+                            if (ImGui::Button("Add AudioBroadcaster"))
+                                gameObjectInspector->AddComponent<AudioBroadcaster>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::AUDIO_LISTENER) :
+                        if (!gameObjectInspector->GetComponent<AudioListener>())
+                            if (ImGui::Button("Add AudioListener"))
+                                gameObjectInspector->AddComponent<AudioListener>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::LIGHT) :
+                        if (!gameObjectInspector->GetComponent<Light>())
+                            if (ImGui::Button("Add Light"))
+                                gameObjectInspector->AddComponent<Light>();
+                        break;
+
+                    case static_cast<int>(E_COMPONENT::MESHRENDERER) :
+                        if (!gameObjectInspector->GetComponent<MeshRenderer>())
+                            if (ImGui::Button("Add MeshRenderer"))
+                                gameObjectInspector->AddComponent<MeshRenderer>();
+                        break;
+                }
+            }
         }
     }
     ImGui::End();
@@ -455,14 +486,94 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
     ImGui::End();
 }
 
+void Editor::DisplayProject()
+{
+    if (ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
+    {
+        if (ImGui::Button("resources"))
+            currentProjectFolder = "resources";
+
+        int i = 0;
+        float windowWidth = ImGui::GetWindowWidth();
+        
+        for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
+        {
+            std::string currentName = GetRightName(entry.path().string());
+            if (entry.is_directory())
+            {
+                ImGui::PushID(i);
+                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
+                {
+                    currentProjectFolder.append("/").append(currentName);
+                }
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                {
+                    currentMovingProjectFile = entry.path().string();
+                    ImGui::SetDragDropPayload("ProjectFile", &currentMovingProjectFile, sizeof(std::string));
+                    ImGui::Text(currentName.c_str());
+                    ImGui::EndDragDropSource();
+                }
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+                    {
+                        ZASSERT(payload->DataSize == sizeof(std::string), "Error in project manager");
+                        std::string name = *(const std::string*)payload->Data;
+                        std::string newName = name.substr(0, name.size() - GetRightName(name).size()).append(currentName).append("/").append(GetRightName(name));
+                        std::rename(name.c_str(), newName.c_str());
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+                ImGui::PopID();
+            }
+            else
+            {
+                ImGui::PushID(i);
+                ImGui::Button(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f));
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                {
+                    currentMovingProjectFile = entry.path().string();
+                    ImGui::SetDragDropPayload("ProjectFile", &currentMovingProjectFile, sizeof(std::string));
+                    ImGui::Text(currentName.c_str());
+                    ImGui::EndDragDropSource();
+                }
+                ImGui::PopID();
+            }
+            if (++i % 3 != 0)
+                ImGui::SameLine();
+        }
+    
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        {
+            projectNewFolderPos = ImGui::GetMousePos();
+            projectNewFolder = true;
+        }
+
+        if (projectNewFolder)
+        {
+            ImGui::SetNextWindowPos(projectNewFolderPos);
+            if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+            {
+                static char newHierarchyFolderName[256] = "New Folder";
+                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName, 256);
+                if (ImGui::Button("Create"))
+                {
+                    if (_mkdir(std::string(currentProjectFolder).append("/").append(newHierarchyFolderName).c_str()) == 0)
+                        std::cout << "Folder " << newHierarchyFolderName << " created" << std::endl;
+                    else
+                        std::cout << "Folder " << newHierarchyFolderName << " not created" << std::endl;
+                    projectNewFolder = !projectNewFolder;
+                }
+            }
+            ImGui::End();
+        }
+    }
+    ImGui::End();
+}
+
 void DisplayChild(GameObject* _parent)
 {
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf;
-    
-    if (selectedGameObject == _parent)
-        flags |= ImGuiTreeNodeFlags_Selected;
-
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), flags))
+    if (ImGui::TreeNodeEx(_parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
@@ -473,21 +584,29 @@ void DisplayChild(GameObject* _parent)
                 newGameObjectParent = _parent;
             }
 
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && _parent->name != "World")
-                selectedGameObject = _parent;
-
-            if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && selectedGameObject)
-            {
-                if (selectedGameObject == _parent)
-                    gameObjectInspector = selectedGameObject;
-
-                else if (!_parent->IsChildOf(selectedGameObject))
-                {
-                    selectedGameObject->SetParent(_parent);
-                    selectedGameObject = nullptr;
-                }
-            }
+            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                gameObjectInspector = _parent;
         }
+
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload("Gameobject Hierarchy", &_parent, sizeof(_parent));
+            ImGui::Text(_parent->name.c_str());
+
+            ImGui::EndDragDropSource();
+        }
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Gameobject Hierarchy"))
+            {
+                GameObject* gameObject = * (GameObject**)(payload->Data);
+                if (!_parent->IsChildOf(gameObject))
+                    gameObject->SetParent(_parent);
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         for (GameObject* child : _parent->GetChildren())
             DisplayChild(child);
 
@@ -502,7 +621,7 @@ void Editor::DisplayHierarchy()
     {
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             hierarchyMenuPos = ImGui::GetMousePos();
             hierarchyMenu = true;
@@ -523,34 +642,40 @@ void Editor::DisplayHierarchy()
                     hierarchyMenu = false;
                     strcpy_s(newGameObjectName,"New GameObject");
                 }
+                if (ImGui::Button("Delete") && newGameObjectParent->parent)
+                {
+                    for (GameObject* child : newGameObjectParent->children)
+                    {
+                        child->SetParent(newGameObjectParent->parent);
+                    }
+                    newGameObjectParent->SetParent(nullptr);
+                    newGameObjectParent->toDestroy = true;
+                    GameObject::destroyGameObject = true;
+                }
             }
             ImGui::End();
         }
 
         if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-        {
             hierarchyMenu = false;
-            selectedGameObject = nullptr;
-        }
     }
     ImGui::End();
 }
 
 void Editor::MoveSelectedGameobject()
 {
-    if (selectedGameObject == nullptr)
+    if (gameObjectInspector == nullptr)
         return;
-    
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        selectedGameObject->Translate(selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        selectedGameObject->Translate(-selectedGameObject->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-        selectedGameObject->Translate(selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-        selectedGameObject->Translate(-selectedGameObject->Right() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Right() * editorClock->GetDeltaTime());
 }

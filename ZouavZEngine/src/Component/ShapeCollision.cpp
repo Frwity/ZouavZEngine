@@ -36,7 +36,7 @@ void ShapeCollision::AttachToRigidComponent()
 
 		if (rd)
 		{
-			ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE, "Plane must created with a RigidStatic");
+			ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE, "Plane must be created with a RigidStatic");
 			rd->actor->attachShape(*shape);
 		}
 		

@@ -15,18 +15,18 @@ struct Vertex
 class Mesh : public Resource
 {
 private:
-    unsigned int VBO, EBO;
-    unsigned int VAO;
-    size_t nbElements;
+    unsigned int VBO, EBO = 0;
+    unsigned int VAO = 0;
+    size_t nbElements = 0;
 
 public:
-    Mesh() = default;
-    Mesh(const char* path);
+    Mesh(const std::string& _name);
+    Mesh(const std::string& _name, const char* path);
     ~Mesh();
 
     void InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
     void ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
-    void CreateQuad();
+    void CreateCube();
   
     unsigned int GetID() const
     {

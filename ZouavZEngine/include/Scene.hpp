@@ -2,8 +2,6 @@
 #include "GameObject.hpp"
 #include <vector>
 
-class Mat4;
-
 class Scene
 {
 private:
@@ -12,16 +10,24 @@ private:
 	GameObject world{ "World" };
 
 	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const class Camera& _camera) const;
-
-public:
+	
 	std::vector<class Light*> lights;
 
+public:
+
 	Scene();
-	~Scene() = default;
+	~Scene();
 
 	static Scene* GetCurrentScene() { return currentScene; }
 	GameObject& GetWorld() { return world; }
 
+	void Load();
+	void Save();
+
 	void Draw(const class Camera& _camera) const;
 	void SimulatePhyics() const;					//Simulate phyics and update transform of affected gameObjects
+
+	void AddLight(class Light* _newLight);
+	void DeleteLight();
+	const std::vector<class Light*>& GetLights() { return lights; }
 };

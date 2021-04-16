@@ -11,8 +11,7 @@ class Shader: public Resource
 {
 public:
 	unsigned int id = 0;
-	Shader() {};
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const std::string& _name, const char* vertexPath, const char* fragmentPath);
 	const char* LoadFile(const char* pathToFile);
 	void DebugCheck(const int& shader, const char* msg, const char* pathToFile);
 	unsigned int CreateVertexShader(const char* vertexPath);
@@ -23,6 +22,7 @@ public:
 	void SetBool(const std::string& name, bool value) const;
 	void SetInt(const std::string& name, int value) const;
 	void SetFloat(const std::string& name, float value) const;
+	void SetFloatArray(const std::string& name, float* value, unsigned int size) const;
 	void SetVector3(const std::string& name, float x, float y, float z) const;
 	void SetVector3(const std::string& name, const Vec3& v) const;
 	void SetVector2(const std::string& name, const Vec2& v) const;

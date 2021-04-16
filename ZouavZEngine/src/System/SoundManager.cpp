@@ -1,12 +1,13 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <iostream>
-#include "Sound.hpp"
+#include "Component/AudioBroadcaster.hpp"
 #include "System/Debug.hpp"
+#include "Maths/Vec3.hpp"
 #include "System/SoundManager.hpp"
 
 float SoundManager::mainVolume = 1.0f;
-std::vector<Sound*> SoundManager::sounds;
+std::vector<AudioBroadcaster*> SoundManager::sounds;
 
 void SoundManager::Init()
 {
@@ -38,8 +39,8 @@ void SoundManager::Init()
 
 void SoundManager::Update()
 {
-    for (Sound* sound : sounds)
-        sound->SetVolume(mainVolume);
+    for (AudioBroadcaster* sound : sounds)
+        sound->SetVolume(mainVolume * sound->volumeIntensity);
 }
 
 void SoundManager::Destroy()
@@ -54,12 +55,12 @@ void SoundManager::Destroy()
     alcCloseDevice(Device);
 }
 
-void SoundManager::AddSound(Sound* _newSound)
+void SoundManager::AddSound(AudioBroadcaster* _newSound)
 {
     sounds.push_back(_newSound);
 }
 
-void SoundManager::RemoveSound(Sound* _newSound)
+void SoundManager::RemoveSound(AudioBroadcaster* _newSound)
 {
     for (auto it = sounds.begin(); it != sounds.end(); )
     {
@@ -71,4 +72,14 @@ void SoundManager::RemoveSound(Sound* _newSound)
         else
             ++it;
     }
+}
+
+void SoundManager::SetListenerPosition(const Vec3& _position)
+{
+    alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
+}
+
+void SoundManager::SetListenerVelocity(const Vec3& _velocity)
+{
+    alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z);
 }

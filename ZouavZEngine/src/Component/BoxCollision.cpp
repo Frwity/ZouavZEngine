@@ -14,6 +14,7 @@
 
 using namespace physx;
 
+
 BoxCollision::BoxCollision(GameObject* _gameObject)
 	: ShapeCollision(_gameObject)
 {
@@ -25,6 +26,7 @@ BoxCollision::BoxCollision(GameObject* _gameObject)
 	Vec3 v{ 0.5f, 0.5f, 0.5f };
 	
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+	shape->userData = gameObject;
 
 	AttachToRigidComponent();
 }

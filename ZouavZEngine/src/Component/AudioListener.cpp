@@ -1,15 +1,23 @@
 #include "GameObject.hpp"
 #include <AL/al.h>
+#include "System/SoundManager.hpp"
 #include "Component/AudioListener.hpp"
+#include "imgui.h"
 
 AudioListener::AudioListener(GameObject* _gameObject)
 	: Component(_gameObject)
 {
-	alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
-	alListener3f(AL_POSITION, _gameObject->WorldPosition().x, _gameObject->WorldPosition().y, _gameObject->WorldPosition().z);
+	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
+	if (_gameObject)
+		SoundManager::SetListenerPosition(_gameObject->WorldPosition());
 }
 
 void AudioListener::Update()
 {
-	alListener3f(AL_POSITION, gameObject->WorldPosition().x, gameObject->WorldPosition().y, gameObject->WorldPosition().z);
+	SoundManager::SetListenerPosition(gameObject->WorldPosition());
+}
+
+void AudioListener::Editor()
+{
+	ImGui::Text("AudioListener");
 }

@@ -14,6 +14,7 @@
 
 using namespace physx;
 
+
 RigidBody::RigidBody(GameObject* _gameObject)
 	: Component(_gameObject)
 {
@@ -21,7 +22,11 @@ RigidBody::RigidBody(GameObject* _gameObject)
 
 	actor = PhysicSystem::physics->createRigidDynamic(t);
 
-	actor->userData = gameObject;
+	actor->userData = this;
+
+	static int i = 0;
+	if (i++ == 0)	
+		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 
 	AttachShape();
 
@@ -63,6 +68,11 @@ void RigidBody::AttachShape()
 	{
 		collision->isAttach = true;
 		actor->attachShape(*collision->shape);
-		collision->shape->release();
+		//collision->shape->release();
 	}
+}
+
+void RigidBody::OnContact()
+{
+	gameObject->OnContact();
 }
