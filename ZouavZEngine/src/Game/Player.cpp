@@ -19,8 +19,12 @@ Player::Player(GameObject* _gameobject)
 
 void Player::Begin()
 {
-	gameObject->GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
-	gameObject->GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
+	if (gameObject->GetComponent<Camera>())
+	{
+		gameObject->GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
+		gameObject->GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
+
+	}
 	gameObject->localRotation = Quaternion{ Vec3{ 0.0f, 180.0f, 0.0f } };
 	rb = gameObject->GetComponent<RigidBody>();
 

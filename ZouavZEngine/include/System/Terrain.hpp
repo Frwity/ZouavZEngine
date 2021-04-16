@@ -65,10 +65,12 @@ private:
 
 	int size = 0;
 	int vertexCount = 0;
+
+	bool isGenerated = false;
 public:
 
 	Chunk() = default; 
-	~Chunk() = default;
+	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
 	void Generate(ChunkCreateArg _cca, bool _reGenerate);

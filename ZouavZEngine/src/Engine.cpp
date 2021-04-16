@@ -104,7 +104,26 @@ void Engine::TempLoad()
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
     player->AddComponent<SphereCollision>();
     player->AddComponent<RigidBody>();
-
+    player = GameObject::CreateGameObject("oui");
+    player->AddComponent<MeshRenderer>(MeshRenderer::defaultMesh, texture, MeshRenderer::defaultShader);
+    player->AddComponent<BoxCollision>();
+    player->AddComponent<Player>();
+    player->AddComponent<RigidBody>();
+    player = GameObject::CreateGameObject("oui");
+    player->AddComponent<MeshRenderer>(MeshRenderer::defaultMesh, texture, MeshRenderer::defaultShader);
+    player->AddComponent<BoxCollision>();
+    player->AddComponent<Player>();
+    player->AddComponent<RigidBody>();
+    player = GameObject::CreateGameObject("oui");
+    player->AddComponent<MeshRenderer>(MeshRenderer::defaultMesh, texture, MeshRenderer::defaultShader);
+    player->AddComponent<BoxCollision>();
+    player->AddComponent<Player>();
+    player->AddComponent<RigidBody>();
+    player = GameObject::CreateGameObject("oui");
+    player->AddComponent<MeshRenderer>(MeshRenderer::defaultMesh, texture, MeshRenderer::defaultShader);
+    player->AddComponent<BoxCollision>();
+    player->AddComponent<Player>();
+    player->AddComponent<RigidBody>();
     GameObject* test = GameObject::CreateGameObject("test");
     test->localPosition = { 0.0f, 5.0f, 0.0f };
     test->AddComponent<MeshRenderer>(mesh, texture, MeshRenderer::defaultShader);
