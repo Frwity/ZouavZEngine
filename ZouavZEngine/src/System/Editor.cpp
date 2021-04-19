@@ -384,10 +384,14 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 }
 
 template <typename T>
-void ComponentButton(std::string _text)
+bool ComponentButton(std::string _text, bool _onlyOne)
 {
-    if (!gameObjectInspector->GetComponent<T>() && ImGui::Button(_text.c_str()))
+    if ((!_onlyOne || (_onlyOne && !gameObjectInspector->GetComponent<T>())) && ImGui::Button(_text.c_str()))
+    {
         gameObjectInspector->AddComponent<T>();
+        return true;
+    }
+    return false;
 }
 
 void Editor::DisplayInspector()
@@ -436,41 +440,68 @@ void Editor::DisplayInspector()
                 component->Editor();
             }
 
-            for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+            static bool addComponentWindow = false;
+            
+            if (ImGui::Button("Add Component"))
+                addComponentWindow = true;
+
+            if (addComponentWindow)
             {
-                switch (static_cast<E_COMPONENT>(i))
+                ImGui::SetNextWindowPos(ImGui::GetWindowPos());
+                ImGui::SetNextWindowSize(ImGui::GetWindowSize());
+                if (ImGui::Begin("Add Component##window"), addComponentWindow, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize)
                 {
-                    case E_COMPONENT::AUDIO_BROADCASTER :
-                        ComponentButton<AudioBroadcaster>("Add AudioBroadcaster");
-                        break;
-                    case E_COMPONENT::AUDIO_LISTENER :
-                        ComponentButton<AudioListener>("Add AudioListener");
-                        break;
-                    case E_COMPONENT::LIGHT :
-                        ComponentButton<Light>("Add Light");
-                        break;
-                    case E_COMPONENT::MESHRENDERER :
-                        ComponentButton<MeshRenderer>("Add MeshRenderer");
-                        break;
-                    case E_COMPONENT::BOX_COLLISION :
-                        ComponentButton<BoxCollision>("Add BoxCollision");
-                        break;
-                    case E_COMPONENT::CAPSULE_COLLISION :
-                        ComponentButton<CapsuleCollision>("Add CapsuleCollision");
-                        break;
-                    case E_COMPONENT::SPHERE_COLLISION :
-                        ComponentButton<SphereCollision>("Add SphereCollision");
-                        break;
-                    case E_COMPONENT::PLANE :
-                        ComponentButton<Plane>("Add Plane");
-                        break;
-                    case E_COMPONENT::RIGID_BODY :
-                        ComponentButton<RigidBody>("Add RigidBody");
-                        break;
-                    case E_COMPONENT::RIGID_STATIC :
-                        ComponentButton<RigidStatic>("Add RigidStatic");
-                        break;
+                    for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+                    {
+                        switch (static_cast<E_COMPONENT>(i))
+                        {
+                        case E_COMPONENT::AUDIO_BROADCASTER:
+                            if (ComponentButton<AudioBroadcaster>("Add AudioBroadcaster", true))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::AUDIO_LISTENER:
+                            if (ComponentButton<AudioListener>("Add AudioListener", true))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::LIGHT:
+                            if (ComponentButton<Light>("Add Light", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::MESHRENDERER:
+                            if (ComponentButton<MeshRenderer>("Add MeshRenderer", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::BOX_COLLISION:
+                            if (ComponentButton<BoxCollision>("Add BoxCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::CAPSULE_COLLISION:
+                            if (ComponentButton<CapsuleCollision>("Add CapsuleCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::SPHERE_COLLISION:
+                            if (ComponentButton<SphereCollision>("Add SphereCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::PLANE:
+                            if (gameObjectInspector->GetComponent<RigidStatic>())
+                                if (ComponentButton<Plane>("Add Plane", false))
+                                    addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::RIGID_BODY:
+                            if (!gameObjectInspector->GetComponent<RigidStatic>())
+                                if (ComponentButton<RigidBody>("Add RigidBody", true))
+                                    addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::RIGID_STATIC:
+                            if (!gameObjectInspector->GetComponent<RigidBody>())
+                                if (ComponentButton<RigidStatic>("Add RigidStatic", true))
+                                    addComponentWindow = false;
+                            break;
+                        }
+                    }
                 }
+                ImGui::End();
             }
         }
     }
@@ -510,7 +541,11 @@ void Editor::DisplayConsoleWindow()
 
 void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
-    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
+    if (state == EDITOR_STATE::PLAYING)
+    {
+        ImGui::SetNextWindowSize(ImGui::GetWindowSize());
+    }
+    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
         ImVec2 windowSize = ImGui::GetWindowSize();
 
@@ -543,7 +578,6 @@ void Editor::DisplayProject()
                 ImGui::PushID(i);
                 if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
                 {
-
                     currentProjectFolder.append("/").append(currentName);
                 }
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -618,7 +652,9 @@ void Editor::DisplayProject()
 
 void DisplayChild(GameObject* _parent)
 {
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    std::ostringstream id;
+    id << (void*)_parent;
+    if (ImGui::TreeNodeEx((_parent->name + "##" + id.str()).c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
