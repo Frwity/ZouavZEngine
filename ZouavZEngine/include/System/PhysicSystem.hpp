@@ -9,7 +9,9 @@
 #include "PxRigidActor.h"
 #include "System/Debug.hpp"
 
+#include "GameObject.hpp"
 #include "Component/RigidBody.hpp"
+#include "Component/ScriptComponent.hpp"
 
 namespace physx
 {
@@ -31,14 +33,17 @@ public:
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
-		//RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
-		//RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
+		/*RigidBody* rb1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
+		RigidBody* rb2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
+		
+		if (rb1 && rb2)
+		{
+			rb1->OnContact(rb2->gameObject);
+			rb2->OnContact(rb1->gameObject);
+		}
 
-		//rigidbody1->OnContact(rigidbody2->gameObject);
-		//rigidbody2->OnContact(rigidbody1->gameObject);
-
-		//PX_UNUSED((pairs));
-		//PX_UNUSED((nbPairs));
+		PX_UNUSED((pairs));
+		PX_UNUSED((nbPairs));*/
 	}
 
 public:
@@ -70,5 +75,4 @@ public:
 	static void Init();
 	static void InitScene();
 	static void Destroy();
-	static void DestroyCollisionComponent();
 };

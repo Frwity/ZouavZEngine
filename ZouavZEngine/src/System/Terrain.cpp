@@ -33,7 +33,6 @@ using namespace physx;
 
 Terrain::Terrain()
 {
-
 	AddColorLayer();
 	AddNoiseLayer();
 }
@@ -406,11 +405,6 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	PxTransform t(PxVec3FromVec3(Vec3(-pos.x * (float)size, 0, pos.y * (float)size)), PxQuatFromQuaternion(Quaternion(Vec3(0,-90,0))));
 	
-	if (shape)
-	{
-		shape->release();
-		shape = nullptr;
-	}
 	if (actor)
 	{
 		PhysicSystem::scene->removeActor(*actor);
@@ -429,12 +423,15 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
+	/*if (actor == nullptr || PhysicSystem::scene == nullptr)
+		return;
+
 	if (isGenerated)
 	{
-		shape->release();
-		shape = nullptr;
-
-		PhysicSystem::scene->removeActor(*actor);
-		actor = nullptr;
-	}
+		if (actor->getScene() == PhysicSystem::scene)
+		{
+			PhysicSystem::scene->removeActor(*actor);
+			actor = nullptr;
+		}
+	}*/
 }

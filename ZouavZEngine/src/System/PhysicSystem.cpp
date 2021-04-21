@@ -91,32 +91,13 @@ void PhysicSystem::InitScene()
 	ZASSERT(pvdClient != nullptr, "getScenePvdClient failed !");
 }
 
-void PhysicSystem::DestroyCollisionComponent()
-{
-	PhysicSystem::scene->simulate(1.0f);
-	PhysicSystem::scene->fetchResults(true);
-
-	physx::PxU32 nbActiveActor;
-
-	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
-
-	//TODO fix destruction
-	/*for (int i = 0; i < nbActiveActor; i++)
-	{
-		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
-
-		//ShapeCollision* collision = go->GetComponent<ShapeCollision>();
-		//collision->releasePhysXComponent();
-	}*/
-}
-
 void PhysicSystem::Destroy()
 {
-	/*DestroyCollisionComponent();
+	//TODO destroy chunks
 	scene->release();
 	cooking->release();
 	physics->release();
 	pvd->release();
 	foundation->release();
-	delete physicEventCallback;*/
+	delete physicEventCallback;
 }

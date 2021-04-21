@@ -71,7 +71,7 @@ void RigidBody::AttachShape()
 	{
 		collision->isAttach = true;
 		actor->attachShape(*collision->shape);
-		//collision->shape->release();
+		collision->shape->release();
 	}
 }
 
