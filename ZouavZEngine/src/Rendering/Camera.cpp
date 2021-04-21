@@ -32,13 +32,14 @@ Camera::~Camera()
 
 Mat4 Camera::GetMatrix() const
 {
-    const Vec3 forward = (target - position).Normalized();
+    const Vec3 pos = gameObject->WorldPosition() + position;
+    const Vec3 targetPos = gameObject->WorldPosition() + target;
+
+    const Vec3 forward = (targetPos - pos).Normalized();
     const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;
-
-    const Vec3 pos(-gameObject->localPosition.x + position.x, gameObject->localPosition.y + position.y, -gameObject->localPosition.z + position.z);
 
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;

@@ -49,11 +49,11 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	{
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
 		
-		RigidBody* rd = _child->GetComponent<RigidBody>();
+		RigidBody* rb = _child->GetComponent<RigidBody>();
 
 		//update physx transform for simulation
-		if (rd)
-			rd->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+		if (rb)
+			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
 
 		RigidStatic* rs = _child->GetComponent<RigidStatic>();
 
