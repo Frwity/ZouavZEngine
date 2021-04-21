@@ -7,7 +7,7 @@
 
 const Texture* Texture::errorTexture;
 
-Texture::Texture(const std::string& _name, const char* src)
+Texture::Texture(const std::string& _name, const char* _path)
     : Resource(_name)
 {
     glGenTextures(1, &textureID);
@@ -20,7 +20,7 @@ Texture::Texture(const std::string& _name, const char* src)
 
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load(src, &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load(_path, &width, &height, &nrChannels, 0);
 
     if (data)
     {
@@ -29,9 +29,12 @@ Texture::Texture(const std::string& _name, const char* src)
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
-        Debug::LogWarning(std::string("Failed to load texture : ").append(src).append("\n"));
+        Debug::LogWarning(std::string("Failed to load texture : ").append(_path).append("\n"));
 
     stbi_image_free(data);
+
+    paths.emplace_back(_path);
+
 }
 
 void Texture::Use(Texture* texture)

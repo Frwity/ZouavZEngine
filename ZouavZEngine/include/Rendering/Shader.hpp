@@ -8,7 +8,7 @@ class Vec3;
 class Vec2;
 class Vec4;
 
-class Shader: public Resource
+class Shader : public Resource
 {
 public:
 	unsigned int id = 0;

@@ -136,7 +136,7 @@ void Editor::DisplayOptionWindow()
         TimeManager::gameClock->Reset();
         gameObjectInspector = nullptr;
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
-        engine.Load();
+        engine.scene.Load(false);
 	}
 
 

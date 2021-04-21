@@ -1,7 +1,7 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 8,
+    "value2": 4,
     "value3": [],
     "value4": 0.0,
     "value5": 0.0,
@@ -198,215 +198,10 @@
     "value53": 1.0,
     "value54": 1.0,
     "value55": 1.0,
-    "value56": "oui",
+    "value56": "test",
     "value57": "",
     "value58": 0,
     "value59": [
-        {
-            "polymorphic_id": 2,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": "Skull Tex",
-                    "value2": "Default"
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483658,
-            "polymorphic_name": "BoxCollision",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 3,
-                    "value1": 10,
-                    "value2": 1.0
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        }
-    ],
-    "value60": 0.0,
-    "value61": 0.0,
-    "value62": 0.0,
-    "value63": 0.0,
-    "value64": 1.0,
-    "value65": -0.0,
-    "value66": -4.371138828673793e-8,
-    "value67": 1.0,
-    "value68": 1.0,
-    "value69": 1.0,
-    "value70": "oui",
-    "value71": "",
-    "value72": 0,
-    "value73": [
-        {
-            "polymorphic_id": 2,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": "Skull Tex",
-                    "value2": "Default"
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 3,
-                    "value1": 10,
-                    "value2": 1.0
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        }
-    ],
-    "value74": 0.0,
-    "value75": 0.0,
-    "value76": 0.0,
-    "value77": 0.0,
-    "value78": 1.0,
-    "value79": -0.0,
-    "value80": -4.371138828673793e-8,
-    "value81": 1.0,
-    "value82": 1.0,
-    "value83": 1.0,
-    "value84": "oui",
-    "value85": "",
-    "value86": 0,
-    "value87": [
-        {
-            "polymorphic_id": 2,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": "Skull Tex",
-                    "value2": "Default"
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 3,
-                    "value1": 10,
-                    "value2": 1.0
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        }
-    ],
-    "value88": 0.0,
-    "value89": 0.0,
-    "value90": 0.0,
-    "value91": 0.0,
-    "value92": 1.0,
-    "value93": -0.0,
-    "value94": -4.371138828673793e-8,
-    "value95": 1.0,
-    "value96": 1.0,
-    "value97": 1.0,
-    "value98": "oui",
-    "value99": "",
-    "value100": 0,
-    "value101": [
-        {
-            "polymorphic_id": 2,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": "Skull Tex",
-                    "value2": "Default"
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 3,
-                    "value1": 10,
-                    "value2": 1.0
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
-        }
-    ],
-    "value102": 0.0,
-    "value103": 0.0,
-    "value104": 0.0,
-    "value105": 0.0,
-    "value106": 1.0,
-    "value107": -0.0,
-    "value108": -4.371138828673793e-8,
-    "value109": 1.0,
-    "value110": 1.0,
-    "value111": 1.0,
-    "value112": "test",
-    "value113": "",
-    "value114": 0,
-    "value115": [
         {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -435,42 +230,42 @@
             }
         }
     ],
-    "value116": 0.0,
-    "value117": 5.0,
-    "value118": 0.0,
-    "value119": 0.0,
-    "value120": 0.0,
-    "value121": 0.0,
-    "value122": 1.0,
-    "value123": 1.0,
-    "value124": 1.0,
-    "value125": 1.0,
-    "value126": 512.0,
-    "value127": 128,
-    "value128": 16,
-    "value129": 0,
-    "value130": 1,
-    "value131": 0,
-    "value132": -10.0,
-    "value133": 30.0,
-    "value134": 30.0,
-    "value135": 1,
-    "value136": 0,
-    "value137": true,
-    "value138": 0,
-    "value139": 0,
-    "value140": 1,
-    "value141": 0.009999999776482582,
-    "value142": 2.0,
-    "value143": 0.5,
-    "value144": 0.0,
-    "value145": 2.0,
-    "value146": 0.0,
-    "value147": 0.0,
-    "value148": 0.0,
-    "value149": 0.0,
-    "value150": 0.0,
-    "value151": 0.0,
-    "value152": 1.0,
-    "value153": "nullptr"
+    "value60": 0.0,
+    "value61": 5.0,
+    "value62": 0.0,
+    "value63": 0.0,
+    "value64": 0.0,
+    "value65": 0.0,
+    "value66": 1.0,
+    "value67": 1.0,
+    "value68": 1.0,
+    "value69": 1.0,
+    "value70": 512.0,
+    "value71": 128,
+    "value72": 16,
+    "value73": 0,
+    "value74": 1,
+    "value75": 0,
+    "value76": -10.0,
+    "value77": 30.0,
+    "value78": 30.0,
+    "value79": 1,
+    "value80": 0,
+    "value81": true,
+    "value82": 0,
+    "value83": 0,
+    "value84": 1,
+    "value85": 0.009999999776482582,
+    "value86": 2.0,
+    "value87": 0.5,
+    "value88": 0.0,
+    "value89": 2.0,
+    "value90": 0.0,
+    "value91": 0.0,
+    "value92": 0.0,
+    "value93": 0.0,
+    "value94": 0.0,
+    "value95": 0.0,
+    "value96": 94.35199737548828,
+    "value97": "Grass"
 }

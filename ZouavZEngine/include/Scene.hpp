@@ -23,8 +23,8 @@ public:
 	static Scene* GetCurrentScene() { return currentScene; }
 	GameObject& GetWorld() { return world; }
 
-	void Load();
-	void Load(const std::string& path);
+	void Load(bool _changingScene = true);
+	void Load(const std::string& _path, bool _changingScene = true);
 	void Save();
 
 	void Update();
