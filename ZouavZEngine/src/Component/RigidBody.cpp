@@ -38,8 +38,7 @@ RigidBody::RigidBody(GameObject* _gameObject)
 
 RigidBody::~RigidBody()
 {
-	//TODO detach shape and release actor
-	//actor->release();
+	
 }
 
 void RigidBody::SetLinearVelocity(const class Vec3& v)
@@ -70,7 +69,8 @@ void RigidBody::AttachShape()
 	if (collision && !collision->isAttach)
 	{
 		collision->isAttach = true;
-		actor->attachShape(*collision->shape);
+		if (!actor->attachShape(*collision->shape))
+			Debug::LogError("Attach to shape failed !");
 		collision->shape->release();
 	}
 }

@@ -43,8 +43,8 @@ void Scene::Load(const std::string& path)
 {
 	GameObject::gameObjects.clear();
 	world.children.clear();
-	PhysicSystem::scene->release();
-	PhysicSystem::InitScene();
+	PhysicSystem::Destroy();
+	PhysicSystem::Init();
 
 	std::ifstream saveFile;
 	saveFile.open(std::string(path), std::ios::binary);

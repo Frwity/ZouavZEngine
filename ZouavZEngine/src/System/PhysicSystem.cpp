@@ -17,7 +17,8 @@ PxCooking* PhysicSystem::cooking = nullptr;
 PxPvd* PhysicSystem::pvd = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
 PxPvdSceneClient* PhysicSystem::pvdClient = nullptr;
-PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
+PxPvdTransport* PhysicSystem::transport = nullptr;
+//PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
 
 static PxFilterFlags filterShader(
     PxFilterObjectAttributes attributes0,
@@ -45,7 +46,7 @@ void PhysicSystem::Init()
 
 	pvd = PxCreatePvd(*foundation);
 	ZASSERT(pvd != nullptr, "PxCreatePvd failed !");
-	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+	transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 	pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
 	physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
@@ -62,7 +63,6 @@ void PhysicSystem::Init()
 	{
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
 	}
-
 }
 
 void PhysicSystem::InitScene()
@@ -80,8 +80,7 @@ void PhysicSystem::InitScene()
 	}
 
 	sceneDesc.filterShader = filterShader;
-
-	sceneDesc.simulationEventCallback = physicEventCallback;
+	sceneDesc.simulationEventCallback = new PhysicEventCallback();
 	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
@@ -95,9 +94,22 @@ void PhysicSystem::Destroy()
 {
 	//TODO destroy chunks
 	scene->release();
+	scene = nullptr;
 	cooking->release();
 	physics->release();
+	PxCloseExtensions();
+	transport->release();
 	pvd->release();
 	foundation->release();
-	delete physicEventCallback;
+	//delete physicEventCallback;
+}
+
+void PhysicSystem::ResetScene()
+{
+	if(scene)
+		scene->release();
+
+	scene = nullptr;
+
+	InitScene();
 }

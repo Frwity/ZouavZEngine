@@ -21,6 +21,7 @@ namespace physx
 	class PxScene;
 	class PxPvdSceneClient;
 	class PxRigidActor;
+	class PxPvdTransport;
 }
 
 class PhysicEventCallback : public physx::PxSimulationEventCallback
@@ -35,7 +36,7 @@ public:
 	{
 		/*RigidBody* rb1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
 		RigidBody* rb2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
-		
+
 		if (rb1 && rb2)
 		{
 			rb1->OnContact(rb2->gameObject);
@@ -49,9 +50,6 @@ public:
 public:
 	PhysicEventCallback() = default;
 	~PhysicEventCallback() = default;
-	std::vector<physx::PxVec3> gContactPositions;
-	std::vector<physx::PxVec3> gContactImpulses;
-
 };
 
 class PhysicSystem
@@ -67,7 +65,8 @@ public:
 	static physx::PxCooking* cooking;
 	static physx::PxScene* scene;
 	static physx::PxPvdSceneClient* pvdClient;
-	static PhysicEventCallback* physicEventCallback;
+	static physx::PxPvdTransport* transport;
+	//static PhysicEventCallback* physicEventCallback;
 
 	PhysicSystem() = delete;
 	~PhysicSystem() = delete;
@@ -75,4 +74,5 @@ public:
 	static void Init();
 	static void InitScene();
 	static void Destroy();
+	static void ResetScene();
 };
