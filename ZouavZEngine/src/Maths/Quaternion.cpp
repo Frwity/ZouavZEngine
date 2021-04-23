@@ -1,6 +1,6 @@
-﻿#include "Maths/Quaternion.hpp"
-#define _USE_MATH_DEFINES
+﻿#define _USE_MATH_DEFINES
 #include <cmath>
+#include "Maths/Quaternion.hpp"
 using namespace std;
 
 Quaternion::Quaternion()
@@ -10,21 +10,19 @@ Quaternion::Quaternion()
 
 Quaternion::Quaternion(const Vec3& _eulerAngles)
 {
-	Vec3 angles = _eulerAngles * (3.14159265f / 180.0f) / 2;
+	Vec3 angles = _eulerAngles * 0.5f * (M_PI / 180.0f);
 
-	float cosx = cosf(angles.x),
-		  cosy = cosf(angles.y),
-		  cosz = cosf(angles.z),
-		  sinx = sinf(angles.x),
-		  siny = sinf(angles.y),
-		  sinz = sinf(angles.z);
-
-	w = cosx * cosy * cosz - sinx * siny * sinz;
-	x = sinx * cosy * cosz + cosx * siny * sinz;
-	y = cosx * siny * cosz + sinx * cosy * sinz;
-	z = cosx * cosy * sinz - sinx * siny * cosz;
-
-	Normalise();
+	double cy = cos(angles.z);
+	double sy = sin(angles.z);
+	double cp = cos(angles.y);
+	double sp = sin(angles.y);
+	double cr = cos(angles.x);
+	double sr = sin(angles.x);
+										 
+	w = cr * cp * cy + sr * sp * sy;
+	x = sr * cp * cy - cr * sp * sy;
+	y = cr * sp * cy + sr * cp * sy;
+	z = cr * cp * sy - sr * sp * cy;
 }
 
 Quaternion::Quaternion(const Vec4& _v)
@@ -192,34 +190,21 @@ Vec3 Quaternion::ToEuler() const
 {
 	Vec3 angles;
 
-	float sqw = w * w;
-	float sqx = x * x;
-	float sqy = y * y;
-	float sqz = z * z;
-	float unit = sqx + sqy + sqz + sqw;
-	float test = x * y + z * w;
+	float sinr_cosp = 2.0f * (w * x + y * z);
+	float cosr_cosp = 1.0f - 2.0f * (x * x + y * y);
+	angles.x = std::atan2f(sinr_cosp, cosr_cosp);
 
-	if (test > 0.499f * unit) 
-	{ 
-		angles.x = 1.57079632f;
-		angles.y = 2.0f * atan2(x, w);
-		angles.z = 0.0f;
-		return angles * (180.0f / 3.14159265f);
-	}
+	float sinp = 2.0f * (w * y - z * x);
+	if (std::abs(sinp) >= 1.0f)
+		angles.y = std::copysignf(M_PI / 2, sinp); 
+	else
+		angles.y = std::asinf(sinp);
 
-	if (test < -0.499f * unit) 
-	{ 
-		angles.x = -1.57079632f;
-		angles.y = -2.0f * atan2(x, w);
-		angles.z = 0.0f;
-		return angles * (180.0f / 3.14159265f);
-	}
+	float siny_cosp = 2.0f * (w * z + x * y);
+	float cosy_cosp = 1.0f - 2.0f * (y * y + z * z);
+	angles.z = std::atan2f(siny_cosp, cosy_cosp);
 
-	angles.x = asinf(2.0f * test / unit);
-	angles.y = atan2f(2.0f * y * w - 2.0f * x * z, sqx - sqy - sqz + sqw);
-	angles.z = atan2f(2.0f * x * w - 2.0f * y * z, -sqx + sqy - sqz + sqw);
-
-	return angles * (180.0f / 3.14159265f);
+	return angles * (180.0f / M_PI);
 }
 
 Vec3 Quaternion::RotateVector(const Vec3& _vec) const
@@ -247,12 +232,12 @@ Mat4 Quaternion::GetRotationMatrix() const
     const Vec3 vec2(twoXY - twoZW, 1.f - twoXX - twoZZ, twoYZ + twoXW);
     const Vec3 vec3(twoXZ + twoYW, twoYZ - twoXW, 1.f - twoXX - twoYY);
 
-    Mat4 rst({	vec1.x, vec2.x, vec3.x, 0.0f,
-				vec1.y, vec2.y, vec3.y, 0.0f,
-				vec1.z, vec2.z, vec3.z, 0.0f,
+    Mat4 rst({	vec1.x, vec1.y, vec1.z, 0.0f,
+				vec2.x, vec2.y, vec2.z, 0.0f,
+				vec3.x, vec3.y, vec3.z, 0.0f,
 				0.0f,	0.0f,	0.0f,	1.0f});
 
-    return rst / SquaredLength();
+    return rst /*/ SquaredLength()*/;
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& _q1, const Quaternion& _q2, float _t)

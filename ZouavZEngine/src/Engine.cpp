@@ -100,33 +100,33 @@ void Engine::TempLoad()
     player->AddComponent<AudioListener>();
     player->AddComponent<Player>();
     player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-    player->AddComponent<SphereCollision>();
-    player->AddComponent<RigidBody>();
-    player = GameObject::CreateGameObject("oui");
-    player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    player->AddComponent<BoxCollision>();
-    player->AddComponent<Player>();
-    player->AddComponent<RigidBody>();
-    player = GameObject::CreateGameObject("oui");
-    player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    player->AddComponent<BoxCollision>();
-    player->AddComponent<Player>();
-    player->AddComponent<RigidBody>();
-    player = GameObject::CreateGameObject("oui");
-    player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    player->AddComponent<BoxCollision>();
-    player->AddComponent<Player>();
-    player->AddComponent<RigidBody>();
-    player = GameObject::CreateGameObject("oui");
-    player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    player->AddComponent<BoxCollision>();
-    player->AddComponent<Player>();
-    player->AddComponent<RigidBody>();
-    GameObject* test = GameObject::CreateGameObject("test");
-    test->localPosition = { 0.0f, 5.0f, 0.0f };
-    test->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
-    test->AddComponent<SphereCollision>();
-    test->AddComponent<RigidBody>();
+    //player->AddComponent<SphereCollision>();
+    //player->AddComponent<RigidBody>();
+    //player = GameObject::CreateGameObject("oui");
+    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
+    //player->AddComponent<BoxCollision>();
+    //player->AddComponent<Player>();
+    //player->AddComponent<RigidBody>();
+    //player = GameObject::CreateGameObject("oui");
+    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
+    //player->AddComponent<BoxCollision>();
+    //player->AddComponent<Player>();
+    //player->AddComponent<RigidBody>();
+    //player = GameObject::CreateGameObject("oui");
+    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
+    //player->AddComponent<BoxCollision>();
+    //player->AddComponent<Player>();
+    //player->AddComponent<RigidBody>();
+    //player = GameObject::CreateGameObject("oui");
+    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
+    //player->AddComponent<BoxCollision>();
+    //player->AddComponent<Player>();
+    //player->AddComponent<RigidBody>();
+    //GameObject* test = GameObject::CreateGameObject("test");
+    //test->localPosition = { 0.0f, 5.0f, 0.0f };
+    //test->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
+    //test->AddComponent<SphereCollision>();
+    //test->AddComponent<RigidBody>();
 }
 
 void Engine::Load()
@@ -145,8 +145,6 @@ void Engine::Update()
 
     while (!render.Stop())
     {
-        scene.GetWorld().UpdateTransform(Mat4::identity);
-
         TimeManager::Update();
         InputManager::Update();
 
@@ -159,8 +157,12 @@ void Engine::Update()
             SoundManager::Update();
             ScriptSystem::FixedUpdate();
             ScriptSystem::Update();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
             scene.Update();
         }
+        else
+            scene.GetWorld().UpdateTransform(Mat4::identity);
+       
         GameObject::DestroyGameObjectIfNeedTo();
 
         editor.Display(render);

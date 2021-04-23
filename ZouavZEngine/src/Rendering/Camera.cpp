@@ -33,13 +33,14 @@ void Camera::Editor()
 
 Mat4 Camera::GetMatrix() const
 {
-    const Vec3 forward = (target - position).Normalized();
+    const Vec3 pos = GetGameObject().WorldPosition() + position;
+    const Vec3 targetPos = GetGameObject().WorldPosition() + target;
+
+    const Vec3 forward = (targetPos - pos).Normalized();
     const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;
-
-    const Vec3 pos(-GetGameObject().localPosition.x + position.x, GetGameObject().localPosition.y + position.y, -GetGameObject().localPosition.z + position.z);
 
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;
@@ -57,7 +58,7 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return (GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
+    return followGameObjectRotation ? GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed() : cameraMatrix.Reversed();
 }
 
 void Camera::Resize(int _width, int _height)

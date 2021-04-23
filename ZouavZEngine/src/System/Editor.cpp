@@ -503,8 +503,9 @@ void Editor::DisplayInspector()
 
                 ImGui::Text("Local Position :");
                 ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
-
-                static Vec3 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
+                
+                static Vec3 localEulerAngles;
+                localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
                 ImGui::Text("Local Rotation :");
                 ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))

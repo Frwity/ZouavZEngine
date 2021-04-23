@@ -14,6 +14,7 @@
 #include "PxSimulationEventCallback.h"
 #include "PxRigidStatic.h"
 #include "pvd/PxPvd.h"
+#include "PhysX/foundation/PxMat44.h"
 #include "Component/RigidBody.hpp"
 
 #include <fstream>
@@ -123,6 +124,7 @@ void Scene::SimulatePhyics() const
 		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
 
 		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
+		physx::PxMat44 mat4(transform);
 
 		rigidbody->GetGameObject().localPosition = { transform.p.x, transform.p.y, transform.p.z };
 		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };

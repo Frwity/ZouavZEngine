@@ -25,10 +25,10 @@ void Player::Begin()
 		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
 
 	}
-	GetGameObject().localRotation = Quaternion{ Vec3{ 0.0f, 180.0f, 0.0f } };
 	rb = GetGameObject().GetComponent<RigidBody>();
-
 }
+
+#include <iostream>
 
 void Player::Update()
 {
@@ -39,6 +39,18 @@ void Player::Update()
 		speed = 100;
 	else
 		speed = 3;
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+	//	rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed ));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+	//	rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed ));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+	//	rb->SetLinearVelocity(Vec3( -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+	//	rb->SetLinearVelocity(Vec3( TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+	//if (InputManager::GetKeyPressed(E_KEYS::NUM0))
+	//	rb->SetLinearVelocity(Vec3( 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f ));
+
+
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
 		rb->SetLinearVelocity(Vec3(0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed));
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
