@@ -14,6 +14,7 @@
 #include "PxSimulationEventCallback.h"
 #include "PxRigidStatic.h"
 #include "pvd/PxPvd.h"
+#include "PhysX/foundation/PxMat44.h"
 #include "Component/RigidBody.hpp"
 
 #include <fstream>
@@ -123,9 +124,14 @@ void Scene::SimulatePhyics() const
 		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
 
 		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
+		physx::PxMat44 mat4(transform);
 
 		rigidbody->gameObject->localPosition = { transform.p.x, transform.p.y, transform.p.z };
 		rigidbody->gameObject->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+
+		Mat4 mymat4 = Mat4::CreateTRSMatrix(rigidbody->gameObject->localPosition, rigidbody->gameObject->localRotation, Vec3::one);
+
+		mymat4.Display();
 	}
 }
 void Scene::DisplayTerrainOptionWindow()

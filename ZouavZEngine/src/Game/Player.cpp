@@ -32,9 +32,9 @@ void Player::Begin()
 
 void Player::Update()
 {
-	Vec3 temp = gameObject->localRotation.ToEuler();
+	/*Vec3 temp = gameObject->localRotation.ToEuler();
 	temp.z += TimeManager::GetDeltaTime() * 6.0f;
-	gameObject->localRotation = Quaternion(temp);
+	gameObject->localRotation = Quaternion(temp);*/
 
 	if(!rb)
 		rb = gameObject->GetComponent<RigidBody>();

@@ -232,12 +232,12 @@ Mat4 Quaternion::GetRotationMatrix() const
     const Vec3 vec2(twoXY - twoZW, 1.f - twoXX - twoZZ, twoYZ + twoXW);
     const Vec3 vec3(twoXZ + twoYW, twoYZ - twoXW, 1.f - twoXX - twoYY);
 
-    Mat4 rst({	vec1.x, vec2.x, vec3.x, 0.0f,
-				vec1.y, vec2.y, vec3.y, 0.0f,
-				vec1.z, vec2.z, vec3.z, 0.0f,
+    Mat4 rst({	vec1.x, vec1.y, vec1.z, 0.0f,
+				vec2.x, vec2.y, vec2.z, 0.0f,
+				vec3.x, vec3.y, vec3.z, 0.0f,
 				0.0f,	0.0f,	0.0f,	1.0f});
 
-    return rst / SquaredLength();
+    return rst /*/ SquaredLength()*/;
 }
 
 Quaternion Quaternion::Lerp(const Quaternion& _q1, const Quaternion& _q2, float _t)
