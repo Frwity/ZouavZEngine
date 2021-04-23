@@ -181,7 +181,10 @@ void Terrain::DisplayOptionWindow()
 		if (!isGenerated)
 		{
 			if (ImGui::Button("Generate"))
-				Generate();
+			{
+				Generate(GameObject::GetGameObjectByTag("Player"));
+				Update();
+			}
 			ImGui::End();
 			return;
 		}
@@ -385,10 +388,19 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	std::vector<PxHeightFieldSample> samples;
 	samples.reserve(vertexCount * vertexCount);
 
+	int j = 0;
+	int k = 0;
 	for (int i = 0; i < vertexCount * vertexCount; ++i)
 	{
 		samples.push_back({});
-		samples[i].height = vertices[i].pos.y;
+		samples[i].height = vertices[j + k].pos.y;
+		if (k == vertexCount * (vertexCount - 1))
+		{
+			j += 1;
+			k = 0;
+		}
+		else
+			k += vertexCount;
 	}
 
 	PxHeightFieldDesc hfDesc;
@@ -404,7 +416,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1, (float)size / (float)(vertexCount -1),
 		(float)size / (float)(vertexCount -1));
 
-	PxTransform t(PxVec3FromVec3(Vec3(-pos.x * (float)size, 0, pos.y * (float)size)), PxQuatFromQuaternion(Quaternion(Vec3(0,-90,0))));
+	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)));
 	
 	if (shape)
 	{

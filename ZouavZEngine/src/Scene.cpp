@@ -129,9 +129,6 @@ void Scene::SimulatePhyics() const
 		rigidbody->gameObject->localPosition = { transform.p.x, transform.p.y, transform.p.z };
 		rigidbody->gameObject->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 
-		Mat4 mymat4 = Mat4::CreateTRSMatrix(rigidbody->gameObject->localPosition, rigidbody->gameObject->localRotation, Vec3::one);
-
-		mymat4.Display();
 	}
 }
 void Scene::DisplayTerrainOptionWindow()

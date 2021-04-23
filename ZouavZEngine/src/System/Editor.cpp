@@ -115,9 +115,10 @@ void Editor::DisplayOptionWindow()
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(800);
 
-	if (ImGui::Button("Play"))
+	if (ImGui::Button(state == EDITOR_STATE::PLAYING ? "Continue" : "Play"))
 	{
-        engine.Save();
+        if (state == EDITOR_STATE::EDITING) 
+            engine.Save();
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
