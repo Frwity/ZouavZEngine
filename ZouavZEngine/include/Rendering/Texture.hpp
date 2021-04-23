@@ -9,7 +9,7 @@ private:
 public:
 
     unsigned int textureID = 0;
-    Texture(const std::string& _name, const char* textPath);
+    Texture(const std::string& _name, const char* _path);
     ~Texture() = default;
 
     static void Use(Texture* _texture);

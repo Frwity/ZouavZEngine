@@ -13,6 +13,14 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceTexture("Default", "resources/white.png");
 }
 
+void ResourcesManager::Clear()
+{
+    soundResources.clear();
+    meshResources.clear();
+    textureResources.clear();
+    shaderResources.clear();
+}
+
 Resource* ResourcesManager::ResourceChangerImpl(const char* _label, Resource* _resource, const std::unordered_map<std::string, std::unique_ptr<Resource>>& _resources, bool& _changed)
 {
     if (ImGui::BeginCombo(_label, _resource ? _resource->GetName().c_str() : ""))

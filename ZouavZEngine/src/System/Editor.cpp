@@ -191,7 +191,7 @@ void Editor::DisplayOptionWindow()
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(800);
 
-	if (ImGui::Button(state == EDITOR_STATE::PLAYING ? "Continue" : "Play"))
+	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
         if (state == EDITOR_STATE::EDITING) 
             engine.Save();
@@ -213,7 +213,7 @@ void Editor::DisplayOptionWindow()
         TimeManager::gameClock->Reset();
         gameObjectInspector = nullptr;
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
-        engine.Load();
+        engine.scene.Load(false);
 	}
 
 

@@ -10,11 +10,11 @@
 #include "System/Debug.hpp"
 #include "Rendering/Shader.hpp"
 
-Shader::Shader(const std::string& _name, const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const std::string& _name, const char* _vertexPath, const char* _fragmentPath)
     : Resource(_name) 
 {
-    unsigned int vertexShader = CreateVertexShader(vertexPath);
-    unsigned int fragmentShader = CreateFragmentShader(fragmentPath);
+    unsigned int vertexShader = CreateVertexShader(_vertexPath);
+    unsigned int fragmentShader = CreateFragmentShader(_fragmentPath);
 
     id = glCreateProgram();
     glAttachShader(id, vertexShader);
@@ -22,39 +22,42 @@ Shader::Shader(const std::string& _name, const char* vertexPath, const char* fra
     glLinkProgram(id);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    paths.emplace_back(_vertexPath);
+    paths.emplace_back(_fragmentPath);
 }
 
-unsigned int Shader::CreateVertexShader(const char* vertexPath)
+unsigned int Shader::CreateVertexShader(const char* _vertexPath)
 {
-    const char* vertexShaderSource = LoadFile(vertexPath);
+    const char* vertexShaderSource = LoadFile(_vertexPath);
     int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
-    DebugCheck(vertexShader, "VERT ERROR", vertexPath);
+    DebugCheck(vertexShader, "VERT ERROR", _vertexPath);
 
     delete[] vertexShaderSource;
 
     return vertexShader;
 }
 
-unsigned int Shader::CreateFragmentShader(const char* fragmentPath)
+unsigned int Shader::CreateFragmentShader(const char* _fragmentPath)
 {
-    const char* fragmentShaderSource = LoadFile(fragmentPath);
+    const char* fragmentShaderSource = LoadFile(_fragmentPath);
     int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
 
-    DebugCheck(fragmentShader, "FRAG ERROR", fragmentPath);
+    DebugCheck(fragmentShader, "FRAG ERROR", _fragmentPath);
 
     delete[] fragmentShaderSource;
 
     return fragmentShader;
 }
 
-const char* Shader::LoadFile(const char* pathToFile)
+const char* Shader::LoadFile(const char* _pathToFile)
 {
-    std::ifstream file(pathToFile, std::ios::binary);
+    std::ifstream file(_pathToFile, std::ios::binary);
 
     if (file)
     {
@@ -76,15 +79,15 @@ const char* Shader::LoadFile(const char* pathToFile)
 }
 
 
-void Shader::DebugCheck(const int& shader, const char* msg, const char* src)
+void Shader::DebugCheck(const int& _shader, const char* _msg, const char* _src)
 {
     int success;
     char infoLog[1024];
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(_shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
-        glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-        Debug::LogWarning(std::string(msg).append(" : ").append(src).append("\n").append(infoLog).append("\n"));
+        glGetShaderInfoLog(_shader, 1024, NULL, infoLog);
+        Debug::LogWarning(std::string(_msg).append(" : ").append(_src).append("\n").append(infoLog).append("\n"));
     }
 }
 
@@ -100,60 +103,60 @@ Shader::~Shader()
 }
 
 
-void Shader::SetBool(const std::string& name, bool value) const
+void Shader::SetBool(const std::string& _name, bool _value) const
 {
-    glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(id, _name.c_str()), (int)_value);
 }
 
-void Shader::SetInt(const std::string& name, int value) const
+void Shader::SetInt(const std::string& _name, int _value) const
 {
-    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(id, _name.c_str()), _value);
 }
 
-void Shader::SetFloat(const std::string& name, float value) const
+void Shader::SetFloat(const std::string& _name, float _value) const
 {
-    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(id, _name.c_str()), _value);
 }
 
-void Shader::SetFloatArray(const std::string& name, const float* value, unsigned int size) const
+void Shader::SetFloatArray(const std::string& _name, const float* _value, unsigned int _size) const
 {
-    glUniform1fv(glGetUniformLocation(id, name.c_str()), size, value);
+    glUniform1fv(glGetUniformLocation(id, _name.c_str()), _size, _value);
 }
 
-void Shader::SetMatrix(const std::string& name, const Mat4& mat) const
+void Shader::SetMatrix(const std::string& _name, const Mat4& _mat) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, mat.matrix);
+    glUniformMatrix4fv(glGetUniformLocation(id, _name.c_str()), 1, GL_FALSE, _mat.matrix);
 }
 
-void Shader::SetVector2(const std::string& name, const Vec2& v) const
+void Shader::SetVector2(const std::string& _name, const Vec2& _v) const
 {
-    glUniform2f(glGetUniformLocation(id, name.c_str()), v.x, v.y);
+    glUniform2f(glGetUniformLocation(id, _name.c_str()), _v.x, _v.y);
 }
 
-void Shader::SetVector3(const std::string& name, float x, float y, float z) const
+void Shader::SetVector3(const std::string& _name, float _x, float _y, float _z) const
 {
-    glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
+    glUniform3f(glGetUniformLocation(id, _name.c_str()), _x, _y, _z);
 }
 
-void Shader::SetVector3(const std::string& name, const Vec3& v) const
+void Shader::SetVector3(const std::string& _name, const Vec3& _v) const
 {
-    glUniform3f(glGetUniformLocation(id, name.c_str()), v.x, v.y, v.z);
+    glUniform3f(glGetUniformLocation(id, _name.c_str()), _v.x, _v.y, _v.z);
 }
 
-void Shader::SetVector4(const std::string& name, float w, float x, float y, float z) const
+void Shader::SetVector4(const std::string& _name, float _w, float _x, float _y, float _z) const
 {
-    glUniform4f(glGetUniformLocation(id, name.c_str()), w, x, y, z);
+    glUniform4f(glGetUniformLocation(id, _name.c_str()), _w, _x, _y, _z);
 }
 
-void Shader::SetVector4(const std::string& name, const Vec4& v) const
+void Shader::SetVector4(const std::string& _name, const Vec4& _v) const
 {
-    glUniform4f(glGetUniformLocation(id, name.c_str()), v.w, v.x, v.y, v.z);
+    glUniform4f(glGetUniformLocation(id, _name.c_str()), _v.w, _v.x, _v.y, _v.z);
 }
 
-void Shader::SetLight(const std::vector<Light*>& lights)
+void Shader::SetLight(const std::vector<Light*>& _lights)
 {
     int i = 0;
-    for (const Light* l : lights)
+    for (const Light* l : _lights)
     {
         const std::string index = std::to_string(i++);
         

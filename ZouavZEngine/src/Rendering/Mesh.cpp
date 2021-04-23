@@ -20,19 +20,19 @@
 Mesh::Mesh(const std::string& _name)
 	: Resource(_name)
 {
-
+	paths.emplace_back("NoPath");
 }
 
-Mesh::Mesh(const std::string& _name, const char* path)
+Mesh::Mesh(const std::string& _name, const char* _path)
 	: Resource(_name)
 {
     Assimp::Importer importer;
 		
-	const aiScene* scene = importer.ReadFile(path,	aiProcess_Triangulate | 
+	const aiScene* scene = importer.ReadFile(_path,	aiProcess_Triangulate | 
 													aiProcess_FindInvalidData | 
 													aiProcess_ValidateDataStructure );
     if (!scene)
-        Debug::LogWarning(std::string("Mesh load failed!: ").append(path));
+        Debug::LogWarning(std::string("Mesh load failed!: ").append(_path));
 
     std::vector<Vertex> vertices;
 	std::vector<int> indices;
@@ -58,6 +58,8 @@ Mesh::Mesh(const std::string& _name, const char* path)
 
 
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
+
+	paths.emplace_back(_path);
 }
 
 void Mesh::InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize)
