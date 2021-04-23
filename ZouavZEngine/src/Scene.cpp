@@ -139,7 +139,7 @@ void Scene::SimulatePhyics() const
 
 	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
 
-	for (int i = 0; i < nbActiveActor; i++)
+	for (unsigned int i = 0; i < nbActiveActor; i++)
 	{
 		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
 

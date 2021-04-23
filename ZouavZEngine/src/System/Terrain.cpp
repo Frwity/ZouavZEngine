@@ -106,18 +106,18 @@ void Terrain::Update()
 			it++;
 	}
 
-	int chunkRadius = chunkDistanceRadius / chunkSize;
+	float chunkRadius = chunkDistanceRadius / (float)chunkSize;
 
-	Vec2 actualizerChunkPos = actualizerPos / chunkSize;
+	Vec2 actualizerChunkPos = actualizerPos / (float)chunkSize;
 
 	// create near Chunk
-	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
+	for (float x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
 	{
-		for (int y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
+		for (float y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
 		{
-			pos = { (float)x, (float)y };
+			pos = { x, y };
 
-			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
+			if ((pos * (float)chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 				break;
 
 			if (chunks.find(pos.ToString()) == chunks.end())
@@ -393,7 +393,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	for (int i = 0; i < vertexCount * vertexCount; ++i)
 	{
 		samples.push_back({});
-		samples[i].height = vertices[j + k].pos.y;
+		samples[i].height = (physx::PxI16)vertices[j + k].pos.y;
 		if (k == vertexCount * (vertexCount - 1))
 		{
 			j += 1;

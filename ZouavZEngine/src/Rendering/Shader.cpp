@@ -62,7 +62,7 @@ const char* Shader::LoadFile(const char* _pathToFile)
     if (file)
     {
         file.seekg(0, file.end);
-        int length = file.tellg();
+        int length = (int)file.tellg();
         file.seekg(0, file.beg);
 
         char* buffer = new char[length + 1];

@@ -39,29 +39,18 @@ void Player::Update()
 		speed = 100;
 	else
 		speed = 3;
+
 	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-	//	rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed ));
+	//	rb->SetLinearVelocity(Vec3(0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed));
 	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-	//	rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed ));
+	//	rb->SetLinearVelocity(Vec3(0.0f, 0.0f, TimeManager::GetDeltaTime() * speed));
 	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-	//	rb->SetLinearVelocity(Vec3( -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+	//	rb->SetLinearVelocity(Vec3(-TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
 	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-	//	rb->SetLinearVelocity(Vec3( TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+	//	rb->SetLinearVelocity(Vec3(TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
 	//if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-	//	rb->SetLinearVelocity(Vec3( 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f ));
-
-
+	//	rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed, 0.0f));
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-		rb->SetLinearVelocity(Vec3(0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed));
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-		rb->SetLinearVelocity(Vec3(0.0f, 0.0f, TimeManager::GetDeltaTime() * speed));
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-		rb->SetLinearVelocity(Vec3(-TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-		rb->SetLinearVelocity(Vec3(TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
-	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-		rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed, 0.0f));
-	/*if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
 		GetGameObject().Translate({ 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed });
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
 		GetGameObject().Translate({ 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed });
@@ -70,5 +59,5 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
 		GetGameObject().Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });*/
+		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 }

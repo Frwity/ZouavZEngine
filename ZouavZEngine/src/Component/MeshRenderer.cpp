@@ -31,7 +31,7 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
     material.shader->SetVector4("color", material.color);
 
     glBindVertexArray(mesh->GetID());
-    glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, (GLsizei)mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }
 
 void MeshRenderer::Editor()

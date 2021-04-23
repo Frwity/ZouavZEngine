@@ -152,6 +152,7 @@ public:
 			return soundResources.at(_name).get();
 		else
 			Debug::LogError("Sound resource : " + _name + " not found");	
+		return nullptr;
 	}
 
 	template<>
@@ -161,6 +162,7 @@ public:
 			return meshResources.at(_name).get();
 		else
 			Debug::LogError("Mesh resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<>
@@ -170,6 +172,7 @@ public:
 			return textureResources.at(_name).get();
 		else
 			Debug::LogError("Texture resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<>
@@ -179,6 +182,7 @@ public:
 			return shaderResources.at(_name).get();
 		else
 			Debug::LogError("Shader resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<typename T>

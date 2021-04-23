@@ -108,7 +108,7 @@ public:
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		int nbChild = children.size();
+		int nbChild = (int)children.size();
 		_ar(name, tag, nbChild, components, 
 			localPosition.x, localPosition.y, localPosition.z,
 			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
