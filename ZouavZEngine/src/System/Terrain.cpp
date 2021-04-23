@@ -106,16 +106,17 @@ void Terrain::Update()
 			it++;
 	}
 
+	int chunkRadius = chunkDistanceRadius / chunkSize;
 	float chunkRadius = chunkDistanceRadius / (float)chunkSize;
 
 	Vec2 actualizerChunkPos = actualizerPos / (float)chunkSize;
 
 	// create near Chunk
-	for (float x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
+	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
 	{
-		for (float y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
+		for (int y = actualizerChunkPos.y - chunkRadius; y < actualizerChunkPos.y + chunkRadius; ++y)
 		{
-			pos = { x, y };
+			pos = { (float)x, (float)y };
 
 			if ((pos * (float)chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 				break;
