@@ -57,7 +57,7 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return (gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
+    return followGameObjectRotation ? gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed() : cameraMatrix.Reversed();
 }
 
 void Camera::Resize(int _width, int _height)
