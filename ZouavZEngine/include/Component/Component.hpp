@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/access.hpp"
@@ -23,15 +24,25 @@ enum class E_COMPONENT
 
 class Component
 {
-public:
-	// TODO : not private
+private:
 	class GameObject* gameObject;
+public:
 
 	Component() = delete;
 	Component(class GameObject* _gameObject);
 	virtual ~Component() = default;
 
 	virtual void Editor();
+
+	virtual const char* GetComponentName() = 0;
+
+	static bool EditorCollapsingHeader(const char* _name = "Component", std::function<void()> _f = [](){});
+
+	void DeleteFromGameObject();
+
+	GameObject& GetGameObject() { return *gameObject; }
+	const GameObject& GetGameObject() const { return *gameObject; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

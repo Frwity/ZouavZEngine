@@ -26,7 +26,7 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
     material.shader->SetMatrix("view", matrixCamera.Reversed());
     material.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
+    material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
     material.shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
     material.shader->SetVector4("color", material.color);
 
@@ -36,9 +36,8 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
 void MeshRenderer::Editor()
 {
-    ImGui::Text("MeshRenderer");
-    ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
-    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
-    ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
-    ImGui::ColorEdit4("Color : ", &material.color.w);
+	ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
+	ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+	ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
+	ImGui::ColorEdit4("Color : ", &material.color.w);
 }

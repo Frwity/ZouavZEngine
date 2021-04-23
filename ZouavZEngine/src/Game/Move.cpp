@@ -14,24 +14,24 @@ void Move::Begin()
 
 void Move::Update()
 {
-	gameObject->localPosition = gameObject->localPosition + Vec3(sinf(TimeManager::GetTime()),0.0f, cosf(TimeManager::GetTime()));
-	gameObject->GetComponent<AudioBroadcaster>()->Update();
+	GetGameObject().localPosition = GetGameObject().localPosition + Vec3(sinf(TimeManager::GetTime()), 0.0f, cosf(TimeManager::GetTime()));
+	GetGameObject().GetComponent<AudioBroadcaster>()->Update();
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::P))
-		gameObject->GetComponent<AudioBroadcaster>()->Play();
+		GetGameObject().GetComponent<AudioBroadcaster>()->Play();
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::K))
-		gameObject->GetComponent<AudioBroadcaster>()->Stop();
+		GetGameObject().GetComponent<AudioBroadcaster>()->Stop();
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::U))
-		gameObject->GetComponent<AudioBroadcaster>()->SetAmbient(true);
+		GetGameObject().GetComponent<AudioBroadcaster>()->SetAmbient(true);
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::Y))
-		gameObject->GetComponent<AudioBroadcaster>()->SetAmbient(false);
+		GetGameObject().GetComponent<AudioBroadcaster>()->SetAmbient(false);
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::T))
-		gameObject->GetComponent<AudioBroadcaster>()->SetLooping(true);
+		GetGameObject().GetComponent<AudioBroadcaster>()->SetLooping(true);
 
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::R))
-		gameObject->GetComponent<AudioBroadcaster>()->SetLooping(false);
+		GetGameObject().GetComponent<AudioBroadcaster>()->SetLooping(false);
 }

@@ -25,6 +25,8 @@ public:
 	ShapeCollision(GameObject* _gameObject, bool _isTrigger = false);
 	~ShapeCollision();
 
+	const char* GetComponentName() override { return "ShapeCollision"; }
+
 	void releasePhysXComponent();
 		
 	template <class Archive>

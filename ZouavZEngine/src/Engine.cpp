@@ -51,7 +51,6 @@ Engine::Engine()
     editor.Init();
 #endif
 
-    //TODO TEMP
     glfwSetInputMode(render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
@@ -153,7 +152,7 @@ void Engine::Update()
 
         editor.NewFrame();
 
-        //ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
 
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {
@@ -164,16 +163,7 @@ void Engine::Update()
         }
         GameObject::DestroyGameObjectIfNeedTo();
 
-        //TODO call single editor function
-        editor.DisplayMainWindow();
-        editor.DisplayOptionWindow();
-        editor.DisplaySceneWindow(render, render.sceneFramebuffer);
-        editor.DisplayInspector();
-        editor.DisplayConsoleWindow();
-        editor.DisplayHierarchy();
-        editor.DisplayGameWindow(render, render.gameFramebuffer);
-        editor.DisplayProject();
-        editor.MoveSelectedGameobject();
+        editor.Display(render);
 
         scene.DisplayTerrainOptionWindow();
 

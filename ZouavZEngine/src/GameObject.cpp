@@ -108,6 +108,18 @@ const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()
 	return components;
 }
 
+void GameObject::RemoveComponent(Component* _component)
+{
+	for (auto component = components.begin(); component != components.end(); component++)
+	{
+		if (component->get() == _component)
+		{
+			components.erase(component);
+			return;
+		}
+	}
+}
+
 void GameObject::DestroyGameObjectIfNeedTo()
 {
 	if (destroyGameObject)

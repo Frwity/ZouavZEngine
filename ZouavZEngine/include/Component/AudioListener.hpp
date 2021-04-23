@@ -15,6 +15,8 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "AudioListener"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

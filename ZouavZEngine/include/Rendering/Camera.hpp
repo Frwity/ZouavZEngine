@@ -26,12 +26,15 @@ protected:
 	Vec3 position;
 	Vec3 target;
 
-public: // TODO callback resize
+public:
 	Camera(class GameObject* _gameObject, int _width, int _height);
 	Camera() = delete;
 	Camera(const Camera&) = delete;
-	//Camera& operator= (const Camera&) = delete; TODO
 	~Camera();
+
+	void Editor() override;
+
+	const char* GetComponentName() { return "Camera"; }
 
 	static /*const */Camera* GetMainCamera() { return mainCamera; }
 

@@ -152,6 +152,8 @@ public:
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 
+	void RemoveComponent(Component* _component);
+
 	virtual void OnContact();
 
 	static void DestroyGameObjectIfNeedTo();

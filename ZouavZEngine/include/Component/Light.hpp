@@ -33,6 +33,8 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "Light"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)  
 	{ 

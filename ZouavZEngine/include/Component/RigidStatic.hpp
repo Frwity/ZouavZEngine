@@ -22,6 +22,8 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "RigidStatic"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

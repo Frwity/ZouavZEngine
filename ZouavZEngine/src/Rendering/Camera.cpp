@@ -8,8 +8,6 @@
 #include <math.h>
 #include <iostream>
 
-// TODO : split in different file
-
 Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
@@ -30,6 +28,9 @@ Camera::~Camera()
         mainCamera = nullptr;
 }
 
+void Camera::Editor()
+{}
+
 Mat4 Camera::GetMatrix() const
 {
     const Vec3 forward = (target - position).Normalized();
@@ -38,7 +39,7 @@ Mat4 Camera::GetMatrix() const
 
     Mat4 cameraMatrix;
 
-    const Vec3 pos(-gameObject->localPosition.x + position.x, gameObject->localPosition.y + position.y, -gameObject->localPosition.z + position.z);
+    const Vec3 pos(-GetGameObject().localPosition.x + position.x, GetGameObject().localPosition.y + position.y, -GetGameObject().localPosition.z + position.z);
 
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;
@@ -56,7 +57,7 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return (gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
+    return (GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
 }
 
 void Camera::Resize(int _width, int _height)

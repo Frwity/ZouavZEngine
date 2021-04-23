@@ -1,7 +1,8 @@
 #include "GameObject.hpp"
-#include "Component/Component.hpp"
 #include <fstream>
 #include <iostream>
+#include "imgui.h"
+#include "Component/Component.hpp"
 
 Component::Component(GameObject* _gameObject)
 	: gameObject(_gameObject)
@@ -10,3 +11,19 @@ Component::Component(GameObject* _gameObject)
 
 void Component::Editor()
 {}
+
+bool Component::EditorCollapsingHeader(const char* _name, std::function<void()> _f)
+{
+	bool open = true;
+	if (ImGui::CollapsingHeader(_name, &open, ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		_f();
+		ImGui::NewLine();
+	}
+	return open;
+}
+
+void Component::DeleteFromGameObject()
+{
+	gameObject->RemoveComponent(this);
+}

@@ -24,7 +24,6 @@ Light::~Light()
 
 void Light::Editor()
 {
-	ImGui::Text("Light");
 	ImGui::SliderFloat3("Ambient : ", &ambient.x, 0.0f, 1.0f);
     ImGui::SliderFloat3("Diffuse : ", &diffuse.x, 0.0f, 1.0f);
 	ImGui::SliderFloat3("Specular : ", &specular.x, 0.0f, 1.0f);

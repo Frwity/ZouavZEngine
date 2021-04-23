@@ -79,7 +79,7 @@ void Scene::Draw(const Camera& _camera) const
 {
 	terrain.Draw(_camera);
 
-	for(GameObject* gameObject : world.GetChildren()) //TODO test call time
+	for(GameObject* gameObject : world.GetChildren())
 	{
 		if (gameObject->GetComponent<MeshRenderer>())
 		{
@@ -124,8 +124,8 @@ void Scene::SimulatePhyics() const
 
 		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
 
-		rigidbody->gameObject->localPosition = { transform.p.x, transform.p.y, transform.p.z };
-		rigidbody->gameObject->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+		rigidbody->GetGameObject().localPosition = { transform.p.x, transform.p.y, transform.p.z };
+		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
 void Scene::DisplayTerrainOptionWindow()

@@ -24,6 +24,8 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "RigidBody"; }
+
 	void SetLinearVelocity(const class Vec3& v);
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();

@@ -27,6 +27,8 @@ public:
 
     void Editor() override;
 
+	const char* GetComponentName() override { return "MeshRenderer"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

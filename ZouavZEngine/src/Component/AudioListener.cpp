@@ -14,10 +14,9 @@ AudioListener::AudioListener(GameObject* _gameObject)
 
 void AudioListener::Update()
 {
-	SoundManager::SetListenerPosition(gameObject->WorldPosition());
+	SoundManager::SetListenerPosition(GetGameObject().WorldPosition());
 }
 
 void AudioListener::Editor()
 {
-	ImGui::Text("AudioListener");
 }

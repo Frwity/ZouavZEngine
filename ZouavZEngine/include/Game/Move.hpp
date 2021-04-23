@@ -11,6 +11,8 @@ class Move : public ScriptComponent
         void Begin() final;
         void Update() final;
 
+		const char* GetComponentName() override { return "Move"; }
+
 		template <class Archive>
 		void serialize(Archive& ar)
 		{

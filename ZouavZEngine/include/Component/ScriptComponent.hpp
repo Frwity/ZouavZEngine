@@ -11,6 +11,8 @@ public:
 	ScriptComponent(class GameObject* _gameObject);
 	virtual ~ScriptComponent();
 
+	const char* GetComponentName() override { return "ScriptComponent"; }
+
 	virtual void Begin() {};
 	virtual void FixedUpdate() {};
 	virtual void Update() {};
