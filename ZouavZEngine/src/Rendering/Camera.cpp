@@ -1,8 +1,9 @@
 #include "GameObject.hpp"
 #include "Maths/Mat4.hpp"
-#include "Rendering/Camera.hpp"
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
+#include "imgui.h"
+#include "Rendering/Camera.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -12,14 +13,14 @@ Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
 Camera::Camera(class GameObject* _gameObject, int _width, int _height)
-    : Component(_gameObject)
+    : Component(_gameObject), width{_width}, height{_height}
 {
     if (!mainCamera)
         mainCamera = this;
 
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
-    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
 Camera::~Camera()
@@ -29,7 +30,11 @@ Camera::~Camera()
 }
 
 void Camera::Editor()
-{}
+{
+    if (ImGui::SliderFloat("Near", &near, 0.001f, 1.0f)) Resize(width, height);
+    if (ImGui::SliderFloat("Far", &far, 1.0f, 10000.0f)) Resize(width, height);
+    if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);
+}
 
 Mat4 Camera::GetMatrix() const
 {
@@ -63,7 +68,9 @@ Mat4 Camera::GetMatrix() const
 
 void Camera::Resize(int _width, int _height)
 {
-    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+    width = _width;
+    height = _height;
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
 template <class Archive>

@@ -9,10 +9,6 @@
 #include "cereal/access.hpp"
 #include <iostream>
 
-#define CAMERA_NEAR 0.01f
-#define CAMERA_FAR  5000.0f
-#define CAMERA_FOV  45.0f
-
 class Camera : public Component
 {
 private:
@@ -25,6 +21,11 @@ protected:
 	Mat4 projection;
 	Vec3 position;
 	Vec3 target;
+	int width = 0;
+	int height = 0;
+	float near = 0.01f;
+	float far = 5000.0f;
+	float fov = 45.0f;
 
 public:
 	Camera(class GameObject* _gameObject, int _width, int _height);
@@ -34,7 +35,7 @@ public:
 
 	void Editor() override;
 
-	const char* GetComponentName() { return "Camera"; }
+	const char* GetComponentName() override { return "Camera"; }
 
 	static /*const */Camera* GetMainCamera() { return mainCamera; }
 
