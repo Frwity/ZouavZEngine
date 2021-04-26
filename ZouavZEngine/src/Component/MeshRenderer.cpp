@@ -41,3 +41,17 @@ void MeshRenderer::Editor()
 	ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
 	ImGui::ColorEdit4("Color : ", &material.color.w);
 }
+
+template <class Archive>
+static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct)
+{
+	std::string meshName;
+	std::string textureName;
+	std::string shaderName;
+
+	_ar(meshName, textureName, shaderName);
+
+	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
+		ResourcesManager::GetResource<Texture>(textureName),
+		ResourcesManager::GetResource<Shader>(shaderName));
+}

@@ -23,10 +23,7 @@ public:
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct)
-	{
-		_construct(GameObject::currentLoadedGameObject);
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct);
 };
 
 

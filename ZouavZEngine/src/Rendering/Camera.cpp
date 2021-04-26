@@ -66,6 +66,27 @@ void Camera::Resize(int _width, int _height)
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
 }
 
+template <class Archive>
+static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& _construct)
+{
+    Mat4 _projection;
+    Vec3 _position;
+    Vec3 _target;
+    bool _wasMainCamera = false;
+    _ar(_projection.matrix[0], _projection.matrix[1], _projection.matrix[2], _projection.matrix[3],
+        _projection.matrix[4], _projection.matrix[5], _projection.matrix[6], _projection.matrix[7],
+        _projection.matrix[8], _projection.matrix[9], _projection.matrix[10], _projection.matrix[11],
+        _projection.matrix[12], _projection.matrix[13], _projection.matrix[14], _projection.matrix[15],
+        _position.x, _position.y, _position.z,
+        _target.x, _target.y, _target.z, _wasMainCamera);
+    _construct(GameObject::currentLoadedGameObject, 10, 10);
+    _construct->projection = _projection;
+    _construct->position = _position;
+    _construct->target = _target;
+    if (_wasMainCamera)
+        _construct->SetMainCamera();
+}
+
 SceneCamera::SceneCamera(int _width, int _height)
     : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw((float)M_PI), speed{ 30.0f }
 {

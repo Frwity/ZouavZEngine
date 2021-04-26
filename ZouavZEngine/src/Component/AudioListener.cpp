@@ -20,3 +20,9 @@ void AudioListener::Update()
 void AudioListener::Editor()
 {
 }
+
+template <class Archive>
+static void AudioListener::load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
+}

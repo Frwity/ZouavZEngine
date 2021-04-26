@@ -94,3 +94,9 @@ void RigidBody::OnTrigger(GameObject* _other)
 void RigidBody::Editor()
 {
 }
+
+template <class Archive>
+static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
+}

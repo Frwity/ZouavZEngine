@@ -10,7 +10,7 @@ namespace physx
 	class PxRigidDynamic;
 }
 
-class RigidBody: public Component
+class RigidBody : public Component
 {
 private:
 	void AttachShape();
@@ -40,10 +40,7 @@ public:
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
-	{
-		_construct(GameObject::currentLoadedGameObject);
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct);
 };
 
 CEREAL_REGISTER_TYPE(RigidBody)

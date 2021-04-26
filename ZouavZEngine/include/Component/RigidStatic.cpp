@@ -44,3 +44,9 @@ RigidStatic::~RigidStatic()
 void RigidStatic::Editor()
 {
 }
+
+template <class Archive>
+static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<RigidStatic>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
+}

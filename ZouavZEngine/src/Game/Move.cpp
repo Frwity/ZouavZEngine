@@ -35,3 +35,9 @@ void Move::Update()
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::R))
 		GetGameObject().GetComponent<AudioBroadcaster>()->SetLooping(false);
 }
+
+template <class Archive>
+static void Move::load_and_construct(Archive& _ar, cereal::construct<Move>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
+}

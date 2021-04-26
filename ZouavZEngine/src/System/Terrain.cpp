@@ -107,7 +107,6 @@ void Terrain::Update()
 	}
 
 	int chunkRadius = chunkDistanceRadius / chunkSize;
-	float chunkRadius = chunkDistanceRadius / (float)chunkSize;
 
 	Vec2 actualizerChunkPos = actualizerPos / (float)chunkSize;
 

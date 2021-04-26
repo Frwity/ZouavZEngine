@@ -40,3 +40,25 @@ void Light::Editor()
 		ImGui::EndCombo();
 	}
 }
+
+template <class Archive>
+static void Light::load_and_construct(Archive& _ar, cereal::construct<Light>& _construct)
+{
+	Vec3 ambient;
+	Vec3 diffuse;
+	Vec3 specular;
+	Vec3 constLineQuad;
+	Vec3 direction;
+	Vec2 cutOffOuterCutOff;
+	int type;
+
+	_ar(ambient.x, ambient.y, ambient.z,
+		diffuse.x, diffuse.y, diffuse.z,
+		specular.x, specular.y, specular.z,
+		constLineQuad.x, constLineQuad.y, constLineQuad.z,
+		direction.x, direction.y, direction.z,
+		cutOffOuterCutOff.x, cutOffOuterCutOff.y,
+		type);
+
+	_construct(GameObject::currentLoadedGameObject, ambient, diffuse, specular, constLineQuad, direction, cutOffOuterCutOff, (E_LIGHT_TYPE)type);
+}

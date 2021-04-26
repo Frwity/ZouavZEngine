@@ -27,3 +27,9 @@ void Component::DeleteFromGameObject()
 {
 	gameObject->RemoveComponent(this);
 }
+
+template <class Archive>
+static void Component::load_and_construct(Archive& _ar, cereal::construct<Component>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
+}
