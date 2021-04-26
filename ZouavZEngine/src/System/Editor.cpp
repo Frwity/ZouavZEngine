@@ -530,15 +530,12 @@ void Editor::DisplayInspector()
 
             static bool addComponentWindow = false;
             
-            if (ImGui::Button("Add Component"))
-                addComponentWindow = true;
-
             if (addComponentWindow)
             {
                 ImVec2 windowSize = ImGui::GetWindowSize();
                 ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowPos().x + windowSize.x / 4, ImGui::GetWindowPos().y + windowSize.y / 4));
                 ImGui::SetNextWindowSize(ImVec2(windowSize.x / 2, windowSize.y / 2));
-                if (ImGui::Begin("Add Component##window"), addComponentWindow, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
+                if (ImGui::Begin("Add Component##window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
                 {
                     for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
                     {
@@ -590,11 +587,13 @@ void Editor::DisplayInspector()
                         }
                     }
                 }
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    addComponentWindow = false;
+                
                 ImGui::End();
-
-                //if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-                //    addComponentWindow = false;
             }
+            if (ImGui::Button("Add Component"))
+                addComponentWindow = true;
         }
     }
     ImGui::End();
@@ -811,9 +810,6 @@ void Editor::DisplayHierarchy()
             ImGui::SetNextWindowPos(hierarchyMenuPos);
             if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                //if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-                //    hierarchyMenu = false;
-
                 ImGui::InputText("New GameObject Name", newGameObjectName, 256);
                 if (ImGui::Button("New GameObject"))
                 {
@@ -836,6 +832,9 @@ void Editor::DisplayHierarchy()
                     GameObject::destroyGameObject = true;
                     hierarchyMenu = false;
                 }
+
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    hierarchyMenu = false;
             }
             ImGui::End();
         }
