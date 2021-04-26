@@ -42,8 +42,7 @@ void Render::Init(int _width, int _height)
     // Init glfw
     ZASSERT(glfwInit(), "Failed to init glfw");
 
-    GLFWmonitor* MyMonitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
     
     width = mode ->width;
     height = mode->height;
@@ -69,6 +68,8 @@ void Render::Init(int _width, int _height)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    
+    glfwMaximizeWindow(window);
 
     //init IMGUI
     IMGUI_CHECKVERSION();
