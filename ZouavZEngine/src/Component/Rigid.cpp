@@ -29,7 +29,7 @@ void Rigid::AttachShape()
 		collision->isAttach = true;
 		if (!actor->attachShape(*collision->shape))
 			std::cout << "Attach to shape failed !" << std::endl;
-		collision->shape->release();
+		//collision->shape->release();
 	}
 }
 

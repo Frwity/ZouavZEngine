@@ -35,5 +35,18 @@ BoxCollision::~BoxCollision()
 
 void BoxCollision::Editor()
 {
-	ImGui::SliderFloat3("Half Extends : ", &halfExtends.x, 0.0f, 100.0f);
+	if (ImGui::SliderFloat3("Half Extends : ", &halfExtends.x, 0.1f, 100.0f))
+		UpdateExtends(halfExtends);
+}
+
+void BoxCollision::UpdateExtends(const Vec3& v)
+{
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	rigid->actor->detachShape(*shape);
+	shape->release();
+
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+
+	AttachToRigidComponent();
 }

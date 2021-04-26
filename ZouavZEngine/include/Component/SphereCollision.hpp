@@ -13,6 +13,7 @@ public:
 	~SphereCollision();
 
 	void Editor() override;
+	void UpdateRadius(float _radius);
 
 	const char* GetComponentName() override { return "SphereCollision"; }
 

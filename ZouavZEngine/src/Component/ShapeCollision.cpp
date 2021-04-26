@@ -38,15 +38,11 @@ void ShapeCollision::AttachToRigidComponent()
 		{
 			ZASSERT(shape->getGeometryType() != physx::PxGeometryType::ePLANE, "Plane must be created with a RigidStatic");
 			rd->actor->attachShape(*shape);
-			shape->release();
-			material->release();
 		}
 		
 		if (rs)
 		{
 			rs->actor->attachShape(*shape);
-			shape->release();
-			material->release();
 		}
 	}
 }

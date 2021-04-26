@@ -31,5 +31,19 @@ SphereCollision::~SphereCollision()
 
 void SphereCollision::Editor()
 {
-	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
+	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
+		UpdateRadius(radius);
+}
+
+void SphereCollision::UpdateRadius(float _radius)
+{
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	rigid->actor->detachShape(*shape);
+	shape->release();
+
+	radius = _radius;
+	shape = PhysicSystem::physics->createShape(PxSphereGeometry(radius), *material);
+
+	AttachToRigidComponent();
 }

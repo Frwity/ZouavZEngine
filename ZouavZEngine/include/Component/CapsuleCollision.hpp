@@ -14,6 +14,7 @@ public:
 	~CapsuleCollision();
 
 	void Editor() override;
+	void UpdateCapsule(float _radius, float halfHeight);
 
 	const char* GetComponentName() override { return "CapsuleCollision"; }
 

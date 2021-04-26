@@ -13,6 +13,7 @@ public:
 	~BoxCollision();
 
 	void Editor() override;
+	void UpdateExtends(const Vec3& v);
 
 	const char* GetComponentName() override { return "BoxCollision"; }
 

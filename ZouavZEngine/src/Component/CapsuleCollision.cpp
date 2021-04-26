@@ -32,3 +32,18 @@ void CapsuleCollision::Editor()
 	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
 	ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f);
 }
+
+void CapsuleCollision::UpdateCapsule(float _radius, float _halfHeight)
+{
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	rigid->actor->detachShape(*shape);
+	shape->release();
+
+	radius = _radius;
+	halfHeight = _halfHeight;
+
+	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
+
+	AttachToRigidComponent();
+}
