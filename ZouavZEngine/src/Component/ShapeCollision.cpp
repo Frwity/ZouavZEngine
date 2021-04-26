@@ -17,9 +17,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, bool _isTrigger)
 
 ShapeCollision::~ShapeCollision()
 {
-	//TODO fix destruction
-	//shape->release();
-	//material->release();
+
 }
 
 void ShapeCollision::releasePhysXComponent()
@@ -38,7 +36,7 @@ void ShapeCollision::AttachToRigidComponent()
 
 		if (rd)
 		{
-			ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE, "Plane must be created with a RigidStatic");
+			ZASSERT(shape->getGeometryType() != physx::PxGeometryType::ePLANE, "Plane must be created with a RigidStatic");
 			rd->actor->attachShape(*shape);
 			shape->release();
 			material->release();
@@ -50,6 +48,5 @@ void ShapeCollision::AttachToRigidComponent()
 			shape->release();
 			material->release();
 		}
-
 	}
 }

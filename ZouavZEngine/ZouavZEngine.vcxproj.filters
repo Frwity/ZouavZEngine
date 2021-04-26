@@ -219,6 +219,9 @@
     <ClCompile Include="src\Rendering\Material.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\Rigid.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\Material.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Rigid.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

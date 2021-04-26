@@ -20,7 +20,7 @@ static int i = 0;
 
 
 RigidBody::RigidBody(GameObject* _gameObject)
-	: Component(_gameObject)
+	: Rigid(_gameObject)
 {
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
@@ -43,12 +43,12 @@ RigidBody::~RigidBody()
 
 void RigidBody::SetLinearVelocity(const class Vec3& v)
 {
-	actor->setLinearVelocity(PxVec3FromVec3(v));
+	((PxRigidBody*)actor)->setLinearVelocity(PxVec3FromVec3(v));
 }
 
 Vec3 RigidBody::GetLinearVelocity()
 {
-	return Vec3FromPxVec3(actor->getLinearVelocity());
+	return Vec3FromPxVec3(((PxRigidBody*)actor)->getLinearVelocity());
 }
 
 void RigidBody::DisableGravity()
@@ -59,36 +59,6 @@ void RigidBody::DisableGravity()
 void RigidBody::EnableGravity()
 {
 	actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
-}
-
-void RigidBody::AttachShape()
-{
-	//TODO use getComponents
-	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
-
-	if (collision && !collision->isAttach)
-	{
-		collision->isAttach = true;
-		if (!actor->attachShape(*collision->shape))
-			Debug::LogError("Attach to shape failed !");
-		collision->shape->release();
-	}
-}
-
-void RigidBody::OnContact(GameObject* _other)
-{
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
-
-	if (script)
-		script->OnContact(_other);
-}
-
-void RigidBody::OnTrigger(GameObject* _other)
-{
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
-
-	if (script)
-		script->OnTrigger(_other);
 }
 
 void RigidBody::Editor()

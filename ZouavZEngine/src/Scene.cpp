@@ -138,6 +138,7 @@ void Scene::SimulatePhyics() const
 	physx::PxU32 nbActiveActor;
 
 	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
+	//std::cout << "nb Active Actor " << nbActiveActor << std::endl;
 
 	for (unsigned int i = 0; i < nbActiveActor; i++)
 	{

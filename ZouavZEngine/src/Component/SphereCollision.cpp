@@ -20,8 +20,6 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	
 	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
 
-	shape->userData = gameObject;
-
 	//attach shape to rigidbody or rigidstatic if exist
 	AttachToRigidComponent();
 }

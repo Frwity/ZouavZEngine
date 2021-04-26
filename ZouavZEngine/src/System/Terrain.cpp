@@ -55,7 +55,7 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk{});
+			chunks.emplace(pos.ToString(), Chunk{nullptr});
 			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 															seed, noiseParams,
 															minHeight, maxHeight, heightIntensity }, false);
@@ -122,7 +122,7 @@ void Terrain::Update()
 			if (chunks.find(pos.ToString()) == chunks.end())
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
-				chunks.emplace(pos.ToString(), Chunk());
+				chunks.emplace(pos.ToString(), Chunk(nullptr));
 				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 																seed, noiseParams,
 																minHeight, maxHeight, heightIntensity }, false);

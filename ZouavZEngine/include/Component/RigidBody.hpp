@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component/Component.hpp"
+#include "Component/Rigid.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
 
@@ -10,13 +11,9 @@ namespace physx
 	class PxRigidDynamic;
 }
 
-class RigidBody : public Component
+class RigidBody : public Rigid
 {
-private:
-	void AttachShape();
-
 public:
-	physx::PxRigidDynamic* actor = nullptr;
 
 	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject);
@@ -30,8 +27,6 @@ public:
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
-	void OnContact(GameObject* _other);
-	void OnTrigger(GameObject* _other);
 
 
 	template <class Archive>

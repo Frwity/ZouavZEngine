@@ -33,6 +33,7 @@ static PxFilterFlags filterShader(
 		| PxPairFlag::eNOTIFY_TOUCH_FOUND
 		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
 		| PxPairFlag::eNOTIFY_CONTACT_POINTS
+		| PxPairFlag::eNOTIFY_TOUCH_LOST
 		| PxPairFlag::eTRIGGER_DEFAULT;
     return PxFilterFlag::eDEFAULT;
 }
@@ -92,7 +93,6 @@ void PhysicSystem::InitScene()
 
 void PhysicSystem::Destroy()
 {
-	//TODO destroy chunks
 	scene->release();
 	scene = nullptr;
 	cooking->release();
@@ -101,15 +101,4 @@ void PhysicSystem::Destroy()
 	transport->release();
 	pvd->release();
 	foundation->release();
-	//delete physicEventCallback;
-}
-
-void PhysicSystem::ResetScene()
-{
-	if(scene)
-		scene->release();
-
-	scene = nullptr;
-
-	InitScene();
 }

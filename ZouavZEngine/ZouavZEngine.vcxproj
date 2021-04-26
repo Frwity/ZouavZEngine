@@ -172,6 +172,7 @@
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\Plane.cpp" />
+    <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\Plane.hpp" />
+    <ClInclude Include="include\Component\Rigid.hpp" />
     <ClInclude Include="include\Component\RigidBody.hpp" />
     <ClInclude Include="include\Component\RigidStatic.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />

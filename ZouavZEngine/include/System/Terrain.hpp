@@ -3,6 +3,7 @@
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
 #include "System/ResourcesManager.hpp"
+#include "Component/RigidStatic.hpp"
 
 #include <FastNoiseLite.h>
 
@@ -53,12 +54,11 @@ struct ChunkCreateArg
 };
 
 
-class Chunk
+class Chunk : public RigidStatic
 {
 private:
 	Mesh mesh{"chunkMesh"};
 
-	physx::PxRigidStatic* actor = nullptr;
 	physx::PxShape* shape = nullptr;
 
 	Vec2 pos{};
@@ -70,6 +70,7 @@ private:
 public:
 
 	Chunk() = default; 
+	Chunk(GameObject* _gameObject = nullptr): RigidStatic(_gameObject) {};
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);

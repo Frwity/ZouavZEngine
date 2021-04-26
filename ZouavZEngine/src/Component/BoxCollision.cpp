@@ -25,8 +25,6 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
 
-	shape->userData = &GetGameObject();
-
 	AttachToRigidComponent();
 }
 

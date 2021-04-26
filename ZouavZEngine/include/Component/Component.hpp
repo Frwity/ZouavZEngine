@@ -24,7 +24,7 @@ enum class E_COMPONENT
 
 class Component
 {
-private:
+protected:
 	class GameObject* gameObject;
 public:
 
