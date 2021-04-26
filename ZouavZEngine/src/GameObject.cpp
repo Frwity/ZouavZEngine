@@ -47,7 +47,7 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 
 	for (GameObject* _child : children)
 	{
-		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
+		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale)); 
 		
 		RigidBody* rb = _child->GetComponent<RigidBody>();
 

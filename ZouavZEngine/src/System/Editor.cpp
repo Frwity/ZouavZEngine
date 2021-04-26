@@ -845,14 +845,14 @@ void Editor::DisplayHierarchy()
 
 void Editor::MoveSelectedGameobject()
 {
-    if (gameObjectInspector == nullptr)
+    if (gameObjectInspector == nullptr || state == EDITOR_STATE::PLAYING || state == EDITOR_STATE::PAUSE)
         return;
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
         gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());

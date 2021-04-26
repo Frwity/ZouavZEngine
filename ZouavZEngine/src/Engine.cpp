@@ -76,6 +76,18 @@ void Engine::TempLoad()
     // other resource
     Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
     Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
+    ResourcesManager::AddResourceMesh("Eye", "resources/eyeball.obj");
+    ResourcesManager::AddResourceMesh("Cat", "resources/Cat.obj");
+    ResourcesManager::AddResourceMesh("Plane", "resources/Plane.obj");
+    ResourcesManager::AddResourceTexture("Cat", "resources/Cat.jpg");
+    ResourcesManager::AddResourceMesh("Horse", "resources/Horse.obj");
+    ResourcesManager::AddResourceTexture("Horse", "resources/Horse.jpg");
+
+
+    ResourcesManager::AddResourceMesh("Deer4", "resources/deer.fbx");
+    ResourcesManager::AddResourceMesh("Deer5", "resources/deer.obj");
+
+
     Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
 
     ResourcesManager::AddResourceTexture("Water", "resources/Water.png");

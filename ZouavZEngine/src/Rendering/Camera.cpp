@@ -88,7 +88,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
 }
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw((float)M_PI), speed{ 30.0f }
+    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;
@@ -106,6 +106,7 @@ void SceneCamera::MoveTo(const Vec3& _direction)
 
 Mat4 SceneCamera::GetMatrix() const
 {
+    std::cout << position.x << " " << position.y << " " << position.z << " " << yaw << std::endl;
     return Mat4::CreateTRSMatrix(position, { pitch, yaw, 0 }, { 1, 1, 1 });
 }
 

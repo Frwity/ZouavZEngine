@@ -21,8 +21,8 @@ void Player::Begin()
 {
 	if (GetGameObject().GetComponent<Camera>())
 	{
-		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
-		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
+		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
+		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, -5 });
 
 	}
 	rb = GetGameObject().GetComponent<RigidBody>();
