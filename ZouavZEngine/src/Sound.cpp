@@ -46,9 +46,7 @@ Sound::Sound(const std::string& _name, const char* _path)
     if (alGetError() != AL_NO_ERROR)
     {
         Debug::LogWarning(std::string(_path).append(" not loaded\n"));
-        return;
     }
-
     paths.emplace_back(_path);
 }
 

@@ -48,17 +48,17 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 	PhysicSystem::InitScene();
 
 	std::ifstream saveFile;
-	//if (_changingScene)
-	//{
-	//	saveFile.open(_path + "r", std::ios::binary);
-	//	{
-	//		cereal::JSONInputArchive iarchive(saveFile);
+	if (_changingScene)
+	{
+		saveFile.open(_path + "r", std::ios::binary);
+		{
+			cereal::JSONInputArchive iarchive(saveFile);
 
-	//		ResourcesManager::Clear();
-	//		ResourcesManager::load(iarchive);
-	//	}
-	//	saveFile.close();
-	//}
+			ResourcesManager::Clear();
+			ResourcesManager::load(iarchive);
+		}
+		saveFile.close();
+	}
 	saveFile.open(_path, std::ios::binary);
 	{
 		cereal::JSONInputArchive iarchive(saveFile);
@@ -81,7 +81,7 @@ void Scene::Save()
 	saveFile.open(std::string("resources/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
-		//ResourcesManager::save(oArchive);
+		ResourcesManager::save(oArchive);
 	}
 	saveFile.close();
 

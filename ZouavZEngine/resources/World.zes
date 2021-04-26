@@ -143,7 +143,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0762453079223633,
+                    "value0": 1.259447455406189,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -168,24 +168,6 @@
                     "value22": true
                 }
             }
-        },
-        {
-            "polymorphic_id": 2147483656,
-            "polymorphic_name": "SphereCollision",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 0.5
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483657,
-            "polymorphic_name": "RigidBody",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {}
-            }
         }
     ],
     "value46": 0.0,
@@ -204,9 +186,9 @@
     "value59": 0,
     "value60": 1,
     "value61": 0,
-    "value62": -90.97200012207031,
+    "value62": -10.0,
     "value63": 30.0,
-    "value64": 123.302001953125,
+    "value64": 30.0,
     "value65": 1,
     "value66": 0,
     "value67": true,
@@ -224,6 +206,6 @@
     "value79": 0.0,
     "value80": 0.0,
     "value81": 0.0,
-    "value82": 55.555999755859378,
-    "value83": "Error"
+    "value82": 1.0,
+    "value83": "nullptr"
 }
