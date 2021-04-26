@@ -45,6 +45,7 @@ std::string currentMovingProjectFile;
 ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
 bool projectNewFolder = false;
 
+bool maximizeOnPlay = false;
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -135,17 +136,22 @@ void Editor::NewFrame()
     ImGui::NewFrame();
 }
 
-void Editor::Display(Render& _render)
+bool Editor::Display(Render& _render)
 {
     DisplayMainWindow();
     DisplayOptionWindow();
-    DisplaySceneWindow(_render, _render.sceneFramebuffer);
-    DisplayInspector();
-    DisplayConsoleWindow();
-    DisplayHierarchy();
-    DisplayGameWindow(_render, _render.gameFramebuffer);
-    DisplayProject();
-    MoveSelectedGameobject();
+    DisplayGameWindow(_render.gameFramebuffer);
+    if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
+    {
+        DisplaySceneWindow(_render, _render.sceneFramebuffer);
+        DisplayInspector();
+        DisplayConsoleWindow();
+        DisplayHierarchy();
+        DisplayProject();
+        MoveSelectedGameobject();
+        return true;
+    }
+    return false;
 }
 
 void Editor::DisplayMainWindow()
@@ -167,16 +173,17 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-	ImGui::Begin("Option", NULL,  //ImGuiWindowFlags_NoMove
-                                //| ImGuiWindowFlags_NoDocking
-                                 ImGuiWindowFlags_NoNav
-                                | ImGuiWindowFlags_NoBackground
-		                        | ImGuiWindowFlags_NoScrollWithMouse
-		                        | ImGuiWindowFlags_NoTitleBar
-		                        | ImGuiWindowFlags_NoScrollbar
-                                | ImGuiWindowFlags_NoCollapse
-		                        | ImGuiWindowFlags_NoResize
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
+    ImGui::Begin("Option", NULL, ImGuiWindowFlags_NoMove
+                               | ImGuiWindowFlags_NoNav
+                               | ImGuiWindowFlags_NoBackground
+		                       | ImGuiWindowFlags_NoScrollWithMouse
+		                       | ImGuiWindowFlags_NoTitleBar
+		                       | ImGuiWindowFlags_NoScrollbar
+                               | ImGuiWindowFlags_NoCollapse
+		                       | ImGuiWindowFlags_NoResize
     );
+
     ImGui::SameLine();
     if (ImGui::Button("Save"))
     {
@@ -189,7 +196,7 @@ void Editor::DisplayOptionWindow()
         engine.Load();
     }
 	ImGui::SameLine();
-	ImGui::SetCursorPosX(800);
+	ImGui::SetCursorPosX(500);
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
@@ -215,7 +222,8 @@ void Editor::DisplayOptionWindow()
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
         engine.scene.Load(false);
 	}
-
+    ImGui::SameLine();
+    ImGui::Checkbox("Maximize On Play", &maximizeOnPlay);
 
 	ImGui::End();
 }
@@ -630,12 +638,8 @@ void Editor::DisplayConsoleWindow()
     ImGui::End();
 }
 
-void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
+void Editor::DisplayGameWindow(class Framebuffer& _framebuffer)
 {
-    if (state == EDITOR_STATE::PLAYING)
-    {
-        ImGui::SetNextWindowSize(ImGui::GetWindowSize());
-    }
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
         ImVec2 windowSize = ImGui::GetWindowSize();
