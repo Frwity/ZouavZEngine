@@ -15,16 +15,15 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "AudioListener"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct)
-	{
-		_construct(GameObject::currentLoadedGameObject);
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct);
 };
 
 

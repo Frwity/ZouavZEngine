@@ -37,7 +37,8 @@ public:
 	
 	const EDITOR_STATE& GetState() const { return state; }
 
-	//TODO discuss method name (DisplayXXX or XXX)
+	void Display(Render& _render);
+
 	void DisplayMainWindow();
 	void DisplayOptionWindow();
 	void DisplayMenuBar();

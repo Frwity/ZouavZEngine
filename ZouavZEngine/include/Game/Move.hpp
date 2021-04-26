@@ -5,23 +5,22 @@
 
 class Move : public ScriptComponent
 {
-   public:
-        Move() = delete;
-        Move(class GameObject* _gameobject);
-        void Begin() final;
-        void Update() final;
+public:
+	Move() = delete;
+	Move(class GameObject* _gameobject);
+	void Begin() final;
+	void Update() final;
 
-		template <class Archive>
-		void serialize(Archive& ar)
-		{
-			
-		}
+	const char* GetComponentName() override { return "Move"; }
 
-		template <class Archive>
-		static void load_and_construct(Archive& _ar, cereal::construct<Move>& _construct)
-		{
-			_construct(GameObject::currentLoadedGameObject);
-		}
+	template <class Archive>
+	void serialize(Archive& ar)
+	{
+
+	}
+
+	template <class Archive>
+	static void load_and_construct(Archive& _ar, cereal::construct<Move>& _construct);
 };
 
 

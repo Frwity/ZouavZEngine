@@ -14,6 +14,8 @@ public:
 
 	void Editor() override;
 
+	const char* GetComponentName() override { return "BoxCollision"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

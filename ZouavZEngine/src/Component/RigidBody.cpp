@@ -22,7 +22,7 @@ static int i = 0;
 RigidBody::RigidBody(GameObject* _gameObject)
 	: Component(_gameObject)
 {
-	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
+	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
 	actor = PhysicSystem::physics->createRigidDynamic(t);
 
@@ -43,7 +43,7 @@ RigidBody::~RigidBody()
 
 void RigidBody::SetLinearVelocity(const class Vec3& v)
 {
- 	actor->setLinearVelocity(PxVec3FromVec3(v));
+	actor->setLinearVelocity(PxVec3FromVec3(v));
 }
 
 Vec3 RigidBody::GetLinearVelocity()
@@ -64,7 +64,7 @@ void RigidBody::EnableGravity()
 void RigidBody::AttachShape()
 {
 	//TODO use getComponents
-	ShapeCollision* collision = gameObject->GetComponent<ShapeCollision>();
+	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
 
 	if (collision && !collision->isAttach)
 	{
@@ -77,7 +77,7 @@ void RigidBody::AttachShape()
 
 void RigidBody::OnContact(GameObject* _other)
 {
-	ScriptComponent* script = gameObject->GetComponent<ScriptComponent>();
+	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
 
 	if (script)
 		script->OnContact(_other);
@@ -85,7 +85,7 @@ void RigidBody::OnContact(GameObject* _other)
 
 void RigidBody::OnTrigger(GameObject* _other)
 {
-	ScriptComponent* script = gameObject->GetComponent<ScriptComponent>();
+	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
 
 	if (script)
 		script->OnTrigger(_other);
@@ -93,5 +93,10 @@ void RigidBody::OnTrigger(GameObject* _other)
 
 void RigidBody::Editor()
 {
-	ImGui::Text("RigidBody");
+}
+
+template <class Archive>
+static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
 }

@@ -12,7 +12,9 @@ public:
 	~Plane();
 
 	void Editor() override;
-	
+
+	const char* GetComponentName() override { return "Plane"; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{

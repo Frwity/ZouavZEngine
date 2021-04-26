@@ -1,12 +1,14 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 class Resource
 {
-private:
+protected:
+	friend class ResourcesManager;
 	std::string name;
-
+	std::vector<std::string> paths;
 public:
 
 	Resource() = default;

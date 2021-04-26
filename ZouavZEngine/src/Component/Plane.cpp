@@ -23,5 +23,4 @@ Plane::~Plane()
 
 void Plane::Editor()
 {
-	ImGui::Text("Plane");
 }

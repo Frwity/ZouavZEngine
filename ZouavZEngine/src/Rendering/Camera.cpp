@@ -8,8 +8,6 @@
 #include <math.h>
 #include <iostream>
 
-// TODO : split in different file
-
 Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
@@ -30,15 +28,19 @@ Camera::~Camera()
         mainCamera = nullptr;
 }
 
+void Camera::Editor()
+{}
+
 Mat4 Camera::GetMatrix() const
 {
-    const Vec3 forward = (target - position).Normalized();
+    const Vec3 pos = GetGameObject().WorldPosition() + position;
+    const Vec3 targetPos = GetGameObject().WorldPosition() + target;
+
+    const Vec3 forward = (targetPos - pos).Normalized();
     const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
     const Vec3 up = right.Cross(forward);
 
     Mat4 cameraMatrix;
-
-    const Vec3 pos(-gameObject->localPosition.x + position.x, gameObject->localPosition.y + position.y, -gameObject->localPosition.z + position.z);
 
     cameraMatrix.Accessor(0, 0) = right.x;
     cameraMatrix.Accessor(0, 1) = right.y;
@@ -56,12 +58,33 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return (gameObject->WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed());
+    return followGameObjectRotation ? GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed() : cameraMatrix.Reversed();
 }
 
 void Camera::Resize(int _width, int _height)
 {
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+}
+
+template <class Archive>
+static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& _construct)
+{
+    Mat4 _projection;
+    Vec3 _position;
+    Vec3 _target;
+    bool _wasMainCamera = false;
+    _ar(_projection.matrix[0], _projection.matrix[1], _projection.matrix[2], _projection.matrix[3],
+        _projection.matrix[4], _projection.matrix[5], _projection.matrix[6], _projection.matrix[7],
+        _projection.matrix[8], _projection.matrix[9], _projection.matrix[10], _projection.matrix[11],
+        _projection.matrix[12], _projection.matrix[13], _projection.matrix[14], _projection.matrix[15],
+        _position.x, _position.y, _position.z,
+        _target.x, _target.y, _target.z, _wasMainCamera);
+    _construct(GameObject::currentLoadedGameObject, 10, 10);
+    _construct->projection = _projection;
+    _construct->position = _position;
+    _construct->target = _target;
+    if (_wasMainCamera)
+        _construct->SetMainCamera();
 }
 
 SceneCamera::SceneCamera(int _width, int _height)

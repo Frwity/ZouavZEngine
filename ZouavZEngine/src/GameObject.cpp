@@ -49,11 +49,11 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	{
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
 		
-		RigidBody* rd = _child->GetComponent<RigidBody>();
+		RigidBody* rb = _child->GetComponent<RigidBody>();
 
 		//update physx transform for simulation
-		if (rd)
-			rd->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+		if (rb)
+			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
 
 		RigidStatic* rs = _child->GetComponent<RigidStatic>();
 
@@ -106,6 +106,18 @@ void GameObject::RemoveChild(GameObject* _child)
 const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()
 {
 	return components;
+}
+
+void GameObject::RemoveComponent(Component* _component)
+{
+	for (auto component = components.begin(); component != components.end(); component++)
+	{
+		if (component->get() == _component)
+		{
+			components.erase(component);
+			return;
+		}
+	}
 }
 
 void GameObject::DestroyGameObjectIfNeedTo()

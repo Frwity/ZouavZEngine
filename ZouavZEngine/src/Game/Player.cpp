@@ -19,44 +19,45 @@ Player::Player(GameObject* _gameobject)
 
 void Player::Begin()
 {
-	if (gameObject->GetComponent<Camera>())
+	if (GetGameObject().GetComponent<Camera>())
 	{
-		gameObject->GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
-		gameObject->GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
+		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, -8 });
+		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 5 });
 
 	}
-	gameObject->localRotation = Quaternion{ Vec3{ 0.0f, 180.0f, 0.0f } };
-	rb = gameObject->GetComponent<RigidBody>();
-
+	rb = GetGameObject().GetComponent<RigidBody>();
 }
+
+#include <iostream>
 
 void Player::Update()
 {
-	if(!rb)
-		rb = gameObject->GetComponent<RigidBody>();
+	if (!rb)
+		rb = GetGameObject().GetComponent<RigidBody>();
 
 	if (InputManager::GetKeyPressed(E_KEYS::RSHIFT))
 		speed = 100;
 	else
 		speed = 3;
+
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+	//	rb->SetLinearVelocity(Vec3(0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+	//	rb->SetLinearVelocity(Vec3(0.0f, 0.0f, TimeManager::GetDeltaTime() * speed));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+	//	rb->SetLinearVelocity(Vec3(-TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
+	//if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+	//	rb->SetLinearVelocity(Vec3(TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
+	//if (InputManager::GetKeyPressed(E_KEYS::NUM0))
+	//	rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed, 0.0f));
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-		rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed ));
+		GetGameObject().Translate({ 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed });
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-		rb->SetLinearVelocity(Vec3( 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed ));
+		GetGameObject().Translate({ 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed });
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-		rb->SetLinearVelocity(Vec3( -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+		GetGameObject().Translate({ -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-		rb->SetLinearVelocity(Vec3( TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f ));
+		GetGameObject().Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-		rb->SetLinearVelocity(Vec3( 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f ));
-	/*if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-		gameObject->Translate({ 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed });
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-		gameObject->Translate({ 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed });
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-		gameObject->Translate({ -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-		gameObject->Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
-	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-		gameObject->Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });*/
+		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 }

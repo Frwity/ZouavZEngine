@@ -107,7 +107,7 @@ void Terrain::Update()
 
 	int chunkRadius = chunkDistanceRadius / chunkSize;
 
-	Vec2 actualizerChunkPos = actualizerPos / chunkSize;
+	Vec2 actualizerChunkPos = actualizerPos / (float)chunkSize;
 
 	// create near Chunk
 	for (int x = actualizerChunkPos.x - chunkRadius; x < actualizerChunkPos.x + chunkRadius; ++x)
@@ -116,7 +116,7 @@ void Terrain::Update()
 		{
 			pos = { (float)x, (float)y };
 
-			if ((pos * chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
+			if ((pos * (float)chunkSize - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 				break;
 
 			if (chunks.find(pos.ToString()) == chunks.end())
@@ -180,7 +180,10 @@ void Terrain::DisplayOptionWindow()
 		if (!isGenerated)
 		{
 			if (ImGui::Button("Generate"))
-				Generate();
+			{
+				Generate(GameObject::GetGameObjectByTag("Player"));
+				Update();
+			}
 			ImGui::End();
 			return;
 		}
@@ -384,10 +387,19 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	std::vector<PxHeightFieldSample> samples;
 	samples.reserve(vertexCount * vertexCount);
 
+	int j = 0;
+	int k = 0;
 	for (int i = 0; i < vertexCount * vertexCount; ++i)
 	{
 		samples.push_back({});
-		samples[i].height = vertices[i].pos.y;
+		samples[i].height = (physx::PxI16)vertices[j + k].pos.y;
+		if (k == vertexCount * (vertexCount - 1))
+		{
+			j += 1;
+			k = 0;
+		}
+		else
+			k += vertexCount;
 	}
 
 	PxHeightFieldDesc hfDesc;
@@ -403,7 +415,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1, (float)size / (float)(vertexCount -1),
 		(float)size / (float)(vertexCount -1));
 
-	PxTransform t(PxVec3FromVec3(Vec3(-pos.x * (float)size, 0, pos.y * (float)size)), PxQuatFromQuaternion(Quaternion(Vec3(0,-90,0))));
+	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)));
 	
 	if (actor)
 	{

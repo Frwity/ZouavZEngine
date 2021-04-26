@@ -26,19 +26,32 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 
     material.shader->SetMatrix("view", matrixCamera.Reversed());
     material.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
+    material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
     material.shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
     material.shader->SetVector4("color", material.color);
 
     glBindVertexArray(mesh->GetID());
-    glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, (GLsizei)mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }
 
 void MeshRenderer::Editor()
 {
-    ImGui::Text("MeshRenderer");
-    ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
-    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
-    ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
-    ImGui::ColorEdit4("Color : ", &material.color.w);
+	ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
+	ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+	ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
+	ImGui::ColorEdit4("Color : ", &material.color.w);
+}
+
+template <class Archive>
+static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct)
+{
+	std::string meshName;
+	std::string textureName;
+	std::string shaderName;
+
+	_ar(meshName, textureName, shaderName);
+
+	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
+		ResourcesManager::GetResource<Texture>(textureName),
+		ResourcesManager::GetResource<Shader>(shaderName));
 }

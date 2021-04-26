@@ -14,18 +14,20 @@ private:
 	friend class Engine;
 
 public:
-    Mesh* mesh = nullptr;
+	Mesh* mesh = nullptr;
 	Material material;
 
-    MeshRenderer() = delete;
-    MeshRenderer(class GameObject* _gameObject);
-    MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader);
+	MeshRenderer() = delete;
+	MeshRenderer(class GameObject* _gameObject);
+	MeshRenderer(class GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader);
 
-    ~MeshRenderer() = default;
+	~MeshRenderer() = default;
 
-    void Draw(const class Mat4& _transform, const class Camera& _camera);
+	void Draw(const class Mat4& _transform, const class Camera& _camera);
 
-    void Editor() override;
+	void Editor() override;
+
+	const char* GetComponentName() override { return "MeshRenderer"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)
@@ -34,18 +36,7 @@ public:
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct)
-	{
-		std::string meshName;
-		std::string textureName;
-		std::string shaderName;
-
-		_ar(meshName, textureName, shaderName);
-
-		_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
-														ResourcesManager::GetResource<Texture>(textureName),
-														ResourcesManager::GetResource<Shader>(shaderName));
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct);
 };
 
 CEREAL_REGISTER_TYPE(MeshRenderer)

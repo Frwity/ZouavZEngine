@@ -10,7 +10,7 @@ namespace physx
 	class PxRigidDynamic;
 }
 
-class RigidBody: public Component
+class RigidBody : public Component
 {
 private:
 	void AttachShape();
@@ -23,6 +23,8 @@ public:
 	~RigidBody();
 
 	void Editor() override;
+
+	const char* GetComponentName() override { return "RigidBody"; }
 
 	void SetLinearVelocity(const class Vec3& v);
 	class Vec3 GetLinearVelocity();
@@ -38,10 +40,7 @@ public:
 	}
 
 	template <class Archive>
-	static void load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
-	{
-		_construct(GameObject::currentLoadedGameObject);
-	}
+	static void load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct);
 };
 
 CEREAL_REGISTER_TYPE(RigidBody)

@@ -29,7 +29,6 @@ CapsuleCollision::~CapsuleCollision()
 
 void CapsuleCollision::Editor()
 {
-	ImGui::Text("CapsuleCollision : ");
 	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
 	ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f);
 }

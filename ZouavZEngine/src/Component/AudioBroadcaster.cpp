@@ -60,7 +60,7 @@ AudioBroadcaster::~AudioBroadcaster()
 void AudioBroadcaster::Update()
 {
 	if (!ambient && sound)
-		SetPosition(gameObject->WorldPosition());
+		SetPosition(GetGameObject().WorldPosition());
 }
 
 void AudioBroadcaster::Play()
@@ -109,7 +109,6 @@ void AudioBroadcaster::SetAmbient(bool _ambient)
 
 void AudioBroadcaster::Editor()
 {
-	ImGui::Text("AudioBroadcaster");
 	if (ResourcesManager::ResourceChanger<Sound>("Sound", sound))
 		if (sound) 
 			sound->LinkSource(source);

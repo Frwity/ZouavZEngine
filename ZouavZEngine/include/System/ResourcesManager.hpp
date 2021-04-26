@@ -6,11 +6,16 @@
 #include "Rendering/Texture.hpp"
 #include "Rendering/Shader.hpp"
 #include <unordered_map>
-
+#include <cstdarg>
 #include <memory>
 #include <string>
 #include <iostream>
 #include "System/Debug.hpp"
+
+#include "cereal/archives/json.hpp"
+#include "cereal/types/vector.hpp"
+#include <cereal/types/string.hpp>
+#include "cereal/access.hpp"
 
 class ResourcesManager
 {
@@ -24,13 +29,63 @@ public:
 	ResourcesManager() = delete;
 
 	static void InitDefaultResources();
+	static void Clear();
 
-	//template<typename T, typename... Args>
-	//static T* AddResource(std::string _name, Args... _args)
-	//{
-	//	Debug::Log("Wrong Resource Type");
-	//	return nullptr;
-	//}
+	template <class Archive>
+	static void load(Archive& _ar)
+	{
+		AddResourceMesh("Default")->CreateCube();
+		int count;
+		std::string name;
+		std::string path1;
+		std::string path2;
+		_ar(count);
+		for (int i = 0; i < count; ++i)
+		{
+			_ar(name, path1);
+			AddResourceSound(name, path1.c_str());
+		}
+		_ar(count);
+		for (int i = 0; i < count; ++i) // TODO cube mesh 
+		{
+			_ar(name, path1);
+			if (i == 0)
+				continue;
+			AddResourceMesh(name, path1.c_str());
+		}
+		_ar(count);
+		for (int i = 0; i < count; ++i)
+		{
+			_ar(name, path1);
+			AddResourceTexture(name, path1.c_str());
+		}
+		_ar(count);
+		for (int i = 0; i < count; ++i)
+		{
+			_ar(name, path1, path2);
+			AddResourceShader(name, path1.c_str(), path2.c_str());
+		}
+	}
+
+	template <class Archive>
+	static void save(Archive& _ar)
+	{
+		_ar(soundResources.size());
+		for (auto& sound : soundResources)
+			_ar(sound.first, sound.second.get()->paths[0]);
+		
+		_ar(meshResources.size());
+		for (auto& mesh : meshResources)
+			_ar(mesh.first, mesh.second.get()->paths[0]);
+		
+		_ar(textureResources.size());
+		for (auto& texture : textureResources)
+			_ar(texture.first, texture.second.get()->paths[0]);
+		
+		_ar(shaderResources.size());
+		for (auto& shader : shaderResources)
+			_ar(shader.first, shader.second.get()->paths[0], shader.second.get()->paths[1]);
+	}
 
 	template<typename... Args>
 	static typename Sound* AddResourceSound(std::string _name, Args... _args)
@@ -97,6 +152,7 @@ public:
 			return soundResources.at(_name).get();
 		else
 			Debug::LogError("Sound resource : " + _name + " not found");	
+		return nullptr;
 	}
 
 	template<>
@@ -106,6 +162,7 @@ public:
 			return meshResources.at(_name).get();
 		else
 			Debug::LogError("Mesh resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<>
@@ -115,6 +172,7 @@ public:
 			return textureResources.at(_name).get();
 		else
 			Debug::LogError("Texture resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<>
@@ -124,6 +182,7 @@ public:
 			return shaderResources.at(_name).get();
 		else
 			Debug::LogError("Shader resource : " + _name + " not found");
+		return nullptr;
 	}
 
 	template<typename T>

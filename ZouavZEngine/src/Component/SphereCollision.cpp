@@ -33,6 +33,5 @@ SphereCollision::~SphereCollision()
 
 void SphereCollision::Editor()
 {
-	ImGui::Text("SphereCollision");
 	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
 }

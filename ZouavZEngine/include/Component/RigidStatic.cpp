@@ -12,11 +12,11 @@ using namespace physx;
 RigidStatic::RigidStatic(GameObject* _gameObject)
 	: Component(_gameObject)
 {
-	PxTransform t(PxVec3FromVec3(gameObject->WorldPosition()), PxQuatFromQuaternion(gameObject->WorldRotation()));
+	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = gameObject;
+	actor->userData = &GetGameObject();
 
 	AttachShape();
 
@@ -26,7 +26,7 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 void RigidStatic::AttachShape()
 {
 	//TODO use getComponents
-	ShapeCollision* collision = gameObject->GetComponent<ShapeCollision>();
+	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
 
 	if (collision && !collision->isAttach)
 	{
@@ -43,5 +43,10 @@ RigidStatic::~RigidStatic()
 
 void RigidStatic::Editor()
 {
-	ImGui::Text("RigidStatic");
+}
+
+template <class Archive>
+static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<RigidStatic>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
 }

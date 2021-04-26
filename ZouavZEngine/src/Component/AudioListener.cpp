@@ -14,10 +14,15 @@ AudioListener::AudioListener(GameObject* _gameObject)
 
 void AudioListener::Update()
 {
-	SoundManager::SetListenerPosition(gameObject->WorldPosition());
+	SoundManager::SetListenerPosition(GetGameObject().WorldPosition());
 }
 
 void AudioListener::Editor()
 {
-	ImGui::Text("AudioListener");
+}
+
+template <class Archive>
+static void AudioListener::load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct)
+{
+	_construct(GameObject::currentLoadedGameObject);
 }

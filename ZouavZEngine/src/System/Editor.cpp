@@ -56,11 +56,74 @@ Editor::Editor(class Engine& _engine)
     : engine(_engine), isKeyboardEnable(false)
 {}
 
+void InitImGuiStyle()
+{
+    ImGuiStyle* style = &ImGui::GetStyle();
+    ImVec4* colors = style->Colors;
+
+    colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+    colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+    colors[ImGuiCol_WindowBg] = ImVec4(0.12f, 0.12f, 0.12f, 0.94f);
+    colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
+    colors[ImGuiCol_Border] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+    colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    colors[ImGuiCol_FrameBg] = ImVec4(0.315f, 0.315f, 0.315f, 0.54f);
+    colors[ImGuiCol_FrameBgHovered] = ImVec4(0.63f, 0.63f, 0.63f, 0.40f);
+    colors[ImGuiCol_FrameBgActive] = ImVec4(0.63f, 0.63f, 0.63f, 0.67f);
+    colors[ImGuiCol_TitleBg] = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
+    colors[ImGuiCol_TitleBgActive] = ImVec4(0.343f, 0.343f, 0.343f, 1.00f);
+    colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
+    colors[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+    colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
+    colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
+    colors[ImGuiCol_CheckMark] = ImVec4(0.8f, 0.8f, 0.8f, 1.00f);
+    colors[ImGuiCol_SliderGrab] = ImVec4(0.65f, 0.65f, 0.65f, 1.00f);
+    colors[ImGuiCol_SliderGrabActive] = ImVec4(0.85f, 0.85f, 0.85f, 1.00f);
+    colors[ImGuiCol_Button] = ImVec4(0.7f, 0.7f, 0.7f, 0.40f);
+    colors[ImGuiCol_ButtonHovered] = ImVec4(0.75f, 0.75f, 0.75f, 1.00f);
+    colors[ImGuiCol_ButtonActive] = ImVec4(0.8f, 0.8f, 0.8f, 1.00f);
+    colors[ImGuiCol_Header] = ImVec4(0.45f, 0.45f, 0.45f, 0.31f);
+    colors[ImGuiCol_HeaderHovered] = ImVec4(0.4f, 0.4f, 0.4f, 0.80f);
+    colors[ImGuiCol_HeaderActive] = ImVec4(0.5f, 0.5f, 0.5f, 1.00f);
+    colors[ImGuiCol_Separator] = colors[ImGuiCol_Border];
+    colors[ImGuiCol_SeparatorHovered] = ImVec4(0.5f, 0.5f, 0.5f, 0.78f);
+    colors[ImGuiCol_SeparatorActive] = ImVec4(0.6f, 0.6f, 0.6f, 1.00f);
+    colors[ImGuiCol_ResizeGrip] = ImVec4(0.8f, 0.8f, 0.8f, 0.20f);
+    colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.85f, 0.85f, 0.85f, 0.67f);
+    colors[ImGuiCol_ResizeGripActive] = ImVec4(0.90f, 0.90f, 0.90f, 0.95f);
+    colors[ImGuiCol_Tab] = ImVec4(0.1f, 0.1f, 0.1f, 0.8f);
+    colors[ImGuiCol_TabHovered] = ImVec4(0.3f, 0.3f, 0.3f, 0.8f);
+    colors[ImGuiCol_TabActive] = ImVec4(0.5f, 0.5f, 0.5f, 0.6f);
+    colors[ImGuiCol_TabUnfocused] = ImVec4(0.2f, 0.2f, 0.2f, 0.8f);
+    colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.4f, 0.4f, 0.4f, 0.4f);
+    colors[ImGuiCol_DockingPreview] = ImVec4(0.6f, 0.6f, 0.6f, 0.7f);
+    colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
+    colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
+    colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
+    colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+    colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+    colors[ImGuiCol_TableHeaderBg] = ImVec4(0.19f, 0.19f, 0.20f, 1.00f);
+    colors[ImGuiCol_TableBorderStrong] = ImVec4(0.31f, 0.31f, 0.35f, 1.00f);   // Prefer using Alpha=1.0 here
+    colors[ImGuiCol_TableBorderLight] = ImVec4(0.23f, 0.23f, 0.25f, 1.00f);   // Prefer using Alpha=1.0 here
+    colors[ImGuiCol_TableRowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
+    colors[ImGuiCol_TextSelectedBg] = ImVec4(0.5f, 0.5f, 0.5f, 0.35f);
+    colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+    colors[ImGuiCol_NavHighlight] = ImVec4(0.5f, 0.5f, 0.5f, 1.00f);
+    colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+    colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+    colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+}
+
 void Editor::Init()
 {
     sceneCamera = SceneCamera(engine.render.width, engine.render.height);
     sceneCamera.SetSceneCamera();
     imguiStyle = &ImGui::GetStyle();
+    InitImGuiStyle();
 
     editorClock = TimeManager::CreateClock();
 }
@@ -70,6 +133,19 @@ void Editor::NewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
+
+void Editor::Display(Render& _render)
+{
+    DisplayMainWindow();
+    DisplayOptionWindow();
+    DisplaySceneWindow(_render, _render.sceneFramebuffer);
+    DisplayInspector();
+    DisplayConsoleWindow();
+    DisplayHierarchy();
+    DisplayGameWindow(_render, _render.gameFramebuffer);
+    DisplayProject();
+    MoveSelectedGameobject();
 }
 
 void Editor::DisplayMainWindow()
@@ -115,9 +191,10 @@ void Editor::DisplayOptionWindow()
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(800);
 
-	if (ImGui::Button("Play"))
+	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
-        engine.Save();
+        if (state == EDITOR_STATE::EDITING) 
+            engine.Save();
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
@@ -136,7 +213,7 @@ void Editor::DisplayOptionWindow()
         TimeManager::gameClock->Reset();
         gameObjectInspector = nullptr;
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
-        engine.Load();
+        engine.scene.Load(false);
 	}
 
 
@@ -384,10 +461,14 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 }
 
 template <typename T>
-void ComponentButton(std::string _text)
+bool ComponentButton(std::string _text, bool _onlyOne)
 {
-    if (!gameObjectInspector->GetComponent<T>() && ImGui::Button(_text.c_str()))
+    if ((!_onlyOne || (_onlyOne && !gameObjectInspector->GetComponent<T>())) && ImGui::Button(_text.c_str()))
+    {
         gameObjectInspector->AddComponent<T>();
+        return true;
+    }
+    return false;
 }
 
 void Editor::DisplayInspector()
@@ -398,7 +479,6 @@ void Editor::DisplayInspector()
         if (gameObjectInspector)
         {
             ImGui::PushItemWidth(200.0f);
-            
             ImGui::Text("Name : ");
             ImGui::SameLine();
             std::string name = gameObjectInspector->name;
@@ -412,65 +492,108 @@ void Editor::DisplayInspector()
             if (ImGui::InputText("##tag", tag.data(), 256))
                 gameObjectInspector->tag = tag.data();
 
-            ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
-            
-            Vec3 worldEulerAngles = gameObjectInspector->WorldRotation().ToEuler();
-            ImGui::Text("World Rotation : %.3f %.3f %.3f", worldEulerAngles.x, worldEulerAngles.y, worldEulerAngles.z);
-            
-            ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
-            ImGui::Text("Local Position :");
-            ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
+            if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+            {
+                ImGui::Text("World Position : %.3f %.3f %.3f", gameObjectInspector->WorldPosition().x, gameObjectInspector->WorldPosition().y, gameObjectInspector->WorldPosition().z);
 
-            static Vec3 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
+                Vec3 worldEulerAngles = gameObjectInspector->WorldRotation().ToEuler();
+                ImGui::Text("World Rotation : %.3f %.3f %.3f", worldEulerAngles.x, worldEulerAngles.y, worldEulerAngles.z);
 
-            ImGui::Text("Local Rotation :");
-            ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
-                gameObjectInspector->localRotation = Quaternion(localEulerAngles);
+                ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
-            ImGui::Text("Local Scale    :");
-            ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
+                ImGui::Text("Local Position :");
+                ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
+                
+                static Vec3 localEulerAngles;
+                localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
+                ImGui::Text("Local Rotation :");
+                ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                    gameObjectInspector->localRotation = Quaternion(localEulerAngles);
+
+                ImGui::Text("Local Scale    :");
+                ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
+            }
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
-                component->Editor();
+                Component* comp = component.get();
+                ImGui::PushID(comp);
+                if (!Component::EditorCollapsingHeader(comp->GetComponentName(), [comp]() {comp->Editor(); }))
+                {
+                    comp->DeleteFromGameObject();
+                    ImGui::PopID();
+                    break;
+                }
+                ImGui::PopID();
             }
 
-            for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+            static bool addComponentWindow = false;
+            
+            if (ImGui::Button("Add Component"))
+                addComponentWindow = true;
+
+            if (addComponentWindow)
             {
-                switch (static_cast<E_COMPONENT>(i))
+                ImVec2 windowSize = ImGui::GetWindowSize();
+                ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowPos().x + windowSize.x / 4, ImGui::GetWindowPos().y + windowSize.y / 4));
+                ImGui::SetNextWindowSize(ImVec2(windowSize.x / 2, windowSize.y / 2));
+                if (ImGui::Begin("Add Component##window"), addComponentWindow, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
                 {
-                    case E_COMPONENT::AUDIO_BROADCASTER :
-                        ComponentButton<AudioBroadcaster>("Add AudioBroadcaster");
-                        break;
-                    case E_COMPONENT::AUDIO_LISTENER :
-                        ComponentButton<AudioListener>("Add AudioListener");
-                        break;
-                    case E_COMPONENT::LIGHT :
-                        ComponentButton<Light>("Add Light");
-                        break;
-                    case E_COMPONENT::MESHRENDERER :
-                        ComponentButton<MeshRenderer>("Add MeshRenderer");
-                        break;
-                    case E_COMPONENT::BOX_COLLISION :
-                        ComponentButton<BoxCollision>("Add BoxCollision");
-                        break;
-                    case E_COMPONENT::CAPSULE_COLLISION :
-                        ComponentButton<CapsuleCollision>("Add CapsuleCollision");
-                        break;
-                    case E_COMPONENT::SPHERE_COLLISION :
-                        ComponentButton<SphereCollision>("Add SphereCollision");
-                        break;
-                    case E_COMPONENT::PLANE :
-                        ComponentButton<Plane>("Add Plane");
-                        break;
-                    case E_COMPONENT::RIGID_BODY :
-                        ComponentButton<RigidBody>("Add RigidBody");
-                        break;
-                    case E_COMPONENT::RIGID_STATIC :
-                        ComponentButton<RigidStatic>("Add RigidStatic");
-                        break;
+                    for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+                    {
+                        switch (static_cast<E_COMPONENT>(i))
+                        {
+                        case E_COMPONENT::AUDIO_BROADCASTER:
+                            if (ComponentButton<AudioBroadcaster>("Add AudioBroadcaster", true))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::AUDIO_LISTENER:
+                            if (ComponentButton<AudioListener>("Add AudioListener", true))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::LIGHT:
+                            if (ComponentButton<Light>("Add Light", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::MESHRENDERER:
+                            if (ComponentButton<MeshRenderer>("Add MeshRenderer", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::BOX_COLLISION:
+                            if (ComponentButton<BoxCollision>("Add BoxCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::CAPSULE_COLLISION:
+                            if (ComponentButton<CapsuleCollision>("Add CapsuleCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::SPHERE_COLLISION:
+                            if (ComponentButton<SphereCollision>("Add SphereCollision", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::PLANE:
+                            if (gameObjectInspector->GetComponent<RigidStatic>())
+                                if (ComponentButton<Plane>("Add Plane", false))
+                                    addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::RIGID_BODY:
+                            if (!gameObjectInspector->GetComponent<RigidStatic>())
+                                if (ComponentButton<RigidBody>("Add RigidBody", true))
+                                    addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::RIGID_STATIC:
+                            if (!gameObjectInspector->GetComponent<RigidBody>())
+                                if (ComponentButton<RigidStatic>("Add RigidStatic", true))
+                                    addComponentWindow = false;
+                            break;
+                        }
+                    }
                 }
+                ImGui::End();
+
+                //if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                //    addComponentWindow = false;
             }
         }
     }
@@ -510,7 +633,11 @@ void Editor::DisplayConsoleWindow()
 
 void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
-    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
+    if (state == EDITOR_STATE::PLAYING)
+    {
+        ImGui::SetNextWindowSize(ImGui::GetWindowSize());
+    }
+    if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
         ImVec2 windowSize = ImGui::GetWindowSize();
 
@@ -543,7 +670,6 @@ void Editor::DisplayProject()
                 ImGui::PushID(i);
                 if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
                 {
-
                     currentProjectFolder.append("/").append(currentName);
                 }
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -618,7 +744,8 @@ void Editor::DisplayProject()
 
 void DisplayChild(GameObject* _parent)
 {
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    ImGui::PushID(_parent);
+    if (ImGui::TreeNodeEx(_parent->name.c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
@@ -663,6 +790,7 @@ void DisplayChild(GameObject* _parent)
 
         ImGui::TreePop();
     }
+    ImGui::PopID();
 }
 
 void Editor::DisplayHierarchy()
@@ -672,7 +800,7 @@ void Editor::DisplayHierarchy()
     {
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
-        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             hierarchyMenuPos = ImGui::GetMousePos();
             hierarchyMenu = true;
@@ -683,6 +811,9 @@ void Editor::DisplayHierarchy()
             ImGui::SetNextWindowPos(hierarchyMenuPos);
             if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
+                //if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
+                //    hierarchyMenu = false;
+
                 ImGui::InputText("New GameObject Name", newGameObjectName, 256);
                 if (ImGui::Button("New GameObject"))
                 {
@@ -693,7 +824,8 @@ void Editor::DisplayHierarchy()
                     hierarchyMenu = false;
                     strcpy_s(newGameObjectName,"New GameObject");
                 }
-                if (ImGui::Button("Delete") && newGameObjectParent->parent)
+
+                if (newGameObjectParent && ImGui::Button("Delete") && newGameObjectParent->parent)
                 {
                     for (GameObject* child : newGameObjectParent->children)
                     {
@@ -702,13 +834,11 @@ void Editor::DisplayHierarchy()
                     newGameObjectParent->SetParent(nullptr);
                     newGameObjectParent->toDestroy = true;
                     GameObject::destroyGameObject = true;
+                    hierarchyMenu = false;
                 }
             }
             ImGui::End();
         }
-
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-            hierarchyMenu = false;
     }
     ImGui::End();
 }

@@ -27,6 +27,8 @@ public:
 	void Begin() final;
 	void Update() final;
 
+	const char* GetComponentName() override { return "Player"; }
+
 	template <class Archive>
 	void serialize(Archive& ar)
 	{

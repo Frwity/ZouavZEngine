@@ -33,8 +33,8 @@ void ShapeCollision::AttachToRigidComponent()
 	{
 		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
 
-		RigidBody* rd = gameObject->GetComponent<RigidBody>();
-		RigidStatic* rs = gameObject->GetComponent<RigidStatic>();
+		RigidBody* rd = GetGameObject().GetComponent<RigidBody>();
+		RigidStatic* rs = GetGameObject().GetComponent<RigidStatic>();
 
 		if (rd)
 		{
