@@ -149,6 +149,7 @@ public:
 	}
 
 	void UpdateTransform(const class Mat4& _heritedTransform);
+	void UpdateTransformLocal(const class Mat4& _matrix);
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 

@@ -155,13 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external_lib\src\glad.c" />
+    <ClCompile Include="external_lib\src\ImCurveEdit.cpp" />
+    <ClCompile Include="external_lib\src\ImGradient.cpp" />
     <ClCompile Include="external_lib\src\imgui.cpp" />
+    <ClCompile Include="external_lib\src\ImGuizmo.cpp" />
     <ClCompile Include="external_lib\src\imgui_demo.cpp" />
     <ClCompile Include="external_lib\src\imgui_draw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
+    <ClCompile Include="external_lib\src\ImSequencer.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
     <ClCompile Include="include\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
@@ -213,6 +217,11 @@
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external_lib\include\ImCurveEdit.h" />
+    <ClInclude Include="external_lib\include\ImGradient.h" />
+    <ClInclude Include="external_lib\include\ImGuizmo.h" />
+    <ClInclude Include="external_lib\include\ImSequencer.h" />
+    <ClInclude Include="external_lib\include\ImZoomSlider.h" />
     <ClInclude Include="external_lib\src\imgui_internal.h" />
     <ClInclude Include="include\Component\AudioBroadcaster.hpp" />
     <ClInclude Include="include\Component\AudioListener.hpp" />

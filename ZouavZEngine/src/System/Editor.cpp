@@ -27,6 +27,7 @@
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
+#include "ImGuizmo.h"
 
 bool newFolderWindow = false;
 char folderName[256] = "New Folder";
@@ -133,6 +134,7 @@ void Editor::NewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 }
 
 void Editor::Display(Render& _render)
@@ -456,6 +458,41 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         }
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
+        
+        if (gameObjectInspector)
+        {
+            ImGuizmo::Enable(true);
+
+            float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+
+            matrixTranslation[0] = gameObjectInspector->localPosition.x;
+            matrixTranslation[1] = gameObjectInspector->localPosition.y;
+            matrixTranslation[2] = gameObjectInspector->localPosition.z;
+
+            matrixRotation[0] = gameObjectInspector->localRotation.ToEuler().x;
+            matrixRotation[1] = gameObjectInspector->localRotation.ToEuler().y;
+            matrixRotation[2] = gameObjectInspector->localRotation.ToEuler().z;
+
+            matrixScale[0] = gameObjectInspector->localScale.x;
+            matrixScale[1] = gameObjectInspector->localScale.y;
+            matrixScale[2] = gameObjectInspector->localScale.z;
+
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+
+            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation.ToEuler(), gameObjectInspector->localScale);
+
+            Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
+
+            static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+            static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
+            if (ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, mCurrentGizmoOperation, mCurrentGizmoMode, matrix.matrix))
+            {
+                gameObjectInspector->UpdateTransformLocal(matrix);
+            }
+        }
     }
     ImGui::End();
 }

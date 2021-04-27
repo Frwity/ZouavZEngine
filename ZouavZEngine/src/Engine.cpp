@@ -166,6 +166,7 @@ void Engine::Update()
         GameObject::DestroyGameObjectIfNeedTo();
 
         editor.Display(render);
+        scene.GetWorld().UpdateTransform(Mat4::identity);
 
         scene.DisplayTerrainOptionWindow();
 

@@ -62,6 +62,29 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	}
 }
 
+void GameObject::UpdateTransformLocal(const class Mat4& _matrix)
+{
+	localPosition = _matrix * localPosition;
+	localRotation = parent ? parent->localRotation * localRotation : localRotation;
+	localScale = parent ? parent->localScale * localScale : localScale;
+
+	for (GameObject* _child : children)
+	{
+		_child->UpdateTransform(_matrix * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
+
+		RigidBody* rb = _child->GetComponent<RigidBody>();
+
+		//update physx transform for simulation
+		if (rb)
+			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+
+		RigidStatic* rs = _child->GetComponent<RigidStatic>();
+
+		if (rs)
+			rs->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+	}
+}
+
 bool GameObject::IsChildOf(const GameObject* _gameObject) const
 {
 	if (!parent)
