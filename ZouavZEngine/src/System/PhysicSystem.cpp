@@ -98,7 +98,7 @@ void PhysicSystem::Destroy()
 	cooking->release();
 	physics->release();
 	PxCloseExtensions();
-	transport->release();
 	pvd->release();
+	transport->release();
 	foundation->release();
 }

@@ -191,6 +191,20 @@ void Editor::DisplayOptionWindow()
         engine.Load();
     }
 	ImGui::SameLine();
+
+    ImGui::SetCursorPosX(200);
+
+    if (ImGui::RadioButton("Translate", currentGizmoOperation == ImGuizmo::TRANSLATE))
+        currentGizmoOperation = ImGuizmo::TRANSLATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Rotate", currentGizmoOperation == ImGuizmo::ROTATE))
+        currentGizmoOperation = ImGuizmo::ROTATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Scale", currentGizmoOperation == ImGuizmo::SCALE))
+        currentGizmoOperation = ImGuizmo::SCALE;
+
+    ImGui::SameLine();
+
 	ImGui::SetCursorPosX(800);
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
@@ -480,15 +494,15 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
 
-            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation.ToEuler(), gameObjectInspector->localScale);
+            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, Vec3(matrixRotation[0], matrixRotation[1], matrixRotation[2]), gameObjectInspector->localScale);
 
             Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
 
-            static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
             static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
-            if (ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, mCurrentGizmoOperation, mCurrentGizmoMode, matrix.matrix))
+            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, mCurrentGizmoMode, matrix.matrix);
+            if (ImGuizmo::IsUsing())
             {
                 gameObjectInspector->UpdateTransformLocal(matrix);
             }

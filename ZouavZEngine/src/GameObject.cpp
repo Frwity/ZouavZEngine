@@ -64,25 +64,35 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 
 void GameObject::UpdateTransformLocal(const class Mat4& _matrix)
 {
-	localPosition = _matrix * localPosition;
-	localRotation = parent ? parent->localRotation * localRotation : localRotation;
-	localScale = parent ? parent->localScale * localScale : localScale;
+	localPosition = Vec3(_matrix.Accessor(0, 3), _matrix.Accessor(1, 3), _matrix.Accessor(2, 3));
+	localScale.x = Vec3(_matrix.Accessor(0, 0), _matrix.Accessor(1, 0), _matrix.Accessor(2, 0)).GetMagnitude();
+	localScale.y = Vec3(_matrix.Accessor(0, 1), _matrix.Accessor(1, 1), _matrix.Accessor(2, 1)).GetMagnitude();
+	localScale.z = Vec3(_matrix.Accessor(0, 2), _matrix.Accessor(1, 2), _matrix.Accessor(2, 2)).GetMagnitude();
 
-	for (GameObject* _child : children)
-	{
-		_child->UpdateTransform(_matrix * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
+	Mat4 m = Mat4::identity;
 
-		RigidBody* rb = _child->GetComponent<RigidBody>();
+	m.Accessor(0, 0) = _matrix.Accessor(0, 0) / localScale.x;
+	m.Accessor(1, 0) = _matrix.Accessor(1, 0) / localScale.x;
+	m.Accessor(2, 0) = _matrix.Accessor(2, 0) / localScale.x;
 
-		//update physx transform for simulation
-		if (rb)
-			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+	m.Accessor(0, 1) = _matrix.Accessor(0, 1) / localScale.y;
+	m.Accessor(1, 1) = _matrix.Accessor(1, 1) / localScale.y;
+	m.Accessor(2, 1) = _matrix.Accessor(2, 1) / localScale.y;
 
-		RigidStatic* rs = _child->GetComponent<RigidStatic>();
+	m.Accessor(0, 2) = _matrix.Accessor(0, 2) / localScale.z;
+	m.Accessor(1, 2) = _matrix.Accessor(1, 2) / localScale.z;
+	m.Accessor(2, 2) = _matrix.Accessor(2, 2) / localScale.z;
 
-		if (rs)
-			rs->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
-	}
+	float x, y, z, w = 0.0f;
+
+	w = sqrt(1 + m.Accessor(0, 0) + m.Accessor(1, 1) + m.Accessor(2, 2)) / 2.0f;
+	float w4 = (4.0f * w);
+
+	x = (m.Accessor(2, 1) - m.Accessor(1, 2)) / w4;
+	y = (m.Accessor(0, 2) - m.Accessor(2, 0)) / w4;
+	z = (m.Accessor(1, 0) - m.Accessor(0, 1)) / w4;
+
+	localRotation = Quaternion(w, x, y, z);
 }
 
 bool GameObject::IsChildOf(const GameObject* _gameObject) const
