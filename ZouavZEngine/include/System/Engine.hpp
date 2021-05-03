@@ -19,6 +19,7 @@ public:
 	Engine();
 	~Engine();
 	
+	void LoadDefaultResources();
 	void TempLoad();
 	void Load();
 	void Update();

@@ -35,9 +35,19 @@ Scene::~Scene()
 		currentScene = nullptr;
 }
 
+void Scene::NewScene(const std::string& _sceneName)
+{
+	GameObject& sceneWorld = GetCurrentScene()->world;
+	GameObject::gameObjects.clear();
+	sceneWorld.children.clear();
+	PhysicSystem::scene->release();
+	PhysicSystem::InitScene();
+	ResourcesManager::Clear();	
+}
+
 void Scene::Load(bool _changingScene)
 {
-	Load("resources/" + world.name + ".zes", _changingScene);
+	Load("Project/scenes/" + world.name + ".zes", _changingScene);
 }
 
 void Scene::Load(const std::string& _path, bool _changingScene)
@@ -78,14 +88,14 @@ void Scene::Save()
 {
 	std::ofstream saveFile;
 
-	saveFile.open(std::string("resources/" + world.name + ".zesr"), std::ios::binary);
+	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
 		ResourcesManager::save(oArchive);
 	}
 	saveFile.close();
 
-	saveFile.open(std::string("resources/" + world.name + ".zes"), std::ios::binary);
+	saveFile.open(std::string("Project/scenes/" + world.name + ".zes"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
 

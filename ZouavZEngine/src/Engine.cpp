@@ -55,6 +55,7 @@ Engine::Engine()
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
+    LoadDefaultResources();
     TempLoad();
 }
 
@@ -67,34 +68,37 @@ Engine::~Engine()
     PhysicSystem::Destroy();
 }
 
-void Engine::TempLoad()
+void Engine::LoadDefaultResources()
 {
-    // engine base resource
     ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
+    ResourcesManager::AddResourceTexture("Folder", "resources/folder.png");
+    ResourcesManager::AddResourceTexture("Default Icon", "resources/default.png");
+    ResourcesManager::AddResourceTexture(".obj", "resources/mesh.png");
+    ResourcesManager::AddResourceTexture(".fbx", "resources/mesh.png");
+    ResourcesManager::AddResourceTexture(".png", "resources/texture.png");
+    ResourcesManager::AddResourceTexture(".jpg", "resources/texture.png");
+    ResourcesManager::AddResourceTexture(".vs", "resources/shader.png");
+    ResourcesManager::AddResourceTexture(".fs", "resources/shader.png");
+    ResourcesManager::AddResourceTexture(".cpp", "resources/script.png");
+    ResourcesManager::AddResourceTexture(".hpp", "resources/script.png");
+    ResourcesManager::AddResourceTexture(".wav", "resources/sound.png");
+}
 
+void Engine::TempLoad()
+{
     // other resource
-    Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
-    Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
-    ResourcesManager::AddResourceMesh("Eye", "resources/eyeball.obj");
-    ResourcesManager::AddResourceMesh("Cat", "resources/Cat.obj");
-    ResourcesManager::AddResourceMesh("Plane", "resources/Plane.obj");
-    ResourcesManager::AddResourceTexture("Cat", "resources/Cat.jpg");
-    ResourcesManager::AddResourceMesh("Horse", "resources/Horse.obj");
-    ResourcesManager::AddResourceTexture("Horse", "resources/Horse.jpg");
+    Sound* sound = ResourcesManager::AddResourceSound("TestSon", "Project/sounds/Test.wav");
+    Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "Project/meshes/Skull.obj");
 
+    Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "Project/textures/skull.jpg");
 
-    ResourcesManager::AddResourceMesh("Deer4", "resources/deer.fbx");
-    ResourcesManager::AddResourceMesh("Deer5", "resources/deer.obj");
-
-
-    Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
-
-    ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
-    ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
-    ResourcesManager::AddResourceTexture("Grass", "resources/Grass.png");
-    ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
-    ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
+    ResourcesManager::AddResourceTexture("Water", "Project/textures/Water.png");
+    ResourcesManager::AddResourceTexture("SandyGrass", "Project/textures/SandyGrass.png");
+    ResourcesManager::AddResourceTexture("Grass", "Project/textures/Grass.png");
+    ResourcesManager::AddResourceTexture("Rocks", "Project/textures/Rocks.png");
+    ResourcesManager::AddResourceTexture("Snow", "Project/textures/Snow.png");
+    
 
     // coded scene
     GameObject* light = GameObject::CreateGameObject("Light");

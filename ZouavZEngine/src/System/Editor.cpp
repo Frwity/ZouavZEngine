@@ -34,17 +34,19 @@ bool newFileWindow = false;
 char fileName[256] = "New File";
 bool newClassWindow = false;
 char className[256] = "NewClass";
+
+bool newSceneWindow = false;
+
 std::string actualFolder = ".";
 bool hierarchyMenu = false;
 ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
 GameObject* gameObjectInspector = nullptr;
-std::string currentProjectFolder = "resources";
+std::string currentProjectFolder = "Project";
 std::string currentMovingProjectFile;
 ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
 bool projectNewFolder = false;
-
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -375,6 +377,27 @@ void NewClassWindow()
     }
 }
 
+void NewSceneWindow(Engine& engine)
+{
+    if (newSceneWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
+
+        static std::string sceneName = "New Scene";
+        ImGui::InputText("Scene Name", sceneName.data(), 256);
+        
+        if (ImGui::Button("Create"))
+        {
+            Scene::NewScene(sceneName);
+            engine.LoadDefaultResources();
+            sceneName = "New Scene";
+        }
+        ImGui::End();
+    }
+}
+
 void Editor::DisplayMenuBar()
 {
     if (ImGui::BeginMenuBar())
@@ -384,8 +407,7 @@ void Editor::DisplayMenuBar()
             ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
             ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("New Class", nullptr, &newClassWindow);
-            ImGui::MenuItem("Load", nullptr);
-            ImGui::MenuItem("Save", nullptr);
+            ImGui::MenuItem("New Scene", nullptr, &newSceneWindow);
             ImGui::EndMenu();
         }
 
@@ -403,6 +425,8 @@ void Editor::DisplayMenuBar()
     NewFileWindow();
 
     NewClassWindow();
+
+    NewSceneWindow(engine);
 }
 
 void Editor::FileMenu()
@@ -591,9 +615,6 @@ void Editor::DisplayInspector()
                     }
                 }
                 ImGui::End();
-
-                //if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-                //    addComponentWindow = false;
             }
         }
     }
@@ -656,19 +677,29 @@ void Editor::DisplayProject()
 {
     if (ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
-        if (ImGui::Button("resources"))
-            currentProjectFolder = "resources";
-
+        if (ImGui::Button("Project"))
+            currentProjectFolder = "Project";
+        if (GetRightName(currentProjectFolder).compare("Project") != 0)
+        {
+            ImGui::SameLine();
+            if(ImGui::Button("<--"))
+                currentProjectFolder = currentProjectFolder.substr(0, currentProjectFolder.find_last_of("/\\"));
+        }
         int i = 0;
-        float windowWidth = ImGui::GetWindowWidth();
-        
+        float windowWidth = ImGui::GetContentRegionAvailWidth();
+        int nbButton = ((windowWidth - 20.0f) / 72.0f) - 2;
+
         for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
         {
+            if (i++ != 0 && nbButton > 0 && (i-1) % nbButton != 0)
+                ImGui::SameLine();
+
             std::string currentName = GetRightName(entry.path().string());
             if (entry.is_directory())
             {
                 ImGui::PushID(i);
-                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
+                ImGui::BeginGroup();
+                if (ImGui::ImageButton((ImTextureID)ResourcesManager::GetResource<Texture>("Folder")->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f)))
                 {
                     currentProjectFolder.append("/").append(currentName);
                 }
@@ -690,12 +721,16 @@ void Editor::DisplayProject()
                     }
                     ImGui::EndDragDropTarget();
                 }
+                ImGui::Text(currentName.size() > 11 ? (currentName.substr(0, 9) + "...").c_str() : currentName.c_str());
+                ImGui::EndGroup();
                 ImGui::PopID();
             }
             else
             {
                 ImGui::PushID(i);
-                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick)
+                ImGui::BeginGroup();
+                Texture* texture = ResourcesManager::GetResource<Texture>(entry.path().extension().string().c_str());
+                if (ImGui::ImageButton(texture ? (ImTextureID)texture->textureID : (ImTextureID)ResourcesManager::GetResource<Texture>("Default Icon")->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f))
                 && entry.path().extension().string().compare(".zes") == 0)
                 {
                     gameObjectInspector = nullptr;
@@ -708,16 +743,17 @@ void Editor::DisplayProject()
                     ImGui::Text(currentName.c_str());
                     ImGui::EndDragDropSource();
                 }
+                ImGui::Text(currentName.size() > 11 ? (currentName.substr(0, 9) + "...").c_str() : currentName.c_str());
+                ImGui::EndGroup();
                 ImGui::PopID();
             }
-            if (++i % 3 != 0)
-                ImGui::SameLine();
         }
     
         if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             projectNewFolderPos = ImGui::GetMousePos();
             projectNewFolder = true;
+
         }
 
         if (projectNewFolder)
@@ -725,15 +761,19 @@ void Editor::DisplayProject()
             ImGui::SetNextWindowPos(projectNewFolderPos);
             if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                static char newHierarchyFolderName[256] = "New Folder";
-                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName, 256);
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    projectNewFolder = false;
+
+                static std::string newHierarchyFolderName = "New Folder";
+                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName.data(), 256);
                 if (ImGui::Button("Create"))
                 {
                     if (_mkdir(std::string(currentProjectFolder).append("/").append(newHierarchyFolderName).c_str()) == 0)
                         std::cout << "Folder " << newHierarchyFolderName << " created" << std::endl;
                     else
                         std::cout << "Folder " << newHierarchyFolderName << " not created" << std::endl;
-                    projectNewFolder = !projectNewFolder;
+                    projectNewFolder = false;
+                    newHierarchyFolderName = "New Folder";
                 }
             }
             ImGui::End();
