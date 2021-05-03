@@ -181,9 +181,8 @@ void Engine::Update()
        
         GameObject::DestroyGameObjectIfNeedTo();
 
-        editor.Display(render);
-
-        scene.DisplayTerrainOptionWindow();
+        if (editor.Display(render))
+            scene.DisplayTerrainOptionWindow();
 
         render.BindSceneFBO();
        
