@@ -34,11 +34,86 @@ void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
     glDrawElements(GL_TRIANGLES, (GLsizei)mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }
 
+void MeshRenderer::TextureEditor()
+{
+    ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+        {
+            ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+            std::string _path = *(const std::string*)payload->Data;
+            std::string _truePath = _path;
+            size_t start_pos = _truePath.find("\\");
+            _truePath.replace(start_pos, 1, "/");
+
+            if (_truePath.find(".png") != std::string::npos || _truePath.find(".jpg") != std::string::npos)
+            {
+                //material.texture->RemoveUse();
+                //if (material.texture->NbUse() <= 0)
+                //    ResourcesManager::RemoveResourceTexture(material.texture->GetName());
+                material.texture = ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+}
+
+void MeshRenderer::MeshEditor()
+{
+    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+        {
+            ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new mesh");
+            std::string _path = *(const std::string*)payload->Data;
+            std::string _truePath = _path;
+            size_t start_pos = _truePath.find("\\");
+            _truePath.replace(start_pos, 1, "/");
+
+            if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".obj") != std::string::npos)
+            {
+                //mesh->RemoveUse();
+                //if (mesh->NbUse() <= 0)
+                //    ResourcesManager::RemoveResourceMesh(mesh->GetName());
+                mesh = ResourcesManager::AddResourceMesh(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+}
+
+void MeshRenderer::ShaderEditor()
+{
+    ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
+    //if (ImGui::BeginDragDropTarget())
+    //{
+    //    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+    //    {
+    //        ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new shader");
+    //        std::string _path = *(const std::string*)payload->Data;
+    //        std::string _truePath = _path;
+    //        size_t start_pos = _truePath.find("\\");
+    //        _truePath.replace(start_pos, 1, "/");
+
+    //        if (_truePath.find(".vs") != std::string::npos || _truePath.find(".fs") != std::string::npos)
+    //        {
+    //            //material.shader->RemoveUse();
+    //            //if (material.shader->NbUse() <= 0)
+    //            //    ResourcesManager::RemoveResourceShader(material.shader->GetName());
+    //            material.shader = ResourcesManager::AddResourceShader(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+    //        }
+    //    }
+    //    ImGui::EndDragDropTarget();
+    //}
+}
+
 void MeshRenderer::Editor()
 {
-	ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
-	ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
-	ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
+    TextureEditor();
+    MeshEditor();
+    ShaderEditor();
 	ImGui::ColorEdit4("Color : ", &material.color.w);
 }
 

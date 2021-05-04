@@ -45,8 +45,6 @@ Engine::Engine()
 
     TimeManager::Init();
 
-    ResourcesManager::InitDefaultResources();
-
 #ifdef EDITOR
     editor.Init();
 #endif
@@ -70,6 +68,7 @@ Engine::~Engine()
 
 void Engine::LoadDefaultResources()
 {
+    ResourcesManager::InitDefaultResources();
     ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
     ResourcesManager::AddResourceTexture("Folder", "resources/folder.png");
@@ -83,6 +82,8 @@ void Engine::LoadDefaultResources()
     ResourcesManager::AddResourceTexture(".cpp", "resources/script.png");
     ResourcesManager::AddResourceTexture(".hpp", "resources/script.png");
     ResourcesManager::AddResourceTexture(".wav", "resources/sound.png");
+    ResourcesManager::AddResourceTexture(".zes", "resources/save.png");
+    ResourcesManager::AddResourceTexture(".zepref", "resources/prefab.png");
 }
 
 void Engine::TempLoad()

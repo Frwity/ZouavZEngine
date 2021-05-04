@@ -96,6 +96,11 @@ public:
 			Debug::Log("Sound resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
+		else if (a.first->second.get())
+		{
+			a.first->second.get()->AddUse();
+		}
+
 		Debug::LogError("Sound resource : " + _name + " not loaded");
 		return nullptr;
 	}
@@ -109,6 +114,11 @@ public:
 			Debug::Log("Mesh resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
+		else if (a.first->second.get())
+		{
+			a.first->second.get()->AddUse();
+		}
+
 		Debug::LogError("Mesh resource : " + _name + " not loaded");
 		return nullptr;
 	}
@@ -122,6 +132,11 @@ public:
 			Debug::Log("Texture resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
+		else if (a.first->second.get())
+		{
+			a.first->second.get()->AddUse();
+		}
+
 		Debug::LogError("Texture resource : " + _name + " not loaded");
 		return nullptr;
 	}
@@ -135,6 +150,11 @@ public:
 			Debug::Log("Shader resource : " + _name + " loaded");
 			return a.first->second.get();
 		}
+		else if (a.first->second.get())
+		{
+			a.first->second.get()->AddUse();
+		}
+
 		Debug::LogError("Shader resource : " + _name + " not loaded");
 		return nullptr;
 	}
@@ -215,12 +235,49 @@ public:
 		return soundResources;
 	}
 
+	static void RemoveResourceSound(std::string _name)
+	{
+		soundResources.erase(_name);
+	}
+
+	static void RemoveResourceTexture(std::string _name)
+	{
+		textureResources.erase(_name);
+	}
+
+	static void RemoveResourceMesh(std::string _name)
+	{
+		meshResources.erase(_name);
+	}
+
+	static void RemoveResourceShader(std::string _name)
+	{
+		shaderResources.erase(_name);
+	}
+
 	template<typename T>
 	static bool ResourceChanger(const char* _label, T*& _resource)
 	{
 		const std::unordered_map<std::string, std::unique_ptr<Resource>>* resources = reinterpret_cast<const std::unordered_map<std::string, std::unique_ptr<Resource>>*>(&GetResources<T>());
 		bool changed = false;
-		_resource = (T*)ResourceChangerImpl(_label, _resource, *resources, changed);
+		T* tempResource = (T*)ResourceChangerImpl(_label, _resource, *resources, changed);
+		//if (changed)
+		//{
+		//	_resource->RemoveUse();
+		//	if (_resource->NbUse() <= 0)
+		//	{
+		//		if (dynamic_cast<Texture*>(_resource))
+		//			ResourcesManager::RemoveResourceTexture(_resource->GetName());
+		//		else if (dynamic_cast<Shader*>(_resource))
+		//			ResourcesManager::RemoveResourceShader(_resource->GetName());
+		//		else if (dynamic_cast<Mesh*>(_resource))
+		//			ResourcesManager::RemoveResourceMesh(_resource->GetName());
+		//		else if (dynamic_cast<Sound*>(_resource))
+		//			ResourcesManager::RemoveResourceSound(_resource->GetName());
+
+		//	}
+		//}
+		_resource = tempResource;
 		return changed;
 	}
 

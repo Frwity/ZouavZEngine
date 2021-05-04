@@ -29,12 +29,8 @@
 #include "System/ResourcesManager.hpp"
 
 bool newFolderWindow = false;
-char folderName[256] = "New Folder";
 bool newFileWindow = false;
-char fileName[256] = "New File";
 bool newClassWindow = false;
-char className[256] = "NewClass";
-
 bool newSceneWindow = false;
 
 std::string actualFolder = ".";
@@ -233,8 +229,8 @@ void Editor::DisplayOptionWindow()
 
 void ListActualFolder(bool& windowOpened)
 {
-    if (ImGui::Button("../"))
-        actualFolder.append("/../");
+    if (ImGui::Button("<--"))
+        actualFolder = actualFolder.substr(0, actualFolder.find_last_of("/\\"));
 
     ImGui::SameLine(ImGui::GetWindowWidth() - 20.0f);
     if (ImGui::Button("X"))
@@ -323,8 +319,9 @@ void NewFolderWindow()
         ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
         ListActualFolder(newFolderWindow);
+        static std::string folderName = "New Folder";
 
-        ImGui::InputText("Folder Name", folderName, 256);
+        ImGui::InputText("Folder Name", folderName.data(), 256);
 
         if (ImGui::Button("Create"))
         {
@@ -332,6 +329,7 @@ void NewFolderWindow()
             {
                 std::cout << "Folder " << folderName << " created" << std::endl;
                 newFolderWindow = !newFolderWindow;
+                folderName = "New Folder";
             }
             else
                 std::cout << "Folder " << folderName << " not created" << std::endl;
@@ -350,7 +348,8 @@ void NewFileWindow()
 
         ListActualFolder(newFileWindow);
 
-        ImGui::InputText("File Name", fileName, 256);
+        static std::string fileName = "New File";
+        ImGui::InputText("File Name", fileName.data(), 256);
 
         if (ImGui::Button("Create"))
         {
@@ -361,6 +360,7 @@ void NewFileWindow()
                 {
                     std::cout << "File " << fileName << " created" << std::endl;
                     newFileWindow = !newFileWindow;
+                    fileName = "New File";
                 }
                 else
                     std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
@@ -377,7 +377,8 @@ void NewClassWindow()
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
         ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
-        ImGui::InputText("Class Name", className, 256);
+        static std::string className = "NewClass";
+        ImGui::InputText("Class Name", className.data(), 256);
 
         if (ImGui::Button("Create"))
             CreateNewClass(className);
@@ -397,11 +398,16 @@ void NewSceneWindow(Engine& engine)
         static std::string sceneName = "New Scene";
         ImGui::InputText("Scene Name", sceneName.data(), 256);
         
+        if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+            newSceneWindow = false;
+
         if (ImGui::Button("Create"))
         {
             Scene::NewScene(sceneName);
             engine.LoadDefaultResources();
             sceneName = "New Scene";
+            newSceneWindow = false;
+            gameObjectInspector = nullptr;
         }
         ImGui::End();
     }
@@ -409,6 +415,14 @@ void NewSceneWindow(Engine& engine)
 
 void Editor::DisplayMenuBar()
 {
+    NewFolderWindow();
+
+    NewFileWindow();
+
+    NewClassWindow();
+
+    NewSceneWindow(engine);
+
     if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -428,14 +442,6 @@ void Editor::DisplayMenuBar()
         }
     }
     ImGui::EndMenuBar();
-
-    NewFolderWindow();
-
-    NewFileWindow();
-
-    NewClassWindow();
-
-    NewSceneWindow(engine);
 }
 
 void Editor::FileMenu()
@@ -698,6 +704,9 @@ void Editor::DisplayProject()
 
         for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
         {
+            if (entry.path().extension().string().compare(".zesr") == 0)
+                continue;
+
             if (i++ != 0 && nbButton > 0 && (i-1) % nbButton != 0)
                 ImGui::SameLine();
 
@@ -812,7 +821,6 @@ void DisplayChild(GameObject* _parent)
             }
         }
 
-
         if (ImGui::BeginDragDropSource())
         {
             ImGui::SetDragDropPayload("Gameobject Hierarchy", &_parent, sizeof(_parent));
@@ -845,6 +853,20 @@ void Editor::DisplayHierarchy()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+            {
+                ZASSERT(payload->DataSize == sizeof(std::string), "Error in moving file in hierarchy");
+                std::string path = *(const std::string*)payload->Data;
+                if (path.find(".zepref") != std::string::npos)
+                {
+                    GameObject::LoadPrefab(path);
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
         if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
