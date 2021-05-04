@@ -825,16 +825,23 @@ void Editor::DisplayHierarchy()
                     strcpy_s(newGameObjectName,"New GameObject");
                 }
 
-                if (newGameObjectParent && ImGui::Button("Delete") && newGameObjectParent->parent)
+                if (newGameObjectParent && newGameObjectParent->parent)
                 {
-                    for (GameObject* child : newGameObjectParent->children)
+                    if (ImGui::Button("Delete"))
                     {
-                        child->SetParent(newGameObjectParent->parent);
+                        for (GameObject* child : newGameObjectParent->children)
+                        {
+                            child->SetParent(newGameObjectParent->parent);
+                        }
+                        newGameObjectParent->SetParent(nullptr);
+                        newGameObjectParent->toDestroy = true;
+                        GameObject::destroyGameObject = true;
+                        hierarchyMenu = false;
                     }
-                    newGameObjectParent->SetParent(nullptr);
-                    newGameObjectParent->toDestroy = true;
-                    GameObject::destroyGameObject = true;
-                    hierarchyMenu = false;
+                    if (ImGui::Button("CreatePrefab"))
+                    {
+                        newGameObjectParent->CreatePrefab();
+                    }
                 }
             }
             ImGui::End();
