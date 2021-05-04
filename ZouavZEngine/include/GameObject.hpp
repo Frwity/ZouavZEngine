@@ -118,6 +118,8 @@ public:
 			child->save(_ar);
 	}
 
+	void CreatePrefab();
+
 	static GameObject* CreateGameObject(const std::string& _name);
 	static GameObject* CreateGameObject(const std::string& _name, const std::string& _tag);
 

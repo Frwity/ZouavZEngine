@@ -8,6 +8,10 @@
 #include "PxActor.h"
 #include "GameObject.hpp"
 
+#include <fstream>
+#include "cereal/archives/json.hpp"
+#include <iostream>
+
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
@@ -37,6 +41,19 @@ GameObject::GameObject(const std::string& _name, const std::string& _tag)
 void GameObject::Destroy() 
 { 
 	toDestroy = true;
+}
+
+void GameObject::CreatePrefab()
+{
+	std::ofstream saveFile;
+	saveFile.open(std::string("Project/prefabs/" + name + ".zepref"), std::ios::binary);
+	{
+		cereal::JSONOutputArchive oArchive(saveFile);
+
+		save(oArchive);
+	}
+	saveFile.close();
+
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

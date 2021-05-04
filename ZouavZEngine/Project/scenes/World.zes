@@ -111,8 +111,8 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "Deer4",
-                    "value1": "Default",
+                    "value0": "Skull Mesh",
+                    "value1": "Skull Tex",
                     "value2": "Default"
                 }
             }
@@ -143,7 +143,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.259447455406189,
+                    "value0": 1.093367338180542,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -170,16 +170,16 @@
             }
         }
     ],
-    "value46": 1.4705123901367188,
+    "value46": 0.0,
     "value47": 0.0,
     "value48": 0.0,
     "value49": 0.0,
     "value50": 0.0,
     "value51": 0.0,
     "value52": 1.0,
-    "value53": 0.004999999888241291,
-    "value54": 0.004999999888241291,
-    "value55": 0.004999999888241291,
+    "value53": 1.0,
+    "value54": 1.0,
+    "value55": 1.0,
     "value56": 512.0,
     "value57": 128,
     "value58": 16,
