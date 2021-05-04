@@ -881,6 +881,7 @@ void Editor::DisplayHierarchy()
                         newGameObjectParent->toDestroy = true;
                         GameObject::destroyGameObject = true;
                         hierarchyMenu = false;
+                        newGameObjectParent = nullptr;
                     }
                     if (ImGui::Button("CreatePrefab"))
                     {
