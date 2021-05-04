@@ -483,9 +483,9 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             matrixTranslation[1] = gameObjectInspector->localPosition.y;
             matrixTranslation[2] = gameObjectInspector->localPosition.z;
 
-            matrixRotation[0] = gameObjectInspector->localRotation.ToEuler().x;
-            matrixRotation[1] = gameObjectInspector->localRotation.ToEuler().y;
-            matrixRotation[2] = gameObjectInspector->localRotation.ToEuler().z;
+            matrixRotation[0] = gameObjectInspector->localRotation.x;
+            matrixRotation[1] = gameObjectInspector->localRotation.y;
+            matrixRotation[2] = gameObjectInspector->localRotation.z;
 
             matrixScale[0] = gameObjectInspector->localScale.x;
             matrixScale[1] = gameObjectInspector->localScale.y;
@@ -504,7 +504,9 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, mCurrentGizmoMode, matrix.matrix);
             if (ImGuizmo::IsUsing())
             {
-                gameObjectInspector->UpdateTransformLocal(matrix);
+                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, matrixTranslation, matrixRotation, matrixScale);
+                Vec3 rotationVector = Vec3(matrixRotation[0], matrixRotation[1], matrixRotation[0]);
+                gameObjectInspector->UpdateTransformLocal(matrix, rotationVector);
             }
         }
     }

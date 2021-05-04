@@ -62,13 +62,14 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	}
 }
 
-void GameObject::UpdateTransformLocal(const class Mat4& _matrix)
+void GameObject::UpdateTransformLocal(const class Mat4& _matrix, Vec3& rotation)
 {
 	localPosition = Vec3(_matrix.Accessor(0, 3), _matrix.Accessor(1, 3), _matrix.Accessor(2, 3));
 	localScale.x = Vec3(_matrix.Accessor(0, 0), _matrix.Accessor(1, 0), _matrix.Accessor(2, 0)).GetMagnitude();
 	localScale.y = Vec3(_matrix.Accessor(0, 1), _matrix.Accessor(1, 1), _matrix.Accessor(2, 1)).GetMagnitude();
 	localScale.z = Vec3(_matrix.Accessor(0, 2), _matrix.Accessor(1, 2), _matrix.Accessor(2, 2)).GetMagnitude();
 
+	//Rotation WIP
 	Mat4 m = Mat4::identity;
 
 	m.Accessor(0, 0) = _matrix.Accessor(0, 0) / localScale.x;
@@ -92,7 +93,8 @@ void GameObject::UpdateTransformLocal(const class Mat4& _matrix)
 	y = (m.Accessor(0, 2) - m.Accessor(2, 0)) / w4;
 	z = (m.Accessor(1, 0) - m.Accessor(0, 1)) / w4;
 
-	localRotation = Quaternion(w, x, y, z);
+	//localRotation = Quaternion(w, x, y, z);
+	localRotation = Quaternion(rotation);
 }
 
 bool GameObject::IsChildOf(const GameObject* _gameObject) const
