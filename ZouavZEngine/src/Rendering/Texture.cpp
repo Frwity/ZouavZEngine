@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "System/Debug.hpp"
+#include "System/ResourcesManager.hpp"
 #include "Rendering/Texture.hpp"
 
 const Texture* Texture::errorTexture;
@@ -35,6 +36,11 @@ Texture::Texture(const std::string& _name, const char* _path)
 
     paths.emplace_back(_path);
 
+}
+
+void Texture::RemoveFromResourcesManager()
+{
+    ResourcesManager::RemoveResourceTexture(name);
 }
 
 void Texture::Use(Texture* texture)

@@ -11,7 +11,7 @@
                 "data": {
                     "value0": "Skull Mesh",
                     "value1": "Skull Tex",
-                    "value2": "Default"
+                    "value2": "DefaultS"
                 }
             }
         },
@@ -41,7 +41,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.4884932041168213,
+                    "value0": 1.7837812900543213,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,

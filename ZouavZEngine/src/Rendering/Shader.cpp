@@ -8,6 +8,7 @@
 #include "Component/Light.hpp"
 #include "GameObject.hpp"
 #include "System/Debug.hpp"
+#include "System/ResourcesManager.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const std::string& _name, const char* _vertexPath, const char* _fragmentPath)
@@ -102,6 +103,10 @@ Shader::~Shader()
     glDeleteProgram(id);
 }
 
+void Shader::RemoveFromResourcesManager()
+{
+    ResourcesManager::RemoveResourceShader(name);
+}
 
 void Shader::SetBool(const std::string& _name, bool _value) const
 {

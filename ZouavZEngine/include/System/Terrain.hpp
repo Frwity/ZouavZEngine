@@ -89,7 +89,7 @@ private:
 
 	std::vector<physx::PxMaterial*> material;
 
-	Shader* shader = nullptr;
+	std::shared_ptr<Shader> shader;
 	
 	bool isGenerated = false;
 
@@ -125,7 +125,7 @@ public:
 	std::vector<float> colorBlend;
 	std::vector<float> colorStrength;
 	std::vector<float> textureScale;
-	std::vector<Texture*> textureID;
+	std::vector<std::shared_ptr<Texture>> textureID;
 
 	// editor variable
 
@@ -177,7 +177,7 @@ public:
 			if (i != 0)
 				AddColorLayer();
 			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], _textureName);
-			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : ResourcesManager::GetResource<Texture>(_textureName);
+			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : *ResourcesManager::GetResource<Texture>(_textureName);
 		}
 	}
 	
