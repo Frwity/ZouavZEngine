@@ -126,6 +126,20 @@ void Editor::Init()
     InitImGuiStyle();
 
     editorClock = TimeManager::CreateClock();
+
+    editorTextures.emplace("Folder", std::make_unique<Texture>( "Folder", "resources/folder.png" ));
+    editorTextures.emplace("Default Icon", std::make_unique<Texture>( "Default Icon", "resources/default.png" ));
+    editorTextures.emplace(".obj", std::make_unique<Texture>( ".obj", "resources/mesh.png" ));
+    editorTextures.emplace(".fbx", std::make_unique<Texture>( ".fbx", "resources/mesh.png" ));
+    editorTextures.emplace(".png", std::make_unique<Texture>( ".png", "resources/texture.png" ));
+    editorTextures.emplace(".jpg", std::make_unique<Texture>( ".jpg", "resources/texture.png" ));
+    editorTextures.emplace(".vs", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
+    editorTextures.emplace(".fs", std::make_unique<Texture>( ".fs", "resources/shader.png" ));
+    editorTextures.emplace(".cpp", std::make_unique<Texture>( ".cpp", "resources/script.png" ));
+    editorTextures.emplace(".hpp", std::make_unique<Texture>( ".hpp", "resources/script.png" ));
+    editorTextures.emplace(".wav", std::make_unique<Texture>( ".wav", "resources/sound.png" ));
+    editorTextures.emplace(".zes", std::make_unique<Texture>( ".zes", "resources/save.png" ));
+    editorTextures.emplace(".zepref", std::make_unique<Texture>( ".zepref", "resources/prefab.png" ));
 }
 
 void Editor::NewFrame()
@@ -715,7 +729,7 @@ void Editor::DisplayProject()
             {
                 ImGui::PushID(i);
                 ImGui::BeginGroup();
-                if (ImGui::ImageButton((ImTextureID)ResourcesManager::GetResource<Texture>("Folder")->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f)))
+                if (ImGui::ImageButton((ImTextureID)editorTextures.find("Folder")->second->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f)))
                 {
                     currentProjectFolder.append("/").append(currentName);
                 }
@@ -745,8 +759,8 @@ void Editor::DisplayProject()
             {
                 ImGui::PushID(i);
                 ImGui::BeginGroup();
-                Texture* texture = ResourcesManager::GetResource<Texture>(entry.path().extension().string().c_str());
-                if (ImGui::ImageButton(texture ? (ImTextureID)texture->textureID : (ImTextureID)ResourcesManager::GetResource<Texture>("Default Icon")->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f))
+                auto texture = editorTextures.find(entry.path().extension().string().c_str());
+                if (ImGui::ImageButton(texture != editorTextures.end() ? (ImTextureID)texture->second->textureID : (ImTextureID)editorTextures.find("Default Icon")->second->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f))
                 && entry.path().extension().string().compare(".zes") == 0)
                 {
                     gameObjectInspector = nullptr;

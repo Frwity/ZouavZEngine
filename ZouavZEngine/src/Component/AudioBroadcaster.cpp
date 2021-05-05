@@ -28,7 +28,7 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
 	SoundManager::AddSound(this);
 }
 
-AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<class Sound>& _sound)
 	: Component(_gameObject), sound(_sound)
 {
 	alGenSources(1, &source);
@@ -52,6 +52,8 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
 AudioBroadcaster::~AudioBroadcaster()
 {
 	SoundManager::RemoveSound(this);
+	if (sound.use_count() == 2 && sound->IsDeletable())
+		sound->RemoveFromResourcesManager();
 
 	alSourcei(source, AL_BUFFER, 0);
 	alDeleteSources(1, &source);
@@ -121,10 +123,9 @@ void AudioBroadcaster::SoundEditor()
 
 			if (_truePath.find(".wav") != std::string::npos)
 			{
-				//sound->RemoveUse();
-				//if (sound->NbUse() <= 0)
-				//    ResourcesManager::RemoveResourceTexture(sound->GetName());
-				sound = ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+				if (sound.use_count() == 2 && sound->IsDeletable())
+				    ResourcesManager::RemoveResourceTexture(sound->GetName());
+				sound = *ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
 			}
 		}
 		ImGui::EndDragDropTarget();
@@ -158,7 +159,7 @@ static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct
 	bool _loop;
 	_ar(_ambient, _loop, soundName);
 
-	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Sound>(soundName));
+	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::GetResource<Sound>(soundName));
 	_construct->ambient = _ambient;
 	_construct->loop = _loop;
 }

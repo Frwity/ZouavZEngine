@@ -47,7 +47,7 @@ void Terrain::Generate(GameObject* _actualizer)
 	if (colorCount <= 0)
 		AddColorLayer();
 
-	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
+	shader = *ResourcesManager::GetResource<Shader>("TerrainShader");
 	actualizer = _actualizer;
 	chunks.reserve(16);
 	Vec2 pos;
@@ -158,7 +158,7 @@ void Terrain::Draw(const class Camera& _camera) const
 		glUniform1i(glGetUniformLocation(shader->id, ("textures[" + std::to_string(i) + "]").c_str()), i);
 		glActiveTexture(GL_TEXTURE0 + i);
 		if (textureID.at(i))
-			Texture::Use(textureID.at(i));
+			Texture::Use(textureID.at(i).get());
 		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
 	}
 

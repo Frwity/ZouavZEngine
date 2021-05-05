@@ -5,6 +5,7 @@
 #include <vector>
 #include "System/SoundManager.hpp"
 #include "System/Debug.hpp"
+#include "System/ResourcesManager.hpp"
 #include "Sound.hpp"
 
 Sound::Sound(const std::string& _name, const char* _path)
@@ -53,6 +54,11 @@ Sound::Sound(const std::string& _name, const char* _path)
 Sound::~Sound()
 {
     alDeleteBuffers(1, &buffer);
+}
+
+void Sound::RemoveFromResourcesManager()
+{
+    ResourcesManager::RemoveResourceSound(name);
 }
 
 void Sound::LinkSource(unsigned int& source)

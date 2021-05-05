@@ -13,6 +13,8 @@ enum class EDITOR_STATE
 class Editor
 {
 private:
+	std::unordered_map<std::string, std::unique_ptr<Texture>> editorTextures;
+
 	double lastCursorScenePosX = 0;
 	double lastCursorScenePosY = 0;
 	double lastCursorGamePosX = 0;

@@ -12,5 +12,7 @@ public:
     Texture(const std::string& _name, const char* _path);
     ~Texture() = default;
 
+    void RemoveFromResourcesManager() override;
+
     static void Use(Texture* _texture);
 };

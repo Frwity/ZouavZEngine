@@ -8,20 +8,30 @@
 #include "System/Debug.hpp"
 #include "imgui.h"
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject, Mesh* _mesh, Texture* _texture, Shader* _shader)
+MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader)
     : Component(_gameObject), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
 {}
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject)
     : Component(_gameObject), 
-      mesh{ ResourcesManager::GetResource<Mesh>("Default") }
+      mesh{ *ResourcesManager::GetResource<Mesh>("Default") }
 {}
+
+MeshRenderer::~MeshRenderer()
+{
+    if (mesh.use_count() == 2 && mesh->IsDeletable())
+        mesh->RemoveFromResourcesManager();
+    if (material.texture.use_count() == 2 && material.texture->IsDeletable())
+        material.texture->RemoveFromResourcesManager();
+    if (material.shader.use_count() == 2 && material.shader->IsDeletable())
+        material.shader->RemoveFromResourcesManager();
+}
 
 void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
 {
     material.shader->Use();
     glActiveTexture(GL_TEXTURE0);
-    Texture::Use(material.texture);
+    Texture::Use(material.texture.get());
     Mat4 matrixCamera = _camera.GetMatrix();
 
     material.shader->SetMatrix("view", matrixCamera.Reversed());
@@ -49,10 +59,9 @@ void MeshRenderer::TextureEditor()
 
             if (_truePath.find(".png") != std::string::npos || _truePath.find(".jpg") != std::string::npos)
             {
-                //material.texture->RemoveUse();
-                //if (material.texture->NbUse() <= 0)
-                //    ResourcesManager::RemoveResourceTexture(material.texture->GetName());
-                material.texture = ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+                if (material.texture.use_count() == 2 && material.texture->IsDeletable())
+                    ResourcesManager::RemoveResourceTexture(material.texture->GetName());
+                material.texture = *ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
             }
         }
         ImGui::EndDragDropTarget();
@@ -74,10 +83,9 @@ void MeshRenderer::MeshEditor()
 
             if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".obj") != std::string::npos)
             {
-                //mesh->RemoveUse();
-                //if (mesh->NbUse() <= 0)
-                //    ResourcesManager::RemoveResourceMesh(mesh->GetName());
-                mesh = ResourcesManager::AddResourceMesh(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
+                if (mesh.use_count() == 2 && mesh->IsDeletable())
+                    ResourcesManager::RemoveResourceMesh(mesh->GetName());
+                mesh = *ResourcesManager::AddResourceMesh(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
             }
         }
         ImGui::EndDragDropTarget();
@@ -126,7 +134,7 @@ static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<Mes
 
 	_ar(meshName, textureName, shaderName);
 
-	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
-		ResourcesManager::GetResource<Texture>(textureName),
-		ResourcesManager::GetResource<Shader>(shaderName));
+	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::GetResource<Mesh>(meshName),
+		*ResourcesManager::GetResource<Texture>(textureName),
+		*ResourcesManager::GetResource<Shader>(shaderName));
 }

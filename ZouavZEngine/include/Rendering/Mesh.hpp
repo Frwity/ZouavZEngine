@@ -24,6 +24,8 @@ public:
     Mesh(const std::string& _name, const char* path);
     ~Mesh();
 
+    void RemoveFromResourcesManager() override;
+
     void InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
     void ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize);
     void CreateCube();
