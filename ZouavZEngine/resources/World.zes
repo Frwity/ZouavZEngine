@@ -143,7 +143,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0113314390182496,
+                    "value0": 1.1230854988098145,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -171,31 +171,33 @@
         },
         {
             "polymorphic_id": 2147483656,
-            "polymorphic_name": "RigidBody",
+            "polymorphic_name": "SphereCollision",
             "ptr_wrapper": {
                 "valid": 1,
-                "data": {}
+                "data": {
+                    "value0": 0.5
+                }
             }
         },
         {
             "polymorphic_id": 2147483657,
-            "polymorphic_name": "BoxCollision",
+            "polymorphic_name": "RigidBody",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {}
             }
         }
     ],
-    "value46": -1.9791672229766846,
+    "value46": 0.0,
     "value47": 0.0,
-    "value48": -5.797429084777832,
-    "value49": -6.279198601077951e-7,
-    "value50": -4.023397366381687e-7,
-    "value51": -6.279198601077951e-7,
+    "value48": 0.0,
+    "value49": 0.0,
+    "value50": 0.0,
+    "value51": 0.0,
     "value52": 1.0,
-    "value53": 1.564741611480713,
-    "value54": 2.203700542449951,
-    "value55": 1.9966049194335938,
+    "value53": 1.0,
+    "value54": 1.0,
+    "value55": 1.0,
     "value56": 512.0,
     "value57": 128,
     "value58": 16,
@@ -223,5 +225,5 @@
     "value80": 0.0,
     "value81": 0.0,
     "value82": 1.0,
-    "value83": "Water"
+    "value83": "nullptr"
 }

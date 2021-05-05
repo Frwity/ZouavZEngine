@@ -13,6 +13,7 @@ namespace physx
 class RigidStatic: public Rigid
 {
 public:
+
 	RigidStatic() = delete;
 	RigidStatic(GameObject* _gameObject);
 	~RigidStatic();
@@ -20,6 +21,8 @@ public:
 	void Editor() override;
 
 	const char* GetComponentName() override { return "RigidStatic"; }
+
+	void UpdateTransform(Transform transform) override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

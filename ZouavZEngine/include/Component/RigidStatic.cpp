@@ -41,3 +41,8 @@ static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<Rigi
 {
 	_construct(GameObject::currentLoadedGameObject);
 }
+
+void RigidStatic::UpdateTransform(Transform transform)
+{
+	
+}

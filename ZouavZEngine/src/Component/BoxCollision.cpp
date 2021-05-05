@@ -15,15 +15,13 @@
 
 using namespace physx;
 
-
 BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger)
 	: ShapeCollision(_gameObject, _isTrigger), halfExtends(_halfExtends)
 {
-	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
-
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
+	//shape->setLocalPose(transform);
 	AttachToRigidComponent();
 }
 
@@ -36,6 +34,8 @@ void BoxCollision::Editor()
 {
 	if (ImGui::SliderFloat3("Half Extends : ", &halfExtends.x, 0.1f, 100.0f))
 		UpdateExtends(halfExtends);
+
+	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
 void BoxCollision::UpdateExtends(const Vec3& v)
@@ -43,11 +43,6 @@ void BoxCollision::UpdateExtends(const Vec3& v)
 	halfExtends = v;
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	//PxShape* actorShape;
-	//rigid->actor->getShapes(&actorShape, 1);
-	//assert(actorShape);
-	//assert(shape->getGeometryType() == PxGeometryType::eBOX);
-	//shape->setGeometry(PxBoxGeometry(PxVec3FromVec3(halfExtends)));
 	rigid->actor->detachShape(*shape);
 	shape->release();
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);

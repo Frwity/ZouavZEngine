@@ -495,7 +495,8 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
                 ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
                 gameObjectInspector->localPosition = translation;
                 gameObjectInspector->localRotation = Quaternion(rotation);
-                gameObjectInspector->localScale = scale;            }
+                gameObjectInspector->localScale = scale;            
+            }
         }
     }
     ImGui::End();

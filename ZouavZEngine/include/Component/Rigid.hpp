@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component/Component.hpp"
+#include "Transform.hpp"
 
 namespace physx
 {
@@ -13,10 +14,13 @@ protected:
 	void AttachShape();
 
 public:
+	Transform transform;
 	physx::PxRigidActor* actor = nullptr;
 
 	Rigid() = delete;
 	Rigid(class GameObject* _gameObject);
+
+	virtual void UpdateTransform(Transform transform) {};
 
 	virtual void OnContact(GameObject* _other);
 	virtual void OnTrigger(GameObject* _other);

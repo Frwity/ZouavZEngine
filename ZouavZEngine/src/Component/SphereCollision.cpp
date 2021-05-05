@@ -33,6 +33,8 @@ void SphereCollision::Editor()
 {
 	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
 		UpdateRadius(radius);
+
+	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
 void SphereCollision::UpdateRadius(float _radius)

@@ -29,11 +29,16 @@ CapsuleCollision::~CapsuleCollision()
 
 void CapsuleCollision::Editor()
 {
-	ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f);
-	ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f);
+	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
+		UpdateCapsule();
+	
+	if (ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f))
+		UpdateCapsule();
+
+	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void CapsuleCollision::UpdateCapsule(float _radius, float _halfHeight)
+void CapsuleCollision::UpdateCapsule()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
@@ -42,9 +47,6 @@ void CapsuleCollision::UpdateCapsule(float _radius, float _halfHeight)
 
 	rigid->actor->detachShape(*shape);
 	shape->release();
-
-	radius = _radius;
-	halfHeight = _halfHeight;
 
 	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
 

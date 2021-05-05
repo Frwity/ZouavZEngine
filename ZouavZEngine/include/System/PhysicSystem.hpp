@@ -36,7 +36,15 @@ public:
 	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) override { PX_UNUSED(constraints); PX_UNUSED(count); }
 	void onWake(physx::PxActor** actors, physx::PxU32 count) override { Debug::Log("AWAKE !"); PX_UNUSED(actors); PX_UNUSED(count); }
 	void onSleep(physx::PxActor** actors, physx::PxU32 count) override { std::cout << "SLEEP !" << std::endl;  PX_UNUSED(actors); PX_UNUSED(count); }
-	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override { Debug::Log("Trigger");  PX_UNUSED(pairs); PX_UNUSED(count); }
+	
+	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override 
+	{ 
+		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
+		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
+
+		triggerActor->OnTrigger(&otherActor->GetGameObject());
+	}
+
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
