@@ -53,7 +53,27 @@ void GameObject::CreatePrefab()
 		save(oArchive);
 	}
 	saveFile.close();
+}
 
+#include <algorithm>
+
+void GameObject::LoadPrefab(const std::string& _path)
+{
+	std::ifstream saveFile;
+
+	std::string _truePath = _path;
+	size_t start_pos = _truePath.find("\\");
+	_truePath.replace(start_pos, 1, "/");
+
+	GameObject* newGameObject = CreateGameObject("New GameObject");
+
+	saveFile.open(_truePath, std::ios::binary);
+	{
+		cereal::JSONInputArchive iarchive(saveFile);
+
+		newGameObject->load(iarchive);
+	}
+	saveFile.close();
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

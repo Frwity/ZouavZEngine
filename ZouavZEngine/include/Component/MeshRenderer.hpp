@@ -25,6 +25,9 @@ public:
 
 	void Draw(const class Mat4& _transform, const class Camera& _camera);
 
+	void TextureEditor();
+	void ShaderEditor();
+	void MeshEditor();
 	void Editor() override;
 
 	const char* GetComponentName() override { return "MeshRenderer"; }

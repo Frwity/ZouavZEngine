@@ -27,7 +27,7 @@ Resource* ResourcesManager::ResourceChangerImpl(const char* _label, Resource* _r
     {
         for (auto& resource : _resources)
         {
-            if (ImGui::Selectable(resource.first.c_str(), resource.second.get() == _resource))
+            if (ImGui::Selectable(resource.first.c_str(), resource.second.get() == _resource) && _resource != resource.second.get())
             {
                 _resource = resource.second.get();
                 _changed = true;

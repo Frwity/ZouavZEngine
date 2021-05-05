@@ -34,6 +34,7 @@ public:
 	void SetLooping(bool _loop);
 	void SetAmbient(bool _ambient);
 
+	void SoundEditor();
 	void Editor() override;
 
 	const char* GetComponentName() override { return "AudioBroadcaster"; }
