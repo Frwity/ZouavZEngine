@@ -20,6 +20,7 @@
 #include <fstream>
 #include "cereal/archives/json.hpp"
 #include <iostream>
+#include <filesystem>
 
 Scene* Scene::currentScene = nullptr;
 
@@ -35,14 +36,19 @@ Scene::~Scene()
 		currentScene = nullptr;
 }
 
-void Scene::NewScene(const std::string& _sceneName)
+bool Scene::NewScene(const std::string& _sceneName, bool _force)
 {
+	if (!_force && std::filesystem::exists("Project/scenes/" + _sceneName + ".zes"))
+		return false;
+
 	GameObject& sceneWorld = GetCurrentScene()->world;
+	sceneWorld.name = _sceneName;
 	GameObject::gameObjects.clear();
 	sceneWorld.children.clear();
 	PhysicSystem::scene->release();
 	PhysicSystem::InitScene();
 	ResourcesManager::Clear();	
+	GetCurrentScene()->Save();
 }
 
 void Scene::Load(bool _changingScene)

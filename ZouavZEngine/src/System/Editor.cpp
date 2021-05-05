@@ -36,6 +36,7 @@ bool newClassWindow = false;
 char className[256] = "NewClass";
 
 bool newSceneWindow = false;
+bool newSceneWindowWarning = false;
 
 std::string actualFolder = ".";
 bool hierarchyMenu = false;
@@ -397,11 +398,28 @@ void NewSceneWindow(Engine& engine)
         static std::string sceneName = "New Scene";
         ImGui::InputText("Scene Name", sceneName.data(), 256);
         
-        if (ImGui::Button("Create"))
+        if (!newSceneWindowWarning && ImGui::Button("Create"))
         {
-            Scene::NewScene(sceneName);
-            engine.LoadDefaultResources();
-            sceneName = "New Scene";
+            if (!Scene::NewScene(sceneName.c_str(), false))
+                newSceneWindowWarning = true;
+            else
+            {
+                engine.LoadDefaultResources();
+                sceneName = "New Scene";
+                newSceneWindow = false;
+            }
+        }
+        if (newSceneWindowWarning)
+        {
+            ImGui::TextWrapped("A scene with the same name already exist, are you sure you want to create it ?");
+            if (ImGui::Button("Create"))
+            {
+                Scene::NewScene(sceneName.c_str(), true);
+                newSceneWindowWarning = false;
+                engine.LoadDefaultResources();
+                sceneName = "New Scene";
+                newSceneWindow = false;
+            }
         }
         ImGui::End();
     }
@@ -881,6 +899,8 @@ void Editor::DisplayHierarchy()
                         newGameObjectParent->toDestroy = true;
                         GameObject::destroyGameObject = true;
                         hierarchyMenu = false;
+                        if (newGameObjectParent == gameObjectInspector)
+                            gameObjectInspector = nullptr;
                         newGameObjectParent = nullptr;
                     }
                     if (ImGui::Button("CreatePrefab"))
