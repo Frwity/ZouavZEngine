@@ -39,6 +39,9 @@ void SphereCollision::UpdateRadius(float _radius)
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
+	if (!rigid)
+		return;
+
 	rigid->actor->detachShape(*shape);
 	shape->release();
 

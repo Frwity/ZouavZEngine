@@ -24,7 +24,6 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
-
 	AttachToRigidComponent();
 }
 
@@ -41,11 +40,16 @@ void BoxCollision::Editor()
 
 void BoxCollision::UpdateExtends(const Vec3& v)
 {
+	halfExtends = v;
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
+	//PxShape* actorShape;
+	//rigid->actor->getShapes(&actorShape, 1);
+	//assert(actorShape);
+	//assert(shape->getGeometryType() == PxGeometryType::eBOX);
+	//shape->setGeometry(PxBoxGeometry(PxVec3FromVec3(halfExtends)));
 	rigid->actor->detachShape(*shape);
 	shape->release();
-
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
 
 	AttachToRigidComponent();

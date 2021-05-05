@@ -477,37 +477,25 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         {
             ImGuizmo::Enable(true);
 
-            float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-
-            matrixTranslation[0] = gameObjectInspector->localPosition.x;
-            matrixTranslation[1] = gameObjectInspector->localPosition.y;
-            matrixTranslation[2] = gameObjectInspector->localPosition.z;
-
-            matrixRotation[0] = gameObjectInspector->localRotation.x;
-            matrixRotation[1] = gameObjectInspector->localRotation.y;
-            matrixRotation[2] = gameObjectInspector->localRotation.z;
-
-            matrixScale[0] = gameObjectInspector->localScale.x;
-            matrixScale[1] = gameObjectInspector->localScale.y;
-            matrixScale[2] = gameObjectInspector->localScale.z;
-
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
 
-            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, Vec3(matrixRotation[0], matrixRotation[1], matrixRotation[2]), gameObjectInspector->localScale);
+            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation, gameObjectInspector->localScale);
 
             Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
 
+            //TODO WORLD mode
             static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
             ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, mCurrentGizmoMode, matrix.matrix);
             if (ImGuizmo::IsUsing())
             {
-                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, matrixTranslation, matrixRotation, matrixScale);
-                Vec3 rotationVector = Vec3(matrixRotation[0], matrixRotation[1], matrixRotation[0]);
-                gameObjectInspector->UpdateTransformLocal(matrix, rotationVector);
-            }
+                Vec3 translation, rotation, scale;
+                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
+                gameObjectInspector->localPosition = translation;
+                gameObjectInspector->localRotation = Quaternion(rotation);
+                gameObjectInspector->localScale = scale;            }
         }
     }
     ImGui::End();

@@ -37,6 +37,9 @@ void CapsuleCollision::UpdateCapsule(float _radius, float _halfHeight)
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
+	if (!rigid)
+		return;
+
 	rigid->actor->detachShape(*shape);
 	shape->release();
 

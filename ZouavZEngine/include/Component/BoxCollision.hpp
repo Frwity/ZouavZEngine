@@ -20,12 +20,15 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
 	}
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<BoxCollision>& _construct)
 	{
-		_construct(GameObject::currentLoadedGameObject);
+		Vec3 halfExtends;
+		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
+		_construct(GameObject::currentLoadedGameObject, halfExtends);
 	}
 };
 
