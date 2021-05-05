@@ -639,6 +639,13 @@ void Editor::DisplayInspector()
                                 if (ComponentButton<RigidStatic>("Add RigidStatic", true))
                                     addComponentWindow = false;
                             break;
+                        case E_COMPONENT::CAMERA:
+                            if (ComponentButton<Camera>("Add Camera", true))
+                            {
+                                addComponentWindow = false;
+                                gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
+                            }
+                            break;
                         }
                     }
                 }

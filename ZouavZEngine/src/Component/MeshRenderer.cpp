@@ -121,12 +121,15 @@ template <class Archive>
 static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<MeshRenderer>& _construct)
 {
 	std::string meshName;
+    std::string meshPath;
 	std::string textureName;
+    std::string texturePath;
 	std::string shaderName;
+    std::string shaderPath1;
+    std::string shaderPath2;
 
-	_ar(meshName, textureName, shaderName);
-
-	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Mesh>(meshName),
-		ResourcesManager::GetResource<Texture>(textureName),
-		ResourcesManager::GetResource<Shader>(shaderName));
+	_ar(meshName, meshPath, textureName, texturePath, shaderName, shaderPath1, shaderPath2);
+	_construct(GameObject::currentLoadedGameObject, ResourcesManager::AddResourceMesh(meshName, meshPath.c_str()),
+		ResourcesManager::AddResourceTexture(textureName, texturePath.c_str()),
+		ResourcesManager::AddResourceShader(shaderName, shaderPath1.c_str(), shaderPath2.c_str()));
 }

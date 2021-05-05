@@ -19,5 +19,6 @@ public:
 	int NbUse() { return nbUse; }
 	void AddUse() { nbUse++; }
 	void RemoveUse() { nbUse--; }
+	const std::vector<std::string>& GetPaths() { return paths; }
 	const std::string& GetName() { return name; }
 };

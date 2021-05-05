@@ -34,6 +34,8 @@ void Camera::Editor()
     if (ImGui::SliderFloat("Near", &near, 0.001f, 1.0f)) Resize(width, height);
     if (ImGui::SliderFloat("Far", &far, 1.0f, 10000.0f)) Resize(width, height);
     if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);
+    ImGui::SliderFloat3("Postion", &position.x, -1000, 1000);
+    ImGui::SliderFloat3("Target", &target.x, -1000, 1000);
 }
 
 Mat4 Camera::GetMatrix() const

@@ -28,7 +28,7 @@ protected:
 	float fov = 45.0f;
 
 public:
-	Camera(class GameObject* _gameObject, int _width, int _height);
+	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
 	Camera() = delete;
 	Camera(const Camera&) = delete;
 	~Camera();
