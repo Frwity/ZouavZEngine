@@ -135,9 +135,11 @@ static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<Mes
 	std::string shaderName;
     std::string shaderPath1;
     std::string shaderPath2;
-
-	_ar(meshName, meshPath, textureName, texturePath, shaderName, shaderPath1, shaderPath2);
-	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceMesh(meshName, meshPath.c_str()),
-		*ResourcesManager::AddResourceTexture(textureName, texturePath.c_str()),
-		*ResourcesManager::AddResourceShader(shaderName, shaderPath1.c_str(), shaderPath2.c_str()));
+    bool isMeshDeletebale;
+    bool isTextureDeletebale;
+    bool isShaderDeletebale;
+    _ar(meshName, isMeshDeletebale, meshPath, textureName, isTextureDeletebale, texturePath, shaderName, isShaderDeletebale, shaderPath1, shaderPath2);
+	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceMesh(meshName, isMeshDeletebale, meshPath.c_str()),
+		*ResourcesManager::AddResourceTexture(textureName, isTextureDeletebale, texturePath.c_str()),
+		*ResourcesManager::AddResourceShader(shaderName, isShaderDeletebale, shaderPath1.c_str(), shaderPath2.c_str()));
 }

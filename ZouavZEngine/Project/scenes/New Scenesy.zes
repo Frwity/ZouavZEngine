@@ -1,5 +1,5 @@
 {
-    "value0": "New Scene",
+    "value0": "New Scenesy",
     "value1": "",
     "value2": 1,
     "value3": [],
@@ -19,6 +19,25 @@
     "value17": [
         {
             "polymorphic_id": 2147483649,
+            "polymorphic_name": "MeshRenderer",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Cat.obj",
+                    "value1": true,
+                    "value2": "Project/meshes/Cat.obj",
+                    "value3": "Cat.jpg",
+                    "value4": true,
+                    "value5": "Project/textures/Cat.jpg",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.vs",
+                    "value9": "resources/BlinnPhongShader.fs"
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483650,
             "polymorphic_name": "Light",
             "ptr_wrapper": {
                 "valid": 1,
@@ -70,7 +89,7 @@
     "value40": 0,
     "value41": 0,
     "value42": 1,
-    "value43": 0.02800000086426735,
+    "value43": 0.009999999776482582,
     "value44": 2.0,
     "value45": 0.5,
     "value46": 0.0,
@@ -82,5 +101,5 @@
     "value52": 0.0,
     "value53": 0.0,
     "value54": 1.0,
-    "value55": "Error"
+    "value55": "nullptr"
 }

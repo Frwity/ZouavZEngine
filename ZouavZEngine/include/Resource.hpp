@@ -21,5 +21,6 @@ public:
 
 	bool IsDeletable() { return deletable; }
 
+	const std::vector<std::string>& GetPaths() { return paths; }
 	const std::string& GetName() { return name; }
 };

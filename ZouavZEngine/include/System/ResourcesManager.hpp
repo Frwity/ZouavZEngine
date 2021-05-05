@@ -98,6 +98,8 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
+		else if (a.first->second)
+			return &a.first->second;
 
 		Debug::LogError("Sound resource : " + _name + " not loaded");
 		return nullptr;
@@ -113,6 +115,9 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
+		else if (a.first->second)
+			return &a.first->second;
+
 
 		Debug::LogError("Mesh resource : " + _name + " not loaded");
 		return nullptr;
@@ -128,6 +133,8 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
+		else if (a.first->second)
+			return &a.first->second;
 
 		Debug::LogError("Texture resource : " + _name + " not loaded");
 		return nullptr;
@@ -143,6 +150,8 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
+		else if (a.first->second)
+			return &a.first->second;
 
 		Debug::LogError("Shader resource : " + _name + " not loaded");
 		return nullptr;

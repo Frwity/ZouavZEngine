@@ -35,9 +35,9 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(mesh->GetName(), mesh->GetPaths()[0], 
-			material.texture->GetName(), material.texture->GetPaths()[0], 
-			material.shader->GetName(), material.shader->GetPaths()[0], material.shader->GetPaths()[1]);
+		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPaths()[0],
+			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPaths()[0],
+			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPaths()[0], material.shader->GetPaths()[1]);
 	}
 
 	template <class Archive>
