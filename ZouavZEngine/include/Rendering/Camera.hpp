@@ -26,7 +26,7 @@ protected:
 	float near = 0.01f;
 	float far = 5000.0f;
 	float fov = 45.0f;
-
+	bool isMainCamera = false;
 public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
 	Camera() = delete;
@@ -37,7 +37,7 @@ public:
 
 	const char* GetComponentName() override { return "Camera"; }
 
-	static /*const */Camera* GetMainCamera() { return mainCamera; }
+	static Camera* GetMainCamera() { return mainCamera; }
 
 	void SetMainCamera() { mainCamera = this; }
 	
@@ -82,7 +82,7 @@ public:
 	SceneCamera() = default;
 	~SceneCamera() = default;
 
-	static /*const */Camera* GetSceneCamera() { return sceneCamera; }
+	static Camera* GetSceneCamera() { return sceneCamera; }
 
 	void SetSceneCamera() { sceneCamera = this; }
 

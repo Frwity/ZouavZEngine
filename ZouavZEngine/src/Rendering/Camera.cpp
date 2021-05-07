@@ -16,7 +16,10 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     : Component(_gameObject), width{_width}, height{_height}
 {
     if (!mainCamera)
+    {
         mainCamera = this;
+        isMainCamera = true;
+    }
 
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
@@ -31,6 +34,22 @@ Camera::~Camera()
 
 void Camera::Editor()
 {
+    bool changeMainCamera = isMainCamera;
+    if (ImGui::Checkbox("Main Camera", &changeMainCamera))
+    {
+        if (!isMainCamera)
+        {
+            if (mainCamera)
+                mainCamera->isMainCamera = false;
+            isMainCamera = true;
+            mainCamera = this;
+        }
+        else
+        {
+            mainCamera = nullptr;
+            isMainCamera = false;
+        }
+    }
     if (ImGui::SliderFloat("Near", &near, 0.001f, 1.0f)) Resize(width, height);
     if (ImGui::SliderFloat("Far", &far, 1.0f, 10000.0f)) Resize(width, height);
     if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);

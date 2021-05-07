@@ -92,6 +92,7 @@ private:
 	std::shared_ptr<Shader> shader;
 	
 	bool isGenerated = false;
+	bool isActivated = false;
 
 public:
 
@@ -154,7 +155,7 @@ public:
 	{
 		int _noiseCount = 0;
 		int _colorCount = 0;
-		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
+		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
 			minHeight, maxHeight, heightIntensity, _colorCount, colorID, alwaysActualize);
 
 		int _noiseType;
@@ -184,7 +185,7 @@ public:
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
+		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
 			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
 
 		for (int i = 0; i < noiseCount; ++i)

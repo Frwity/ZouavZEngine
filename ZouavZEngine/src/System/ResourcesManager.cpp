@@ -8,7 +8,7 @@ std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shade
 
 void ResourcesManager::InitDefaultResources()
 {
-    ResourcesManager::AddResourceMesh("Default", false)->get()->CreateCube();
+    ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
 }

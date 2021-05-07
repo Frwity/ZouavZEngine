@@ -34,7 +34,6 @@ public:
 	template <class Archive>
 	static void load(Archive& _ar)
 	{
-		AddResourceMesh("Default", false)->get()->CreateCube();
 		int count;
 		std::string name;
 		std::string path1;
@@ -47,11 +46,9 @@ public:
 			AddResourceSound(name, deletable, path1.c_str());
 		}
 		_ar(count);
-		for (int i = 0; i < count; ++i) // TODO cube mesh 
+		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path1);
-			if (i == 0)
-				continue;
 			AddResourceMesh(name, deletable, path1.c_str());
 		}
 		_ar(count);
