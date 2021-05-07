@@ -9,11 +9,12 @@
 #include "Component/RigidStatic.hpp"
 #include "System/Debug.hpp"
 #include "System/PhysicUtils.hpp"
+#include "imgui.h"
 
-ShapeCollision::ShapeCollision(GameObject* _gameObject/*, Transform _transform*/, bool _isTrigger)
-	 : Component(_gameObject), isTrigger(_isTrigger)
+ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger)
+	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
 {
-	//transform = _transform;
+	
 }
 
 ShapeCollision::~ShapeCollision()
@@ -29,6 +30,35 @@ void ShapeCollision::releasePhysXComponent()
 void ShapeCollision::UpdateIsTrigger()
 {
 	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+}
+
+void ShapeCollision::Editor()
+{
+	ImGui::Text("Local Position :");
+	ImGui::SameLine(); ImGui::InputFloat3("##positionx", &transform.localPosition.x);
+
+	static Vec3 localEulerAngles;
+	localEulerAngles = transform.localRotation.ToEuler();
+
+	ImGui::Text("Local Rotation :");
+	ImGui::SameLine(); 
+	
+	if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+		transform.localRotation = Quaternion(localEulerAngles);
+
+	//ImGui::Text("Local Scale    :");
+	//ImGui::SameLine(); ImGui::InputFloat3("##scalex", &transform.localScale.x);
+
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	if (rigid)
+	{
+		physx::PxShape* shape = nullptr;
+		rigid->actor->getShapes(&shape, 1);
+
+		if (shape)
+			shape->setLocalPose(PxTransformFromTransform(transform));
+	}
 }
 
 void ShapeCollision::AttachToRigidComponent()
@@ -50,10 +80,12 @@ void ShapeCollision::AttachToRigidComponent()
 		{
 			rs->actor->attachShape(*shape);
 		}
+
+		shape->release();
 	}
 }
 
-void ShapeCollision::UpdateTransform(class Transform& _transform)
+void ShapeCollision::UpdateTransform(Transform _transform)
 {
 	transform = _transform;
 

@@ -9,7 +9,7 @@ class SphereCollision : public ShapeCollision
 public:
 	float radius;
 
-	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false);
+	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false, Transform _tranform = Transform());
 	~SphereCollision();
 
 	void Editor() override;

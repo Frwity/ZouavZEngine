@@ -26,7 +26,6 @@ public:
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
-	void RigidBody::UpdateTransform(Transform transform) override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

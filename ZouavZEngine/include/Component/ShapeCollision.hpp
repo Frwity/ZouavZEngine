@@ -17,19 +17,20 @@ class ShapeCollision: public Component
 protected:
 	physx::PxMaterial* material = nullptr;
 	void AttachToRigidComponent();
-	class Transform transform;
+	Transform transform;
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
 	bool isTrigger = false;
 
-	ShapeCollision(GameObject* _gameObject/*, class Transform transform*/, bool _isTrigger = false);
+	ShapeCollision(GameObject* _gameObject, Transform _transform = Transform(), bool _isTrigger = false);
 	~ShapeCollision();
 
 	const char* GetComponentName() override { return "ShapeCollision"; }
 	void releasePhysXComponent();
 	void UpdateIsTrigger();
-	void UpdateTransform(class Transform& _transform);
+	void UpdateTransform(Transform _transform);
+	virtual void Editor() override;
 		
 	template <class Archive>
 	void serialize(Archive& _ar)

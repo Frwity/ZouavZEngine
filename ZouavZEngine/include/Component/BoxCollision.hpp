@@ -9,7 +9,7 @@ class BoxCollision: public ShapeCollision
 public:
 	Vec3 halfExtends;
 
-	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false);
+	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false, Transform _tranform = Transform());
 	~BoxCollision();
 
 	void Editor() override;

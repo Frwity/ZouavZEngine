@@ -13,13 +13,13 @@
 
 using namespace physx;
 
-SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger)
-	: ShapeCollision(_gameObject, _isTrigger), radius(_radius)
+SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _transform)
+	: ShapeCollision(_gameObject, _transform, _isTrigger), radius(_radius)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
 	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
-
+	shape->setLocalPose(PxTransformFromTransform(transform));
 	//attach shape to rigidbody or rigidstatic if exist
 	AttachToRigidComponent();
 }
@@ -31,6 +31,8 @@ SphereCollision::~SphereCollision()
 
 void SphereCollision::Editor()
 {
+	ShapeCollision::Editor();
+
 	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
 		UpdateRadius(radius);
 

@@ -70,8 +70,3 @@ static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidB
 {
 	_construct(GameObject::currentLoadedGameObject);
 }
-
-void RigidBody::UpdateTransform(Transform transform)
-{
-	
-}

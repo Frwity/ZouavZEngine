@@ -14,7 +14,6 @@ protected:
 	void AttachShape();
 
 public:
-	Transform transform;
 	physx::PxRigidActor* actor = nullptr;
 
 	Rigid() = delete;
