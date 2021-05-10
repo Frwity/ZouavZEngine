@@ -12,11 +12,11 @@ class Shader : public Resource
 {
 public:
 	unsigned int id = 0;
-	Shader(const std::string& _name, const char* vertexPath, const char* fragmentPath);
-	const char* LoadFile(const char* pathToFile);
-	void DebugCheck(const int& shader, const char* msg, const char* pathToFile);
-	unsigned int CreateVertexShader(const char* vertexPath);
-	unsigned int CreateFragmentShader(const char* fragmentPath);
+	Shader(const std::string& _name, const char* _shaderPath);
+	const char* LoadFile(std::string pathToFile);
+	void DebugCheck(const int& shader, const char* msg, std::string pathToFile);
+	unsigned int CreateVertexShader(const char* _vertexShaderContent, const char* _shaderPath);
+	unsigned int CreateFragmentShader(const char* _fragmentShaderContent, const char* _shaderPath);
 	void Use();
 	~Shader();
 

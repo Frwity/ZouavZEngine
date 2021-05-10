@@ -37,7 +37,7 @@ public:
 	{
 		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPaths()[0],
 			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPaths()[0],
-			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPaths()[0], material.shader->GetPaths()[1]);
+			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPaths()[0]);
 	}
 
 	template <class Archive>

@@ -67,7 +67,7 @@ Engine::~Engine()
 void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
-    ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.shader");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 

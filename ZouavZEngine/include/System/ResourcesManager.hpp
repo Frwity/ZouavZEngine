@@ -36,32 +36,31 @@ public:
 	{
 		int count;
 		std::string name;
-		std::string path1;
-		std::string path2;
+		std::string path;
 		bool deletable;
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
-			_ar(name, deletable, path1);
-			AddResourceSound(name, deletable, path1.c_str());
+			_ar(name, deletable, path);
+			AddResourceSound(name, deletable, path.c_str());
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
-			_ar(name, deletable, path1);
-			AddResourceMesh(name, deletable, path1.c_str());
+			_ar(name, deletable, path);
+			AddResourceMesh(name, deletable, path.c_str());
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
-			_ar(name, deletable, path1);
-			AddResourceTexture(name, deletable, path1.c_str());
+			_ar(name, deletable, path);
+			AddResourceTexture(name, deletable, path.c_str());
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
-			_ar(name, deletable, path1, path2);
-			AddResourceShader(name, deletable, path1.c_str(), path2.c_str());
+			_ar(name, deletable, path);
+			AddResourceShader(name, deletable, path.c_str());
 		}
 	}
 
@@ -82,7 +81,7 @@ public:
 		
 		_ar(shaderResources.size());
 		for (auto& shader : shaderResources)
-			_ar(shader.first, shader.second->deletable, shader.second.get()->paths[0], shader.second.get()->paths[1]);
+			_ar(shader.first, shader.second->deletable, shader.second.get()->paths[0]);
 	}
 
 	template<typename... Args>

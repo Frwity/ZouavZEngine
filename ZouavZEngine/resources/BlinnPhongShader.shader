@@ -1,4 +1,30 @@
-#version 330 core
+#ifdef COMPILING_VS
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoord;
+
+out vec3 Pos;
+out vec2 TexCoord;
+out vec3 Normal;
+out vec4 Color;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+uniform vec4 color;
+
+void main()
+{
+   Pos      = vec3(model * vec4(aPos, 1.0));
+   Normal   = mat3(transpose(inverse(model))) * aNormal;     
+   TexCoord = aTexCoord;
+   Color    = color;
+   
+   gl_Position = projection * view * vec4(Pos, 1.0);
+}
+#endif
+
+#ifdef COMPILING_FS
 
 #define MAX_LIGHTS 3
 
@@ -124,3 +150,4 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir)
 
     return (ambient + diffuse + specular);
 }
+#endif

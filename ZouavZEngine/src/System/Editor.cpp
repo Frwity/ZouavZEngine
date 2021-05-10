@@ -134,8 +134,7 @@ void Editor::Init()
     editorTextures.emplace(".fbx", std::make_unique<Texture>( ".fbx", "resources/mesh.png" ));
     editorTextures.emplace(".png", std::make_unique<Texture>( ".png", "resources/texture.png" ));
     editorTextures.emplace(".jpg", std::make_unique<Texture>( ".jpg", "resources/texture.png" ));
-    editorTextures.emplace(".vs", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
-    editorTextures.emplace(".fs", std::make_unique<Texture>( ".fs", "resources/shader.png" ));
+    editorTextures.emplace(".shader", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
     editorTextures.emplace(".cpp", std::make_unique<Texture>( ".cpp", "resources/script.png" ));
     editorTextures.emplace(".hpp", std::make_unique<Texture>( ".hpp", "resources/script.png" ));
     editorTextures.emplace(".wav", std::make_unique<Texture>( ".wav", "resources/sound.png" ));
