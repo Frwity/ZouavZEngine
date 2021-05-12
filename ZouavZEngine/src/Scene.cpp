@@ -3,6 +3,7 @@
 #include "Component/MeshRenderer.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/Light.hpp"
+#include "Component/Skybox.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/PhysicSystem.hpp"
@@ -123,6 +124,8 @@ void Scene::Draw(const Camera& _camera) const
 			gameObject->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::identity, _camera);
 		}
+		if (gameObject->GetComponent<Skybox>())
+			gameObject->GetComponent<Skybox>()->Draw(_camera);
 		for (GameObject* child : gameObject->GetChildren())
 			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()), _camera);
 	}

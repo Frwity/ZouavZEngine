@@ -10,6 +10,7 @@ void ResourcesManager::InitDefaultResources()
 {
     ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.shader");
+    ResourcesManager::AddResourceShader("Skybox", false, "resources/Skybox.shader");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
 }
 

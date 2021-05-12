@@ -20,6 +20,7 @@
 #include "Component/Plane.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
+#include "Component/Skybox.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -658,6 +659,10 @@ void Editor::DisplayInspector()
                                 addComponentWindow = false;
                                 gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
                             }
+                            break;
+                        case E_COMPONENT::SKYBOX:
+                            if (ComponentButton<Skybox>("Add Skybox", true))
+                                addComponentWindow = false;
                             break;
                         }
                     }
