@@ -7,6 +7,8 @@
 #include "Rendering/Shader.hpp"
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Texture.hpp"
+#include "Rendering/Framebuffer.hpp"
+#include "Rendering/Font.hpp"
 #include "Component/MeshRenderer.hpp"
 #include "Component/Light.hpp"
 #include "Component/AudioBroadcaster.hpp"
@@ -17,7 +19,6 @@
 #include "System/ScriptSystem.hpp"
 #include "System/Engine.hpp"
 #include "System/SoundManager.hpp"
-#include "Rendering/Framebuffer.hpp"
 #include "Game/Move.hpp"
 #include "Game/Player.hpp"
 #include "Sound.hpp"
@@ -83,6 +84,7 @@ void Engine::Save()
 
 void Engine::Update()
 {
+    MetaFile test("resources/font.fnt");
     ScriptSystem::Begin();
 
     while (!render.Stop())

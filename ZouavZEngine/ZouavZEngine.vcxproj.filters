@@ -219,6 +219,9 @@
     <ClCompile Include="src\Rendering\Material.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Font.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -363,6 +366,9 @@
       <Filter>include\Multithread</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\Material.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Font.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
