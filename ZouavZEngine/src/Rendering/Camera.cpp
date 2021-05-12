@@ -1,8 +1,9 @@
 #include "GameObject.hpp"
 #include "Maths/Mat4.hpp"
-#include "Rendering/Camera.hpp"
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
+#include "imgui.h"
+#include "Rendering/Camera.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -12,14 +13,17 @@ Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
 Camera::Camera(class GameObject* _gameObject, int _width, int _height)
-    : Component(_gameObject)
+    : Component(_gameObject), width{_width}, height{_height}
 {
     if (!mainCamera)
+    {
         mainCamera = this;
+        isMainCamera = true;
+    }
 
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, 0.0f };
-    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
 Camera::~Camera()
@@ -29,7 +33,29 @@ Camera::~Camera()
 }
 
 void Camera::Editor()
-{}
+{
+    bool changeMainCamera = isMainCamera;
+    if (ImGui::Checkbox("Main Camera", &changeMainCamera))
+    {
+        if (!isMainCamera)
+        {
+            if (mainCamera)
+                mainCamera->isMainCamera = false;
+            isMainCamera = true;
+            mainCamera = this;
+        }
+        else
+        {
+            mainCamera = nullptr;
+            isMainCamera = false;
+        }
+    }
+    if (ImGui::SliderFloat("Near", &near, 0.001f, 1.0f)) Resize(width, height);
+    if (ImGui::SliderFloat("Far", &far, 1.0f, 10000.0f)) Resize(width, height);
+    if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);
+    ImGui::SliderFloat3("Postion", &position.x, -1000, 1000);
+    ImGui::SliderFloat3("Target", &target.x, -1000, 1000);
+}
 
 Mat4 Camera::GetMatrix() const
 {
@@ -63,7 +89,9 @@ Mat4 Camera::GetMatrix() const
 
 void Camera::Resize(int _width, int _height)
 {
-    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, CAMERA_NEAR, CAMERA_FAR, CAMERA_FOV);
+    width = _width;
+    height = _height;
+    projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
 template <class Archive>
@@ -88,7 +116,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
 }
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw((float)M_PI), speed{ 30.0f }
+    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;

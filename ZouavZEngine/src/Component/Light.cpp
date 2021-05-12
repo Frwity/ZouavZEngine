@@ -28,7 +28,7 @@ void Light::Editor()
     ImGui::SliderFloat3("Diffuse : ", &diffuse.x, 0.0f, 1.0f);
 	ImGui::SliderFloat3("Specular : ", &specular.x, 0.0f, 1.0f);
 	ImGui::SliderFloat3("ConstLineQuad : ", &constLineQuad.x, 0.0f, 1.0f);
-	ImGui::SliderFloat3("Direction : ", &direction.x, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Direction : ", &direction.x, -1.0f, 1.0f);
 	ImGui::SliderFloat2("CutOffOuterCutOff : ", &cutOffOuterCutOff.x, 0.0f, 1.0f);
 
 	std::string oldValue = type == E_LIGHT_TYPE::DIRECTIONAL ? "Directional" : type == E_LIGHT_TYPE::POINT ? "Point" : "Spot";

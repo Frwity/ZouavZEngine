@@ -50,12 +50,12 @@ public:
 	{
 		int nbChild;
 
+		currentLoadedGameObject = this;
+
 		_ar(name, tag, nbChild, components,
 			localPosition.x, localPosition.y, localPosition.z,
 			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
 			localScale.x, localScale.y, localScale.z);
-
-		currentLoadedGameObject = this;
 
 		std::string childName;
 		std::string childTag;
@@ -118,6 +118,9 @@ public:
 			child->save(_ar);
 	}
 
+	void CreatePrefab();
+	static void LoadPrefab(const std::string& _path);
+
 	static GameObject* CreateGameObject(const std::string& _name);
 	static GameObject* CreateGameObject(const std::string& _name, const std::string& _tag);
 
@@ -162,5 +165,4 @@ public:
 	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);
 	static GameObject* GetGameObjectByTag(std::string _tag);
 	static std::vector<GameObject*> GetGameObjectsByTag(std::string _tag);
-	
 };

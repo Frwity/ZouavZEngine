@@ -8,6 +8,10 @@
 #include "PxActor.h"
 #include "GameObject.hpp"
 
+#include <fstream>
+#include "cereal/archives/json.hpp"
+#include <iostream>
+
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
@@ -39,6 +43,39 @@ void GameObject::Destroy()
 	toDestroy = true;
 }
 
+void GameObject::CreatePrefab()
+{
+	std::ofstream saveFile;
+	saveFile.open(std::string("Project/prefabs/" + name + ".zepref"), std::ios::binary);
+	{
+		cereal::JSONOutputArchive oArchive(saveFile);
+
+		save(oArchive);
+	}
+	saveFile.close();
+}
+
+#include <algorithm>
+
+void GameObject::LoadPrefab(const std::string& _path)
+{
+	std::ifstream saveFile;
+
+	std::string _truePath = _path;
+	size_t start_pos = _truePath.find("\\");
+	_truePath.replace(start_pos, 1, "/");
+
+	GameObject* newGameObject = CreateGameObject("New GameObject");
+
+	saveFile.open(_truePath, std::ios::binary);
+	{
+		cereal::JSONInputArchive iarchive(saveFile);
+
+		newGameObject->load(iarchive);
+	}
+	saveFile.close();
+}
+
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 {
 	worldPosition = _heritedTransform * localPosition;
@@ -47,7 +84,7 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 
 	for (GameObject* _child : children)
 	{
-		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale));
+		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale)); 
 		
 		RigidBody* rb = _child->GetComponent<RigidBody>();
 

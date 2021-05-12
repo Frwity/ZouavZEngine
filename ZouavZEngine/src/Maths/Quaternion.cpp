@@ -209,11 +209,11 @@ Vec3 Quaternion::ToEuler() const
 
 Vec3 Quaternion::RotateVector(const Vec3& _vec) const
 {
-    const float angle = GetAngle();
-    const Vec3 unitAxis = GetAxis();
+    Vec3 u(x, y, z);
 
-    const float cosAngle = cosf(angle);
-    return cosAngle * _vec + (1.f - cosAngle) * _vec.Dot(unitAxis) * unitAxis + sin(angle) * unitAxis.Cross(_vec);
+	float s = w;
+
+	return 2.0f * u.Dot(_vec) * u + (s * s - u.Dot(u)) * _vec + 2.0f * s * u.Cross(_vec);
 }
 
 Mat4 Quaternion::GetRotationMatrix() const

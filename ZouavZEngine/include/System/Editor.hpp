@@ -14,6 +14,8 @@ enum class EDITOR_STATE
 class Editor
 {
 private:
+	std::unordered_map<std::string, std::unique_ptr<Texture>> editorTextures;
+
 	double lastCursorScenePosX = 0;
 	double lastCursorScenePosY = 0;
 	double lastCursorGamePosX = 0;
@@ -40,7 +42,7 @@ public:
 	
 	const EDITOR_STATE& GetState() const { return state; }
 
-	void Display(Render& _render);
+	bool Display(Render& _render);
 
 	void DisplayMainWindow();
 	void DisplayOptionWindow();
@@ -48,7 +50,7 @@ public:
 	void DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void DisplayInspector();
 	void DisplayConsoleWindow();
-	void DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer);
+	void DisplayGameWindow(class Framebuffer& _framebuffer);
 	void DisplayProject();
 	void FileMenu();
 	void Update();

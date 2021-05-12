@@ -11,5 +11,7 @@ public:
 	Sound(const std::string& _name, const char* _path);
 	~Sound();
 
+	void RemoveFromResourcesManager() override;
+
 	void LinkSource(unsigned int& sound);
 };

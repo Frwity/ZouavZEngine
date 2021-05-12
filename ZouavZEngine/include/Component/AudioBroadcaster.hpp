@@ -10,7 +10,7 @@ class Vec3;
 class AudioBroadcaster : public Component
 {
 private:
-	class Sound* sound = nullptr;
+	std::shared_ptr<class Sound> sound;
 	unsigned int source = 0;
 	bool ambient = false;
 	bool loop = false;
@@ -20,7 +20,8 @@ public:
 
 	AudioBroadcaster() = delete;
 	AudioBroadcaster(class GameObject* _gameObject);
-	AudioBroadcaster(class GameObject* _gameObject, class Sound* _sound);
+	AudioBroadcaster(class GameObject* _gameObject, std::shared_ptr<class Sound>& _sound);
+	AudioBroadcaster(const AudioBroadcaster&) = delete;
 
 	~AudioBroadcaster();
 
@@ -34,6 +35,7 @@ public:
 	void SetLooping(bool _loop);
 	void SetAmbient(bool _ambient);
 
+	void SoundEditor();
 	void Editor() override;
 
 	const char* GetComponentName() override { return "AudioBroadcaster"; }

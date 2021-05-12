@@ -8,6 +8,7 @@
 #include "Component/Light.hpp"
 #include "GameObject.hpp"
 #include "System/Debug.hpp"
+#include "System/ResourcesManager.hpp"
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const std::string& _name, const char* _vertexPath, const char* _fragmentPath)
@@ -102,6 +103,10 @@ Shader::~Shader()
     glDeleteProgram(id);
 }
 
+void Shader::RemoveFromResourcesManager()
+{
+    ResourcesManager::RemoveResourceShader(name);
+}
 
 void Shader::SetBool(const std::string& _name, bool _value) const
 {
@@ -155,9 +160,12 @@ void Shader::SetVector4(const std::string& _name, const Vec4& _v) const
 
 void Shader::SetLight(const std::vector<Light*>& _lights)
 {
+    Use();
     int i = 0;
+    SetInt("nbLight", _lights.size());
     for (const Light* l : _lights)
     {
+        std::cout << i << std::endl;
         const std::string index = std::to_string(i++);
         
         SetVector3(("lights[" + index + "].position").c_str(), l->GetGameObject().localPosition);

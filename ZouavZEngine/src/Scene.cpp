@@ -20,6 +20,7 @@
 #include <fstream>
 #include "cereal/archives/json.hpp"
 #include <iostream>
+#include <filesystem>
 
 Scene* Scene::currentScene = nullptr;
 
@@ -35,9 +36,24 @@ Scene::~Scene()
 		currentScene = nullptr;
 }
 
+bool Scene::NewScene(const std::string& _sceneName, bool _force)
+{
+	if (!_force && std::filesystem::exists("Project/scenes/" + _sceneName + ".zes"))
+		return false;
+
+	GameObject& sceneWorld = GetCurrentScene()->world;
+	sceneWorld.name = _sceneName;
+	GameObject::gameObjects.clear();
+	sceneWorld.children.clear();
+	PhysicSystem::scene->release();
+	PhysicSystem::InitScene();
+	ResourcesManager::Clear();	
+	GetCurrentScene()->Save();
+}
+
 void Scene::Load(bool _changingScene)
 {
-	Load("resources/" + world.name + ".zes", _changingScene);
+	Load("Project/scenes/" + world.name + ".zes", _changingScene);
 }
 
 void Scene::Load(const std::string& _path, bool _changingScene)
@@ -48,17 +64,17 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 	PhysicSystem::Init();
 
 	std::ifstream saveFile;
-	//if (_changingScene)
-	//{
-	//	saveFile.open(_path + "r", std::ios::binary);
-	//	{
-	//		cereal::JSONInputArchive iarchive(saveFile);
+	if (_changingScene)
+	{
+		saveFile.open(_path + "r", std::ios::binary);
+		{
+			cereal::JSONInputArchive iarchive(saveFile);
 
-	//		ResourcesManager::Clear();
-	//		ResourcesManager::load(iarchive);
-	//	}
-	//	saveFile.close();
-	//}
+			ResourcesManager::Clear();
+			ResourcesManager::load(iarchive);
+		}
+		saveFile.close();
+	}
 	saveFile.open(_path, std::ios::binary);
 	{
 		cereal::JSONInputArchive iarchive(saveFile);
@@ -78,14 +94,14 @@ void Scene::Save()
 {
 	std::ofstream saveFile;
 
-	saveFile.open(std::string("resources/" + world.name + ".zesr"), std::ios::binary);
+	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
-		//ResourcesManager::save(oArchive);
+		ResourcesManager::save(oArchive);
 	}
 	saveFile.close();
 
-	saveFile.open(std::string("resources/" + world.name + ".zes"), std::ios::binary);
+	saveFile.open(std::string("Project/scenes/" + world.name + ".zes"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
 

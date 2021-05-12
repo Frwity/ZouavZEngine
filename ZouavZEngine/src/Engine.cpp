@@ -45,8 +45,6 @@ Engine::Engine()
 
     TimeManager::Init();
 
-    ResourcesManager::InitDefaultResources();
-
 #ifdef EDITOR
     editor.Init();
 #endif
@@ -55,78 +53,22 @@ Engine::Engine()
     double startCursorX, startCursorY;
     glfwGetCursorPos(render.window, &startCursorX, &startCursorY);
 
-    TempLoad();
+    LoadDefaultResources();
 }
 
 Engine::~Engine()
 {
     //Save();
-
 	render.Destroy();
     SoundManager::Destroy();
     PhysicSystem::Destroy();
 }
 
-void Engine::TempLoad()
+void Engine::LoadDefaultResources()
 {
-    // engine base resource
-    ResourcesManager::AddResourceShader("TerrainShader", "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", "resources/error.jpg");
-
-    // other resource
-    Sound* sound = ResourcesManager::AddResourceSound("TestSon", "resources/Test.wav");
-    Mesh* mesh = ResourcesManager::AddResourceMesh("Skull Mesh", "resources/Skull.obj");
-    Texture* texture = ResourcesManager::AddResourceTexture("Skull Tex", "resources/skull.jpg");
-
-    ResourcesManager::AddResourceTexture("Water", "resources/Water.png");
-    ResourcesManager::AddResourceTexture("SandyGrass", "resources/SandyGrass.png");
-    ResourcesManager::AddResourceTexture("Grass", "resources/Grass.png");
-    ResourcesManager::AddResourceTexture("Rocks", "resources/Rocks.png");
-    ResourcesManager::AddResourceTexture("Snow", "resources/Snow.png");
-
-    // coded scene
-    GameObject* light = GameObject::CreateGameObject("Light");
-    light->AddComponent<Light>(Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(0.5f, 0.5f, 0.5f), Vec3(1.0f, 0.01f, 0.001f), Vec3(0.0f, -1.0f, 0.0f), Vec2(0.9f, 0.8f), E_LIGHT_TYPE::DIRECTIONAL);
-
-    GameObject* soundSkull = GameObject::CreateGameObject("SoundSkull");
-    soundSkull->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
-    soundSkull->AddComponent<AudioBroadcaster>(sound);
-    soundSkull->AddComponent<Move>();
-
-    GameObject* player = GameObject::CreateGameObject("Player");
-    player->tag = "Player";
-    player->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
-
-    player->AddComponent<AudioListener>();
-    player->AddComponent<Player>();
-    player->AddComponent<Camera>(render.width, render.height)->SetMainCamera();
-    //player->AddComponent<SphereCollision>();
-    //player->AddComponent<RigidBody>();
-    //player = GameObject::CreateGameObject("oui");
-    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    //player->AddComponent<BoxCollision>();
-    //player->AddComponent<Player>();
-    //player->AddComponent<RigidBody>();
-    //player = GameObject::CreateGameObject("oui");
-    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    //player->AddComponent<BoxCollision>();
-    //player->AddComponent<Player>();
-    //player->AddComponent<RigidBody>();
-    //player = GameObject::CreateGameObject("oui");
-    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    //player->AddComponent<BoxCollision>();
-    //player->AddComponent<Player>();
-    //player->AddComponent<RigidBody>();
-    //player = GameObject::CreateGameObject("oui");
-    //player->AddComponent<MeshRenderer>(ResourcesManager::GetResource<Mesh>("Default"), texture, ResourcesManager::GetResource<Shader>("Default"));
-    //player->AddComponent<BoxCollision>();
-    //player->AddComponent<Player>();
-    //player->AddComponent<RigidBody>();
-    //GameObject* test = GameObject::CreateGameObject("test");
-    //test->localPosition = { 0.0f, 5.0f, 0.0f };
-    //test->AddComponent<MeshRenderer>(mesh, texture, ResourcesManager::GetResource<Shader>("Default"));
-    //test->AddComponent<SphereCollision>();
-    //test->AddComponent<RigidBody>();
+    ResourcesManager::InitDefaultResources();
+    ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 
 void Engine::Load()
@@ -165,10 +107,8 @@ void Engine::Update()
        
         GameObject::DestroyGameObjectIfNeedTo();
 
-        editor.Display(render);
-        scene.GetWorld().UpdateTransform(Mat4::identity);
-
-        scene.DisplayTerrainOptionWindow();
+        if (editor.Display(render))
+            scene.DisplayTerrainOptionWindow();
 
         render.BindSceneFBO();
        

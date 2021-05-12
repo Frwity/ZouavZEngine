@@ -28,7 +28,7 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
 	SoundManager::AddSound(this);
 }
 
-AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<class Sound>& _sound)
 	: Component(_gameObject), sound(_sound)
 {
 	alGenSources(1, &source);
@@ -52,6 +52,8 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, Sound* _sound)
 AudioBroadcaster::~AudioBroadcaster()
 {
 	SoundManager::RemoveSound(this);
+	if (sound.use_count() == 2 && sound->IsDeletable())
+		sound->RemoveFromResourcesManager();
 
 	alSourcei(source, AL_BUFFER, 0);
 	alDeleteSources(1, &source);
@@ -107,11 +109,36 @@ void AudioBroadcaster::SetAmbient(bool _ambient)
 	}
 }
 
+void AudioBroadcaster::SoundEditor()
+{
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+		{
+			ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+			std::string _path = *(const std::string*)payload->Data;
+			std::string _truePath = _path;
+			size_t start_pos = _truePath.find("\\");
+			_truePath.replace(start_pos, 1, "/");
+
+			if (_truePath.find(".wav") != std::string::npos)
+			{
+				if (sound.use_count() == 2 && sound->IsDeletable())
+				    ResourcesManager::RemoveResourceTexture(sound->GetName());
+				sound = *ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ResourcesManager::ResourceChanger<Sound>("Sound", sound))
+		if (sound)
+			sound->LinkSource(source);
+}
+
 void AudioBroadcaster::Editor()
 {
-	if (ResourcesManager::ResourceChanger<Sound>("Sound", sound))
-		if (sound) 
-			sound->LinkSource(source);
+	SoundEditor();
 
 	ImGui::Text("Ambient : "); 
 	ImGui::SameLine();
@@ -132,7 +159,7 @@ static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct
 	bool _loop;
 	_ar(_ambient, _loop, soundName);
 
-	_construct(GameObject::currentLoadedGameObject, ResourcesManager::GetResource<Sound>(soundName));
+	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::GetResource<Sound>(soundName));
 	_construct->ambient = _ambient;
 	_construct->loop = _loop;
 }

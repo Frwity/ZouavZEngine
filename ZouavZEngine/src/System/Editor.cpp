@@ -27,25 +27,25 @@
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
-#include "ImGuizmo.h"
 
 bool newFolderWindow = false;
-char folderName[256] = "New Folder";
 bool newFileWindow = false;
-char fileName[256] = "New File";
 bool newClassWindow = false;
-char className[256] = "NewClass";
+bool newSceneWindow = false;
+bool newSceneWindowWarning = false;
+
 std::string actualFolder = ".";
 bool hierarchyMenu = false;
 ImVec2 hierarchyMenuPos = { 0.0f, 0.0f };
 char newGameObjectName[256] = "New GameObject";
 GameObject* newGameObjectParent = nullptr;
 GameObject* gameObjectInspector = nullptr;
-std::string currentProjectFolder = "resources";
+std::string currentProjectFolder = "Project";
 std::string currentMovingProjectFile;
 ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
 bool projectNewFolder = false;
 
+bool maximizeOnPlay = false;
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -127,6 +127,20 @@ void Editor::Init()
     InitImGuiStyle();
 
     editorClock = TimeManager::CreateClock();
+
+    editorTextures.emplace("Folder", std::make_unique<Texture>( "Folder", "resources/folder.png" ));
+    editorTextures.emplace("Default Icon", std::make_unique<Texture>( "Default Icon", "resources/default.png" ));
+    editorTextures.emplace(".obj", std::make_unique<Texture>( ".obj", "resources/mesh.png" ));
+    editorTextures.emplace(".fbx", std::make_unique<Texture>( ".fbx", "resources/mesh.png" ));
+    editorTextures.emplace(".png", std::make_unique<Texture>( ".png", "resources/texture.png" ));
+    editorTextures.emplace(".jpg", std::make_unique<Texture>( ".jpg", "resources/texture.png" ));
+    editorTextures.emplace(".vs", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
+    editorTextures.emplace(".fs", std::make_unique<Texture>( ".fs", "resources/shader.png" ));
+    editorTextures.emplace(".cpp", std::make_unique<Texture>( ".cpp", "resources/script.png" ));
+    editorTextures.emplace(".hpp", std::make_unique<Texture>( ".hpp", "resources/script.png" ));
+    editorTextures.emplace(".wav", std::make_unique<Texture>( ".wav", "resources/sound.png" ));
+    editorTextures.emplace(".zes", std::make_unique<Texture>( ".zes", "resources/save.png" ));
+    editorTextures.emplace(".zepref", std::make_unique<Texture>( ".zepref", "resources/prefab.png" ));
 }
 
 void Editor::NewFrame()
@@ -134,20 +148,24 @@ void Editor::NewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGuizmo::BeginFrame();
 }
 
-void Editor::Display(Render& _render)
+bool Editor::Display(Render& _render)
 {
     DisplayMainWindow();
     DisplayOptionWindow();
-    DisplaySceneWindow(_render, _render.sceneFramebuffer);
-    DisplayInspector();
-    DisplayConsoleWindow();
-    DisplayHierarchy();
-    DisplayGameWindow(_render, _render.gameFramebuffer);
-    DisplayProject();
-    MoveSelectedGameobject();
+    DisplayGameWindow(_render.gameFramebuffer);
+    if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
+    {
+        DisplaySceneWindow(_render, _render.sceneFramebuffer);
+        DisplayInspector();
+        DisplayConsoleWindow();
+        DisplayHierarchy();
+        DisplayProject();
+        MoveSelectedGameobject();
+        return true;
+    }
+    return false;
 }
 
 void Editor::DisplayMainWindow()
@@ -169,16 +187,17 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-	ImGui::Begin("Option", NULL,  //ImGuiWindowFlags_NoMove
-                                //| ImGuiWindowFlags_NoDocking
-                                 ImGuiWindowFlags_NoNav
-                                | ImGuiWindowFlags_NoBackground
-		                        | ImGuiWindowFlags_NoScrollWithMouse
-		                        | ImGuiWindowFlags_NoTitleBar
-		                        | ImGuiWindowFlags_NoScrollbar
-                                | ImGuiWindowFlags_NoCollapse
-		                        | ImGuiWindowFlags_NoResize
+    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
+    ImGui::Begin("Option", NULL, ImGuiWindowFlags_NoMove
+                               | ImGuiWindowFlags_NoNav
+                               | ImGuiWindowFlags_NoBackground
+		                       | ImGuiWindowFlags_NoScrollWithMouse
+		                       | ImGuiWindowFlags_NoTitleBar
+		                       | ImGuiWindowFlags_NoScrollbar
+                               | ImGuiWindowFlags_NoCollapse
+		                       | ImGuiWindowFlags_NoResize
     );
+
     ImGui::SameLine();
     if (ImGui::Button("Save"))
     {
@@ -191,21 +210,7 @@ void Editor::DisplayOptionWindow()
         engine.Load();
     }
 	ImGui::SameLine();
-
-    ImGui::SetCursorPosX(200);
-
-    if (ImGui::RadioButton("Translate", currentGizmoOperation == ImGuizmo::TRANSLATE))
-        currentGizmoOperation = ImGuizmo::TRANSLATE;
-    ImGui::SameLine();
-    if (ImGui::RadioButton("Rotate", currentGizmoOperation == ImGuizmo::ROTATE))
-        currentGizmoOperation = ImGuizmo::ROTATE;
-    ImGui::SameLine();
-    if (ImGui::RadioButton("Scale", currentGizmoOperation == ImGuizmo::SCALE))
-        currentGizmoOperation = ImGuizmo::SCALE;
-
-    ImGui::SameLine();
-
-	ImGui::SetCursorPosX(800);
+	ImGui::SetCursorPosX(500);
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
@@ -231,15 +236,16 @@ void Editor::DisplayOptionWindow()
         imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
         engine.scene.Load(false);
 	}
-
+    ImGui::SameLine();
+    ImGui::Checkbox("Maximize On Play", &maximizeOnPlay);
 
 	ImGui::End();
 }
 
 void ListActualFolder(bool& windowOpened)
 {
-    if (ImGui::Button("../"))
-        actualFolder.append("/../");
+    if (ImGui::Button("<--"))
+        actualFolder = actualFolder.substr(0, actualFolder.find_last_of("/\\"));
 
     ImGui::SameLine(ImGui::GetWindowWidth() - 20.0f);
     if (ImGui::Button("X"))
@@ -328,8 +334,9 @@ void NewFolderWindow()
         ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
         ListActualFolder(newFolderWindow);
+        static std::string folderName = "New Folder";
 
-        ImGui::InputText("Folder Name", folderName, 256);
+        ImGui::InputText("Folder Name", folderName.data(), 256);
 
         if (ImGui::Button("Create"))
         {
@@ -337,6 +344,7 @@ void NewFolderWindow()
             {
                 std::cout << "Folder " << folderName << " created" << std::endl;
                 newFolderWindow = !newFolderWindow;
+                folderName = "New Folder";
             }
             else
                 std::cout << "Folder " << folderName << " not created" << std::endl;
@@ -355,7 +363,8 @@ void NewFileWindow()
 
         ListActualFolder(newFileWindow);
 
-        ImGui::InputText("File Name", fileName, 256);
+        static std::string fileName = "New File";
+        ImGui::InputText("File Name", fileName.data(), 256);
 
         if (ImGui::Button("Create"))
         {
@@ -366,6 +375,7 @@ void NewFileWindow()
                 {
                     std::cout << "File " << fileName << " created" << std::endl;
                     newFileWindow = !newFileWindow;
+                    fileName = "New File";
                 }
                 else
                     std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
@@ -382,7 +392,8 @@ void NewClassWindow()
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
         ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
-        ImGui::InputText("Class Name", className, 256);
+        static std::string className = "NewClass";
+        ImGui::InputText("Class Name", className.data(), 256);
 
         if (ImGui::Button("Create"))
             CreateNewClass(className);
@@ -391,8 +402,57 @@ void NewClassWindow()
     }
 }
 
+void NewSceneWindow(Engine& engine)
+{
+    if (newSceneWindow)
+    {
+        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
+        ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
+
+        static std::string sceneName = "New Scene";
+        ImGui::InputText("Scene Name", sceneName.data(), 256);
+        
+        if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+            newSceneWindow = false;
+
+        if (!newSceneWindowWarning && ImGui::Button("Create"))
+        {
+            if (!Scene::NewScene(sceneName.c_str(), false))
+                newSceneWindowWarning = true;
+            else
+            {
+                engine.LoadDefaultResources();
+                sceneName = "New Scene";
+                newSceneWindow = false;
+            }
+        }
+        if (newSceneWindowWarning)
+        {
+            ImGui::TextWrapped("A scene with the same name already exist, are you sure you want to create it ?");
+            if (ImGui::Button("Create"))
+            {
+                Scene::NewScene(sceneName.c_str(), true);
+                newSceneWindowWarning = false;
+                engine.LoadDefaultResources();
+                sceneName = "New Scene";
+                newSceneWindow = false;
+            }
+        }
+        ImGui::End();
+    }
+}
+
 void Editor::DisplayMenuBar()
 {
+    NewFolderWindow();
+
+    NewFileWindow();
+
+    NewClassWindow();
+
+    NewSceneWindow(engine);
+
     if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -400,8 +460,7 @@ void Editor::DisplayMenuBar()
             ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
             ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("New Class", nullptr, &newClassWindow);
-            ImGui::MenuItem("Load", nullptr);
-            ImGui::MenuItem("Save", nullptr);
+            ImGui::MenuItem("New Scene", nullptr, &newSceneWindow);
             ImGui::EndMenu();
         }
 
@@ -413,12 +472,6 @@ void Editor::DisplayMenuBar()
         }
     }
     ImGui::EndMenuBar();
-
-    NewFolderWindow();
-
-    NewFileWindow();
-
-    NewClassWindow();
 }
 
 void Editor::FileMenu()
@@ -472,32 +525,6 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         }
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
-        
-        if (gameObjectInspector)
-        {
-            ImGuizmo::Enable(true);
-
-            ImGuizmo::SetOrthographic(false);
-            ImGuizmo::SetDrawlist();
-
-            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation, gameObjectInspector->localScale);
-
-            Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
-
-            //TODO WORLD mode
-            static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
-
-            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
-            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, mCurrentGizmoMode, matrix.matrix);
-            if (ImGuizmo::IsUsing())
-            {
-                Vec3 translation, rotation, scale;
-                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
-                gameObjectInspector->localPosition = translation;
-                gameObjectInspector->localRotation = Quaternion(rotation);
-                gameObjectInspector->localScale = scale;            
-            }
-        }
     }
     ImGui::End();
 }
@@ -572,15 +599,12 @@ void Editor::DisplayInspector()
 
             static bool addComponentWindow = false;
             
-            if (ImGui::Button("Add Component"))
-                addComponentWindow = true;
-
             if (addComponentWindow)
             {
                 ImVec2 windowSize = ImGui::GetWindowSize();
                 ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowPos().x + windowSize.x / 4, ImGui::GetWindowPos().y + windowSize.y / 4));
                 ImGui::SetNextWindowSize(ImVec2(windowSize.x / 2, windowSize.y / 2));
-                if (ImGui::Begin("Add Component##window"), addComponentWindow, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
+                if (ImGui::Begin("Add Component##window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
                 {
                     for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
                     {
@@ -629,14 +653,23 @@ void Editor::DisplayInspector()
                                 if (ComponentButton<RigidStatic>("Add RigidStatic", true))
                                     addComponentWindow = false;
                             break;
+                        case E_COMPONENT::CAMERA:
+                            if (ComponentButton<Camera>("Add Camera", true))
+                            {
+                                addComponentWindow = false;
+                                gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
+                            }
+                            break;
                         }
                     }
                 }
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    addComponentWindow = false;
+                
                 ImGui::End();
-
-                //if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-                //    addComponentWindow = false;
             }
+            if (ImGui::Button("Add Component"))
+                addComponentWindow = true;
         }
     }
     ImGui::End();
@@ -673,12 +706,8 @@ void Editor::DisplayConsoleWindow()
     ImGui::End();
 }
 
-void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
+void Editor::DisplayGameWindow(class Framebuffer& _framebuffer)
 {
-    if (state == EDITOR_STATE::PLAYING)
-    {
-        ImGui::SetNextWindowSize(ImGui::GetWindowSize());
-    }
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
         ImVec2 windowSize = ImGui::GetWindowSize();
@@ -698,19 +727,32 @@ void Editor::DisplayProject()
 {
     if (ImGui::Begin("Project", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
-        if (ImGui::Button("resources"))
-            currentProjectFolder = "resources";
-
+        if (ImGui::Button("Project"))
+            currentProjectFolder = "Project";
+        if (GetRightName(currentProjectFolder).compare("Project") != 0)
+        {
+            ImGui::SameLine();
+            if(ImGui::Button("<--"))
+                currentProjectFolder = currentProjectFolder.substr(0, currentProjectFolder.find_last_of("/\\"));
+        }
         int i = 0;
-        float windowWidth = ImGui::GetWindowWidth();
-        
+        float windowWidth = ImGui::GetContentRegionAvailWidth();
+        int nbButton = ((windowWidth - 20.0f) / 72.0f) - 2;
+
         for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
         {
+            if (entry.path().extension().string().compare(".zesr") == 0)
+                continue;
+
+            if (i++ != 0 && nbButton > 0 && (i-1) % nbButton != 0)
+                ImGui::SameLine();
+
             std::string currentName = GetRightName(entry.path().string());
             if (entry.is_directory())
             {
                 ImGui::PushID(i);
-                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick))
+                ImGui::BeginGroup();
+                if (ImGui::ImageButton((ImTextureID)editorTextures.find("Folder")->second->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f)))
                 {
                     currentProjectFolder.append("/").append(currentName);
                 }
@@ -732,12 +774,16 @@ void Editor::DisplayProject()
                     }
                     ImGui::EndDragDropTarget();
                 }
+                ImGui::Text(currentName.size() > 11 ? (currentName.substr(0, 9) + "...").c_str() : currentName.c_str());
+                ImGui::EndGroup();
                 ImGui::PopID();
             }
             else
             {
                 ImGui::PushID(i);
-                if (ImGui::ButtonEx(currentName.c_str(), ImVec2(windowWidth / 3.0f - windowWidth / 100.0f, 60.0f), ImGuiButtonFlags_PressedOnDoubleClick)
+                ImGui::BeginGroup();
+                auto texture = editorTextures.find(entry.path().extension().string().c_str());
+                if (ImGui::ImageButton(texture != editorTextures.end() ? (ImTextureID)texture->second->textureID : (ImTextureID)editorTextures.find("Default Icon")->second->textureID, ImVec2(60.0f, 60.0f), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f), 12, ImVec4(100.f, 100.f, 100.f, 0.f))
                 && entry.path().extension().string().compare(".zes") == 0)
                 {
                     gameObjectInspector = nullptr;
@@ -750,16 +796,17 @@ void Editor::DisplayProject()
                     ImGui::Text(currentName.c_str());
                     ImGui::EndDragDropSource();
                 }
+                ImGui::Text(currentName.size() > 11 ? (currentName.substr(0, 9) + "...").c_str() : currentName.c_str());
+                ImGui::EndGroup();
                 ImGui::PopID();
             }
-            if (++i % 3 != 0)
-                ImGui::SameLine();
         }
     
         if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             projectNewFolderPos = ImGui::GetMousePos();
             projectNewFolder = true;
+
         }
 
         if (projectNewFolder)
@@ -767,15 +814,19 @@ void Editor::DisplayProject()
             ImGui::SetNextWindowPos(projectNewFolderPos);
             if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                static char newHierarchyFolderName[256] = "New Folder";
-                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName, 256);
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    projectNewFolder = false;
+
+                static std::string newHierarchyFolderName = "New Folder";
+                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName.data(), 256);
                 if (ImGui::Button("Create"))
                 {
                     if (_mkdir(std::string(currentProjectFolder).append("/").append(newHierarchyFolderName).c_str()) == 0)
                         std::cout << "Folder " << newHierarchyFolderName << " created" << std::endl;
                     else
                         std::cout << "Folder " << newHierarchyFolderName << " not created" << std::endl;
-                    projectNewFolder = !projectNewFolder;
+                    projectNewFolder = false;
+                    newHierarchyFolderName = "New Folder";
                 }
             }
             ImGui::End();
@@ -806,7 +857,6 @@ void DisplayChild(GameObject* _parent)
                 SceneCamera::GetSceneCamera()->SetPosition(_parent->WorldPosition());
             }
         }
-
 
         if (ImGui::BeginDragDropSource())
         {
@@ -840,6 +890,20 @@ void Editor::DisplayHierarchy()
     ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse))
     {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+            {
+                ZASSERT(payload->DataSize == sizeof(std::string), "Error in moving file in hierarchy");
+                std::string path = *(const std::string*)payload->Data;
+                if (path.find(".zepref") != std::string::npos)
+                {
+                    GameObject::LoadPrefab(path);
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
         if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
@@ -853,9 +917,6 @@ void Editor::DisplayHierarchy()
             ImGui::SetNextWindowPos(hierarchyMenuPos);
             if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                //if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT))
-                //    hierarchyMenu = false;
-
                 ImGui::InputText("New GameObject Name", newGameObjectName, 256);
                 if (ImGui::Button("New GameObject"))
                 {
@@ -867,17 +928,30 @@ void Editor::DisplayHierarchy()
                     strcpy_s(newGameObjectName,"New GameObject");
                 }
 
-                if (newGameObjectParent && ImGui::Button("Delete") && newGameObjectParent->parent)
+                if (newGameObjectParent && newGameObjectParent->parent)
                 {
-                    for (GameObject* child : newGameObjectParent->children)
+                    if (ImGui::Button("Delete"))
                     {
-                        child->SetParent(newGameObjectParent->parent);
+                        for (GameObject* child : newGameObjectParent->children)
+                        {
+                            child->SetParent(newGameObjectParent->parent);
+                        }
+                        newGameObjectParent->SetParent(nullptr);
+                        newGameObjectParent->toDestroy = true;
+                        GameObject::destroyGameObject = true;
+                        hierarchyMenu = false;
+                        if (newGameObjectParent == gameObjectInspector)
+                            gameObjectInspector = nullptr;
+                        newGameObjectParent = nullptr;
                     }
-                    newGameObjectParent->SetParent(nullptr);
-                    newGameObjectParent->toDestroy = true;
-                    GameObject::destroyGameObject = true;
-                    hierarchyMenu = false;
+                    if (ImGui::Button("CreatePrefab"))
+                    {
+                        newGameObjectParent->CreatePrefab();
+                    }
                 }
+
+                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                    hierarchyMenu = false;
             }
             ImGui::End();
         }
@@ -887,14 +961,14 @@ void Editor::DisplayHierarchy()
 
 void Editor::MoveSelectedGameobject()
 {
-    if (gameObjectInspector == nullptr)
+    if (gameObjectInspector == nullptr || state == EDITOR_STATE::PLAYING || state == EDITOR_STATE::PAUSE)
         return;
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-        gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
+        gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
     if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
         gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());

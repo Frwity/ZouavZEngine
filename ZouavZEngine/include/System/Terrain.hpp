@@ -90,9 +90,10 @@ private:
 
 	std::vector<physx::PxMaterial*> material;
 
-	Shader* shader = nullptr;
+	std::shared_ptr<Shader> shader;
 	
 	bool isGenerated = false;
+	bool isActivated = false;
 
 public:
 
@@ -126,7 +127,7 @@ public:
 	std::vector<float> colorBlend;
 	std::vector<float> colorStrength;
 	std::vector<float> textureScale;
-	std::vector<Texture*> textureID;
+	std::vector<std::shared_ptr<Texture>> textureID;
 
 	// editor variable
 
@@ -155,7 +156,7 @@ public:
 	{
 		int _noiseCount = 0;
 		int _colorCount = 0;
-		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
+		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
 			minHeight, maxHeight, heightIntensity, _colorCount, colorID, alwaysActualize);
 
 		int _noiseType;
@@ -178,14 +179,14 @@ public:
 			if (i != 0)
 				AddColorLayer();
 			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], _textureName);
-			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : ResourcesManager::GetResource<Texture>(_textureName);
+			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : *ResourcesManager::GetResource<Texture>(_textureName);
 		}
 	}
 	
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		_ar(chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
+		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
 			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
 
 		for (int i = 0; i < noiseCount; ++i)

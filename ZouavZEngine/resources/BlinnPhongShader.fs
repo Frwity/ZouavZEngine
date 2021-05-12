@@ -25,6 +25,7 @@ in vec4 Color;
 uniform sampler2D ourTexture;
 uniform vec3      viewPos; 
 uniform Light     lights[3];
+uniform int nbLight;
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir);
@@ -33,14 +34,14 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir);
 void main()
 {
     vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - Pos);
+    vec3 viewDir = normalize(Pos - viewPos);
     
     vec3 result;    
     result.x = 0;
     result.y = 0;
     result.z = 0;
 
-    for (int i = 0; i < MAX_LIGHTS; i++)
+    for (int i = 0; i < nbLight && i < MAX_LIGHTS; i++)
     {
         if (lights[i].type == 0)
             result += CalcDirLight(lights[i], norm, viewDir);
@@ -57,9 +58,9 @@ void main()
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 {
-    vec3 lightDir       = normalize(-light.direction);
+    vec3 lightDir       = normalize(light.direction);
 
-    float diff          = max(dot(normal, lightDir), 0.0);
+    float diff          = max(dot(normal, -lightDir), 0.0);
 
     vec3 reflectDir     = reflect(-lightDir, normal);
     float spec          = pow(max(dot(viewDir, reflectDir), 0.0), 32);
@@ -73,9 +74,9 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir)
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir)
 {
-    vec3 lightDir       = normalize(light.position - Pos);
+    vec3 lightDir       = normalize(Pos - light.position);
 
-    float diff          = max(dot(normal, lightDir), 0.0);
+    float diff          = max(dot(normal, -lightDir), 0.0);
 
     vec3 reflectDir     = reflect(-lightDir, normal);
     float spec          = pow(max(dot(viewDir, reflectDir), 0.0), 32);
@@ -98,9 +99,9 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir)
 
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir)
 {
-    vec3 lightDir       = normalize(light.position - Pos);
+    vec3 lightDir       = normalize(Pos - light.position);
 
-    float diff          = max(dot(normal, lightDir), 0.0);
+    float diff          = max(dot(normal, -lightDir), 0.0);
 
     vec3 reflectDir     = reflect(-lightDir, normal);
     float spec          = pow(max(dot(viewDir, reflectDir), 0.0), 32);

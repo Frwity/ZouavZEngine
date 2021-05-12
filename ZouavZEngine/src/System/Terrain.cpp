@@ -39,6 +39,8 @@ Terrain::Terrain()
 
 void Terrain::Generate(GameObject* _actualizer)
 {
+	if (!isActivated)
+		return;
 	material.emplace_back(PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f));
 
 	if (noiseCount <= 0)
@@ -46,7 +48,7 @@ void Terrain::Generate(GameObject* _actualizer)
 	if (colorCount <= 0)
 		AddColorLayer();
 
-	shader = ResourcesManager::GetResource<Shader>("TerrainShader");
+	shader = *ResourcesManager::GetResource<Shader>("TerrainShader");
 	actualizer = _actualizer;
 	chunks.reserve(16);
 	Vec2 pos;
@@ -67,7 +69,7 @@ void Terrain::Generate(GameObject* _actualizer)
 
 void Terrain::Actualise()
 {
-	if (!isGenerated)
+	if (!isGenerated || !isActivated)
 		return;
 	Vec2 pos;
 
@@ -84,7 +86,7 @@ void Terrain::Actualise()
 
 void Terrain::Update()
 {
-	if (!actualizer || !isGenerated)
+	if (!actualizer || !isGenerated || !isActivated)
 		return;
 
 	Vec2 pos;
@@ -135,7 +137,7 @@ void Terrain::Update()
 
 void Terrain::Draw(const class Camera& _camera) const
 {
-	if (!shader || !isGenerated)
+	if (!shader || !isGenerated || !isActivated)
 		return;
 
 	shader->Use();
@@ -157,7 +159,7 @@ void Terrain::Draw(const class Camera& _camera) const
 		glUniform1i(glGetUniformLocation(shader->id, ("textures[" + std::to_string(i) + "]").c_str()), i);
 		glActiveTexture(GL_TEXTURE0 + i);
 		if (textureID.at(i))
-			Texture::Use(textureID.at(i));
+			Texture::Use(textureID.at(i).get());
 		shader->SetVector3("colors[" + std::to_string(i) + "]", colors[i]);
 	}
 
@@ -177,6 +179,8 @@ void Terrain::DisplayOptionWindow()
 {
 	if (ImGui::Begin("Procedural Generation", nullptr, ImGuiWindowFlags_NoNavInputs))
 	{
+		ImGui::Checkbox("Activated", &isActivated);
+		ImGui::SameLine();
 		if (!isGenerated)
 		{
 			if (ImGui::Button("Generate"))
@@ -187,6 +191,7 @@ void Terrain::DisplayOptionWindow()
 			ImGui::End();
 			return;
 		}
+
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
 		actualized |= ImGui::SliderInt("Seed", &seed, 0, 214748364);

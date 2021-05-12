@@ -9,11 +9,18 @@ protected:
 	friend class ResourcesManager;
 	std::string name;
 	std::vector<std::string> paths;
+	bool deletable = true;
+
 public:
 
 	Resource() = default;
 	Resource(const std::string& _name) : name(_name) {}
-	~Resource() = default;
+	virtual ~Resource() = default;
 
+	virtual void RemoveFromResourcesManager() = 0;
+
+	bool IsDeletable() { return deletable; }
+
+	const std::vector<std::string>& GetPaths() { return paths; }
 	const std::string& GetName() { return name; }
 };

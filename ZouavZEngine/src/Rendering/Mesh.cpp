@@ -107,6 +107,11 @@ Mesh::~Mesh()
     glDeleteVertexArrays(1, &VAO);
 }
 
+void Mesh::RemoveFromResourcesManager()
+{
+	ResourcesManager::RemoveResourceMesh(name);
+}
+
 void Mesh::CreateCube()
 {
 	std::vector<Vertex> vertices;
