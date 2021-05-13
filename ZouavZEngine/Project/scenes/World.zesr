@@ -11,7 +11,7 @@
     "value9": "Error",
     "value10": false,
     "value11": "resources/error.jpg",
-    "value12": 2,
+    "value12": 3,
     "value13": "Default",
     "value14": false,
     "value15": "resources/BlinnPhongShader.vs",
@@ -19,5 +19,13 @@
     "value17": "TerrainShader",
     "value18": false,
     "value19": "resources/TerrainShader.vs",
-    "value20": "resources/TerrainShader.fs"
+    "value20": "resources/TerrainShader.fs",
+    "value21": "FontShader",
+    "value22": false,
+    "value23": "resources/FontShader.vs",
+    "value24": "resources/FontShader.fs",
+    "value25": 1,
+    "value26": "Default",
+    "value27": false,
+    "value28": "resources/font.fnt"
 }

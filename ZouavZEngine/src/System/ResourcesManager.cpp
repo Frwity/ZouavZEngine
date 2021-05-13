@@ -5,12 +5,14 @@ std::unordered_map<std::string, std::shared_ptr<Sound>> ResourcesManager::soundR
 std::unordered_map<std::string, std::shared_ptr<Mesh>> ResourcesManager::meshResources;
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourcesManager::textureResources;
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shaderResources;
+std::unordered_map<std::string, std::shared_ptr<Font>> ResourcesManager::fontResources;
 
 void ResourcesManager::InitDefaultResources()
 {
     ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
+    ResourcesManager::AddResourceFont("Default", false, "resources/font.fnt");
 }
 
 void ResourcesManager::Clear()
@@ -19,6 +21,7 @@ void ResourcesManager::Clear()
     meshResources.clear();
     textureResources.clear();
     shaderResources.clear();
+    fontResources.clear();
 }
 
 std::shared_ptr<Resource>& ResourcesManager::ResourceChangerImpl(const char* _label, std::shared_ptr<Resource>& _resource, const std::unordered_map<std::string, std::shared_ptr<Resource>>& _resources, bool& _changed)

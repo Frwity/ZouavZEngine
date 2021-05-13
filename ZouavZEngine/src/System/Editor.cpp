@@ -11,6 +11,7 @@
 #include "Rendering/Render.hpp"
 #include "Rendering/Framebuffer.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/FontComponent.hpp"
 #include "Component/Light.hpp"
 #include "Component/AudioBroadcaster.hpp"
 #include "Component/AudioListener.hpp"
@@ -624,6 +625,10 @@ void Editor::DisplayInspector()
                             break;
                         case E_COMPONENT::MESHRENDERER:
                             if (ComponentButton<MeshRenderer>("Add MeshRenderer", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::FONTCOMPONENT:
+                            if (ComponentButton<FontComponent>("Add FontComponent", false))
                                 addComponentWindow = false;
                             break;
                         case E_COMPONENT::BOX_COLLISION:

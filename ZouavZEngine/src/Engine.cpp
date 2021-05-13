@@ -69,6 +69,7 @@ void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
     ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    ResourcesManager::AddResourceShader("FontShader", false, "resources/FontShader.vs", "resources/FontShader.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 
@@ -84,7 +85,6 @@ void Engine::Save()
 
 void Engine::Update()
 {
-    MetaFile test("resources/font.fnt");
     ScriptSystem::Begin();
 
     while (!render.Stop())

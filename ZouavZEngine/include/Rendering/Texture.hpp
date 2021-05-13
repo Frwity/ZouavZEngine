@@ -15,4 +15,5 @@ public:
     void RemoveFromResourcesManager() override;
 
     static void Use(Texture* _texture);
+    void Use() const;
 };

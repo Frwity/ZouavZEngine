@@ -26,7 +26,7 @@ Texture::Texture(const std::string& _name, const char* _path)
     if (data)
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, nrChannels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 3 ? GL_RGB : GL_RGBA, width, height, 0, nrChannels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -35,12 +35,16 @@ Texture::Texture(const std::string& _name, const char* _path)
     stbi_image_free(data);
 
     paths.emplace_back(_path);
-
 }
 
 void Texture::RemoveFromResourcesManager()
 {
     ResourcesManager::RemoveResourceTexture(name);
+}
+
+void Texture::Use() const
+{
+    glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
 void Texture::Use(Texture* texture)

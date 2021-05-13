@@ -169,6 +169,7 @@
     <ClCompile Include="src\Component\BoxCollision.cpp" />
     <ClCompile Include="src\Component\CapsuleCollision.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
+    <ClCompile Include="src\Component\FontComponent.cpp" />
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\Plane.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="include\Component\BoxCollision.hpp" />
     <ClInclude Include="include\Component\CapsuleCollision.hpp" />
     <ClInclude Include="include\Component\Component.hpp" />
+    <ClInclude Include="include\Component\FontComponent.hpp" />
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\Plane.hpp" />
