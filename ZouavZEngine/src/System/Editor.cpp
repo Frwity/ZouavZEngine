@@ -578,7 +578,7 @@ void Editor::DisplayInspector()
                 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
                 ImGui::Text("Local Rotation :");
-                ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
                     gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
                 ImGui::Text("Local Scale    :");
