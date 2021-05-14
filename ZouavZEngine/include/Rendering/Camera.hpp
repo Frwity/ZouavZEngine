@@ -15,6 +15,7 @@ private:
 	friend cereal::access;
 	static Camera* mainCamera;
 	bool followGameObjectRotation = false;
+	bool isMainCamera = false;
 
 protected:
 
@@ -23,10 +24,9 @@ protected:
 	Vec3 target;
 	int width = 0;
 	int height = 0;
-	float near = 0.01f;
+	float near = 0.001f;
 	float far = 5000.0f;
 	float fov = 45.0f;
-	bool isMainCamera = false;
 public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
 	Camera() = delete;
@@ -38,6 +38,9 @@ public:
 	const char* GetComponentName() override { return "Camera"; }
 
 	static Camera* GetMainCamera() { return mainCamera; }
+
+	int GetWidth() const { return width; }
+	int GetHeight() const { return height; }
 
 	void SetMainCamera() { mainCamera = this; }
 	

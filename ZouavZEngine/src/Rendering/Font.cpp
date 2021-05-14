@@ -8,7 +8,7 @@ int MetaData::PAD_TOP = 0;
 int MetaData::PAD_LEFT = 1;
 int MetaData::PAD_BOTTOM = 2;
 int MetaData::PAD_RIGHT = 3;
-int MetaData::DESIRED_PADDING = 3;
+int MetaData::DESIRED_PADDING = 16;
 
 Character::Character(int _id, float _xTextureCoord, float _yTextureCoord, float _xTexSize, float _yTexSize,
 	float _xOffset, float _yOffset, float _sizeX, float _sizeY, float _xAdvance)

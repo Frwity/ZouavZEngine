@@ -113,37 +113,16 @@ void Scene::Save()
 	saveFile.close();
 }
 
-void Scene::Draw(const Camera& _camera) const
-{
-	terrain.Draw(_camera);
-
-	for(GameObject* gameObject : world.GetChildren())
-	{
-		if (gameObject->GetComponent<MeshRenderer>())
-		{
-			gameObject->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
-			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::identity, _camera);
-		}
-		if (gameObject->GetComponent<FontComponent>())
-			gameObject->GetComponent<FontComponent>()->Draw(Mat4::identity, _camera);
-
-		for (GameObject* child : gameObject->GetChildren())
-			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()), _camera);
-	}
-}
-
-void Scene::DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const Camera& _camera) const
+void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 {
 	if (_parent->GetComponent<MeshRenderer>())
 	{
 		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
-		_parent->GetComponent<MeshRenderer>()->Draw(_heritedMatrix, _camera);
+		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
 	}
-	if (_parent->GetComponent<FontComponent>())
-		_parent->GetComponent<FontComponent>()->Draw(Mat4::identity, _camera);
 
 	for (GameObject* child : _parent->GetChildren())
-		DrawChild(child, Mat4::CreateTRSMatrix(_parent->WorldPosition(), _parent->WorldRotation(), _parent->WorldScale()), _camera);
+		Draw(child, _camera);
 }
 
 void Scene::Update()

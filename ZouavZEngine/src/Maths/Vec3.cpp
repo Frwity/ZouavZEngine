@@ -1,4 +1,5 @@
 #include "Maths/Vec3.hpp"
+#include "Maths/Vec4.hpp"
 #include <cmath>
 
 const Vec3 Vec3::zero{ 0.0f, 0.0f, 0.0f };
@@ -21,6 +22,11 @@ Vec3::Vec3(float _x, float _y, float _z)
 Vec3::Vec3(const Vec3& _v)
     : x{ _v.x }, y{ _v.y }, z{ _v.z }
 {}
+
+Vec3::Vec3(const Vec4& _v)
+    : x{ _v.x }, y{ _v.y }, z{ _v.z }
+{
+}
 
 float Vec3::GetMagnitude() const
 {

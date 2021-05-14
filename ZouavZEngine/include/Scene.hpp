@@ -11,7 +11,7 @@ private:
 	Terrain terrain;
 	GameObject world{ "World" };
 
-	void DrawChild(GameObject* _parent, const Mat4& _heritedMatrix, const class Camera& _camera) const;
+	void DrawChild(GameObject* _parent, const class Camera& _camera) const;
 	
 	std::vector<class Light*> lights;
 
@@ -30,7 +30,7 @@ public:
 	void Save();
 
 	void Update();
-	void Draw(const class Camera& _camera) const;
+	void Draw(GameObject* _parent, const class Camera& _camera) const;
 	void SimulatePhyics() const;					//Simulate phyics and update transform of affected gameObjects
 
 	void AddLight(class Light* _newLight);

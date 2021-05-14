@@ -12,7 +12,7 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
-    ResourcesManager::AddResourceFont("Default", false, "resources/font.fnt");
+    ResourcesManager::AddResourceFont("Default", false, "resources/Arial.fnt");
 }
 
 void ResourcesManager::Clear()

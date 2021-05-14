@@ -27,7 +27,7 @@ MeshRenderer::~MeshRenderer()
         material.shader->RemoveFromResourcesManager();
 }
 
-void MeshRenderer::Draw(const Mat4& heritedMatrix, const Camera& _camera)
+void MeshRenderer::Draw(const Camera& _camera)
 {
     material.shader->Use();
     glActiveTexture(GL_TEXTURE0);

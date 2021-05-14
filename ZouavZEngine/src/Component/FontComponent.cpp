@@ -2,6 +2,7 @@
 #include "GameObject.hpp"
 #include "Maths/Mat4.hpp"
 #include "System/ResourcesManager.hpp"
+#include "System/FontSystem.hpp"
 #include "Component/FontComponent.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -10,62 +11,225 @@
 
 
 FontComponent::FontComponent(class GameObject* _gameObject)
-	: Component( _gameObject), font{ *ResourcesManager::GetResource<Font>("Default") }, shader { *ResourcesManager::GetResource<Shader>("FontShader") }
+	: Component( _gameObject),	font{ *ResourcesManager::GetResource<Font>("Default") }, 
+								shader3D { *ResourcesManager::GetResource<Shader>("Font3DShader") },
+								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
+								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }
 {
 	ChangeText(text.c_str(), text.size());
+	FontSystem::AddFont3D(this);
 }
 
 FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _font)
-	: Component(_gameObject), font{ _font }, shader{ *ResourcesManager::GetResource<Shader>("FontShader") }
+	: Component(_gameObject),	font{ _font }, 
+								shader3D{ *ResourcesManager::GetResource<Shader>("Font3DShader") },
+								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
+								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }
 {
 	ChangeText(text.c_str(), text.size());
+	FontSystem::AddFont3D(this);
+}
+
+FontComponent::~FontComponent()
+{
+	switch (fontType)
+	{
+		case E_FONT_TYPE::FONT3D :
+			FontSystem::RemoveFont3D(this);
+			break;
+		case E_FONT_TYPE::FONTBILLBOARD :
+			FontSystem::RemoveFontBillboard(this);
+			break;
+		case E_FONT_TYPE::FONT2D :
+			FontSystem::RemoveFont2D(this);
+			break;
+		default :
+			break;
+	}
+}
+
+void FontComponent::ChangeType(E_FONT_TYPE _newType)
+{
+	if (_newType == fontType)
+		return;
+
+	switch (fontType)
+	{
+		case E_FONT_TYPE::FONT3D:
+			FontSystem::RemoveFont3D(this);
+			break;
+		case E_FONT_TYPE::FONTBILLBOARD:
+			FontSystem::RemoveFontBillboard(this);
+			break;
+		case E_FONT_TYPE::FONT2D:
+			FontSystem::RemoveFont2D(this);
+			break;
+		default:
+			break;
+	}
+
+	fontType = _newType;
+
+	switch (fontType)
+	{
+		case E_FONT_TYPE::FONT3D:
+			FontSystem::AddFont3D(this);
+			break;
+		case E_FONT_TYPE::FONTBILLBOARD:
+			FontSystem::AddFontBillboard(this);
+			break;
+		case E_FONT_TYPE::FONT2D:
+			FontSystem::AddFont2D(this);
+			break;
+		default:
+			break;
+	}
 }
 
 void FontComponent::Editor()
 {
 	std::string tempText = text;
-	if (ImGui::InputText("Text : ", tempText.data(), 256))
+	if (ImGui::InputText("Text : ", tempText.data(), 1024))
 	{
 		text = tempText;
 		ChangeText(text.c_str(), text.size());
 	}
+
+	std::string oldValue = fontType == E_FONT_TYPE::FONT3D ? "Font 3D" : fontType == E_FONT_TYPE::FONTBILLBOARD ? "Font Billboard" : "Font 2D";
+	if (ImGui::BeginCombo("Type : ", oldValue.c_str()))
+	{
+		E_FONT_TYPE newType = fontType;
+		if (ImGui::Selectable("Font 3D", fontType == E_FONT_TYPE::FONT3D)) newType = E_FONT_TYPE::FONT3D;
+		if (ImGui::Selectable("Font Billboard", fontType == E_FONT_TYPE::FONTBILLBOARD)) newType = E_FONT_TYPE::FONTBILLBOARD;
+		if (ImGui::Selectable("Font 2D", fontType == E_FONT_TYPE::FONT2D)) newType = E_FONT_TYPE::FONT2D;
+		ImGui::EndCombo();
+		ChangeType(newType);
+	}
+
 	if (ImGui::InputFloat("Font Size :", &fontSize, 0.1f))
 		ChangeText(text.c_str(), text.size());
-	ImGui::ColorEdit4("Color : ", &color.w);
-	ImGui::InputFloat3("Position : ", &position.x);
-	ImGui::Checkbox("Billboard :", &billBoard);
-	ImGui::Checkbox("Depth Test (TODO) :", &depthTest);
+
+	ImGui::ColorEdit4("Color :", &color.w);
+	
+	ImGui::DragFloat3("Position :", &position.x);
+	
+	ImGui::InputFloat("Width :", &width, 0.01f);
+	ImGui::InputFloat("Edge :", &edge, 0.01f);
+
+	ImGui::ColorEdit3("Outline Color :", &outlineColor.x);
+	ImGui::InputFloat("Outline Width :", &outlineWidth, 0.01f);
+	ImGui::InputFloat("Outline Edge :", &outlineEdge, 0.01f);
+
+	ImGui::DragFloat2("Offset :", &offset.x, 0.0001f);
+
+	ImGui::Checkbox("Depth Test :", &depthTest);
 }
 
-void FontComponent::Draw(const Mat4& _transform, const class Camera& _camera)
+void FontComponent::Draw3D(const Camera& _camera)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_DEPTH_TEST);
-	shader->Use();
+	if (!depthTest)
+		glDisable(GL_DEPTH_TEST);
+
+	shader3D->Use();
 	glActiveTexture(GL_TEXTURE0);
 	font->GetTexture().Use();
 	Mat4 matrixCamera = _camera.GetMatrix();
 
-	shader->SetMatrix("view", matrixCamera.Reversed());
-	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-	shader->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()) * Mat4::CreateTranslationMatrix(position));
-	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
-	shader->SetVector4("color", color);
+	shader3D->SetMatrix("view", matrixCamera.Reversed());
+	shader3D->SetMatrix("projection", _camera.GetProjetionMatrix());
+	shader3D->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()) 
+								* Mat4::CreateTranslationMatrix(position));
+	shader3D->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
+	shader3D->SetVector4("color", color);
+	shader3D->SetFloat("width", width);
+	shader3D->SetFloat("edge", edge);
+	shader3D->SetFloat("outlineWidth", outlineWidth);
+	shader3D->SetFloat("outlineEdge", outlineEdge);
+	shader3D->SetVector3("outlineColor", outlineColor);
+	shader3D->SetVector2("offset", offset);
 
 	glBindVertexArray(mesh.GetID());
 	glDrawElements(GL_TRIANGLES, (GLsizei)mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+
+	if (!depthTest)
+		glEnable(GL_DEPTH_TEST);
+}
+
+void FontComponent::DrawBillboard(const Camera& _camera)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (!depthTest)
+		glDisable(GL_DEPTH_TEST);
+
+	shaderBillboard->Use();
+	glActiveTexture(GL_TEXTURE0);
+	font->GetTexture().Use();
+	Mat4 matrixCamera = _camera.GetMatrix();
+
+	shaderBillboard->SetMatrix("view", matrixCamera.Reversed());
+	shaderBillboard->SetMatrix("projection", _camera.GetProjetionMatrix());
+	shaderBillboard->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
+	shaderBillboard->SetVector3("centerPos", GetGameObject().WorldPosition());
+	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
+	shaderBillboard->SetVector4("color", color);
+	shaderBillboard->SetFloat("width", width);
+	shaderBillboard->SetFloat("edge", edge);
+	shaderBillboard->SetFloat("outlineWidth", outlineWidth);
+	shaderBillboard->SetFloat("outlineEdge", outlineEdge);
+	shaderBillboard->SetVector3("outlineColor", outlineColor);
+	shaderBillboard->SetVector2("offset", offset);
+
+	glBindVertexArray(mesh.GetID());
+	glDrawElements(GL_TRIANGLES, (GLsizei)mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
+
+	glDisable(GL_BLEND);
+
+	if (!depthTest)
+		glEnable(GL_DEPTH_TEST);
+}
+
+void FontComponent::Draw2D(const Camera& _camera)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (!depthTest)
+		glDisable(GL_DEPTH_TEST);
+
+	shader2D->Use();
+	glActiveTexture(GL_TEXTURE0);
+	font->GetTexture().Use();
+
+	shader2D->SetMatrix("view", _camera.GetMatrix().Reversed());
+	shader2D->SetMatrix("projection", Mat4::CreateTranslationMatrix(Vec3{ -1.f + (float)_camera.GetHeight() / (float)_camera.GetWidth() , 0.0f, 0.0f } + position / 100.f)
+									* Mat4::CreateScaleMatrix({ (float)_camera.GetHeight() / (float)_camera.GetWidth(), 1.f, 1.f }));
+	shader2D->SetVector4("color", color);
+	shader2D->SetFloat("width", width);
+	shader2D->SetFloat("edge", edge);
+	shader2D->SetFloat("outlineWidth", outlineWidth);
+	shader2D->SetFloat("outlineEdge", outlineEdge);
+	shader2D->SetVector3("outlineColor", outlineColor);
+	shader2D->SetVector2("offset", offset);
+
+	glBindVertexArray(mesh.GetID());
+	glDrawElements(GL_TRIANGLES, (GLsizei)mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
+
+	glDisable(GL_BLEND);
+
+	if (!depthTest)
+		glEnable(GL_DEPTH_TEST);
 }
 
 void FontComponent::ChangeText(const char* _newText, int _size)
 {
 	if (_size < 1)
 		return;
-	float curserX = 0.f;
-	float curserY = 0.f;
+	float curserX = 0.25f;
+	float curserY = 0.5f;
 	std::vector<Vertex> vertices;
 	vertices.reserve(_size * 4);
 	std::vector<int> indices;
@@ -83,7 +247,7 @@ void FontComponent::ChangeText(const char* _newText, int _size)
 		}
 		if (ascii == '\n')
 		{
-			curserX = 0.0f;
+			curserX = 0.25f;
 			curserY += 0.03f * fontSize; // like the other TODO in Font.cpp
 			++i;
 			continue;
@@ -135,9 +299,18 @@ void FontComponent::ChangeText(const char* _newText, int _size)
 template <class Archive>
 static void FontComponent::load_and_construct(Archive& _ar, cereal::construct<FontComponent>& _construct)
 {
-	std::string fontName;
-	std::string fontPath;
-	bool isfontDeletebale;
-	_ar(fontName, isfontDeletebale, fontPath);
-	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceFont(fontName, isfontDeletebale, fontPath.c_str()));
+	std::string _fontName;
+	std::string _fontPath;
+	bool _isfontDeletebale;
+
+	_ar(_fontName, _isfontDeletebale, _fontPath);
+	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceFont(_fontName, _isfontDeletebale, _fontPath.c_str()));
+	int _type;
+	_ar(_type, _construct->text, _construct->color.x, _construct->color.y, _construct->color.z, _construct->color.w,
+		_construct->position.x, _construct->position.y, _construct->position.z,
+		_construct->fontSize, _construct->width, _construct->edge, _construct->outlineWidth, _construct->outlineEdge,
+		_construct->outlineColor.x, _construct->outlineColor.y, _construct->outlineColor.z, 
+		_construct->offset.x, _construct->offset.y, _construct->depthTest);
+	_construct->ChangeType((E_FONT_TYPE)_type);
+	_construct->ChangeText(_construct->text.c_str(), _construct->text.size());
 }

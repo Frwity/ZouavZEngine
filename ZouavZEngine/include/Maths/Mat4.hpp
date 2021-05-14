@@ -46,4 +46,5 @@ class Mat4 : public Matrix
         void operator*=(float _value);
         void operator/=(float _value);
 };
+
 #endif

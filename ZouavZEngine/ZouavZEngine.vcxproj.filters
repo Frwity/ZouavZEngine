@@ -225,6 +225,9 @@
     <ClCompile Include="src\Component\FontComponent.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\System\FontSystem.cpp">
+      <Filter>src\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\FontComponent.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\FontSystem.hpp">
+      <Filter>include\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

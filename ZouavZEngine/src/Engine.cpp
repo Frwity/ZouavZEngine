@@ -17,6 +17,7 @@
 #include "System/Terrain.hpp"
 #include "System/InputManager.hpp"
 #include "System/ScriptSystem.hpp"
+#include "System/FontSystem.hpp"
 #include "System/Engine.hpp"
 #include "System/SoundManager.hpp"
 #include "Game/Move.hpp"
@@ -69,7 +70,9 @@ void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
     ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    ResourcesManager::AddResourceShader("FontShader", false, "resources/FontShader.vs", "resources/FontShader.fs");
+    ResourcesManager::AddResourceShader("Font3DShader", false, "resources/Font3DShader.vs", "resources/Font3DShader.fs");
+    ResourcesManager::AddResourceShader("FontBillboardShader", false, "resources/FontBillboardShader.vs", "resources/FontBillboardShader.fs");
+    ResourcesManager::AddResourceShader("Font2DShader", false, "resources/Font2DShader.vs", "resources/Font2DShader.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 
@@ -112,14 +115,23 @@ void Engine::Update()
         if (editor.Display(render))
             scene.DisplayTerrainOptionWindow();
 
-        render.BindSceneFBO();
+        render.BindSceneFBO(); 
        
-        scene.Draw(*SceneCamera::GetSceneCamera());
+        scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
+        FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
         
         if (Camera::GetMainCamera())
-            scene.Draw(*Camera::GetMainCamera());
+        {
+            scene.Draw(&scene.GetWorld(), *Camera::GetMainCamera());
+            FontSystem::DrawFonts(*Camera::GetMainCamera());
+        }
+        else
+        {
+            scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
+            FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
+        }
         
         render.BindMainFBO();
         

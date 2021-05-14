@@ -23,7 +23,7 @@ public:
 
 	~MeshRenderer();
 
-	void Draw(const class Mat4& _transform, const class Camera& _camera);
+	void Draw(const class Camera& _camera);
 
 	void TextureEditor();
 	void ShaderEditor();

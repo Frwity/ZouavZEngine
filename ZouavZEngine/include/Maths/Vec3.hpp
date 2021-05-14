@@ -17,6 +17,7 @@ class Vec3
         Vec3();
         Vec3(float _x, float _y, float _z);
         Vec3(const Vec3& _v);
+        Vec3(const class Vec4& _v);
         ~Vec3() = default;
 
         const static Vec3 zero;

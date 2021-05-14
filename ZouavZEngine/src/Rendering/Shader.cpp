@@ -165,7 +165,6 @@ void Shader::SetLight(const std::vector<Light*>& _lights)
     SetInt("nbLight", _lights.size());
     for (const Light* l : _lights)
     {
-        std::cout << i << std::endl;
         const std::string index = std::to_string(i++);
         
         SetVector3(("lights[" + index + "].position").c_str(), l->GetGameObject().localPosition);
