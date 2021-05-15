@@ -3,9 +3,13 @@
 #include "Component/ShapeCollision.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
+#include "Rendering/Mesh.hpp"
+#include <memory>
 
 class CapsuleCollision: public ShapeCollision
 {
+private:
+	std::shared_ptr<Mesh> capsule;
 public:
 	float radius;
 	float halfHeight;

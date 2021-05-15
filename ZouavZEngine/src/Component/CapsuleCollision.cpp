@@ -22,6 +22,8 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
 
 	AttachToRigidComponent();
+
+	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
 }
 
 CapsuleCollision::~CapsuleCollision()
@@ -61,7 +63,14 @@ void CapsuleCollision::DrawGizmos(const Camera& _camera)
 
 	materialShader.shader->Use();
 
-	physx::PxMat44 m = physx::PxMat44(shape->getLocalPose());
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	physx::PxMat44 m;
+
+	if (rigid)
+		m = rigid->actor->getGlobalPose();
+	else
+		m = physx::PxMat44(shape->getLocalPose());
 
 	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, halfHeight, radius));
 
@@ -70,5 +79,6 @@ void CapsuleCollision::DrawGizmos(const Camera& _camera)
 	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 	materialShader.shader->SetVector4("color", materialShader.color);
 
-	glDrawElements(GL_TRIANGLE_STRIP, 64, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(capsule->GetID());
+	glDrawElements(GL_LINE_LOOP, capsule->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

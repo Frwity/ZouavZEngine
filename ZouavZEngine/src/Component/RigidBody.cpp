@@ -16,8 +16,6 @@
 
 using namespace physx;
 
-static int i = 0;
-
 
 RigidBody::RigidBody(GameObject* _gameObject)
 	: Rigid(_gameObject)
@@ -27,9 +25,6 @@ RigidBody::RigidBody(GameObject* _gameObject)
 	actor = PhysicSystem::physics->createRigidDynamic(t);
 
 	actor->userData = this;
-
-	if (i++ == 0)
-		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 
 	AttachShape();
 
