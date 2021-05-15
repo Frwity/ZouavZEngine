@@ -46,6 +46,9 @@ void Rigid::OnContact(GameObject* _other)
 
 void Rigid::OnTrigger(GameObject* _other)
 {
+	if (gameObject == nullptr)
+		return;
+
 	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
 
 	if (script)
@@ -56,7 +59,7 @@ Rigid::~Rigid()
 {
 	if (!PhysicSystem::scene)
 		return;
-	
+
 	if (actor)
 		PhysicSystem::scene->removeActor(*actor);
 }

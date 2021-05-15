@@ -29,6 +29,8 @@ RigidBody::RigidBody(GameObject* _gameObject)
 	AttachShape();
 
 	PhysicSystem::scene->addActor(*actor);
+
+	LockAxis();
 }
 
 RigidBody::~RigidBody()
@@ -58,10 +60,27 @@ void RigidBody::EnableGravity()
 
 void RigidBody::Editor()
 {
+	if (ImGui::Checkbox("Lock Rotaion X ", &lockX))
+		LockAxis();
+
+	if (ImGui::Checkbox("Lock Rotaion Y ", &lockY))
+		LockAxis();
+
+	if (ImGui::Checkbox("Lock Rotaion Z ", &lockZ))
+		LockAxis();
 }
 
 template <class Archive>
 static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+}
+
+void RigidBody::LockAxis()
+{
+	PxRigidDynamic* rd = static_cast<PxRigidDynamic*>(actor);
+
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, lockZ);
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, lockZ);
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, lockY);
 }

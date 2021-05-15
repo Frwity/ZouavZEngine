@@ -13,7 +13,11 @@ namespace physx
 
 class RigidBody : public Rigid
 {
+private:
+
 public:
+	bool lockX, lockY, lockZ = false;
+
 	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject);
 	~RigidBody();
@@ -26,6 +30,7 @@ public:
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
+	void LockAxis();
 
 	template <class Archive>
 	void serialize(Archive& _ar)
