@@ -162,9 +162,10 @@ void Shader::SetLight(const std::vector<Light*>& _lights)
 {
     Use();
     int i = 0;
-    SetInt("nbLight", _lights.size());
     for (const Light* l : _lights)
     {
+        if (!l->IsActive())
+            continue;
         const std::string index = std::to_string(i++);
         
         SetVector3(("lights[" + index + "].position").c_str(), l->GetGameObject().localPosition);
@@ -176,4 +177,5 @@ void Shader::SetLight(const std::vector<Light*>& _lights)
         SetVector2(("lights[" + index + "].cutOffOuterCutOff").c_str(), l->cutOffOuterCutOff);
         SetInt(("lights[" + index + "].type").c_str(), (int)l->type);
     }
+    SetInt("nbLight", i);
 }

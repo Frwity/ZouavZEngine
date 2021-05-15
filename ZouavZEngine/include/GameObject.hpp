@@ -30,95 +30,34 @@ private:
 	std::vector<std::unique_ptr<Component>> components;
 	std::vector<GameObject*> children;
 	GameObject* parent{ nullptr };
+	bool isActive{ true };
 	bool toDestroy{ false };
-
-public:
-	static GameObject* currentLoadedGameObject;
 
 	std::string name;
 	std::string tag;
+public:
 
 	GameObject() = delete;
 	GameObject(const std::string& _name);
 	GameObject(const std::string& _name, const std::string& _tag);
+	GameObject& operator=(const GameObject&);
+	GameObject(const GameObject&);
+	GameObject(GameObject&&) = default;
 	~GameObject() = default;
 
 	void Destroy();
 
-	template <class Archive>
-	void load(Archive& _ar)
-	{
-		int nbChild;
+	static GameObject* currentLoadedGameObject;
 
-		currentLoadedGameObject = this;
+	const std::string& GetName() const { return name; }
+	void SetName(const std::string& _newName) { name = _newName; }
+	const std::string& GetTag() const { return tag; }
+	void SetTag(const std::string& _newTag) { tag = _newTag; }
 
-		_ar(name, tag, nbChild, components,
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z);
+	bool IsActive() const { return isActive; }
+	void Activate();
+	void Dehactivate();
 
-		std::string childName;
-		std::string childTag;
-		int nbChild2;
-
-		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
-		{
-			_ar(childName, childTag, nbChild2);
-
-			GameObject* gameobject = CreateGameObject(childName, childTag);
-			currentLoadedGameObject = gameobject;
-
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z);
-
-
-			loadRecurss(_ar, gameobject, nbChild2);
-		}
-	}
-
-	template <class Archive>
-	void loadRecurss(Archive& _ar, GameObject* _gameobject, int _nbChild)
-	{
-		std::string childName;
-		std::string childTag;
-		int nbChild2;
-
-		for (int i = 0; i < _nbChild; ++i)
-		{
-			_ar(childName, childTag, nbChild2);
-
-			GameObject* gameobject = CreateGameObject(childName, childTag);
-			currentLoadedGameObject = gameobject;
-
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z);
-
-
-
-			_gameobject->AddChild(gameobject);
-
-			loadRecurss(_ar, gameobject, nbChild2);
-		}
-	}
-
-	template <class Archive>
-	void save(Archive& _ar) const
-	{
-		int nbChild = (int)children.size();
-		_ar(name, tag, nbChild, components, 
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z);
-
-		for (const GameObject* child : children)
-			child->save(_ar);
-	}
-
-	void CreatePrefab();
 	static void LoadPrefab(const std::string& _path);
 
 	static GameObject* CreateGameObject(const std::string& _name);
@@ -151,6 +90,20 @@ public:
 		return nullptr;
 	}
 
+	template<typename T>
+	std::vector<T*> GetComponents() // sa se trouve ca marche pas hihi TODO ENLEVER CE TODO
+	{
+		std::vector<T*> returnComponents;
+		for (const std::unique_ptr<Component>& component : components)
+		{
+			T* component = dynamic_cast<T*>(component.get());
+			if (component)
+				returnComponents.push_back(component);
+		}
+		return returnComponents;
+	}
+
+
 	void UpdateTransform(const class Mat4& _heritedTransform);
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
@@ -164,4 +117,81 @@ public:
 	static std::vector<GameObject*> GetGameObjectsByName(std::string _name);
 	static GameObject* GetGameObjectByTag(std::string _tag);
 	static std::vector<GameObject*> GetGameObjectsByTag(std::string _tag);
+	void CreatePrefab();
+
+	template <class Archive>
+	void load(Archive& _ar)
+	{
+		int nbChild;
+
+		currentLoadedGameObject = this;
+
+		_ar(name, tag, nbChild, components,
+			localPosition.x, localPosition.y, localPosition.z,
+			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
+			localScale.x, localScale.y, localScale.z, isActive);
+
+		std::string childName;
+		std::string childTag;
+		int nbChild2;
+
+		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
+		{
+			_ar(childName, childTag, nbChild2);
+
+			GameObject* gameobject = CreateGameObject(childName, childTag);
+			currentLoadedGameObject = gameobject;
+
+			_ar(gameobject->components,
+				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
+				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
+				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive);
+
+
+			loadRecurss(_ar, gameobject, nbChild2);
+		}
+	}
+
+	template <class Archive>
+	void loadRecurss(Archive& _ar, GameObject* _gameobject, int _nbChild)
+	{
+		std::string childName;
+		std::string childTag;
+		int nbChild2;
+
+		for (int i = 0; i < _nbChild; ++i)
+		{
+			_ar(childName, childTag, nbChild2);
+
+			GameObject* gameobject = CreateGameObject(childName, childTag);
+			currentLoadedGameObject = gameobject;
+
+			_ar(gameobject->components,
+				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
+				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
+				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive);
+
+
+
+			_gameobject->AddChild(gameobject);
+
+			loadRecurss(_ar, gameobject, nbChild2);
+		}
+	}
+
+	template <class Archive>
+	void save(Archive& _ar) const
+	{
+		int nbChild = (int)children.size();
+		_ar(name, tag, nbChild, components, 
+			localPosition.x, localPosition.y, localPosition.z,
+			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
+			localScale.x, localScale.y, localScale.z, isActive);
+
+		std::string name;
+		std::string tag;
+		for (const GameObject* child : children)
+			child->save(_ar);
+	}
+
 };

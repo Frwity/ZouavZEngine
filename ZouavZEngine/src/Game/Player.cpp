@@ -1,5 +1,6 @@
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
+#include "System/ScriptSystem.hpp"
 #include "GameObject.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/RigidBody.hpp"
@@ -16,6 +17,11 @@ Player::Player(GameObject* _gameobject)
 {
 
 }
+Component* Player::Clone() const
+{ 
+	Player* player = new Player(*this); 
+	ScriptSystem::AddScript(player); 
+	return player; }
 
 void Player::Begin()
 {

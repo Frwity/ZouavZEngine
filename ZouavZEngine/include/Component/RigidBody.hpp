@@ -14,12 +14,16 @@ class RigidBody : public Component
 {
 private:
 	void AttachShape();
-
+protected:
+	void InternalActivate() override;
+	void InternalDehactivate() override;
 public:
 	physx::PxRigidDynamic* actor = nullptr;
 
 	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject);
+	RigidBody(const RigidBody&) = default;
+	Component* Clone() const override { return new RigidBody(*this); }
 	~RigidBody();
 
 	void Editor() override;
@@ -33,10 +37,13 @@ public:
 	void OnContact(GameObject* _other);
 	void OnTrigger(GameObject* _other);
 
+	void Activate() override;
+	void Dehactivate() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

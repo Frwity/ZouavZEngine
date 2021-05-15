@@ -7,6 +7,8 @@ class AudioListener : public Component
 {
 public:
 	AudioListener() = delete;
+	AudioListener(const AudioListener&) = default;
+	Component* Clone() const override { return new AudioListener(*this); }
 	AudioListener(class GameObject* _gameObject);
 
 	~AudioListener() = default;
@@ -20,6 +22,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

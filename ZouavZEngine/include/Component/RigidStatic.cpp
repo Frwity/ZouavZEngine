@@ -21,6 +21,9 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 	AttachShape();
 
 	PhysicSystem::scene->addActor(*actor);
+
+	if (!_gameObject->IsActive())
+		InternalDehactivate();
 }
 
 void RigidStatic::AttachShape()
@@ -36,6 +39,30 @@ void RigidStatic::AttachShape()
 	}
 }
 
+void RigidStatic::Activate()
+{
+	Component::Activate();
+	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
+}
+
+void RigidStatic::Dehactivate()
+{
+	Component::Dehactivate();
+	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
+}
+
+void RigidStatic::InternalActivate()
+{
+	if (isActive)
+		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
+}
+
+void RigidStatic::InternalDehactivate()
+{
+	if (isActive)
+		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
+}
+
 RigidStatic::~RigidStatic()
 {
 	//actor->release();
@@ -49,4 +76,5 @@ template <class Archive>
 static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<RigidStatic>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+	_ar(cereal::base_class<Component>(_construct.ptr()));
 }

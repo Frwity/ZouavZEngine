@@ -67,7 +67,8 @@ void AudioBroadcaster::Update()
 
 void AudioBroadcaster::Play()
 {
-	alSourcePlay(source);
+	if (IsActive())
+		alSourcePlay(source);
 }
 
 void AudioBroadcaster::Stop()
@@ -160,6 +161,7 @@ static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct
 	_ar(_ambient, _loop, soundName);
 
 	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::GetResource<Sound>(soundName));
+	_ar(cereal::base_class<Component>(_construct.ptr()));
 	_construct->ambient = _ambient;
 	_construct->loop = _loop;
 }

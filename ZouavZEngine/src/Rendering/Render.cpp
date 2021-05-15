@@ -69,6 +69,9 @@ void Render::Init(int _width, int _height)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
     glfwMaximizeWindow(window);
 
     //init IMGUI

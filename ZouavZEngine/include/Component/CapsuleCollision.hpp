@@ -11,6 +11,8 @@ public:
 	float halfHeight;
 
 	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false);
+	CapsuleCollision(const CapsuleCollision&) = default;
+	Component* Clone() const override { return new CapsuleCollision(*this); }
 	~CapsuleCollision();
 
 	void Editor() override;
@@ -21,6 +23,7 @@ public:
 	void serialize(Archive& _ar)
 	{
 		_ar(radius, halfHeight);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
@@ -30,6 +33,7 @@ public:
 		float _halfHeight;
 		_ar(_radius, _halfHeight);
 		_construct(GameObject::currentLoadedGameObject, _radius, _halfHeight);
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };
 

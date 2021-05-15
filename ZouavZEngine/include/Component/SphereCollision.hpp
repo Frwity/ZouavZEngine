@@ -10,6 +10,8 @@ public:
 	float radius;
 
 	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false);
+	SphereCollision(const SphereCollision&) = default;
+	Component* Clone() const override { return new SphereCollision(*this); }
 	~SphereCollision();
 
 	void Editor() override;
@@ -20,6 +22,7 @@ public:
 	void serialize(Archive& _ar)
 	{
 		_ar(radius);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
@@ -28,6 +31,7 @@ public:
 		float _radius;
 		_ar(_radius);
 		_construct(GameObject::currentLoadedGameObject, _radius);
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };
 

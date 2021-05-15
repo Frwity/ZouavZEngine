@@ -29,6 +29,8 @@
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
 
+#include "Game/Player.hpp"
+
 bool newFolderWindow = false;
 bool newFileWindow = false;
 bool newClassWindow = false;
@@ -549,6 +551,11 @@ void Editor::DisplayInspector()
         if (gameObjectInspector)
         {
             ImGui::PushItemWidth(200.0f);
+            bool isActive = gameObjectInspector->isActive;
+            ImGui::Checkbox(" ", &isActive);
+            if (isActive != gameObjectInspector->isActive)
+                isActive ? gameObjectInspector->Activate() : gameObjectInspector->Dehactivate();
+            ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
             std::string name = gameObjectInspector->name;
@@ -589,6 +596,11 @@ void Editor::DisplayInspector()
             {
                 Component* comp = component.get();
                 ImGui::PushID(comp);
+                bool active = comp->isActive;
+                ImGui::Checkbox("", &active);
+                if (active != comp->isActive)
+                    active ? comp->Activate() : comp->Dehactivate();
+                ImGui::SameLine();
                 if (!Component::EditorCollapsingHeader(comp->GetComponentName(), [comp]() {comp->Editor(); }))
                 {
                     comp->DeleteFromGameObject();
@@ -664,6 +676,10 @@ void Editor::DisplayInspector()
                                 addComponentWindow = false;
                                 gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
                             }
+                            break;
+                        case E_COMPONENT::PLAYER:
+                            if (ComponentButton<Player>("Add Player", false))
+                                addComponentWindow = false;
                             break;
                         }
                     }
@@ -840,10 +856,10 @@ void Editor::DisplayProject()
     ImGui::End();
 }
 
-void DisplayChild(GameObject* _parent)
+void Editor::DisplayChild(GameObject* _parent)
 {
     ImGui::PushID(_parent);
-    if (ImGui::TreeNodeEx(_parent->name.c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    if (ImGui::TreeNodeEx(_parent->GetName().c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {
@@ -866,7 +882,7 @@ void DisplayChild(GameObject* _parent)
         if (ImGui::BeginDragDropSource())
         {
             ImGui::SetDragDropPayload("Gameobject Hierarchy", &_parent, sizeof(_parent));
-            ImGui::Text(_parent->name.c_str());
+            ImGui::Text(_parent->GetName().c_str());
 
             ImGui::EndDragDropSource();
         }
@@ -901,7 +917,7 @@ void Editor::DisplayHierarchy()
             {
                 ZASSERT(payload->DataSize == sizeof(std::string), "Error in moving file in hierarchy");
                 std::string path = *(const std::string*)payload->Data;
-                if (path.find(".zepref") != std::string::npos)
+                if (path.find(".zepref") != std::string::npos) //abcdefg
                 {
                     GameObject::LoadPrefab(path);
                 }
@@ -952,6 +968,12 @@ void Editor::DisplayHierarchy()
                     if (ImGui::Button("CreatePrefab"))
                     {
                         newGameObjectParent->CreatePrefab();
+                    }
+                    if (ImGui::Button("Copy/Paste"))
+                    {
+                        GameObject* newGameobject = GameObject::CreateGameObject("");
+                        *newGameobject = *newGameObjectParent;
+                        newGameobject->SetParent(newGameObjectParent->parent);
                     }
                 }
 

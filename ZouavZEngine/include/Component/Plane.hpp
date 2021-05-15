@@ -9,6 +9,8 @@ class Plane: public ShapeCollision
 public:
 	Plane() = delete;
 	Plane(GameObject* _gameObject);
+	Plane(const Plane&) = default;
+	Component* Clone() const override { return new Plane(*this); }
 	~Plane();
 
 	void Editor() override;
@@ -18,12 +20,14 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<Plane>& _construct)
 	{
 		_construct(GameObject::currentLoadedGameObject);
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };
 

@@ -115,7 +115,9 @@ void Scene::Save()
 
 void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 {
-	if (_parent->GetComponent<MeshRenderer>())
+	if (!_parent->IsActive())
+		return;
+	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
 	{
 		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_camera);

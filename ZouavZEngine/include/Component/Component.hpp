@@ -6,6 +6,7 @@
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/access.hpp"
+#include <cereal/types/base_class.hpp>
 
 enum class E_COMPONENT
 {
@@ -21,18 +22,26 @@ enum class E_COMPONENT
 	RIGID_BODY,
 	RIGID_STATIC,
 	CAMERA,
+	PLAYER,
 	NUMBER_OF_COMPONENTS
 };
 
 class Component
 {
-private:
+protected:
+	friend class Editor;
+	friend class GameObject;
 	class GameObject* gameObject;
+	bool isActive = true;
+
+	virtual void InternalActivate() {}
+	virtual void InternalDehactivate() {}
 public:
 
 	Component() = delete;
 	Component(class GameObject* _gameObject);
 	virtual ~Component() = default;
+	virtual Component* Clone() const = 0;
 
 	virtual void Editor();
 
@@ -42,14 +51,20 @@ public:
 
 	void DeleteFromGameObject();
 
+	bool IsActive() const;
+	virtual void Activate() { isActive = true; }
+	virtual void Dehactivate() { isActive = false; }
+
 	GameObject& GetGameObject() { return *gameObject; }
 	const GameObject& GetGameObject() const { return *gameObject; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(isActive);
 	}
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<Component>& _construct);
 };
+

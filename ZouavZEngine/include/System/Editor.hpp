@@ -52,5 +52,6 @@ public:
 	void FileMenu();
 	void Update();
 	void DisplayHierarchy();
+	void DisplayChild(class GameObject* _parent);
 	void MoveSelectedGameobject();
 };

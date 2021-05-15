@@ -27,6 +27,8 @@ public:
 	Light() = delete;
 	Light(class GameObject* _gameObject);
 	Light(class GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type);
+	Light(const Light&) = default;
+	Component* Clone() const override { return new Light(*this); }
 	~Light();
 
 	bool toDestroy{ false };
@@ -45,6 +47,7 @@ public:
 			direction.x, direction.y, direction.z,
 			cutOffOuterCutOff.x, cutOffOuterCutOff.y,
 			(int)type);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

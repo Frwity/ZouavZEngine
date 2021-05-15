@@ -17,27 +17,35 @@ class ShapeCollision: public Component
 protected:
 	physx::PxMaterial* material = nullptr;
 	void AttachToRigidComponent();
+	void InternalActivate() override;
+	void InternalDehactivate() override;
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
 	bool isTrigger = false;
 
 	ShapeCollision(GameObject* _gameObject, bool _isTrigger = false);
+	ShapeCollision(const ShapeCollision&) = default;
+	Component* Clone() const override { return new ShapeCollision(*this); }
 	~ShapeCollision();
 
 	const char* GetComponentName() override { return "ShapeCollision"; }
 
 	void releasePhysXComponent();
 		
+	void Activate() override;
+	void Dehactivate() override;
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<ShapeCollision>& _construct)
 	{
-		_construct(GameObject::currentLoadedGameObject);
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 
 };

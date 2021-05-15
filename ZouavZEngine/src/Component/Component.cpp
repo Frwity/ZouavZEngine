@@ -23,6 +23,11 @@ bool Component::EditorCollapsingHeader(const char* _name, std::function<void()> 
 	return open;
 }
 
+bool Component::IsActive() const 
+{ 
+	return isActive && gameObject->IsActive(); 
+}
+
 void Component::DeleteFromGameObject()
 {
 	gameObject->RemoveComponent(this);

@@ -30,7 +30,8 @@ protected:
 public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
 	Camera() = delete;
-	Camera(const Camera&) = delete;
+	Camera(const Camera&) = default;
+	Component* Clone() const override { return new Camera(*this); }
 	~Camera();
 
 	void Editor() override;
@@ -62,6 +63,7 @@ public:
 			projection.matrix[12], projection.matrix[13], projection.matrix[14], projection.matrix[15],
 			position.x, position.y, position.z,
 			target.x, target.y, target.z, mainCamera == this ? true : false);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

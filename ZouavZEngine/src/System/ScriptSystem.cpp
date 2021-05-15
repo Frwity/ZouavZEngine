@@ -25,17 +25,20 @@ void ScriptSystem::RemoveScript(ScriptComponent* _script)
 void ScriptSystem::Begin()
 {
 	for (ScriptComponent* script : scripts)
-		script->Begin();
+		if (script->IsActive())
+			script->Begin();
 }
 
 void ScriptSystem::FixedUpdate()
 {
 	for (ScriptComponent* script : scripts)
-		script->FixedUpdate();
+		if (script->IsActive())
+			script->FixedUpdate();
 }
 
 void ScriptSystem::Update()
 {
 	for (ScriptComponent* script : scripts)
-		script->Update();
+		if (script->IsActive())
+			script->Update();
 }

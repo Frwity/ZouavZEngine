@@ -10,6 +10,8 @@ public:
 	Vec3 halfExtends;
 
 	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false);
+	BoxCollision(const BoxCollision&) = default;
+	Component* Clone() const override { return new BoxCollision(*this); }
 	~BoxCollision();
 
 	void Editor() override;
@@ -19,12 +21,14 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<BoxCollision>& _construct)
 	{
 		_construct(GameObject::currentLoadedGameObject);
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };
 

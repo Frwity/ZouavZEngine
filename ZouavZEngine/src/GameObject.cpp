@@ -2,6 +2,7 @@
 #include "Maths/Mat4.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
+#include "Component/ShapeCollision.hpp"
 #include "System/PhysicUtils.hpp"
 #include "PxRigidDynamic.h"
 #include "PxRigidStatic.h"
@@ -11,6 +12,7 @@
 #include <fstream>
 #include "cereal/archives/json.hpp"
 #include <iostream>
+#include <algorithm>
 
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
@@ -18,8 +20,9 @@ std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
-	return CreateGameObject(_name, "");
+	return CreateGameObject(_name, " ");
 }
+
 GameObject* GameObject::CreateGameObject(const std::string& _name, const std::string& _tag)
 {
 	gameObjects.emplace_back(std::make_unique<GameObject>(_name, _tag));
@@ -34,8 +37,66 @@ GameObject::GameObject(const std::string& _name)
 
 GameObject::GameObject(const std::string& _name, const std::string& _tag)
 	: name(_name), tag(_tag)
-
 {
+
+}
+
+GameObject& GameObject::operator=(const GameObject& _other)
+{
+	worldPosition = _other.worldPosition;
+	worldRotation = _other.worldRotation;
+	worldScale = _other.worldScale;
+
+	localPosition = _other.localPosition;
+	localRotation = _other.localRotation;
+	localScale = _other.localScale;
+
+	isActive = _other.isActive;
+	name = _other.name;
+	tag = _other.tag;
+	for (const GameObject* otherChildren : _other.children)
+	{
+		if (!otherChildren)
+			break;
+		GameObject* child = CreateGameObject(otherChildren->name);
+		*child = *otherChildren;
+		child->SetParent(this);
+
+	}
+	for (auto& otherComponent : _other.components)
+	{
+		components.emplace_back(otherComponent->Clone());
+		components.back().get()->gameObject = this;
+	}
+	return *this;
+}
+
+GameObject::GameObject(const GameObject& _other)
+{
+	worldPosition = _other.worldPosition;
+	worldRotation = _other.worldRotation;
+	worldScale = _other.worldScale;
+
+	localPosition = _other.localPosition;
+	localRotation = _other.localRotation;
+	localScale = _other.localScale;
+
+	SetParent(_other.parent);
+	isActive = _other.isActive;
+	name = _other.name;
+	tag = _other.tag;
+	for (const GameObject* otherChildren : _other.children)
+	{
+		if (!otherChildren)
+			break;
+		GameObject* child = CreateGameObject(otherChildren->name);
+		*child = *otherChildren;
+	}
+	for (auto& otherComponent : _other.components)
+	{
+		components.emplace_back(otherComponent->Clone());
+		components.back().get()->gameObject = this;
+	}
 }
 
 void GameObject::Destroy() 
@@ -55,7 +116,18 @@ void GameObject::CreatePrefab()
 	saveFile.close();
 }
 
-#include <algorithm>
+void GameObject::Activate() 
+{
+	isActive = true; 
+	for (auto& component : components)
+		component->InternalActivate();
+}
+void GameObject::Dehactivate() 
+{
+	isActive = false; 
+	for (auto& component : components)
+		component->InternalDehactivate();
+}
 
 void GameObject::LoadPrefab(const std::string& _path)
 {

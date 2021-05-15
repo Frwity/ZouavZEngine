@@ -62,19 +62,22 @@ void FontSystem::RemoveFont2D(FontComponent* _font)
 void FontSystem::DrawFont3D(const Camera& _camera)
 {
 	for (auto& font3D : fonts3D)
-		font3D->Draw3D(_camera);
+		if (font3D->IsActive())
+			font3D->Draw3D(_camera);
 }
 
 void FontSystem::DrawFontBillboard(const Camera& _camera)
 {
 	for (auto& fontBillboard : fontsBillboard)
-		fontBillboard->DrawBillboard(_camera);
+		if (fontBillboard->IsActive())
+			fontBillboard->DrawBillboard(_camera);
 }
 
 void FontSystem::DrawFont2D(const Camera& _camera)
 {
 	for (auto& font2D : fonts2D)
-		font2D->Draw2D(_camera);
+		if (font2D->IsActive())
+			font2D->Draw2D(_camera);
 }
 
 void FontSystem::DrawFonts(const Camera& _camera)

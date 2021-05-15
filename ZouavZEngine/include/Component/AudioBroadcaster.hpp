@@ -21,8 +21,8 @@ public:
 	AudioBroadcaster() = delete;
 	AudioBroadcaster(class GameObject* _gameObject);
 	AudioBroadcaster(class GameObject* _gameObject, std::shared_ptr<class Sound>& _sound);
-	AudioBroadcaster(const AudioBroadcaster&) = delete;
-
+	AudioBroadcaster(const AudioBroadcaster&) = default;
+	Component* Clone() const override { return new AudioBroadcaster(*this); }
 	~AudioBroadcaster();
 
 	void Update();
@@ -44,6 +44,7 @@ public:
 	void serialize(Archive& _ar)
 	{
 		_ar(ambient, loop, sound->GetName());
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

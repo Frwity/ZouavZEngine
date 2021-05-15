@@ -25,4 +25,5 @@ template <class Archive>
 static void AudioListener::load_and_construct(Archive& _ar, cereal::construct<AudioListener>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+	_ar(cereal::base_class<Component>(_construct.ptr()));
 }

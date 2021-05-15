@@ -13,7 +13,7 @@ private:
 
 	friend class cereal::access;
 
-	class RigidBody* rb;
+	class RigidBody* rb = nullptr;
 
 	int speed = 3;
 	int vie = 10;
@@ -24,6 +24,7 @@ public:
 
 	Player() = delete;
 	Player(class GameObject* _gameobject);
+	Component* Clone() const override;
 	void Begin() final;
 	void Update() final;
 

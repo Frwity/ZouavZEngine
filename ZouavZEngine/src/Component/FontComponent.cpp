@@ -264,11 +264,11 @@ void FontComponent::ChangeText(const char* _newText, int _size)
 		const float properMaxY = (-2.f * maxY) + 1.f;
 		
 		indices.push_back(vertices.size());
+		indices.push_back(vertices.size() + 2 );
 		indices.push_back(vertices.size() + 3 );
-		indices.push_back(vertices.size() + 2 );
 		indices.push_back(vertices.size());
-		indices.push_back(vertices.size() + 2 );
 		indices.push_back(vertices.size() + 1 );
+		indices.push_back(vertices.size() + 2 );
 
 		vertices.push_back(Vertex{ Vec3(properX, properY, 0.0f),
 									Vec3(0.0f, 0.0f, 1.0f),
@@ -311,6 +311,7 @@ static void FontComponent::load_and_construct(Archive& _ar, cereal::construct<Fo
 		_construct->fontSize, _construct->width, _construct->edge, _construct->outlineWidth, _construct->outlineEdge,
 		_construct->outlineColor.x, _construct->outlineColor.y, _construct->outlineColor.z, 
 		_construct->offset.x, _construct->offset.y, _construct->depthTest);
+	_ar(cereal::base_class<Component>(_construct.ptr()));
 	_construct->ChangeType((E_FONT_TYPE)_type);
 	_construct->ChangeText(_construct->text.c_str(), _construct->text.size());
 }

@@ -6,6 +6,7 @@
 #include "System/ResourcesManager.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
+#include <cereal/types/base_class.hpp>
 
 
 class MeshRenderer : public Component
@@ -20,7 +21,8 @@ public:
 	MeshRenderer() = delete;
 	MeshRenderer(class GameObject* _gameObject);
 	MeshRenderer(class GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader);
-
+	MeshRenderer(const MeshRenderer&) = default;
+	Component* Clone() const override { return new MeshRenderer(*this); }
 	~MeshRenderer();
 
 	void Draw(const class Camera& _camera);
@@ -38,6 +40,7 @@ public:
 		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPaths()[0],
 			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPaths()[0],
 			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPaths()[0], material.shader->GetPaths()[1]);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

@@ -53,7 +53,8 @@ public:
 	FontComponent() = delete;
 	FontComponent(class GameObject* _gameObject);
 	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font);
-
+	FontComponent(const FontComponent&) = default;
+	Component* Clone() const override { return new FontComponent(*this); }
 	~FontComponent() override;
 
 	const std::string& GetText() const { return text; }
@@ -75,6 +76,7 @@ public:
 			color.x, color.y, color.z, color.w, position.x, position.y, position.z,
 			fontSize, width, edge, outlineWidth, outlineEdge, 
 			outlineColor.x, outlineColor.y, outlineColor.z, offset.x, offset.y, depthTest);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

@@ -109,6 +109,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
         _position.x, _position.y, _position.z,
         _target.x, _target.y, _target.z, _wasMainCamera);
     _construct(GameObject::currentLoadedGameObject, 10, 10);
+    _ar(cereal::base_class<Component>(_construct.ptr()));
     _construct->projection = _projection;
     _construct->position = _position;
     _construct->target = _target;
@@ -179,6 +180,9 @@ void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
 
 void SceneCamera::Update(bool _isKeyboardEnable, float _deltaTime)
 {
+    if (!_isKeyboardEnable)
+        return;
+   
     bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
     float cameraSpeed = _deltaTime * Speed() + Speed() * sprint * 1.2f;
 
@@ -200,8 +204,6 @@ void SceneCamera::Update(bool _isKeyboardEnable, float _deltaTime)
     if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
         MoveTo({ 0.0f, -cameraSpeed, 0.0f });
 
-    if (!_isKeyboardEnable)
-        return;
 
     UpdateRotation(InputManager::GetCursorPos());
 }

@@ -12,7 +12,8 @@
 ShapeCollision::ShapeCollision(GameObject* _gameObject, bool _isTrigger)
 	 : Component(_gameObject), isTrigger(_isTrigger)
 {
-	
+	if (!_gameObject->IsActive())
+		InternalDehactivate();
 }
 
 ShapeCollision::~ShapeCollision()
@@ -45,4 +46,29 @@ void ShapeCollision::AttachToRigidComponent()
 		if (rs)
 			rs->actor->attachShape(*shape);
 	}
+}
+
+
+void ShapeCollision::Activate()
+{
+	Component::Activate();
+	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+}
+
+void ShapeCollision::Dehactivate()
+{
+	Component::Dehactivate();
+	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+}
+
+void ShapeCollision::InternalActivate()
+{
+	if (isActive)
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+}
+
+void ShapeCollision::InternalDehactivate()
+{
+	if (isActive)
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 }

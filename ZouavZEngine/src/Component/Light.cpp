@@ -51,7 +51,6 @@ static void Light::load_and_construct(Archive& _ar, cereal::construct<Light>& _c
 	Vec3 direction;
 	Vec2 cutOffOuterCutOff;
 	int type;
-
 	_ar(ambient.x, ambient.y, ambient.z,
 		diffuse.x, diffuse.y, diffuse.z,
 		specular.x, specular.y, specular.z,
@@ -61,4 +60,5 @@ static void Light::load_and_construct(Archive& _ar, cereal::construct<Light>& _c
 		type);
 
 	_construct(GameObject::currentLoadedGameObject, ambient, diffuse, specular, constLineQuad, direction, cutOffOuterCutOff, (E_LIGHT_TYPE)type);
+	_ar(cereal::base_class<Component>(_construct.ptr()));
 }
