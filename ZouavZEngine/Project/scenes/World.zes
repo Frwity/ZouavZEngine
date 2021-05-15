@@ -19,13 +19,12 @@
     "value17": [
         {
             "polymorphic_id": 2147483649,
-            "polymorphic_name": "BoxCollision",
+            "polymorphic_name": "CapsuleCollision",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 0.5,
-                    "value1": 0.5,
-                    "value2": 0.5
+                    "value0": 1.0,
+                    "value1": 1.0
                 }
             }
         },

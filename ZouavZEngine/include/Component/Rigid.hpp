@@ -18,6 +18,7 @@ public:
 
 	Rigid() = delete;
 	Rigid(class GameObject* _gameObject);
+	~Rigid();
 
 	virtual void UpdateTransform(Transform transform) {};
 

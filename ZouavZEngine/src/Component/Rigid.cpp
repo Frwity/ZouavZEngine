@@ -51,3 +51,12 @@ void Rigid::OnTrigger(GameObject* _other)
 	if (script)
 		script->OnTrigger(_other);
 }
+
+Rigid::~Rigid()
+{
+	if (!PhysicSystem::scene)
+		return;
+	
+	if (actor)
+		PhysicSystem::scene->removeActor(*actor);
+}
