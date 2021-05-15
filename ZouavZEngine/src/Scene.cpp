@@ -16,6 +16,7 @@
 #include "pvd/PxPvd.h"
 #include "PhysX/foundation/PxMat44.h"
 #include "Component/RigidBody.hpp"
+#include "Component/ShapeCollision.hpp"
 
 #include <fstream>
 #include "cereal/archives/json.hpp"
@@ -123,6 +124,12 @@ void Scene::Draw(const Camera& _camera) const
 			gameObject->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 			gameObject->GetComponent<MeshRenderer>()->Draw(Mat4::identity, _camera);
 		}
+
+		if (gameObject->GetComponent<ShapeCollision>())
+		{
+			gameObject->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
+		}
+
 		for (GameObject* child : gameObject->GetChildren())
 			DrawChild(child, Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()), _camera);
 	}
@@ -154,7 +161,6 @@ void Scene::SimulatePhyics() const
 	physx::PxU32 nbActiveActor;
 
 	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
-	//std::cout << "nb Active Actor " << nbActiveActor << std::endl;
 
 	for (unsigned int i = 0; i < nbActiveActor; i++)
 	{
@@ -167,6 +173,7 @@ void Scene::SimulatePhyics() const
 		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
+
 void Scene::DisplayTerrainOptionWindow()
 {
 	terrain.DisplayOptionWindow();

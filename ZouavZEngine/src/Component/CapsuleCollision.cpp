@@ -9,6 +9,8 @@
 #include "extensions/PxSimpleFactory.h"
 #include "System/PhysicUtils.hpp"
 #include "imgui.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 using namespace physx;
 
@@ -18,7 +20,6 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 
 	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
-	shape->setLocalPose(PxTransformFromTransform(transform));
 
 	AttachToRigidComponent();
 }
@@ -45,13 +46,29 @@ void CapsuleCollision::UpdateCapsule()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	if (!rigid)
-		return;
-
-	rigid->actor->detachShape(*shape);
-	shape->release();
+	if (rigid)
+		rigid->actor->detachShape(*shape);
 
 	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
 
 	AttachToRigidComponent();
+}
+
+void CapsuleCollision::DrawGizmos(const Camera& _camera)
+{
+	if (shape == nullptr)
+		return;
+
+	materialShader.shader->Use();
+
+	physx::PxMat44 m = physx::PxMat44(shape->getLocalPose());
+
+	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, halfHeight, radius));
+
+	materialShader.shader->SetMatrix("matrix", mat);
+	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
+	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	materialShader.shader->SetVector4("color", materialShader.color);
+
+	glDrawElements(GL_TRIANGLE_STRIP, 64, GL_UNSIGNED_INT, 0);
 }

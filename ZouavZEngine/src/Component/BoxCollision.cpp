@@ -12,7 +12,11 @@
 #include "extensions/PxRigidBodyExt.h"
 #include "extensions/PxRigidActorExt.h"
 #include "System/PhysicUtils.hpp"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include "Component/RigidBody.hpp"
 #include "imgui.h"
+#include <memory>
 
 using namespace physx;
 
@@ -22,14 +26,15 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material, true);
-	shape->setLocalPose(PxTransformFromTransform(transform));
+	//shape->setLocalPose(PxTransformFromTransform(transform));
 
 	AttachToRigidComponent();
+	cube = *ResourcesManager::GetResource<Mesh>("Default");
 }
 
 BoxCollision::~BoxCollision()
 {
-	
+	 
 }
 
 void BoxCollision::Editor()
@@ -45,12 +50,40 @@ void BoxCollision::Editor()
 void BoxCollision::UpdateExtends(const Vec3& v)
 {
 	halfExtends = v;
-	//TODO search for shape attach to the PxActor
-	/*Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	rigid->actor->detachShape(*shape);
-	shape->release();
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(v)), *material);
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	AttachToRigidComponent();*/
+	if (rigid)
+		rigid->actor->detachShape(*shape);
+
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends)), *material);
+
+	AttachToRigidComponent();
+}
+
+void BoxCollision::DrawGizmos(const Camera& _camera)
+{
+	if (shape == nullptr)
+		return;
+
+	materialShader.shader->Use();
+
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	physx::PxMat44 m;
+
+	if (rigid)
+		m = rigid->actor->getGlobalPose();
+	else
+		m = physx::PxMat44(shape->getLocalPose());
+
+	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.y));
+
+	materialShader.shader->SetMatrix("matrix", mat);
+	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
+	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	materialShader.shader->SetVector4("color", materialShader.color);
+
+	glBindVertexArray(cube->GetID());
+	glDrawElements(GL_LINE_LOOP, cube->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

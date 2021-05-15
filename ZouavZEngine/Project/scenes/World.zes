@@ -19,48 +19,22 @@
     "value17": [
         {
             "polymorphic_id": 2147483649,
-            "polymorphic_name": "Light",
+            "polymorphic_name": "BoxCollision",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
                     "value0": 0.5,
-                    "value1": 0.5400000214576721,
-                    "value2": 0.47999998927116396,
-                    "value3": 0.11999999731779099,
-                    "value4": 0.10000000149011612,
-                    "value5": 0.1599999964237213,
-                    "value6": 0.03999999910593033,
-                    "value7": 0.03999999910593033,
-                    "value8": 0.05999999865889549,
-                    "value9": 1.0,
-                    "value10": 0.009999999776482582,
-                    "value11": 0.0010000000474974514,
-                    "value12": 0.0,
-                    "value13": -1.0,
-                    "value14": 0.0,
-                    "value15": 0.8999999761581421,
-                    "value16": 0.800000011920929,
-                    "value17": 0
+                    "value1": 0.5,
+                    "value2": 0.5
                 }
             }
         },
         {
             "polymorphic_id": 2147483650,
-            "polymorphic_name": "MeshRenderer",
+            "polymorphic_name": "RigidStatic",
             "ptr_wrapper": {
                 "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Cube.obj",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.vs",
-                    "value9": "resources/BlinnPhongShader.fs"
-                }
+                "data": {}
             }
         }
     ],

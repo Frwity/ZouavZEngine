@@ -68,6 +68,7 @@ void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
     ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
+    ResourcesManager::AddResourceShader("GizmosShader", false, "resources/Gizmos.vs", "resources/Gizmos.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 

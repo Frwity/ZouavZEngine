@@ -273,6 +273,8 @@
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Gizmos.fs" />
+    <None Include="resources\Gizmos.vs" />
     <None Include="resources\TerrainShader.fs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>

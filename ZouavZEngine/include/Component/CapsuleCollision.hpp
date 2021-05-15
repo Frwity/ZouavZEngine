@@ -15,6 +15,7 @@ public:
 
 	void Editor() override;
 	void UpdateCapsule();
+	void DrawGizmos(const Camera& _camera) override;
 
 	const char* GetComponentName() override { return "CapsuleCollision"; }
 

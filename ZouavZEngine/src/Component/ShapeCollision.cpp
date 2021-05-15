@@ -9,17 +9,20 @@
 #include "Component/RigidStatic.hpp"
 #include "System/Debug.hpp"
 #include "System/PhysicUtils.hpp"
+#include "System/ResourcesManager.hpp"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "imgui.h"
 
 ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger)
 	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
 {
-	
+	materialShader = Material(*ResourcesManager::GetResource<Shader>("GizmosShader"), *ResourcesManager::GetResource<Texture>("Error"), {1.0f, 0.0f, 0.0f, 1.0f});
 }
 
 ShapeCollision::~ShapeCollision()
 {
-
+	
 }
 
 void ShapeCollision::releasePhysXComponent()
@@ -51,14 +54,14 @@ void ShapeCollision::Editor()
 
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	if (rigid)
+	/*if (rigid)
 	{
 		physx::PxShape* shape = nullptr;
 		rigid->actor->getShapes(&shape, 1);
 
-		if (shape)
-			shape->setLocalPose(PxTransformFromTransform(transform));
-	}
+		//if (shape)
+			//shape->setLocalPose(PxTransformFromTransform(transform));
+	}*/
 }
 
 void ShapeCollision::AttachToRigidComponent()
@@ -81,7 +84,6 @@ void ShapeCollision::AttachToRigidComponent()
 			rs->actor->attachShape(*shape);
 		}
 
-		shape->release();
 	}
 }
 
@@ -89,6 +91,12 @@ void ShapeCollision::UpdateTransform(Transform _transform)
 {
 	transform = _transform;
 
-	if (shape)
-		shape->setLocalPose(PxTransformFromTransform(transform));
+	//does not work atm
+	//if (shape)
+	//	shape->setLocalPose(PxTransformFromTransform(transform));
+}
+
+void ShapeCollision::DrawGizmos(const Camera& _camera)
+{
+	
 }

@@ -4,6 +4,8 @@
 #include "System/Debug.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
+#include "Rendering/Material.hpp"
+#include "Rendering/Camera.hpp"
 #include "GameObject.hpp"
 
 namespace physx
@@ -18,6 +20,7 @@ protected:
 	physx::PxMaterial* material = nullptr;
 	void AttachToRigidComponent();
 	Transform transform;
+	Material materialShader;
 public:
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
@@ -31,6 +34,7 @@ public:
 	void UpdateIsTrigger();
 	void UpdateTransform(Transform _transform);
 	virtual void Editor() override;
+	virtual void DrawGizmos(const Camera& _camera);
 		
 	template <class Archive>
 	void serialize(Archive& _ar)

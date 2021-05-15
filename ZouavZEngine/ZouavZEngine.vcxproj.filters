@@ -406,6 +406,12 @@
     <None Include="resources\TerrainShader.vs">
       <Filter>resources</Filter>
     </None>
+    <None Include="resources\Gizmos.fs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\Gizmos.vs">
+      <Filter>resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\texture.jpg">
