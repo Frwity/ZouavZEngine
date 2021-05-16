@@ -4,7 +4,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
-
+#include "Prefab.hpp"
 
 
 class Player : public ScriptComponent
@@ -15,25 +15,31 @@ private:
 
 	class RigidBody* rb = nullptr;
 
+	Prefab skull;
+
+	Vec3 pos;
+
 	int speed = 3;
 	int vie = 10;
 	float distance = 1.f;
-
 
 public:
 
 	Player() = delete;
 	Player(class GameObject* _gameobject);
-	Component* Clone() const override;
+	Component* Clone() const override { return new Player(*this); }
+
+	void Editor() override;
+
 	void Begin() final;
 	void Update() final;
 
 	const char* GetComponentName() override { return "Player"; }
 
 	template <class Archive>
-	void serialize(Archive& ar)
+	void serialize(Archive& _ar)
 	{
-		ar(speed, vie, distance);
+		_ar(speed, vie, distance, skull);
 	}
 
 	template <class Archive>
@@ -49,9 +55,11 @@ public:
 		_construct->speed = _speed;
 		_construct->vie = _vie;
 		_construct->distance = _distance;
+
+
+		_ar(_construct->skull);
 	}
 };
-
 
 CEREAL_REGISTER_TYPE(Player)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Player)

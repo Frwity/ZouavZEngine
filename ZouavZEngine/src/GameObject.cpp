@@ -17,6 +17,7 @@
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
+std::unordered_map < std::string, std::unique_ptr<GameObject >> GameObject::prefabGameObjects;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
@@ -43,6 +44,7 @@ GameObject::GameObject(const std::string& _name, const std::string& _tag)
 
 GameObject& GameObject::operator=(const GameObject& _other)
 {
+	currentLoadedGameObject = this;
 	worldPosition = _other.worldPosition;
 	worldRotation = _other.worldRotation;
 	worldScale = _other.worldScale;
@@ -73,6 +75,7 @@ GameObject& GameObject::operator=(const GameObject& _other)
 
 GameObject::GameObject(const GameObject& _other)
 {
+	currentLoadedGameObject = this;
 	worldPosition = _other.worldPosition;
 	worldRotation = _other.worldRotation;
 	worldScale = _other.worldScale;
@@ -81,7 +84,6 @@ GameObject::GameObject(const GameObject& _other)
 	localRotation = _other.localRotation;
 	localScale = _other.localScale;
 
-	SetParent(_other.parent);
 	isActive = _other.isActive;
 	name = _other.name;
 	tag = _other.tag;
@@ -91,6 +93,8 @@ GameObject::GameObject(const GameObject& _other)
 			break;
 		GameObject* child = CreateGameObject(otherChildren->name);
 		*child = *otherChildren;
+		child->SetParent(this);
+
 	}
 	for (auto& otherComponent : _other.components)
 	{
@@ -104,8 +108,82 @@ void GameObject::Destroy()
 	toDestroy = true;
 }
 
+
+void GameObject::Activate() 
+{
+	isActive = true; 
+	for (auto& component : components)
+		component->InternalActivate();
+}
+
+void GameObject::Dehactivate() 
+{
+	isActive = false; 
+	for (auto& component : components)
+		component->InternalDehactivate();
+}
+
+GameObject* GameObject::Instanciate(GameObject* _gameobject)
+{
+	GameObject* newGameobject = GameObject::CreateGameObject("");
+	*newGameobject = *_gameobject;
+	if (_gameobject->parent)
+		newGameobject->SetParent(_gameobject->parent);
+	else
+		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
+
+	newGameobject->isPrefab = false;
+	return newGameobject;
+}
+
+GameObject* GameObject::Instanciate(GameObject* _gameobject, const Vec3& _position)
+{
+	Vec3 _gameobjectPostion = _gameobject->localPosition;
+	_gameobject->localPosition = _position;
+	GameObject* newGameobject = GameObject::CreateGameObject("");
+	*newGameobject = *_gameobject;
+	if (_gameobject->parent)
+		newGameobject->SetParent(_gameobject->parent);
+	else
+		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
+	_gameobject->localPosition = _gameobjectPostion;
+
+	newGameobject->isPrefab = false;
+	return newGameobject;
+}
+
+GameObject* GameObject::Instanciate(GameObject* _gameobject, GameObject* _parent)
+{
+	GameObject* newGameobject = GameObject::CreateGameObject("");
+	*newGameobject = *_gameobject;
+	if (_parent)
+		newGameobject->SetParent(_parent);
+	else
+		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
+
+	newGameobject->isPrefab = false;
+	return newGameobject;
+}
+
+GameObject* GameObject::Instanciate(GameObject* _gameobject, GameObject* _parent, const Vec3& _position)
+{
+	Vec3 _gameobjectPostion = _gameobject->localPosition;
+	_gameobject->localPosition = _position;
+	GameObject* newGameobject = GameObject::CreateGameObject("");
+	*newGameobject = *_gameobject;
+	if (_parent)
+		newGameobject->SetParent(_parent);
+	else
+		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
+	_gameobject->localPosition = _gameobjectPostion;
+
+	newGameobject->isPrefab = false;
+	return newGameobject;
+}
+
 void GameObject::CreatePrefab()
 {
+	isPrefab = true;
 	std::ofstream saveFile;
 	saveFile.open(std::string("Project/prefabs/" + name + ".zepref"), std::ios::binary);
 	{
@@ -114,31 +192,22 @@ void GameObject::CreatePrefab()
 		save(oArchive);
 	}
 	saveFile.close();
+	isPrefab = false;
 }
 
-void GameObject::Activate() 
+GameObject* GameObject::LoadPrefab(const std::string& _path)
 {
-	isActive = true; 
-	for (auto& component : components)
-		component->InternalActivate();
-}
-void GameObject::Dehactivate() 
-{
-	isActive = false; 
-	for (auto& component : components)
-		component->InternalDehactivate();
-}
-
-void GameObject::LoadPrefab(const std::string& _path)
-{
-	std::ifstream saveFile;
+	auto emplacePair = prefabGameObjects.emplace(_path, std::make_unique<GameObject>(" ", " "));
+	if (!emplacePair.second)
+		return emplacePair.first->second.get();
+	
+	GameObject* newGameObject = emplacePair.first->second.get();
 
 	std::string _truePath = _path;
 	size_t start_pos = _truePath.find("\\");
 	_truePath.replace(start_pos, 1, "/");
 
-	GameObject* newGameObject = CreateGameObject("New GameObject");
-
+	std::ifstream saveFile;
 	saveFile.open(_truePath, std::ios::binary);
 	{
 		cereal::JSONInputArchive iarchive(saveFile);
@@ -146,6 +215,7 @@ void GameObject::LoadPrefab(const std::string& _path)
 		newGameObject->load(iarchive);
 	}
 	saveFile.close();
+	return newGameObject;
 }
 
 void GameObject::UpdateTransform(const Mat4& _heritedTransform)

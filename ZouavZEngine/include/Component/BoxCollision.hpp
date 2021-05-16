@@ -10,7 +10,7 @@ public:
 	Vec3 halfExtends;
 
 	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 0.5f }, bool _isTrigger = false);
-	BoxCollision(const BoxCollision&) = default;
+	BoxCollision(const BoxCollision&);
 	Component* Clone() const override { return new BoxCollision(*this); }
 	~BoxCollision();
 

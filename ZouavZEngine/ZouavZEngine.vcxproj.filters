@@ -228,6 +228,9 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Prefab.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="include\System\FontSystem.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Prefab.hpp">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

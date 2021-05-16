@@ -39,6 +39,23 @@ RigidBody::RigidBody(GameObject* _gameObject)
 		InternalDehactivate();
 }
 
+RigidBody::RigidBody(const RigidBody& _other)
+	: Component(_other)
+{
+	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
+
+	actor = PhysicSystem::physics->createRigidDynamic(t);
+
+	actor->userData = this;
+
+	AttachShape();
+
+	PhysicSystem::scene->addActor(*actor);
+
+	if (!_other.IsActive())
+		InternalDehactivate();
+}
+
 RigidBody::~RigidBody()
 {
 	//TODO detach shape and release actor

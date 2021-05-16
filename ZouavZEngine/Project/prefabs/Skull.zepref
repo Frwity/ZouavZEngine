@@ -1,6 +1,6 @@
 {
-    "value0": "New GameObject",
-    "value1": "",
+    "value0": "Skull",
+    "value1": " ",
     "value2": 0,
     "value3": [
         {
@@ -9,21 +9,24 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "NoPath",
-                    "value3": "Cat.jpg",
+                    "value0": "Skull.obj",
+                    "value1": true,
+                    "value2": "Project/meshes/Skull.obj",
+                    "value3": "skull.jpg",
                     "value4": true,
-                    "value5": "Project/textures/Cat.jpg",
+                    "value5": "Project/textures/skull.jpg",
                     "value6": "Default",
                     "value7": false,
                     "value8": "resources/BlinnPhongShader.vs",
-                    "value9": "resources/BlinnPhongShader.fs"
+                    "value9": "resources/BlinnPhongShader.fs",
+                    "value10": {
+                        "value0": true
+                    }
                 }
             }
         }
     ],
-    "value4": -1.569580078125,
+    "value4": 0.0,
     "value5": 0.0,
     "value6": 0.0,
     "value7": 0.0,
@@ -32,5 +35,7 @@
     "value10": 1.0,
     "value11": 1.0,
     "value12": 1.0,
-    "value13": 1.0
+    "value13": 1.0,
+    "value14": true,
+    "value15": true
 }

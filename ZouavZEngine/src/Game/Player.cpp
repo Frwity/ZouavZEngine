@@ -17,11 +17,11 @@ Player::Player(GameObject* _gameobject)
 {
 
 }
-Component* Player::Clone() const
-{ 
-	Player* player = new Player(*this); 
-	ScriptSystem::AddScript(player); 
-	return player; }
+
+void Player::Editor()
+{
+	skull.Editor("skull");
+}
 
 void Player::Begin()
 {
@@ -66,4 +66,7 @@ void Player::Update()
 		GetGameObject().Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
+
+	if (InputManager::GetKeyPressed(E_KEYS::T))
+		GameObject::Instanciate(*skull, gameObject->WorldPosition());
 }

@@ -17,7 +17,8 @@ enum class E_FONT_TYPE
 {
 	FONT3D = 1,
 	FONTBILLBOARD,
-	FONT2D
+	FONT2D,
+	NOFONT
 };
 
 class FontComponent : public Component
@@ -53,7 +54,7 @@ public:
 	FontComponent() = delete;
 	FontComponent(class GameObject* _gameObject);
 	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font);
-	FontComponent(const FontComponent&) = default;
+	FontComponent(const FontComponent&);
 	Component* Clone() const override { return new FontComponent(*this); }
 	~FontComponent() override;
 

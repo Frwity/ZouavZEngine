@@ -9,8 +9,14 @@ using namespace physx;
 Plane::Plane(GameObject* _gameObject)
 	: ShapeCollision(_gameObject)
 {
-	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-	
+	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
+
+	AttachToRigidComponent();
+}
+
+Plane::Plane(const Plane& _other)
+	: ShapeCollision(_other)
+{
 	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
 
 	AttachToRigidComponent();

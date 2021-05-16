@@ -919,7 +919,7 @@ void Editor::DisplayHierarchy()
                 std::string path = *(const std::string*)payload->Data;
                 if (path.find(".zepref") != std::string::npos) //abcdefg
                 {
-                    GameObject::LoadPrefab(path);
+                    GameObject::Instanciate(GameObject::LoadPrefab(path));
                 }
             }
             ImGui::EndDragDropTarget();
@@ -970,11 +970,7 @@ void Editor::DisplayHierarchy()
                         newGameObjectParent->CreatePrefab();
                     }
                     if (ImGui::Button("Copy/Paste"))
-                    {
-                        GameObject* newGameobject = GameObject::CreateGameObject("");
-                        *newGameobject = *newGameObjectParent;
-                        newGameobject->SetParent(newGameObjectParent->parent);
-                    }
+                        GameObject::Instanciate(newGameObjectParent);
                 }
 
                 if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))

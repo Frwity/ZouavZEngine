@@ -21,7 +21,7 @@ public:
 	AudioBroadcaster() = delete;
 	AudioBroadcaster(class GameObject* _gameObject);
 	AudioBroadcaster(class GameObject* _gameObject, std::shared_ptr<class Sound>& _sound);
-	AudioBroadcaster(const AudioBroadcaster&) = default;
+	AudioBroadcaster(const AudioBroadcaster&);
 	Component* Clone() const override { return new AudioBroadcaster(*this); }
 	~AudioBroadcaster();
 

@@ -9,6 +9,7 @@ private:
 public:
 	ScriptComponent() = delete;
 	ScriptComponent(class GameObject* _gameObject);
+	ScriptComponent(const ScriptComponent& _other);
 	virtual ~ScriptComponent();
 
 	const char* GetComponentName() override { return "ScriptComponent"; }

@@ -30,7 +30,7 @@ protected:
 public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
 	Camera() = delete;
-	Camera(const Camera&) = default;
+	Camera(const Camera&);
 	Component* Clone() const override { return new Camera(*this); }
 	~Camera();
 

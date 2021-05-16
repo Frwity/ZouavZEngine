@@ -15,12 +15,17 @@ using namespace physx;
 
 SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger)
 	: ShapeCollision(_gameObject, _isTrigger), radius(_radius)
-{
-	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-	
+{	
 	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
 
 	//attach shape to rigidbody or rigidstatic if exist
+	AttachToRigidComponent();
+}
+
+SphereCollision::SphereCollision(const SphereCollision& _other)
+	: ShapeCollision(_other), radius{_other.radius}
+{
+	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_other.radius), *material);
 	AttachToRigidComponent();
 }
 

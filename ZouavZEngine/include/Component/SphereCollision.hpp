@@ -10,7 +10,7 @@ public:
 	float radius;
 
 	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false);
-	SphereCollision(const SphereCollision&) = default;
+	SphereCollision(const SphereCollision&);
 	Component* Clone() const override { return new SphereCollision(*this); }
 	~SphereCollision();
 

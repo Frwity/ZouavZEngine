@@ -49,6 +49,27 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<clas
 	SoundManager::AddSound(this);
 }
 
+AudioBroadcaster::AudioBroadcaster(const AudioBroadcaster& _other)
+	: Component(_other), sound(_other.sound), volumeIntensity(_other.volumeIntensity), ambient(_other.ambient), loop(_other.loop)
+{
+	alGenSources(1, &source);
+
+	alSourcef(source, AL_PITCH, 1.0f);
+	alSourcef(source, AL_GAIN, 1.0f);
+	alSourcef(source, AL_MIN_GAIN, 0.0f);
+	alSourcef(source, AL_ROLLOFF_FACTOR, 1.0f);
+	alSourcef(source, AL_REFERENCE_DISTANCE, 4.0f);
+	alSourcef(source, AL_MAX_DISTANCE, 60.0f);
+	alSource3f(source, AL_POSITION, 0.0f, 0.0f, 0.0f);
+	alSource3f(source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+	alSourcei(source, AL_LOOPING, AL_FALSE);
+	if (sound)
+		sound->LinkSource(source);
+	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+
+	SoundManager::AddSound(this);
+}
+
 AudioBroadcaster::~AudioBroadcaster()
 {
 	SoundManager::RemoveSound(this);

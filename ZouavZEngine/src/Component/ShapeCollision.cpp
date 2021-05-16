@@ -7,12 +7,24 @@
 #include "GameObject.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
+#include "System/PhysicSystem.hpp"
 #include "System/Debug.hpp"
 
 ShapeCollision::ShapeCollision(GameObject* _gameObject, bool _isTrigger)
 	 : Component(_gameObject), isTrigger(_isTrigger)
 {
+	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
+
 	if (!_gameObject->IsActive())
+		InternalDehactivate();
+}
+
+ShapeCollision::ShapeCollision(const ShapeCollision& _other)
+	: Component(_other)
+{
+	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f); // TODO physxsystem material manager
+	isTrigger = _other.isTrigger;
+	if (!_other.IsActive())
 		InternalDehactivate();
 }
 

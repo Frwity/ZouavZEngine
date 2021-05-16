@@ -7,9 +7,9 @@ class AudioListener : public Component
 {
 public:
 	AudioListener() = delete;
-	AudioListener(const AudioListener&) = default;
-	Component* Clone() const override { return new AudioListener(*this); }
 	AudioListener(class GameObject* _gameObject);
+	AudioListener(const AudioListener&);
+	Component* Clone() const override { return new AudioListener(*this); }
 
 	~AudioListener() = default;
 

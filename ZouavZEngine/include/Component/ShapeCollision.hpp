@@ -25,7 +25,7 @@ public:
 	bool isTrigger = false;
 
 	ShapeCollision(GameObject* _gameObject, bool _isTrigger = false);
-	ShapeCollision(const ShapeCollision&) = default;
+	ShapeCollision(const ShapeCollision&);
 	Component* Clone() const override { return new ShapeCollision(*this); }
 	~ShapeCollision();
 

@@ -26,6 +26,21 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
+Camera::Camera(const Camera& _other)
+    : Component(_other)
+{
+    gameObject = GameObject::currentLoadedGameObject;
+    projection = _other.projection;
+    position = _other.position;
+    target = _other.target;
+    width = _other.width;
+    height = _other.height;
+    near = _other.near;
+    far = _other.far;
+    fov = _other.fov;
+    followGameObjectRotation = _other.followGameObjectRotation;
+}
+
 Camera::~Camera()
 {
     isMainCamera = false;
