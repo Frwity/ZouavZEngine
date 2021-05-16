@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Component/ScriptComponent.hpp"
+#include "Maths/Vec2.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
-
-
 
 class Player : public ScriptComponent
 {
@@ -19,6 +18,7 @@ private:
 	int vie = 10;
 	float distance = 1.f;
 
+	Vec2 oldMousePos{ 0.0f, 0.0f };
 
 public:
 

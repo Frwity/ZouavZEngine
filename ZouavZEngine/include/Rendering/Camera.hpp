@@ -41,6 +41,8 @@ public:
 
 	void SetMainCamera() { mainCamera = this; }
 	
+	const Vec3& GetPosition() { return position; }
+
 	void SetPosition(const Vec3& _pos) { position = _pos; }
 	void SetTarget(const Vec3& _target) { target = _target; }
 

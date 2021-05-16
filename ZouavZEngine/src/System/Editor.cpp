@@ -21,6 +21,7 @@
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/Skybox.hpp"
+#include "Game/Player.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -663,6 +664,13 @@ void Editor::DisplayInspector()
                         case E_COMPONENT::SKYBOX:
                             if (ComponentButton<Skybox>("Add Skybox", true))
                                 addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::PLAYER:
+                            if (ComponentButton<Player>("Add Player", true))
+                            {
+                                addComponentWindow = false;
+                                gameObjectInspector->GetComponent<Player>()->Begin();
+                            }
                             break;
                         }
                     }

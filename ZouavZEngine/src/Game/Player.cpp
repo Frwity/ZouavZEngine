@@ -22,10 +22,10 @@ void Player::Begin()
 	if (GetGameObject().GetComponent<Camera>())
 	{
 		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
-		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, -5 });
-
+		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
 	}
 	rb = GetGameObject().GetComponent<RigidBody>();
+	oldMousePos = InputManager::GetCursorPos();
 }
 
 #include <iostream>
@@ -60,4 +60,12 @@ void Player::Update()
 		GetGameObject().Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
+
+	Vec2 newMousePos = InputManager::GetCursorPos();
+	Vec2 offset = newMousePos - oldMousePos;
+	Vec3 cameraPos = GetGameObject().GetComponent<Camera>()->GetPosition();
+
+	GetGameObject().GetComponent<Camera>()->SetPosition(Quaternion(Vec3{ offset.x, offset.y, 0.0f }).RotateVector(cameraPos));
+
+	oldMousePos = newMousePos;
 }
