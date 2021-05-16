@@ -224,7 +224,7 @@ void Editor::DisplayOptionWindow()
     
     ImGui::SameLine();
     
-    if (ImGui::RadioButton("Scale", currentGizmoOperation == ImGuizmo::TRANSLATE))
+    if (ImGui::RadioButton("Scale", currentGizmoOperation == ImGuizmo::SCALE))
         currentGizmoOperation = ImGuizmo::SCALE;
    
     ImGui::SameLine();
