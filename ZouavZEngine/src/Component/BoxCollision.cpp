@@ -26,6 +26,7 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
 
 	AttachToRigidComponent();
+	cube = *ResourcesManager::GetResource<Mesh>("Default");
 }
 
 BoxCollision::BoxCollision(const BoxCollision& _other)
@@ -46,16 +47,14 @@ void BoxCollision::Editor()
 {
 	ShapeCollision::Editor();
 
-	if (ImGui::SliderFloat3("Half Extends : ", &halfExtends.x, 0.1f, 100.0f))
-		UpdateExtends(halfExtends);
+	if (ImGui::DragFloat3("Half Extends : ", &halfExtends.x, 0.1f, 0.1f, 100.0f))
+		UpdateExtends();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void BoxCollision::UpdateExtends(const Vec3& v)
+void BoxCollision::UpdateExtends()
 {
-	halfExtends = v;
-
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
 	if (rigid)
@@ -82,7 +81,7 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 	else
 		m = physx::PxMat44(shape->getLocalPose());
 
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.y));
+	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.z));
 
 	materialShader.shader->SetMatrix("matrix", mat);
 	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());

@@ -1,5 +1,4 @@
 #ifdef COMPILING_VS
-#version 330 core
 layout (location = 0) in vec3 aPos;
 
 uniform mat4 view;
@@ -21,7 +20,6 @@ void main()
 
 #ifdef COMPILING_FS
 
-#version 330 core
 
 in vec3 Pos;
 in vec4 Color;

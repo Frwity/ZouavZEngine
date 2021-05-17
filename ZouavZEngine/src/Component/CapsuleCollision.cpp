@@ -20,6 +20,8 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
 
 	AttachToRigidComponent();
+
+	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
 }
 
 CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
