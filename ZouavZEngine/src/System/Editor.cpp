@@ -161,7 +161,7 @@ bool Editor::Display(Render& _render)
 {
     DisplayMainWindow();
     DisplayOptionWindow();
-    DisplayGameWindow(_render.gameFramebuffer);
+    DisplayGameWindow(_render, _render.gameFramebuffer);
     if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
     {
         DisplaySceneWindow(_render, _render.sceneFramebuffer);
@@ -630,7 +630,7 @@ void Editor::DisplayInspector()
                 ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
                 ImGui::Text("Local Position :");
-                ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x);
+                ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
                 
                 static Vec3 localEulerAngles;
                 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
@@ -640,7 +640,13 @@ void Editor::DisplayInspector()
                     gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
                 ImGui::Text("Local Scale    :");
-                ImGui::SameLine(); ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x);
+                ImGui::SameLine(); 
+                if (ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+                {
+                    gameObjectInspector->localScale.x = gameObjectInspector->localScale.x < 0.001f ? 0.001f : gameObjectInspector->localScale.x;
+                    gameObjectInspector->localScale.y = gameObjectInspector->localScale.y < 0.001f ? 0.001f : gameObjectInspector->localScale.y;
+                    gameObjectInspector->localScale.z = gameObjectInspector->localScale.z < 0.001f ? 0.001f : gameObjectInspector->localScale.z;
+                }
             }
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
@@ -788,10 +794,25 @@ void Editor::DisplayConsoleWindow()
     ImGui::End();
 }
 
-void Editor::DisplayGameWindow(class Framebuffer& _framebuffer)
+void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable)
+        {
+            ImGui::SetWindowFocus("Game");
+            isKeyboardEnable = true;
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+        }
+        if (ImGui::IsWindowFocused() && InputManager::GetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable)
+        {
+            isKeyboardEnable = false;
+            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            ImGui::SetWindowFocus("Main");
+        }
+
         ImVec2 windowSize = ImGui::GetWindowSize();
 
         if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())

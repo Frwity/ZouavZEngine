@@ -6,6 +6,7 @@ std::unordered_map<std::string, std::shared_ptr<Mesh>> ResourcesManager::meshRes
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourcesManager::textureResources;
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shaderResources;
 std::unordered_map<std::string, std::shared_ptr<Font>> ResourcesManager::fontResources;
+std::unordered_map<std::string, std::shared_ptr<CubemapTexture>> ResourcesManager::cubemapTextureResources;
 
 void ResourcesManager::InitDefaultResources()
 {
@@ -16,6 +17,7 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceShader("Skybox", false, "resources/Skybox.shader");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
     ResourcesManager::AddResourceFont("Default", false, "resources/Arial.fnt");
+    ResourcesManager::AddResourceCubemapTexture("Default", false, "resources/Skybox.dds");
 }
 
 void ResourcesManager::Clear()
@@ -25,6 +27,7 @@ void ResourcesManager::Clear()
     textureResources.clear();
     shaderResources.clear();
     fontResources.clear();
+    cubemapTextureResources.clear();
 }
 
 std::shared_ptr<Resource>& ResourcesManager::ResourceChangerImpl(const char* _label, std::shared_ptr<Resource>& _resource, const std::unordered_map<std::string, std::shared_ptr<Resource>>& _resources, bool& _changed)

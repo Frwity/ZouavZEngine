@@ -34,9 +34,9 @@ public:
 	template <class Archive>
 	void serialize(Archive& ar)
 	{
-		_ar(speed, vie, distance, skull);
+		ar(speed, vie, distance);
 
-		_ar(cereal::base_class<Component>(this));
+		ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
@@ -51,11 +51,7 @@ public:
 		_construct(GameObject::currentLoadedGameObject);
 		_construct->speed = _speed;
 		_construct->vie = _vie;
-		_construct->distance = _distance;
-
-
-		_ar(_construct->skull);
-		
+		_construct->distance = _distance;		
 
 		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}

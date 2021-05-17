@@ -201,6 +201,7 @@
     <ClCompile Include="src\Multithread\ThreadPool.cpp" />
     <ClCompile Include="src\Prefab.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
+    <ClCompile Include="src\Rendering\CubemapTexture.cpp" />
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="include\Multithread\ThreadPool.h" />
     <ClInclude Include="include\Prefab.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
+    <ClInclude Include="include\Rendering\CubemapTexture.hpp" />
     <ClInclude Include="include\Rendering\Font.hpp" />
     <ClInclude Include="include\Rendering\Framebuffer.hpp" />
     <ClInclude Include="include\Rendering\Material.hpp" />

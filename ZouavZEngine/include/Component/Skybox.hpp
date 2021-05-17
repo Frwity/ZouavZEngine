@@ -8,14 +8,14 @@
 class Skybox : public Component
 {
 private:
-	unsigned int texture;
+	std::shared_ptr<class CubemapTexture> texture;
 	std::shared_ptr<class Shader> shader;
 	std::shared_ptr<class Mesh> cubeMesh;
 
 public:
 	Skybox() = delete;
 	Skybox(class GameObject* _gameObject);
-	Skybox(class GameObject* _gameObject, const char* _texturePath);
+	Skybox(class GameObject* _gameObject, std::shared_ptr<class CubemapTexture>& _cubemapTexture);
 	Skybox(const Skybox& _other);
 	Component* Clone() const override { return new Skybox(*this); }
 	~Skybox() = default;

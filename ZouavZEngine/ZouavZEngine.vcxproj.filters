@@ -252,6 +252,9 @@
     <ClCompile Include="src\Game\Generato.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\CubemapTexture.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -433,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="include\Game\Generato.hpp">
       <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\CubemapTexture.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
