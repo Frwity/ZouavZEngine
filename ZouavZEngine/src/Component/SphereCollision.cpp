@@ -84,7 +84,7 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 	else
 		m = physx::PxMat44(shape->getLocalPose());
 
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, radius, radius));
+	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, radius, radius) * gameObject->localScale);
 
 	materialShader.shader->SetMatrix("matrix", mat);
 	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
