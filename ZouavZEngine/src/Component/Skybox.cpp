@@ -7,6 +7,7 @@
 #include "Maths/Mat4.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/Skybox.hpp"
+#include "GameObject.hpp"
 
 struct DDSPixelFormat
 {
@@ -159,4 +160,11 @@ void Skybox::Draw(const Camera& _camera)
 void Skybox::Editor()
 {
 
+}
+
+template <class Archive>
+static void Skybox::load_and_construct(Archive& _ar, cereal::construct<Skybox>& _construct)
+{
+    _construct(GameObject::currentLoadedGameObject);
+    _ar(cereal::base_class<Component>(_construct.ptr()));
 }

@@ -439,6 +439,7 @@ void NewSceneWindow(Engine& engine)
 
         if (!newSceneWindowWarning && ImGui::Button("Create"))
         {
+            gameObjectInspector = nullptr;
             if (!Scene::NewScene(sceneName.c_str(), false))
                 newSceneWindowWarning = true;
             else
