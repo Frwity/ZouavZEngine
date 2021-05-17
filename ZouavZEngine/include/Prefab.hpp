@@ -1,3 +1,4 @@
+#pragma once
 #include "cereal/archives/json.hpp"
 #include <cereal/types/string.hpp>
 #include "cereal/access.hpp"
@@ -38,7 +39,8 @@ public:
 	void load(Archive& _ar)
 	{
 		_ar(path);
-		gameobject = GameObject::LoadPrefab(path);
+		if (path != "noPath")
+			gameobject = GameObject::LoadPrefab(path);
 	}
 
 };

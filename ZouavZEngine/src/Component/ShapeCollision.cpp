@@ -112,18 +112,19 @@ void ShapeCollision::Activate()
 void ShapeCollision::Dehactivate()
 {
 	Component::Dehactivate();
-	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	if(shape)
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 }
 
 void ShapeCollision::InternalActivate()
 {
-	if (isActive)
+	if (isActive && shape)
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 }
 
 void ShapeCollision::InternalDehactivate()
 {
-	if (isActive)
+	if (isActive && shape)
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 }
 

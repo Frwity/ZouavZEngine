@@ -38,4 +38,5 @@ public:
 };
 
 CEREAL_REGISTER_TYPE(Skybox)
+
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Skybox)

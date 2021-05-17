@@ -1,0 +1,60 @@
+{
+    "value0": "Game",
+    "value1": "",
+    "value2": 0,
+    "value3": [
+        {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "Skybox",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true
+                    }
+                }
+            }
+        }
+    ],
+    "value4": 0.0,
+    "value5": 0.0,
+    "value6": 0.0,
+    "value7": 0.0,
+    "value8": 0.0,
+    "value9": 0.0,
+    "value10": 1.0,
+    "value11": 1.0,
+    "value12": 1.0,
+    "value13": 1.0,
+    "value14": true,
+    "value15": false,
+    "value16": false,
+    "value17": 512.0,
+    "value18": 128,
+    "value19": 16,
+    "value20": 0,
+    "value21": 1,
+    "value22": 0,
+    "value23": -10.0,
+    "value24": 30.0,
+    "value25": 30.0,
+    "value26": 1,
+    "value27": 0,
+    "value28": true,
+    "value29": 0,
+    "value30": 0,
+    "value31": 1,
+    "value32": 0.009999999776482582,
+    "value33": 2.0,
+    "value34": 0.5,
+    "value35": 0.0,
+    "value36": 2.0,
+    "value37": 0.0,
+    "value38": 0.0,
+    "value39": 0.0,
+    "value40": 0.0,
+    "value41": 0.0,
+    "value42": 0.0,
+    "value43": 1.0,
+    "value44": "nullptr"
+}

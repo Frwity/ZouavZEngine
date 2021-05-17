@@ -8,6 +8,7 @@
 #include "Rendering/Camera.hpp"
 #include "GameObject.hpp"
 #include "Component/Skybox.hpp"
+#include "GameObject.hpp"
 
 struct DDSPixelFormat
 {

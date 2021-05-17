@@ -1,5 +1,5 @@
 {
-    "value0": "New GameObject",
+    "value0": "ddddddddd",
     "value1": " ",
     "value2": 0,
     "value3": [
@@ -14,9 +14,6 @@
                     "value2": 1.0,
                     "value3": {
                         "value0": "noPath"
-                    },
-                    "value4": {
-                        "value0": true
                     }
                 }
             }
