@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Component.hpp"
+#include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/json.hpp"
+#include <cereal/types/base_class.hpp>
 
 class Skybox : public Component
 {
@@ -23,7 +26,6 @@ public:
 
 	const char* GetComponentName() override { return "Skybox"; }
 
-
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
@@ -32,7 +34,9 @@ public:
 
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<Skybox>& _construct);
+
 };
 
 CEREAL_REGISTER_TYPE(Skybox)
+
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Skybox)

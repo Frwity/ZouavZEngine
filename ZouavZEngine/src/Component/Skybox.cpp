@@ -6,6 +6,7 @@
 #include "Maths/Vec4.hpp"
 #include "Maths/Mat4.hpp"
 #include "Rendering/Camera.hpp"
+#include "GameObject.hpp"
 #include "Component/Skybox.hpp"
 #include "GameObject.hpp"
 
@@ -145,6 +146,7 @@ Skybox::Skybox(const Skybox& _other)
 
 void Skybox::Draw(const Camera& _camera)
 {
+    glDisable(GL_CULL_FACE);
     glDepthMask(GL_FALSE);
     glUseProgram(shader->id);
 
@@ -155,6 +157,8 @@ void Skybox::Draw(const Camera& _camera)
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
 void Skybox::Editor()
