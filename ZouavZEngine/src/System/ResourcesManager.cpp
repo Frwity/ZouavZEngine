@@ -12,7 +12,8 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
     ResourcesManager::AddResourceMesh("Sphere", false, "resources/spheregizmos.obj");
     ResourcesManager::AddResourceMesh("Capsule", false, "resources/capsule.obj");
-    ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.vs", "resources/BlinnPhongShader.fs");
+    ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.shader");
+    ResourcesManager::AddResourceShader("Skybox", false, "resources/Skybox.shader");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
     ResourcesManager::AddResourceFont("Default", false, "resources/Arial.fnt");
 }

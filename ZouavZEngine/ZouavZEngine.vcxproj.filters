@@ -246,6 +246,9 @@
     <ClCompile Include="external_lib\src\ImSequencer.cpp">
       <Filter>external_lib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\Skybox.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -421,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="external_lib\include\ImZoomSlider.h">
       <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Skybox.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

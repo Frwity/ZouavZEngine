@@ -21,6 +21,7 @@
 #include "Component/Plane.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
+#include "Component/Skybox.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -137,8 +138,7 @@ void Editor::Init()
     editorTextures.emplace(".fbx", std::make_unique<Texture>( ".fbx", "resources/mesh.png" ));
     editorTextures.emplace(".png", std::make_unique<Texture>( ".png", "resources/texture.png" ));
     editorTextures.emplace(".jpg", std::make_unique<Texture>( ".jpg", "resources/texture.png" ));
-    editorTextures.emplace(".vs", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
-    editorTextures.emplace(".fs", std::make_unique<Texture>( ".fs", "resources/shader.png" ));
+    editorTextures.emplace(".shader", std::make_unique<Texture>( ".vs", "resources/shader.png" ));
     editorTextures.emplace(".cpp", std::make_unique<Texture>( ".cpp", "resources/script.png" ));
     editorTextures.emplace(".hpp", std::make_unique<Texture>( ".hpp", "resources/script.png" ));
     editorTextures.emplace(".wav", std::make_unique<Texture>( ".wav", "resources/sound.png" ));
@@ -629,7 +629,7 @@ void Editor::DisplayInspector()
                 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
 
                 ImGui::Text("Local Rotation :");
-                ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+                ImGui::SameLine(); if (ImGui::InputFloat3("##rotation", &localEulerAngles.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
                     gameObjectInspector->localRotation = Quaternion(localEulerAngles);
 
                 ImGui::Text("Local Scale    :");
@@ -722,6 +722,10 @@ void Editor::DisplayInspector()
                             break;
                         case E_COMPONENT::PLAYER:
                             if (ComponentButton<Player>("Add Player", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::SKYBOX:
+                            if (ComponentButton<Skybox>("Add Skybox", true))
                                 addComponentWindow = false;
                             break;
                         }

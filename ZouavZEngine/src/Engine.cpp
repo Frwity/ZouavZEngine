@@ -69,11 +69,11 @@ Engine::~Engine()
 void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
-    ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.vs", "resources/TerrainShader.fs");
-    ResourcesManager::AddResourceShader("Font3DShader", false, "resources/Font3DShader.vs", "resources/Font3DShader.fs");
-    ResourcesManager::AddResourceShader("FontBillboardShader", false, "resources/FontBillboardShader.vs", "resources/FontBillboardShader.fs");
-    ResourcesManager::AddResourceShader("Font2DShader", false, "resources/Font2DShader.vs", "resources/Font2DShader.fs");
-    ResourcesManager::AddResourceShader("GizmosShader", false, "resources/Gizmos.vs", "resources/Gizmos.fs");
+    ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.shader");
+    ResourcesManager::AddResourceShader("Font3DShader", false, "resources/Font3DShader.shader");
+    ResourcesManager::AddResourceShader("FontBillboardShader", false, "resources/FontBillboardShader.shader");
+    ResourcesManager::AddResourceShader("Font2DShader", false, "resources/Font2DShader.shader");
+    ResourcesManager::AddResourceShader("GizmosShader", false, "resources/Gizmos.shader");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 

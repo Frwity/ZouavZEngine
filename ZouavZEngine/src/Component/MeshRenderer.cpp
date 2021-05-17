@@ -95,26 +95,25 @@ void MeshRenderer::MeshEditor()
 void MeshRenderer::ShaderEditor()
 {
     ResourcesManager::ResourceChanger<Shader>("Shader", material.shader);
-    //if (ImGui::BeginDragDropTarget())
-    //{
-    //    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
-    //    {
-    //        ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new shader");
-    //        std::string _path = *(const std::string*)payload->Data;
-    //        std::string _truePath = _path;
-    //        size_t start_pos = _truePath.find("\\");
-    //        _truePath.replace(start_pos, 1, "/");
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+        {
+            ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new shader");
+            std::string _path = *(const std::string*)payload->Data;
+            std::string _truePath = _path;
+            size_t start_pos = _truePath.find("\\");
+            _truePath.replace(start_pos, 1, "/");
 
-    //        if (_truePath.find(".vs") != std::string::npos || _truePath.find(".fs") != std::string::npos)
-    //        {
-    //            //material.shader->RemoveUse();
-    //            //if (material.shader->NbUse() <= 0)
-    //            //    ResourcesManager::RemoveResourceShader(material.shader->GetName());
-    //            material.shader = ResourcesManager::AddResourceShader(_path.substr(_path.find_last_of("/\\") + 1), _truePath.c_str());
-    //        }
-    //    }
-    //    ImGui::EndDragDropTarget();
-    //}
+            if (_truePath.find(".shader") != std::string::npos)
+            {
+                if (material.shader.use_count() == 2 && material.shader->IsDeletable())
+                    ResourcesManager::RemoveResourceShader(material.shader->GetName());
+                material.shader = *ResourcesManager::AddResourceShader(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
 }
 
 void MeshRenderer::Editor()
@@ -133,14 +132,13 @@ static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<Mes
 	std::string textureName;
     std::string texturePath;
 	std::string shaderName;
-    std::string shaderPath1;
-    std::string shaderPath2;
+    std::string shaderPath;
     bool isMeshDeletebale;
     bool isTextureDeletebale;
     bool isShaderDeletebale;
-    _ar(meshName, isMeshDeletebale, meshPath, textureName, isTextureDeletebale, texturePath, shaderName, isShaderDeletebale, shaderPath1, shaderPath2);
+    _ar(meshName, isMeshDeletebale, meshPath, textureName, isTextureDeletebale, texturePath, shaderName, isShaderDeletebale, shaderPath);
 	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceMesh(meshName, isMeshDeletebale, meshPath.c_str()),
 		*ResourcesManager::AddResourceTexture(textureName, isTextureDeletebale, texturePath.c_str()),
-		*ResourcesManager::AddResourceShader(shaderName, isShaderDeletebale, shaderPath1.c_str(), shaderPath2.c_str()));
+		*ResourcesManager::AddResourceShader(shaderName, isShaderDeletebale, shaderPath.c_str()));
     _ar(cereal::base_class<Component>(_construct.ptr()));
 }

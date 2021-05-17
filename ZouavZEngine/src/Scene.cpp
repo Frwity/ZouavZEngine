@@ -4,6 +4,7 @@
 #include "Component/FontComponent.hpp"
 #include "Component/Light.hpp"
 #include "Rendering/Camera.hpp"
+#include "Component/Skybox.hpp"
 #include "Maths/Mat4.hpp"
 #include "Scene.hpp"
 #include "System/PhysicSystem.hpp"

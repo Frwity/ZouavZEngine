@@ -11,11 +11,15 @@
 #include "System/ResourcesManager.hpp"
 #include "Rendering/Shader.hpp"
 
-Shader::Shader(const std::string& _name, const char* _vertexPath, const char* _fragmentPath)
-    : Resource(_name) 
+Shader::Shader(const std::string& _name, const char* _shaderPath)
+    : Resource(_name)
 {
-    unsigned int vertexShader = CreateVertexShader(_vertexPath);
-    unsigned int fragmentShader = CreateFragmentShader(_fragmentPath);
+    const char* shaderSource = LoadFile(_shaderPath);
+    std::string vshader = "#version 330 core\r\n#define COMPILING_VS\r\n" + std::string(shaderSource);
+    std::string fshader = "#version 330 core\r\n#define COMPILING_FS\r\n" + std::string(shaderSource);
+    
+    unsigned int vertexShader = CreateVertexShader(vshader.c_str(), _shaderPath);
+    unsigned int fragmentShader = CreateFragmentShader(fshader.c_str(), _shaderPath);
 
     id = glCreateProgram();
     glAttachShader(id, vertexShader);
@@ -24,41 +28,38 @@ Shader::Shader(const std::string& _name, const char* _vertexPath, const char* _f
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    paths.emplace_back(_vertexPath);
-    paths.emplace_back(_fragmentPath);
+    delete[] shaderSource;
+    
+    paths.emplace_back(_shaderPath);
 }
 
-unsigned int Shader::CreateVertexShader(const char* _vertexPath)
+unsigned int Shader::CreateVertexShader(const char* _vertexShaderContent, const char* _shaderPath)
 {
-    const char* vertexShaderSource = LoadFile(_vertexPath);
+    const char* vertexShaderSource = _vertexShaderContent;
     int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
-    DebugCheck(vertexShader, "VERT ERROR", _vertexPath);
-
-    delete[] vertexShaderSource;
+    DebugCheck(vertexShader, "VERT ERROR", _shaderPath);
 
     return vertexShader;
 }
 
-unsigned int Shader::CreateFragmentShader(const char* _fragmentPath)
+unsigned int Shader::CreateFragmentShader(const char* _fragmentShaderContent, const char* _shaderPath)
 {
-    const char* fragmentShaderSource = LoadFile(_fragmentPath);
+    const char* fragmentShaderSource = _fragmentShaderContent;
     int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
 
-    DebugCheck(fragmentShader, "FRAG ERROR", _fragmentPath);
-
-    delete[] fragmentShaderSource;
+    DebugCheck(fragmentShader, "FRAG ERROR", _shaderPath);
 
     return fragmentShader;
 }
 
-const char* Shader::LoadFile(const char* _pathToFile)
+const char* Shader::LoadFile(std::string _pathToFile)
 {
-    std::ifstream file(_pathToFile, std::ios::binary);
+    std::ifstream file(_pathToFile.c_str(), std::ios::binary);
 
     if (file)
     {
@@ -80,7 +81,7 @@ const char* Shader::LoadFile(const char* _pathToFile)
 }
 
 
-void Shader::DebugCheck(const int& _shader, const char* _msg, const char* _src)
+void Shader::DebugCheck(const int& _shader, const char* _msg, std::string _src)
 {
     int success;
     char infoLog[1024];
