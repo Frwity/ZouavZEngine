@@ -323,15 +323,35 @@ void CreateNewClass(std::string className)
     {
         hppFile <<
             "#pragma once\n"
-            "#include \"Component/ScriptComponent.hpp\"\n\n"
+            "#include \"Component/ScriptComponent.hpp\"\n"
+            "#include \"cereal/archives/json.hpp\"\n"
+            "#include \"cereal/types/polymorphic.hpp\"\n"
+            "#include \"cereal/access.hpp\"\n\n"
             "class " << className << " : public ScriptComponent\n"
             "{\n"
+            "   private:\n"
+            "       friend class cereal::access;\n"  
             "   public:\n"
             "        " << className << "() = delete;\n"
             "        " << className << "(class GameObject* _gameobject);\n"
+            "        Component* Clone() const override { return new " << className << "(*this); }\n"  
             "        void Begin() final;\n"
             "        void Update() final;\n"
-            "};\0";
+            "        const char* GetComponentName() override { return \"" << className << "\"; }\n"
+            "template <class Archive>\n"
+            "void serialize(Archive & ar)\n"
+            "{\n"
+            "    ar(cereal::base_class<Component>(this));\n"
+            "}\n"
+            "template <class Archive>\n"
+            "static void load_and_construct(Archive & _ar, cereal::construct<" << className << ">&_construct)\n"
+            "{\n"
+            "    _construct(GameObject::currentLoadedGameObject);\n"
+            "    _ar(cereal::base_class<Component>(_construct.ptr()));\n"
+            "}\n"
+            "};\n"
+            "CEREAL_REGISTER_TYPE(" << className << ")\n"
+            "CEREAL_REGISTER_POLYMORPHIC_RELATION(ScriptComponent, " << className << ")\0";
 
         cppFile <<
             "#include \"Game/" << className << ".hpp\"\n"
