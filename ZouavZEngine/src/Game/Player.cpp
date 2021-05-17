@@ -1,6 +1,5 @@
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
-#include "System/ScriptSystem.hpp"
 #include "GameObject.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/RigidBody.hpp"
@@ -18,20 +17,15 @@ Player::Player(GameObject* _gameobject)
 
 }
 
-void Player::Editor()
-{
-	skull.Editor("skull");
-}
-
 void Player::Begin()
 {
 	if (GetGameObject().GetComponent<Camera>())
 	{
 		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
-		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, -5 });
-
+		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
 	}
 	rb = GetGameObject().GetComponent<RigidBody>();
+	oldMousePos = InputManager::GetCursorPos();
 }
 
 #include <iostream>
@@ -67,6 +61,16 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 
-	if (InputManager::GetKeyPressed(E_KEYS::T) && *skull)
-		GameObject::Instanciate(*skull, gameObject->WorldPosition());
+	Vec2 newMousePos = InputManager::GetCursorPos();
+	Vec2 offset = newMousePos - oldMousePos;
+
+	xCameraAngle += offset.y;
+	if (xCameraAngle > 89.0f || xCameraAngle < -89.0f)
+	{
+		xCameraAngle = xCameraAngle > -(float)89.0f ? (xCameraAngle < (float)89.0f ? xCameraAngle : (float)89.0f) : -(float)89.0f;
+		offset.y = 0;
+	}
+	GetGameObject().GetComponent<Camera>()->SetPosition(Quaternion(Vec3{ -offset.y, offset.x, 0.0f }).RotateVector(GetGameObject().GetComponent<Camera>()->GetPosition()));
+
+	oldMousePos = newMousePos;
 }

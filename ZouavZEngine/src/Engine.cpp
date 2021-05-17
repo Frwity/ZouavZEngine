@@ -128,11 +128,6 @@ void Engine::Update()
             scene.Draw(&scene.GetWorld(), *Camera::GetMainCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }
-        else
-        {
-            scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
-            FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
-        }
         
         render.BindMainFBO();
         

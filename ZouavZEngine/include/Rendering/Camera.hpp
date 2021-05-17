@@ -28,7 +28,7 @@ protected:
 	float far = 5000.0f;
 	float fov = 45.0f;
 public:
-	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1);
+	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1, bool _sceneCamera = false);
 	Camera() = delete;
 	Camera(const Camera&);
 	Component* Clone() const override { return new Camera(*this); }
@@ -45,6 +45,8 @@ public:
 
 	void SetMainCamera() { mainCamera = this; }
 	
+	const Vec3& GetPosition() { return position; }
+
 	void SetPosition(const Vec3& _pos) { position = _pos; }
 	void SetTarget(const Vec3& _target) { target = _target; }
 

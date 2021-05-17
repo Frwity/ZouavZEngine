@@ -26,8 +26,8 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(cereal::base_class<Component>(this));
 		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

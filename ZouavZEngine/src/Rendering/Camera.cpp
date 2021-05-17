@@ -12,10 +12,10 @@
 Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
-Camera::Camera(class GameObject* _gameObject, int _width, int _height)
+Camera::Camera(class GameObject* _gameObject, int _width, int _height, bool _sceneCamera)
     : Component(_gameObject), width{_width}, height{_height}
 {
-    if (!mainCamera)
+    if (!mainCamera && !_sceneCamera)
     {
         mainCamera = this;
         isMainCamera = true;
@@ -133,7 +133,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
 }
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
+    : Camera(nullptr, _width, _height, true), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;

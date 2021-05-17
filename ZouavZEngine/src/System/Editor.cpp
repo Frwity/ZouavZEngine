@@ -22,6 +22,7 @@
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/Skybox.hpp"
+#include "Game/Player.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -50,6 +51,7 @@ ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
 bool projectNewFolder = false;
 
 bool maximizeOnPlay = false;
+bool sceneFocused = false;
 
 bool consoleText = true;
 bool consoleWarning = true;
@@ -166,7 +168,7 @@ bool Editor::Display(Render& _render)
         DisplayConsoleWindow();
         DisplayHierarchy();
         DisplayProject();
-        MoveSelectedGameobject();
+        //MoveSelectedGameobject();
         return true;
     }
     return false;
@@ -513,7 +515,8 @@ void Editor::Update()
         glfwMakeContextCurrent(backup_current_context);
     }
 
-    sceneCamera.Update(isKeyboardEnable, editorClock->GetDeltaTime());
+    if (sceneFocused)
+        sceneCamera.Update(isKeyboardEnable, editorClock->GetDeltaTime());
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
@@ -522,8 +525,10 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 
     if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
+        sceneFocused = ImGui::IsWindowFocused();
         if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT) && !isKeyboardEnable)
         {
+            ImGui::SetWindowFocus("Scene");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
@@ -720,13 +725,16 @@ void Editor::DisplayInspector()
                                 gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
                             }
                             break;
-                        case E_COMPONENT::PLAYER:
-                            if (ComponentButton<Player>("Add Player", false))
-                                addComponentWindow = false;
-                            break;
                         case E_COMPONENT::SKYBOX:
                             if (ComponentButton<Skybox>("Add Skybox", true))
                                 addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::PLAYER:
+                            if (ComponentButton<Player>("Add Player", true))
+                            {
+                                addComponentWindow = false;
+                                gameObjectInspector->GetComponent<Player>()->Begin();
+                            }
                             break;
                         }
                     }
