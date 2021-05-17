@@ -134,7 +134,7 @@ void FontComponent::Editor()
 
 	ImGui::ColorEdit4("Color :", &color.w);
 	
-	ImGui::DragFloat3("Position :", &position.x);
+	ImGui::DragFloat3("Position :", &position.x, 0.1f);
 	
 	ImGui::InputFloat("Width :", &width, 0.01f);
 	ImGui::InputFloat("Edge :", &edge, 0.01f);
@@ -198,7 +198,8 @@ void FontComponent::DrawBillboard(const Camera& _camera)
 	shaderBillboard->SetMatrix("projection", _camera.GetProjetionMatrix());
 	shaderBillboard->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shaderBillboard->SetVector3("centerPos", GetGameObject().WorldPosition());
-	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
+	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale())
+										* Mat4::CreateTranslationMatrix(position));	
 	shaderBillboard->SetVector4("color", color);
 	shaderBillboard->SetFloat("width", width);
 	shaderBillboard->SetFloat("edge", edge);
