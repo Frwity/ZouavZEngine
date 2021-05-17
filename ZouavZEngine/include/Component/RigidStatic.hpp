@@ -1,5 +1,6 @@
 #pragma once
 #include "Component/Component.hpp"
+#include "Component/Rigid.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
 
@@ -9,16 +10,13 @@ namespace physx
 }
 #include <iostream>
 
-class RigidStatic: public Component
+class RigidStatic: public Rigid
 {
-private:
-	void AttachShape();
 protected:
 
 	void InternalActivate() override;
 	void InternalDehactivate() override;
 public:
-	physx::PxRigidStatic* actor = nullptr;
 
 	RigidStatic() = delete;
 	RigidStatic(GameObject* _gameObject);
@@ -32,6 +30,7 @@ public:
 
 	void Activate() override;
 	void Dehactivate() override;
+	void UpdateTransform(Transform transform) override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

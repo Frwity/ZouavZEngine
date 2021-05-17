@@ -73,6 +73,7 @@ void Engine::LoadDefaultResources()
     ResourcesManager::AddResourceShader("Font3DShader", false, "resources/Font3DShader.vs", "resources/Font3DShader.fs");
     ResourcesManager::AddResourceShader("FontBillboardShader", false, "resources/FontBillboardShader.vs", "resources/FontBillboardShader.fs");
     ResourcesManager::AddResourceShader("Font2DShader", false, "resources/Font2DShader.vs", "resources/Font2DShader.fs");
+    ResourcesManager::AddResourceShader("GizmosShader", false, "resources/Gizmos.vs", "resources/Gizmos.fs");
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 

@@ -16,11 +16,9 @@
 
 using namespace physx;
 
-static int i = 0;
-
 
 RigidBody::RigidBody(GameObject* _gameObject)
-	: Component(_gameObject)
+	: Rigid(_gameObject)
 {
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
@@ -28,15 +26,14 @@ RigidBody::RigidBody(GameObject* _gameObject)
 
 	actor->userData = this;
 
-	if (i++ == 0)
-		actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
-
 	AttachShape();
 
 	PhysicSystem::scene->addActor(*actor);
 
 	if (!_gameObject->IsActive())
 		InternalDehactivate();
+	
+	LockAxis();
 }
 
 RigidBody::RigidBody(const RigidBody& _other)
@@ -54,22 +51,22 @@ RigidBody::RigidBody(const RigidBody& _other)
 
 	if (!_other.IsActive())
 		InternalDehactivate();
+	LockAxis();
 }
 
 RigidBody::~RigidBody()
 {
-	//TODO detach shape and release actor
-	//actor->release();
+	
 }
 
 void RigidBody::SetLinearVelocity(const class Vec3& v)
 {
-	actor->setLinearVelocity(PxVec3FromVec3(v));
+	((PxRigidBody*)actor)->setLinearVelocity(PxVec3FromVec3(v));
 }
 
 Vec3 RigidBody::GetLinearVelocity()
 {
-	return Vec3FromPxVec3(actor->getLinearVelocity());
+	return Vec3FromPxVec3(((PxRigidBody*)actor)->getLinearVelocity());
 }
 
 void RigidBody::DisableGravity()
@@ -82,35 +79,23 @@ void RigidBody::EnableGravity()
 	actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
 }
 
-void RigidBody::AttachShape()
+void RigidBody::Editor()
 {
-	//TODO use getComponents
-	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
+	if (ImGui::Checkbox("Lock Rotaion X ", &lockX))
+		LockAxis();
 
-	if (collision && !collision->isAttach)
-	{
-		collision->isAttach = true;
-		actor->attachShape(*collision->shape);
-		//collision->shape->release();
-	}
+	if (ImGui::Checkbox("Lock Rotaion Y ", &lockY))
+		LockAxis();
+
+	if (ImGui::Checkbox("Lock Rotaion Z ", &lockZ))
+		LockAxis();
 }
 
-void RigidBody::OnContact(GameObject* _other)
+template <class Archive>
+static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
 {
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
-
-	if (script)
-		script->OnContact(_other);
+	_construct(GameObject::currentLoadedGameObject);
 }
-
-void RigidBody::OnTrigger(GameObject* _other)
-{
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
-
-	if (script)
-		script->OnTrigger(_other);
-}
-
 
 void RigidBody::Activate()
 {
@@ -138,6 +123,19 @@ void RigidBody::InternalDehactivate()
 
 void RigidBody::Editor()
 {
+	if (ImGui::Checkbox("Lock Rotaion X ", &lockX))
+        LockAxis();
+
+    if (ImGui::Checkbox("Lock Rotaion Y ", &lockY))
+        LockAxis();
+
+    if (ImGui::Checkbox("Lock Rotaion Z ", &lockZ))
+        LockAxis();
+}
+
+void RigidBody::LockAxis()
+{
+	PxRigidDynamic* rd = static_cast<PxRigidDynamic*>(actor);
 }
 
 template <class Archive>
@@ -145,4 +143,7 @@ static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidB
 {
 	_construct(GameObject::currentLoadedGameObject);
 	_ar(cereal::base_class<Component>(_construct.ptr()));
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, lockZ);
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, lockZ);
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, lockY);
 }

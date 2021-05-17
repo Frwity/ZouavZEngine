@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "imgui.h"
+#include "ImGuizmo.h"
 #include "Rendering/Camera.hpp"
 
 enum class EDITOR_STATE
@@ -19,6 +20,8 @@ private:
 	double lastCursorScenePosY = 0;
 	double lastCursorGamePosX = 0;
 	double lastCursorGamePosY = 0;
+
+	ImGuizmo::OPERATION currentGizmoOperation = ImGuizmo::TRANSLATE;
 
 	ImGuiStyle* imguiStyle = nullptr;
 

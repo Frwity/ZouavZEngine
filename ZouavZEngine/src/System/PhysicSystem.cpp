@@ -17,7 +17,8 @@ PxCooking* PhysicSystem::cooking = nullptr;
 PxPvd* PhysicSystem::pvd = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
 PxPvdSceneClient* PhysicSystem::pvdClient = nullptr;
-PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
+PxPvdTransport* PhysicSystem::transport = nullptr;
+//PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
 
 static PxFilterFlags filterShader(
     PxFilterObjectAttributes attributes0,
@@ -32,6 +33,7 @@ static PxFilterFlags filterShader(
 		| PxPairFlag::eNOTIFY_TOUCH_FOUND
 		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
 		| PxPairFlag::eNOTIFY_CONTACT_POINTS
+		| PxPairFlag::eNOTIFY_TOUCH_LOST
 		| PxPairFlag::eTRIGGER_DEFAULT;
     return PxFilterFlag::eDEFAULT;
 }
@@ -45,7 +47,7 @@ void PhysicSystem::Init()
 
 	pvd = PxCreatePvd(*foundation);
 	ZASSERT(pvd != nullptr, "PxCreatePvd failed !");
-	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+	transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 	pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
 	physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation,
@@ -62,7 +64,6 @@ void PhysicSystem::Init()
 	{
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
 	}
-
 }
 
 void PhysicSystem::InitScene()
@@ -80,8 +81,7 @@ void PhysicSystem::InitScene()
 	}
 
 	sceneDesc.filterShader = filterShader;
-
-	sceneDesc.simulationEventCallback = physicEventCallback;
+	sceneDesc.simulationEventCallback = new PhysicEventCallback();
 	sceneDesc.flags = PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
@@ -91,32 +91,14 @@ void PhysicSystem::InitScene()
 	ZASSERT(pvdClient != nullptr, "getScenePvdClient failed !");
 }
 
-void PhysicSystem::DestroyCollisionComponent()
-{
-	PhysicSystem::scene->simulate(1.0f);
-	PhysicSystem::scene->fetchResults(true);
-
-	physx::PxU32 nbActiveActor;
-
-	physx::PxActor** activeActors = PhysicSystem::scene->getActiveActors(nbActiveActor);
-
-	//TODO fix destruction
-	/*for (int i = 0; i < nbActiveActor; i++)
-	{
-		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
-
-		//ShapeCollision* collision = go->GetComponent<ShapeCollision>();
-		//collision->releasePhysXComponent();
-	}*/
-}
-
 void PhysicSystem::Destroy()
 {
-	/*DestroyCollisionComponent();
 	scene->release();
+	scene = nullptr;
 	cooking->release();
 	physics->release();
+	PxCloseExtensions();
 	pvd->release();
+	transport->release();
 	foundation->release();
-	delete physicEventCallback;*/
 }

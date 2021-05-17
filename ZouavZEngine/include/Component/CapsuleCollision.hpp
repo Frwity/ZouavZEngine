@@ -3,19 +3,25 @@
 #include "Component/ShapeCollision.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
+#include "Rendering/Mesh.hpp"
+#include <memory>
 
 class CapsuleCollision: public ShapeCollision
 {
+private:
+	std::shared_ptr<Mesh> capsule;
 public:
 	float radius;
 	float halfHeight;
 
-	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false);
+	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
 	CapsuleCollision(const CapsuleCollision&);
 	Component* Clone() const override { return new CapsuleCollision(*this); }
 	~CapsuleCollision();
 
 	void Editor() override;
+	void UpdateCapsule();
+	void DrawGizmos(const Camera& _camera) override;
 
 	const char* GetComponentName() override { return "CapsuleCollision"; }
 

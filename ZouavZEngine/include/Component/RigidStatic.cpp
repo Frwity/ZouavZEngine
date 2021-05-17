@@ -10,8 +10,11 @@
 using namespace physx;
 
 RigidStatic::RigidStatic(GameObject* _gameObject)
-	: Component(_gameObject)
+	: Rigid(_gameObject)
 {
+	if (_gameObject == nullptr)
+		return;
+
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
@@ -43,19 +46,6 @@ RigidStatic::RigidStatic(const RigidStatic& _other)
 		InternalDehactivate();
 }
 
-void RigidStatic::AttachShape()
-{
-	//TODO use getComponents
-	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
-
-	if (collision && !collision->isAttach)
-	{
-		collision->isAttach = true;
-		actor->attachShape(*collision->shape);
-		collision->shape->release();
-	}
-}
-
 void RigidStatic::Activate()
 {
 	Component::Activate();
@@ -82,11 +72,12 @@ void RigidStatic::InternalDehactivate()
 
 RigidStatic::~RigidStatic()
 {
-	//actor->release();
+	
 }
 
 void RigidStatic::Editor()
 {
+
 }
 
 template <class Archive>
@@ -94,4 +85,9 @@ static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<Rigi
 {
 	_construct(GameObject::currentLoadedGameObject);
 	_ar(cereal::base_class<Component>(_construct.ptr()));
+}
+
+void RigidStatic::UpdateTransform(Transform transform)
+{
+	
 }

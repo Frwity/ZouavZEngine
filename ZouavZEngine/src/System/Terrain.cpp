@@ -33,7 +33,6 @@ using namespace physx;
 
 Terrain::Terrain()
 {
-
 	AddColorLayer();
 	AddNoiseLayer();
 }
@@ -58,7 +57,7 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk{});
+			chunks.emplace(pos.ToString(), Chunk{nullptr});
 			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 															seed, noiseParams,
 															minHeight, maxHeight, heightIntensity }, false);
@@ -125,7 +124,7 @@ void Terrain::Update()
 			if (chunks.find(pos.ToString()) == chunks.end())
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
-				chunks.emplace(pos.ToString(), Chunk());
+				chunks.emplace(pos.ToString(), Chunk(nullptr));
 				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 																seed, noiseParams,
 																minHeight, maxHeight, heightIntensity }, false);
@@ -423,11 +422,6 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)));
 	
-	if (shape)
-	{
-		shape->release();
-		shape = nullptr;
-	}
 	if (actor)
 	{
 		PhysicSystem::scene->removeActor(*actor);
@@ -446,12 +440,15 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
+	/*if (actor == nullptr || PhysicSystem::scene == nullptr)
+		return;
+
 	if (isGenerated)
 	{
-		shape->release();
-		shape = nullptr;
-
-		PhysicSystem::scene->removeActor(*actor);
-		actor = nullptr;
-	}
+		if (actor->getScene() == PhysicSystem::scene)
+		{
+			PhysicSystem::scene->removeActor(*actor);
+			actor = nullptr;
+		}
+	}*/
 }

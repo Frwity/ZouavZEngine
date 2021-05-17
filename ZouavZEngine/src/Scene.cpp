@@ -17,6 +17,7 @@
 #include "pvd/PxPvd.h"
 #include "PhysX/foundation/PxMat44.h"
 #include "Component/RigidBody.hpp"
+#include "Component/ShapeCollision.hpp"
 
 #include <fstream>
 #include "cereal/archives/json.hpp"
@@ -61,8 +62,8 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 {
 	GameObject::gameObjects.clear();
 	world.children.clear();
-	PhysicSystem::scene->release();
-	PhysicSystem::InitScene();
+	PhysicSystem::Destroy();
+	PhysicSystem::Init();
 
 	std::ifstream saveFile;
 	if (_changingScene)
@@ -122,7 +123,9 @@ void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
 	}
-
+	if (gameObject->GetComponent<ShapeCollision>())
+		gameObject->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
+		
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);
 }
@@ -153,6 +156,7 @@ void Scene::SimulatePhyics() const
 		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
+
 void Scene::DisplayTerrainOptionWindow()
 {
 	terrain.DisplayOptionWindow();

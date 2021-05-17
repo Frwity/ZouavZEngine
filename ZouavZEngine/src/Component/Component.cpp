@@ -16,7 +16,9 @@ Component::Component(const Component& _other)
 }
 
 void Component::Editor()
-{}
+{
+
+}
 
 bool Component::EditorCollapsingHeader(const char* _name, std::function<void()> _f)
 {

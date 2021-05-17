@@ -155,13 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external_lib\src\glad.c" />
+    <ClCompile Include="external_lib\src\ImCurveEdit.cpp" />
+    <ClCompile Include="external_lib\src\ImGradient.cpp" />
     <ClCompile Include="external_lib\src\imgui.cpp" />
+    <ClCompile Include="external_lib\src\ImGuizmo.cpp" />
     <ClCompile Include="external_lib\src\imgui_demo.cpp" />
     <ClCompile Include="external_lib\src\imgui_draw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
+    <ClCompile Include="external_lib\src\ImSequencer.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
     <ClCompile Include="include\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
@@ -173,6 +177,7 @@
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\Plane.cpp" />
+    <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
@@ -216,6 +221,11 @@
     <ClCompile Include="src\System\ScriptSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external_lib\include\ImCurveEdit.h" />
+    <ClInclude Include="external_lib\include\ImGradient.h" />
+    <ClInclude Include="external_lib\include\ImGuizmo.h" />
+    <ClInclude Include="external_lib\include\ImSequencer.h" />
+    <ClInclude Include="external_lib\include\ImZoomSlider.h" />
     <ClInclude Include="external_lib\src\imgui_internal.h" />
     <ClInclude Include="include\Component\AudioBroadcaster.hpp" />
     <ClInclude Include="include\Component\AudioListener.hpp" />
@@ -226,6 +236,7 @@
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\Plane.hpp" />
+    <ClInclude Include="include\Component\Rigid.hpp" />
     <ClInclude Include="include\Component\RigidBody.hpp" />
     <ClInclude Include="include\Component\RigidStatic.hpp" />
     <ClInclude Include="include\Component\ScriptComponent.hpp" />
@@ -270,6 +281,8 @@
     <ClInclude Include="include\System\TimeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Gizmos.fs" />
+    <None Include="resources\Gizmos.vs" />
     <None Include="resources\TerrainShader.fs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>

@@ -231,6 +231,21 @@
     <ClCompile Include="src\Prefab.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\Rigid.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\ImCurveEdit.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\ImGradient.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\ImGuizmo.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\ImSequencer.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -389,12 +404,36 @@
     <ClInclude Include="include\Prefab.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Rigid.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\ImCurveEdit.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\ImGradient.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\ImGuizmo.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\ImSequencer.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\ImZoomSlider.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\TerrainShader.fs">
       <Filter>resources</Filter>
     </None>
     <None Include="resources\TerrainShader.vs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\Gizmos.fs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\Gizmos.vs">
       <Filter>resources</Filter>
     </None>
   </ItemGroup>

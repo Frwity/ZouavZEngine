@@ -151,6 +151,7 @@ void Editor::NewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 }
 
 bool Editor::Display(Render& _render)
@@ -213,7 +214,24 @@ void Editor::DisplayOptionWindow()
         engine.Load();
     }
 	ImGui::SameLine();
-	ImGui::SetCursorPosX(500);
+
+    ImGui::SetCursorPosX(200);
+    
+    if (ImGui::RadioButton("Translate", currentGizmoOperation == ImGuizmo::TRANSLATE))
+        currentGizmoOperation = ImGuizmo::TRANSLATE;
+    
+    ImGui::SameLine();
+    
+    if (ImGui::RadioButton("Rotate", currentGizmoOperation == ImGuizmo::ROTATE))
+        currentGizmoOperation = ImGuizmo::ROTATE;
+    
+    ImGui::SameLine();
+    
+    if (ImGui::RadioButton("Scale", currentGizmoOperation == ImGuizmo::SCALE))
+        currentGizmoOperation = ImGuizmo::SCALE;
+   
+    ImGui::SameLine();
+	ImGui::SetCursorPosX(800);
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
@@ -528,6 +546,31 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
         }
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
+
+        if (gameObjectInspector)
+        {
+            ImGuizmo::Enable(true);
+
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+
+            static ImGuizmo::MODE currentGizmosMode(ImGuizmo::LOCAL);
+
+            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation, gameObjectInspector->localScale);
+            Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
+
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
+            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, currentGizmosMode, matrix.matrix);
+            if (ImGuizmo::IsUsing)
+            {
+                Vec3 translation, rotation, scale;
+
+                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
+                gameObjectInspector->localPosition = translation;
+                gameObjectInspector->localRotation = Quaternion(rotation);
+                gameObjectInspector->localScale = scale;
+            }
+        }
     }
     ImGui::End();
 }

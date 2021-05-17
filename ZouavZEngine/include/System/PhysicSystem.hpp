@@ -7,9 +7,15 @@
 #include "cooking/PxCooking.h"
 #include "PxSimulationEventCallback.h"
 #include "PxRigidActor.h"
+#include "PxRigidDynamic.h"
+#include "PxRigidStatic.h"
 #include "System/Debug.hpp"
+#include "Terrain.hpp"
 
-#include "Component/RigidBody.hpp"
+#include "GameObject.hpp"
+#include "Component/Rigid.hpp"
+#include "Component/RigidStatic.hpp"
+#include "Component/ScriptComponent.hpp"
 
 namespace physx
 {
@@ -19,6 +25,9 @@ namespace physx
 	class PxScene;
 	class PxPvdSceneClient;
 	class PxRigidActor;
+	class PxPvdTransport;
+	class PxRigidDynamic;
+	class PxRigidStatic;
 }
 
 class PhysicEventCallback : public physx::PxSimulationEventCallback
@@ -26,27 +35,38 @@ class PhysicEventCallback : public physx::PxSimulationEventCallback
 public:
 	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count) override { PX_UNUSED(constraints); PX_UNUSED(count); }
 	void onWake(physx::PxActor** actors, physx::PxU32 count) override { Debug::Log("AWAKE !"); PX_UNUSED(actors); PX_UNUSED(count); }
-	void onSleep(physx::PxActor** actors, physx::PxU32 count) override { Debug::Log("SLEEP !");  PX_UNUSED(actors); PX_UNUSED(count); }
-	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override { Debug::Log("Trigger");  PX_UNUSED(pairs); PX_UNUSED(count); }
+	void onSleep(physx::PxActor** actors, physx::PxU32 count) override { std::cout << "SLEEP !" << std::endl;  PX_UNUSED(actors); PX_UNUSED(count); }
+	
+	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override 
+	{ 
+		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
+		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
+
+		triggerActor->OnTrigger(&otherActor->GetGameObject());
+	}
+
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{
-		//RigidBody* rigidbody1 = static_cast<RigidBody*>(pairHeader.actors[0]->userData);
-		//RigidBody* rigidbody2 = static_cast<RigidBody*>(pairHeader.actors[1]->userData);
+		physx::PxRigidActor* rd = pairHeader.actors[0]->is<physx::PxRigidActor>();
+		physx::PxRigidActor* rd2 = pairHeader.actors[1]->is<physx::PxRigidActor>();
 
-		//rigidbody1->OnContact(rigidbody2->gameObject);
-		//rigidbody2->OnContact(rigidbody1->gameObject);
+		if (rd && rd2)
+		{
+			Rigid* rb1 = static_cast<Rigid*>(rd->userData);
+			Rigid* rb2 = static_cast<Rigid*>(rd2->userData);
 
-		//PX_UNUSED((pairs));
-		//PX_UNUSED((nbPairs));
+			rb1->OnContact(&rb2->GetGameObject());
+			rb2->OnContact(&rb1->GetGameObject());
+		}
+
+		PX_UNUSED((pairs));
+		PX_UNUSED((nbPairs));
 	}
 
 public:
 	PhysicEventCallback() = default;
 	~PhysicEventCallback() = default;
-	std::vector<physx::PxVec3> gContactPositions;
-	std::vector<physx::PxVec3> gContactImpulses;
-
 };
 
 class PhysicSystem
@@ -62,7 +82,8 @@ public:
 	static physx::PxCooking* cooking;
 	static physx::PxScene* scene;
 	static physx::PxPvdSceneClient* pvdClient;
-	static PhysicEventCallback* physicEventCallback;
+	static physx::PxPvdTransport* transport;
+	//static PhysicEventCallback* physicEventCallback;
 
 	PhysicSystem() = delete;
 	~PhysicSystem() = delete;
@@ -70,5 +91,4 @@ public:
 	static void Init();
 	static void InitScene();
 	static void Destroy();
-	static void DestroyCollisionComponent();
 };
