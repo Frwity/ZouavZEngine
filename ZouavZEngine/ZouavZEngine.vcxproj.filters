@@ -249,6 +249,9 @@
     <ClCompile Include="src\Component\Skybox.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Generato.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\Skybox.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Generato.hpp">
+      <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

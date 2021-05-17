@@ -12,7 +12,7 @@ public:
 	Vec3 halfExtends;
 	std::shared_ptr<Mesh> cube;
 
-	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 0.5f, 0.5f, 2.0f }, bool _isTrigger = false, Transform _tranform = Transform());
+	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 1.0f, 1.0f, 1.0f }, bool _isTrigger = false, Transform _tranform = Transform());
 	BoxCollision(const BoxCollision&);
 	Component* Clone() const override { return new BoxCollision(*this); }
 	~BoxCollision();
@@ -26,8 +26,8 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(cereal::base_class<Component>(this));
 		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>

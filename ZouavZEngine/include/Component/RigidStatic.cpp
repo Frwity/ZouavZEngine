@@ -19,7 +19,7 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = &GetGameObject();
+	actor->userData = this;
 
 	AttachShape();
 
