@@ -124,6 +124,8 @@ void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
 	}
+	if (_parent->GetComponent<Skybox>())
+		_parent->GetComponent<Skybox>()->Draw(_camera);
 	if (_parent->GetComponent<ShapeCollision>())
 		_parent->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
 		
