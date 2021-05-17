@@ -13,6 +13,8 @@
 void Prefab::Editor(const char* _label)
 {
     ImGui::Text(_label);
+    ImGui::SameLine();
+    ImGui::Text(path.c_str());
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))

@@ -11,12 +11,43 @@
 #include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
 #include "Component/ShapeCollision.hpp"
-#include "Component/ScriptComponent.hpp"
+
+using namespace physx;
 
 Rigid::Rigid(GameObject* _gameObject)
 	: Component(_gameObject)
 {
 
+}
+
+Rigid::Rigid(const Rigid& _other)
+	: Component(_other)
+{
+
+}
+
+void Rigid::Activate()
+{
+	Component::Activate();
+	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
+}
+
+void Rigid::Dehactivate()
+{
+	Component::Dehactivate();
+	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
+}
+
+void Rigid::InternalActivate()
+{
+	if (isActive)
+		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
+}
+
+void Rigid::InternalDehactivate()
+{
+	if (isActive)
+		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
 }
 
 void Rigid::AttachShape()

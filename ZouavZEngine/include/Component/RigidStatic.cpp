@@ -30,7 +30,7 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 }
 
 RigidStatic::RigidStatic(const RigidStatic& _other)
-	: Component(_other)
+	: Rigid(_other)
 {
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 

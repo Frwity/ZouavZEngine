@@ -13,9 +13,6 @@ namespace physx
 
 class RigidBody : public Rigid
 {
-protected:
-	void InternalActivate() override;
-	void InternalDehactivate() override;
 public:
 	bool lockX, lockY, lockZ = false;
 
@@ -33,9 +30,7 @@ public:
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
-
-	void Activate() override;
-	void Dehactivate() override;
+	void LockAxis();
 
 	template <class Archive>
 	void serialize(Archive& _ar)

@@ -67,6 +67,6 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 
-	if (InputManager::GetKeyPressed(E_KEYS::T))
+	if (InputManager::GetKeyPressed(E_KEYS::T) && *skull)
 		GameObject::Instanciate(*skull, gameObject->WorldPosition());
 }

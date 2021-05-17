@@ -123,8 +123,8 @@ void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
 	}
-	if (gameObject->GetComponent<ShapeCollision>())
-		gameObject->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
+	if (_parent->GetComponent<ShapeCollision>())
+		_parent->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
 		
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);

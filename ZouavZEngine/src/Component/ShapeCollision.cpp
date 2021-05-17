@@ -125,6 +125,8 @@ void ShapeCollision::InternalDehactivate()
 {
 	if (isActive)
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+}
+
 void ShapeCollision::UpdateTransform(Transform _transform)
 {
 	transform = _transform;

@@ -16,8 +16,8 @@
 
 using namespace physx;
 
-SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger)
-	: ShapeCollision(_gameObject, _isTrigger), radius(_radius)
+SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _tranform)
+	: ShapeCollision(_gameObject, _tranform, _isTrigger), radius(_radius)
 {	
 	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
 
