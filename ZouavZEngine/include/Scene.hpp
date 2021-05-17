@@ -29,6 +29,8 @@ public:
 	void Load(const std::string& _path, bool _changingScene = true);
 	void Save();
 
+	void UpdateShaderUniform(const class Camera& _camera);
+
 	void Update();
 	void Draw(GameObject* _parent, const class Camera& _camera) const;
 	void SimulatePhyics() const;					//Simulate phyics and update transform of affected gameObjects

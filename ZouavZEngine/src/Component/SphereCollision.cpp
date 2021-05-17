@@ -87,8 +87,7 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, radius, radius));
 
 	materialShader.shader->SetMatrix("matrix", mat);
-	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+
 	materialShader.shader->SetVector4("color", materialShader.color);
 
 	glBindVertexArray(sphereMesh->GetID());

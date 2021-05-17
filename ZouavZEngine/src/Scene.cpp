@@ -115,15 +115,27 @@ void Scene::Save()
 	saveFile.close();
 }
 
+void Scene::UpdateShaderUniform(const class Camera& _camera)
+{
+	for (auto& shader : ResourcesManager::GetResources<Shader>())
+	{
+		shader.second->Use();
+
+		Mat4 matrixCamera = _camera.GetMatrix();
+
+		shader.second->SetMatrix("view", matrixCamera.Reversed());
+		shader.second->SetMatrix("projection", _camera.GetProjetionMatrix());
+		shader.second->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
+		shader.second->SetLight(lights);
+	}
+}
+
 void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 {
 	if (!_parent->IsActive())
 		return;
 	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
-	{
-		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
 		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
-	}
 	if (_parent->GetComponent<Skybox>())
 		_parent->GetComponent<Skybox>()->Draw(_camera);
 	if (_parent->GetComponent<ShapeCollision>())

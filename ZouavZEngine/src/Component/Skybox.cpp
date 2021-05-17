@@ -150,9 +150,6 @@ void Skybox::Draw(const Camera& _camera)
     glDepthMask(GL_FALSE);
     glUseProgram(shader->id);
 
-    shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    shader->SetMatrix("view", _camera.GetMatrix().Reversed());
-
     glBindVertexArray(cubeMesh->GetID());
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
     glDrawArrays(GL_TRIANGLES, 0, 36);

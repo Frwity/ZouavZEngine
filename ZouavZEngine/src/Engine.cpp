@@ -116,8 +116,10 @@ void Engine::Update()
         if (editor.Display(render))
             scene.DisplayTerrainOptionWindow();
 
+        ////////////////
         render.BindSceneFBO(); 
-       
+
+        scene.UpdateShaderUniform(*SceneCamera::GetSceneCamera());
         scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
         FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
 
@@ -125,16 +127,13 @@ void Engine::Update()
         
         if (Camera::GetMainCamera())
         {
+            scene.UpdateShaderUniform(*Camera::GetMainCamera());
             scene.Draw(&scene.GetWorld(), *Camera::GetMainCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }
-        else
-        {
-            scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
-            FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
-        }
         
         render.BindMainFBO();
+        /////////////////
         
         editor.Update();
         render.Update();

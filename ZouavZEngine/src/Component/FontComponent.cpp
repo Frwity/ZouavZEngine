@@ -158,13 +158,9 @@ void FontComponent::Draw3D(const Camera& _camera)
 	shader3D->Use();
 	glActiveTexture(GL_TEXTURE0);
 	font->GetTexture().Use();
-	Mat4 matrixCamera = _camera.GetMatrix();
 
-	shader3D->SetMatrix("view", matrixCamera.Reversed());
-	shader3D->SetMatrix("projection", _camera.GetProjetionMatrix());
 	shader3D->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()) 
 								* Mat4::CreateTranslationMatrix(position));
-	shader3D->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shader3D->SetVector4("color", color);
 	shader3D->SetFloat("width", width);
 	shader3D->SetFloat("edge", edge);
@@ -192,11 +188,7 @@ void FontComponent::DrawBillboard(const Camera& _camera)
 	shaderBillboard->Use();
 	glActiveTexture(GL_TEXTURE0);
 	font->GetTexture().Use();
-	Mat4 matrixCamera = _camera.GetMatrix();
 
-	shaderBillboard->SetMatrix("view", matrixCamera.Reversed());
-	shaderBillboard->SetMatrix("projection", _camera.GetProjetionMatrix());
-	shaderBillboard->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 	shaderBillboard->SetVector3("centerPos", GetGameObject().WorldPosition());
 	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale())
 										* Mat4::CreateTranslationMatrix(position));	
@@ -228,7 +220,6 @@ void FontComponent::Draw2D(const Camera& _camera)
 	glActiveTexture(GL_TEXTURE0);
 	font->GetTexture().Use();
 
-	shader2D->SetMatrix("view", _camera.GetMatrix().Reversed());
 	shader2D->SetMatrix("projection", Mat4::CreateTranslationMatrix(Vec3{ -1.f + (float)_camera.GetHeight() / (float)_camera.GetWidth() , 0.0f, 0.0f } + position / 100.f)
 									* Mat4::CreateScaleMatrix({ (float)_camera.GetHeight() / (float)_camera.GetWidth(), 1.f, 1.f }));
 	shader2D->SetVector4("color", color);
