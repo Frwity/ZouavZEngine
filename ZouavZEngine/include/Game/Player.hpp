@@ -40,6 +40,8 @@ public:
 	void serialize(Archive& _ar)
 	{
 		_ar(speed, vie, distance, skull);
+
+		_ar(cereal::base_class<Component>(this));
 	}
 
 	template <class Archive>
@@ -58,8 +60,11 @@ public:
 
 
 		_ar(_construct->skull);
+		
+
+		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };
 
 CEREAL_REGISTER_TYPE(Player)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Player)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ScriptComponent, Player)

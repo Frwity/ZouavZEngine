@@ -186,6 +186,7 @@
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Game\Generato.cpp" />
     <ClCompile Include="src\Game\Move.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="include\Component\SphereCollision.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
+    <ClInclude Include="include\Game\Generato.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />
     <ClInclude Include="include\Game\Player.hpp" />
     <ClInclude Include="include\Maths\Mat4.hpp" />

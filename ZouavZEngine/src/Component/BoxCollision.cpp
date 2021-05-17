@@ -27,6 +27,8 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 
 	AttachToRigidComponent();
 	cube = *ResourcesManager::GetResource<Mesh>("Default");
+
+	UpdateExtends();
 }
 
 BoxCollision::BoxCollision(const BoxCollision& _other)
@@ -60,7 +62,7 @@ void BoxCollision::UpdateExtends()
 	if (rigid)
 		rigid->actor->detachShape(*shape);
 
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends)), *material);
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends) / 2.0f), *material);
 
 	AttachToRigidComponent();
 }

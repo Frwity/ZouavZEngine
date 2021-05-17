@@ -149,6 +149,7 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, const Vec3& _positi
 	_gameobject->localPosition = _gameobjectPostion;
 
 	newGameobject->isPrefab = false;
+	newGameobject->Activate();
 	return newGameobject;
 }
 

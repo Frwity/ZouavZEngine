@@ -31,6 +31,7 @@
 #include "System/ResourcesManager.hpp"
 
 #include "Game/Player.hpp"
+#include "Game/Generato.hpp"
 
 bool newFolderWindow = false;
 bool newFileWindow = false;
@@ -723,6 +724,10 @@ void Editor::DisplayInspector()
                             break;
                         case E_COMPONENT::PLAYER:
                             if (ComponentButton<Player>("Add Player", false))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::GENERATOR:
+                            if (ComponentButton<Generato>("Add Generator", false))
                                 addComponentWindow = false;
                             break;
                         case E_COMPONENT::SKYBOX:
