@@ -63,7 +63,7 @@ void BoxCollision::UpdateScale()
 	if (rigid)
 		rigid->actor->detachShape(*shape);
 
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f), *material);
+	geometry = new PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f);
 
 	AttachToRigidComponent();
 }
@@ -75,7 +75,7 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 
 	materialShader.shader->Use();
 	
-	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(halfExtends.x, halfExtends.y, halfExtends.z));
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, halfExtends);
 	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
 	Mat4 mat = trsGlobal * trsLocal;

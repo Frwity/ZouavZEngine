@@ -93,18 +93,17 @@ void ShapeCollision::AttachToRigidComponent()
 {
 	if (shape)
 	{
-		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
-
 		Rigid* rigid = GetGameObject().GetComponent<Rigid>();
 
 		if (rigid)
 		{
 			//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
-			physx::PxBoxGeometry box;
-			shape->getBoxGeometry(box);
-			shape->release();
-			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, box, *material);
-			shape->setLocalPose(PxTransformFromTransform(transform));
+			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
+			if (shape)
+			{
+				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+				shape->setLocalPose(PxTransformFromTransform(transform));
+			}
 		}
 	}
 }

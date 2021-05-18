@@ -44,10 +44,10 @@ void CapsuleCollision::Editor()
 {
 	ShapeCollision::Editor();
 
-	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
+	if (ImGui::SliderFloat("Radius : ", &radius, 0.1f, 100.0f))
 		UpdateScale();
 	
-	if (ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f))
+	if (ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.1f, 100.0f))
 		UpdateScale();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
@@ -57,10 +57,11 @@ void CapsuleCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
+	
 	if (rigid)
 		rigid->actor->detachShape(*shape);
-
-	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
+	
+	geometry = new PxCapsuleGeometry(radius, halfHeight);
 
 	AttachToRigidComponent();
 }
