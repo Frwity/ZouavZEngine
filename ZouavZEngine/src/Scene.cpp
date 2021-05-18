@@ -115,7 +115,7 @@ void Scene::Save()
 	saveFile.close();
 }
 
-void Scene::UpdateShaderUniform(const class Camera& _camera)
+void Scene::UpdateShaderUniform(const Camera& _camera)
 {
 	for (auto& shader : ResourcesManager::GetResources<Shader>())
 	{
@@ -130,16 +130,16 @@ void Scene::UpdateShaderUniform(const class Camera& _camera)
 	}
 }
 
-void Scene::Draw(GameObject* _parent, const Camera& _camera) const
+void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 {
 	if (!_parent->IsActive())
 		return;
 	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
-		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
+		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
 	if (_parent->GetComponent<Skybox>())
-		_parent->GetComponent<Skybox>()->Draw(_camera);
-	if (_parent->GetComponent<ShapeCollision>())
-		_parent->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
+		_parent->GetComponent<Skybox>()->Draw(*_camera);
+	if (_parent->GetComponent<ShapeCollision>() && dynamic_cast<const SceneCamera*>(_camera))
+		_parent->GetComponent<ShapeCollision>()->DrawGizmos(*_camera);
 		
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);

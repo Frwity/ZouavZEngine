@@ -26,7 +26,7 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
 
 	AttachToRigidComponent();
-	cube = *ResourcesManager::GetResource<Mesh>("Default");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
 
 	UpdateExtends();
 }
@@ -37,7 +37,7 @@ BoxCollision::BoxCollision(const BoxCollision& _other)
 	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_other.halfExtends)), *material);
 
 	AttachToRigidComponent();
-	cube = *ResourcesManager::GetResource<Mesh>("Default");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
 }
 
 BoxCollision::~BoxCollision()
@@ -67,27 +67,7 @@ void BoxCollision::UpdateExtends()
 	AttachToRigidComponent();
 }
 
-void BoxCollision::DrawGizmos(const Camera& _camera)
+void BoxCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
 {
-	if (shape == nullptr)
-		return;
-
-	shader.get()->Use();
-
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.z));
-
-	shader.get()->SetMatrix("matrix", mat);
-	shader.get()->SetVector4("color", {1.0f, 0.0f, 1.0f, 0.0f});
-
-	glBindVertexArray(cube->GetID());
-	glDrawElements(GL_LINE_LOOP, cube->GetNbElements(), GL_UNSIGNED_INT, 0);
+	ShapeCollision::DrawGizmos(_camera, Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.z) * gameObject->localScale));
 }

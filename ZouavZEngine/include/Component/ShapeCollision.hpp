@@ -4,7 +4,8 @@
 #include "System/Debug.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
-#include "Rendering/Material.hpp"
+#include "Rendering/Shader.hpp"
+#include "Rendering/Mesh.hpp"
 #include "Rendering/Camera.hpp"
 #include "GameObject.hpp"
 
@@ -19,7 +20,8 @@ class ShapeCollision: public Component
 protected:
 	physx::PxMaterial* material = nullptr;
 	Transform transform;
-	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Shader> gizmoShader;
+	std::shared_ptr<Mesh> gizmoMesh;
 	void AttachToRigidComponent();
 	void InternalActivate() override;
 	void InternalDehactivate() override;
@@ -38,8 +40,8 @@ public:
 	void UpdateIsTrigger();
 	void UpdateTransform(Transform _transform);
 	virtual void Editor() override;
-	virtual void DrawGizmos(const Camera& _camera);
-		
+	virtual void DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix = Mat4::identity);
+
 	void Activate() override;
 	void Dehactivate() override;
 

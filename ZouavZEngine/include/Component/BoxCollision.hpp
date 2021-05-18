@@ -3,14 +3,12 @@
 #include "Component/ShapeCollision.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
-#include "Rendering/Mesh.hpp"
 #include <memory>
 
 class BoxCollision: public ShapeCollision
 {
 public:
 	Vec3 halfExtends;
-	std::shared_ptr<Mesh> cube;
 
 	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 1.0f, 1.0f, 1.0f }, bool _isTrigger = false, Transform _tranform = Transform());
 	BoxCollision(const BoxCollision&);
@@ -19,7 +17,7 @@ public:
 
 	void Editor() override;
 	void UpdateExtends();
-	void DrawGizmos(const Camera& _camera) override;
+	void DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix = Mat4::identity) override;
 
 	const char* GetComponentName() override { return "BoxCollision"; }
 

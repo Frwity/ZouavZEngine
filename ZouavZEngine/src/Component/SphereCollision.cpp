@@ -24,7 +24,7 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	//attach shape to rigidbody or rigidstatic if exist
 	AttachToRigidComponent();
 
-	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 }
 
 SphereCollision::SphereCollision(const SphereCollision& _other)
@@ -34,7 +34,7 @@ SphereCollision::SphereCollision(const SphereCollision& _other)
 	
 	AttachToRigidComponent();
 
-	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 
 }
 
@@ -68,28 +68,7 @@ void SphereCollision::UpdateRadius(float _radius)
 	AttachToRigidComponent();
 }
 
-void SphereCollision::DrawGizmos(const Camera& _camera)
+void SphereCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
 {
-	if (shape == nullptr)
-		return;
-
-	materialShader.shader->Use();
-
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, radius, radius));
-
-	materialShader.shader->SetMatrix("matrix", mat);
-
-	materialShader.shader->SetVector4("color", materialShader.color);
-
-	glBindVertexArray(sphereMesh->GetID());
-	glDrawElements(GL_TRIANGLES, sphereMesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+	ShapeCollision::DrawGizmos(_camera, Mat4::CreateScaleMatrix(Vec3(radius, radius, radius) * gameObject->localScale));
 }

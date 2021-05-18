@@ -19,7 +19,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-	shader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
+	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
 
 	if (!_gameObject->IsActive())
 		InternalDehactivate();
@@ -30,7 +30,7 @@ ShapeCollision::ShapeCollision(const ShapeCollision& _other)
 	: Component(_other)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f); // TODO physxsystem material manager
-	shader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
+	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
 	isTrigger = _other.isTrigger;
 	if (!_other.IsActive())
 		InternalDehactivate();
@@ -84,7 +84,7 @@ void ShapeCollision::AttachToRigidComponent()
 {
 	if (shape)
 	{
-		//shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
 
 		RigidBody* rd = GetGameObject().GetComponent<RigidBody>();
 		RigidStatic* rs = GetGameObject().GetComponent<RigidStatic>();
@@ -137,7 +137,26 @@ void ShapeCollision::UpdateTransform(Transform _transform)
 	//	shape->setLocalPose(PxTransformFromTransform(transform));
 }
 
-void ShapeCollision::DrawGizmos(const Camera& _camera)
+void ShapeCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
 {
-	
+	if (shape == nullptr)
+		return;
+
+	gizmoShader.get()->Use();
+
+	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	physx::PxMat44 m;
+
+	if (rigid)
+		m = rigid->actor->getGlobalPose();
+	else
+		m = physx::PxMat44(shape->getLocalPose());
+
+	gizmoShader.get()->SetMatrix("matrix", Mat4FromPxMat44(m) * _modelMatrix);
+
+	gizmoShader.get()->SetVector4("color", { 0.0f, 1.0f, 0.0f, 1.0f });
+
+	glBindVertexArray(gizmoMesh.get()->GetID());
+	glDrawElements(GL_LINE_LOOP, gizmoMesh.get()->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

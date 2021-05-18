@@ -21,7 +21,7 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 
 	AttachToRigidComponent();
 
-	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
 }
 
 CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
@@ -31,7 +31,7 @@ CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
 
 	AttachToRigidComponent();
 
-	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
 }
 
 CapsuleCollision::~CapsuleCollision()
@@ -64,28 +64,7 @@ void CapsuleCollision::UpdateCapsule()
 	AttachToRigidComponent();
 }
 
-void CapsuleCollision::DrawGizmos(const Camera& _camera)
+void CapsuleCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
 {
-	if (shape == nullptr)
-		return;
-
-	materialShader.shader->Use();
-
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, halfHeight, radius));
-
-	materialShader.shader->SetMatrix("matrix", mat);
-
-	materialShader.shader->SetVector4("color", materialShader.color);
-
-	glBindVertexArray(capsule->GetID());
-	glDrawElements(GL_LINE_LOOP, capsule->GetNbElements(), GL_UNSIGNED_INT, 0);
+	ShapeCollision::DrawGizmos(_camera, Mat4::CreateScaleMatrix(Vec3(radius, halfHeight, radius) * gameObject->localScale));
 }
