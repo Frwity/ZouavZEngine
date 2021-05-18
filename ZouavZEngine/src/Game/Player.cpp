@@ -70,7 +70,9 @@ void Player::Update()
 		xCameraAngle = xCameraAngle > -(float)89.0f ? (xCameraAngle < (float)89.0f ? xCameraAngle : (float)89.0f) : -(float)89.0f;
 		offset.y = 0;
 	}
-	GetGameObject().GetComponent<Camera>()->SetPosition(Quaternion(Vec3{ -offset.y, offset.x, 0.0f }).RotateVector(GetGameObject().GetComponent<Camera>()->GetPosition()));
+	GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
+	GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
+	//GetGameObject().GetComponent<Camera>()->SetPosition(Quaternion(Vec3{ 0.0f, offset.x, -offset.y }).RotateVector(GetGameObject().GetComponent<Camera>()->GetPosition()));
 
 	oldMousePos = newMousePos;
 }

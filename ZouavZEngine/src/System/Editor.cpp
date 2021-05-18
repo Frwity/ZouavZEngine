@@ -604,16 +604,40 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
     ImGui::End();
 }
 
+template<class T> struct componentType { using type = T; };
+
 template <typename T>
 bool ComponentButton(std::string _text, bool _onlyOne)
 {
-    if ((!_onlyOne || (_onlyOne && !gameObjectInspector->GetComponent<T>())) && ImGui::Button(_text.c_str()))
-    {
-        gameObjectInspector->AddComponent<T>();
-        return true;
-    }
-    return false;
+    return ComponentButton(_text, _onlyOne, componentType<T>());
 }
+
+# define GENADDCOMPONENT(typeName)\
+bool ComponentButton(std::string _text, bool _onlyOne, componentType<typeName>)\
+{\
+    if ((!_onlyOne || (_onlyOne && !gameObjectInspector->GetComponent<typeName>())) && ImGui::Button(_text.c_str()))\
+    {\
+	    gameObjectInspector->AddComponent<typeName>();\
+	    return true;\
+    }\
+    return false;\
+}
+
+GENADDCOMPONENT(AudioBroadcaster)
+GENADDCOMPONENT(AudioListener)
+GENADDCOMPONENT(Light)
+GENADDCOMPONENT(MeshRenderer)
+GENADDCOMPONENT(FontComponent)
+GENADDCOMPONENT(BoxCollision)
+GENADDCOMPONENT(CapsuleCollision)
+GENADDCOMPONENT(SphereCollision)
+GENADDCOMPONENT(Plane)
+GENADDCOMPONENT(RigidBody)
+GENADDCOMPONENT(RigidStatic)
+GENADDCOMPONENT(Camera)
+GENADDCOMPONENT(Skybox)
+GENADDCOMPONENT(Generato)
+GENADDCOMPONENT(Player)
 
 void Editor::DisplayInspector()
 {
@@ -697,81 +721,58 @@ void Editor::DisplayInspector()
                 ImGui::SetNextWindowSize(ImVec2(windowSize.x / 2, windowSize.y / 2));
                 if (ImGui::Begin("Add Component##window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
                 {
-                    for (int i = 0; i < static_cast<int>(E_COMPONENT::NUMBER_OF_COMPONENTS); i++)
+                    if (ComponentButton<AudioBroadcaster>("Add AudioBroadcaster", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<AudioListener>("Add AudioListener", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<Light>("Add Light", false))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<MeshRenderer>("Add MeshRenderer", false))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<FontComponent>("Add FontComponent", false))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<BoxCollision>("Add BoxCollision", false))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<CapsuleCollision>("Add CapsuleCollision", false))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<SphereCollision>("Add SphereCollision", false))
+                        addComponentWindow = false;
+
+                    if (gameObjectInspector->GetComponent<RigidStatic>())
+                        if (ComponentButton<Plane>("Add Plane", false))
+                            addComponentWindow = false;
+
+                    if (!gameObjectInspector->GetComponent<RigidStatic>())
+                        if (ComponentButton<RigidBody>("Add RigidBody", true))
+                            addComponentWindow = false;
+
+                    if (!gameObjectInspector->GetComponent<RigidBody>())
+                        if (ComponentButton<RigidStatic>("Add RigidStatic", true))
+                            addComponentWindow = false;
+
+                    if (ComponentButton<Camera>("Add Camera", true))
                     {
-                        switch (static_cast<E_COMPONENT>(i))
-                        {
-                        case E_COMPONENT::AUDIO_BROADCASTER:
-                            if (ComponentButton<AudioBroadcaster>("Add AudioBroadcaster", true))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::AUDIO_LISTENER:
-                            if (ComponentButton<AudioListener>("Add AudioListener", true))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::LIGHT:
-                            if (ComponentButton<Light>("Add Light", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::MESHRENDERER:
-                            if (ComponentButton<MeshRenderer>("Add MeshRenderer", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::FONTCOMPONENT:
-                            if (ComponentButton<FontComponent>("Add FontComponent", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::BOX_COLLISION:
-                            if (ComponentButton<BoxCollision>("Add BoxCollision", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::CAPSULE_COLLISION:
-                            if (ComponentButton<CapsuleCollision>("Add CapsuleCollision", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::SPHERE_COLLISION:
-                            if (ComponentButton<SphereCollision>("Add SphereCollision", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::PLANE:
-                            if (gameObjectInspector->GetComponent<RigidStatic>())
-                                if (ComponentButton<Plane>("Add Plane", false))
-                                    addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::RIGID_BODY:
-                            if (!gameObjectInspector->GetComponent<RigidStatic>())
-                                if (ComponentButton<RigidBody>("Add RigidBody", true))
-                                    addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::RIGID_STATIC:
-                            if (!gameObjectInspector->GetComponent<RigidBody>())
-                                if (ComponentButton<RigidStatic>("Add RigidStatic", true))
-                                    addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::CAMERA:
-                            if (ComponentButton<Camera>("Add Camera", true))
-                            {
-                                addComponentWindow = false;
-                                gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
-                            }
-                            break;
-                        case E_COMPONENT::GENERATOR:
-                            if (ComponentButton<Generato>("Add Generator", false))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::SKYBOX:
-                            if (ComponentButton<Skybox>("Add Skybox", true))
-                                addComponentWindow = false;
-                            break;
-                        case E_COMPONENT::PLAYER:
-                            if (ComponentButton<Player>("Add Player", true))
-                            {
-                                addComponentWindow = false;
-                                gameObjectInspector->GetComponent<Player>()->Begin();
-                            }
-                            break;
-                        }
+                        addComponentWindow = false;
+                        gameObjectInspector->GetComponent<Camera>()->Resize(engine.render.gameFramebuffer.getWidth(), engine.render.gameFramebuffer.getHeight());
                     }
+
+                    if (ComponentButton<Skybox>("Add Skybox", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<Player>("Add Player", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<Generato>("Add Generato", true))
+                        addComponentWindow = false;
+
+                    ScriptSystem::AddComponents(gameObjectInspector);
                 }
                 if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                     addComponentWindow = false;
@@ -820,7 +821,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 {
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable)
+        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
@@ -828,7 +829,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
-        if (ImGui::IsWindowFocused() && InputManager::GetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable)
+        if (ImGui::IsWindowFocused() && InputManager::GetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             isKeyboardEnable = false;
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);

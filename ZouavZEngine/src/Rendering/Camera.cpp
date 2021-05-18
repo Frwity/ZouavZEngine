@@ -71,6 +71,7 @@ void Camera::Editor()
     if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);
     ImGui::DragFloat3("Postion", &position.x, 0.1f, -1000.f, 1000.f);
     ImGui::DragFloat3("Target", &target.x, 0.1f, -1000.f, 1000.f);
+    ImGui::Checkbox("Follow GameObject rotation", &followGameObjectRotation);
 }
 
 Mat4 Camera::GetMatrix() const

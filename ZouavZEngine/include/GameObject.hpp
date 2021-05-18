@@ -74,7 +74,7 @@ public:
 	static GameObject* CreateGameObject(const std::string& _name, const std::string& _tag);
 
 	const std::vector<GameObject*>& GetChildren() const { return children; }
-	const GameObject* GetParent() const { return parent; }
+	GameObject& GetParent() const { return *parent; }
 
 	bool IsChildOf(const GameObject* _gameObject) const;
 	void AddChild(GameObject* _child);
