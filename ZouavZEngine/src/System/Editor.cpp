@@ -554,6 +554,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
         if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
@@ -562,6 +563,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
         }
 
         ImVec2 windowSize = ImGui::GetWindowSize();
@@ -824,6 +826,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
         if (ImGui::IsWindowFocused() && InputManager::GetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable)
         {
@@ -831,6 +834,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
         }
 
         ImVec2 windowSize = ImGui::GetWindowSize();
