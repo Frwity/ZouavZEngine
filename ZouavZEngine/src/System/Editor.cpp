@@ -29,6 +29,7 @@
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
+#include "System/ScriptSystem.hpp"
 
 #include "Game/Player.hpp"
 #include "Game/Generato.hpp"
@@ -236,8 +237,11 @@ void Editor::DisplayOptionWindow()
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
-        if (state == EDITOR_STATE::EDITING) 
+        if (state == EDITOR_STATE::EDITING)
+        {
+            ScriptSystem::Begin();
             engine.Save();
+        }
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);

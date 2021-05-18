@@ -72,7 +72,7 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 	if (shape == nullptr)
 		return;
 
-	materialShader.shader->Use();
+	shader.get()->Use();
 
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
@@ -85,8 +85,8 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 
 	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.z));
 
-	materialShader.shader->SetMatrix("matrix", mat);
-	materialShader.shader->SetVector4("color", materialShader.color);
+	shader.get()->SetMatrix("matrix", mat);
+	shader.get()->SetVector4("color", {1.0f, 0.0f, 1.0f, 0.0f});
 
 	glBindVertexArray(cube->GetID());
 	glDrawElements(GL_LINE_LOOP, cube->GetNbElements(), GL_UNSIGNED_INT, 0);

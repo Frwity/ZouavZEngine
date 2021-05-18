@@ -89,8 +89,6 @@ void Engine::Save()
 
 void Engine::Update()
 {
-    ScriptSystem::Begin();
-
     while (!render.Stop())
     {
         TimeManager::Update();

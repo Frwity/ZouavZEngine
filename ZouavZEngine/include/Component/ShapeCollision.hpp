@@ -19,7 +19,7 @@ class ShapeCollision: public Component
 protected:
 	physx::PxMaterial* material = nullptr;
 	Transform transform;
-	Material materialShader;
+	std::shared_ptr<Shader> shader;
 	void AttachToRigidComponent();
 	void InternalActivate() override;
 	void InternalDehactivate() override;
