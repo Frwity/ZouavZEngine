@@ -54,15 +54,19 @@ void Rigid::InternalDehactivate()
 void Rigid::AttachShape()
 {
 	//TODO use getComponents
-	ShapeCollision* collision = GetGameObject().GetComponent<ShapeCollision>();
+	std::vector<ShapeCollision*> collisions = GetGameObject().GetComponents<ShapeCollision>();
 
-	if (collision && !collision->isAttach)
+
+	for (ShapeCollision* collision : collisions)
 	{
-		collision->isAttach = true;
+		if (collision && !collision->isAttach)
+		{
+			collision->isAttach = true;
 
-		collision->shape = physx::PxRigidActorExt::createExclusiveShape(*actor, *collision->geometry, *collision->material);
-		if(!collision->shape)
-			Debug::LogError("Attach to shape failed !");
+			collision->shape = physx::PxRigidActorExt::createExclusiveShape(*actor, *collision->geometry, *collision->material);
+			if(!collision->shape)
+				Debug::LogError("Attach to shape failed !");
+		}
 	}
 }
 

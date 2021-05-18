@@ -64,30 +64,35 @@ void ShapeCollision::Editor()
 	localEulerAngles = transform.localRotation.ToEuler();
 
 	ImGui::Text("Local Rotation :");
-	ImGui::SameLine(); 
+	ImGui::SameLine();
 	
 	if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
 	{
 		transform.localRotation = Quaternion(localEulerAngles);
 		UpdateShapeTransform();
 	}
-
 }
 
 void ShapeCollision::UpdateShapeTransform()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
+	physx::PxShape** shapeActor = nullptr;
 
 	if (rigid)
 	{
-		physx::PxShape* shapeActor = nullptr;
-		rigid->actor->getShapes(&shapeActor, 1);
+		int i = 0;
+		shapeActor = (physx::PxShape**)malloc(sizeof(physx::PxShape*) * rigid->actor->getNbShapes());
+		int j = rigid->actor->getShapes(shapeActor, rigid->actor->getNbShapes());
 
-		if (shapeActor)
-			shapeActor->setLocalPose(PxTransformFromTransform(transform));
+  		while(i++ < j - 1)
+		{
+			if (shapeActor[i] == shape)
+				shape->setLocalPose(PxTransformFromTransform(transform));
+		}
+
+		free(shapeActor);
 	}
-
-}	
+}
 
 void ShapeCollision::AttachToRigidComponent()
 {

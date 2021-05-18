@@ -101,14 +101,14 @@ public:
 	}
 
 	template<typename T>
-	std::vector<T*> GetComponents() // sa se trouve ca marche pas hihi TODO ENLEVER CE TODO
+	std::vector<T*> GetComponents()
 	{
 		std::vector<T*> returnComponents;
 		for (const std::unique_ptr<Component>& component : components)
 		{
-			T* component = dynamic_cast<T*>(component.get());
-			if (component)
-				returnComponents.push_back(component);
+			T* _component = dynamic_cast<T*>(component.get());
+			if (_component)
+				returnComponents.push_back(_component);
 		}
 		return returnComponents;
 	}

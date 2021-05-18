@@ -26,6 +26,7 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	AttachToRigidComponent();
 
 	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	UpdateScale();
 }
 
 SphereCollision::SphereCollision(const SphereCollision& _other)
@@ -61,6 +62,7 @@ void SphereCollision::UpdateScale()
 	if (rigid)
 		rigid->actor->detachShape(*shape);
 
+	//TODO world scale
 	geometry = new PxSphereGeometry(radius);
 
 	AttachToRigidComponent();

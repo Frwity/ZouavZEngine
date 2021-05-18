@@ -23,6 +23,7 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 	AttachToRigidComponent();
 
 	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
+	UpdateScale();
 }
 
 CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
@@ -56,11 +57,11 @@ void CapsuleCollision::Editor()
 void CapsuleCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
 	
 	if (rigid)
 		rigid->actor->detachShape(*shape);
 	
+	//TODO use gameObject->WorldScale()
 	geometry = new PxCapsuleGeometry(radius, halfHeight);
 
 	AttachToRigidComponent();
