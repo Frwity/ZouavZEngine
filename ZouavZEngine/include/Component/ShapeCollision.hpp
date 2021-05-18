@@ -7,6 +7,7 @@
 #include "Rendering/Material.hpp"
 #include "Rendering/Camera.hpp"
 #include "GameObject.hpp"
+#include "geometry/PxGeometry.h"
 
 namespace physx
 {
@@ -17,13 +18,14 @@ namespace physx
 class ShapeCollision: public Component
 {
 protected:
-	physx::PxMaterial* material = nullptr;
 	Transform transform;
 	Material materialShader;
 	void AttachToRigidComponent();
 	void InternalActivate() override;
 	void InternalDehactivate() override;
 public:
+	physx::PxGeometry* geometry;
+	physx::PxMaterial* material = nullptr;
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
 	bool isTrigger = false;
@@ -36,9 +38,11 @@ public:
 	const char* GetComponentName() override { return "ShapeCollision"; }
 	void releasePhysXComponent();
 	void UpdateIsTrigger();
-	void UpdateTransform(Transform _transform);
+	void UpdateTransform();
 	virtual void Editor() override;
 	virtual void DrawGizmos(const Camera& _camera);
+	void UpdateShapeTransform();
+	virtual void UpdateScale() { };
 		
 	void Activate() override;
 	void Dehactivate() override;

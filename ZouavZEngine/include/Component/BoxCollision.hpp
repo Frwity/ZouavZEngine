@@ -18,8 +18,8 @@ public:
 	~BoxCollision();
 
 	void Editor() override;
-	void UpdateExtends();
 	void DrawGizmos(const Camera& _camera) override;
+	void UpdateScale() override;
 
 	const char* GetComponentName() override { return "BoxCollision"; }
 

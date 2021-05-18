@@ -20,7 +20,7 @@ public:
 	~CapsuleCollision();
 
 	void Editor() override;
-	void UpdateCapsule();
+	void UpdateScale() override;
 	void DrawGizmos(const Camera& _camera) override;
 
 	const char* GetComponentName() override { return "CapsuleCollision"; }

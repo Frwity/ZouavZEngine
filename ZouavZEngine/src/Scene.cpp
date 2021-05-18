@@ -126,7 +126,7 @@ void Scene::Draw(GameObject* _parent, const Camera& _camera) const
 	}
 	if (_parent->GetComponent<Skybox>())
 		_parent->GetComponent<Skybox>()->Draw(_camera);
-	if (_parent->GetComponent<ShapeCollision>())
+	if (_parent->GetComponent<ShapeCollision>() && _parent->GetComponent<ShapeCollision>()->IsActive())
 		_parent->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
 		
 	for (GameObject* child : _parent->GetChildren())

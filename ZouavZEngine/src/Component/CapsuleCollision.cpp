@@ -17,7 +17,8 @@ using namespace physx;
 CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger, Transform _transform)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), radius(_radius), halfHeight(_halfHeight)
 {
-	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
+	geometry = new PxCapsuleGeometry(radius, halfHeight);
+	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
 	AttachToRigidComponent();
 
@@ -44,15 +45,15 @@ void CapsuleCollision::Editor()
 	ShapeCollision::Editor();
 
 	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
-		UpdateCapsule();
+		UpdateScale();
 	
 	if (ImGui::SliderFloat("HalfHeight : ", &halfHeight, 0.0f, 100.0f))
-		UpdateCapsule();
+		UpdateScale();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void CapsuleCollision::UpdateCapsule()
+void CapsuleCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
@@ -71,16 +72,10 @@ void CapsuleCollision::DrawGizmos(const Camera& _camera)
 
 	materialShader.shader->Use();
 
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius, halfHeight, radius));
+	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, halfHeight, radius) * gameObject->localScale);
+	Mat4 mat = trsGlobal * trsLocal;
 
 	materialShader.shader->SetMatrix("matrix", mat);
 	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());

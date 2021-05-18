@@ -23,12 +23,13 @@ using namespace physx;
 BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger, Transform _transform)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), halfExtends(_halfExtends)
 {
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_halfExtends)), *material);
+	geometry = new PxBoxGeometry(PxVec3FromVec3(_halfExtends));
+	shape = PhysicSystem::physics->createShape(*geometry, *material, true);
 
 	AttachToRigidComponent();
 	cube = *ResourcesManager::GetResource<Mesh>("Default");
 
-	UpdateExtends();
+	UpdateScale();
 }
 
 BoxCollision::BoxCollision(const BoxCollision& _other)
@@ -50,19 +51,19 @@ void BoxCollision::Editor()
 	ShapeCollision::Editor();
 
 	if (ImGui::DragFloat3("Half Extends : ", &halfExtends.x, 0.1f, 0.1f, 100.0f))
-		UpdateExtends();
+		UpdateScale();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void BoxCollision::UpdateExtends()
+void BoxCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
 	if (rigid)
 		rigid->actor->detachShape(*shape);
 
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends) / 2.0f), *material);
+	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f), *material);
 
 	AttachToRigidComponent();
 }
@@ -73,17 +74,11 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 		return;
 
 	materialShader.shader->Use();
+	
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(halfExtends.x, halfExtends.y, halfExtends.z));
+	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(halfExtends.x, halfExtends.y, halfExtends.z) * gameObject->localScale);
+	Mat4 mat = trsGlobal * trsLocal;
 
 	materialShader.shader->SetMatrix("matrix", mat);
 	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());

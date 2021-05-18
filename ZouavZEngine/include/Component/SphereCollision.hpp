@@ -18,7 +18,7 @@ public:
 	~SphereCollision();
 
 	void Editor() override;
-	void UpdateRadius(float _radius);
+	void UpdateScale();
 	void DrawGizmos(const Camera& _camera) override;
 
 	const char* GetComponentName() override { return "SphereCollision"; }

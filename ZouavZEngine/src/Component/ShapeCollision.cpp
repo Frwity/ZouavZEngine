@@ -14,6 +14,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
+#include "extensions/PxRigidActorExt.h"
 
 ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger)
 	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
@@ -54,7 +55,10 @@ void ShapeCollision::UpdateIsTrigger()
 void ShapeCollision::Editor()
 {
 	ImGui::Text("Local Position :");
-	ImGui::SameLine(); ImGui::InputFloat3("##positionx", &transform.localPosition.x);
+	ImGui::SameLine(); 
+	
+	if (ImGui::InputFloat3("##positionx", &transform.localPosition.x))
+		UpdateShapeTransform();
 
 	static Vec3 localEulerAngles;
 	localEulerAngles = transform.localRotation.ToEuler();
@@ -63,22 +67,27 @@ void ShapeCollision::Editor()
 	ImGui::SameLine(); 
 	
 	if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
+	{
 		transform.localRotation = Quaternion(localEulerAngles);
+		UpdateShapeTransform();
+	}
 
-	//ImGui::Text("Local Scale    :");
-	//ImGui::SameLine(); ImGui::InputFloat3("##scalex", &transform.localScale.x);
+}
 
+void ShapeCollision::UpdateShapeTransform()
+{
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	/*if (rigid)
+	if (rigid)
 	{
-		physx::PxShape* shape = nullptr;
-		rigid->actor->getShapes(&shape, 1);
+		physx::PxShape* shapeActor = nullptr;
+		rigid->actor->getShapes(&shapeActor, 1);
 
-		//if (shape)
-			//shape->setLocalPose(PxTransformFromTransform(transform));
-	}*/
-}
+		if (shapeActor)
+			shapeActor->setLocalPose(PxTransformFromTransform(transform));
+	}
+
+}	
 
 void ShapeCollision::AttachToRigidComponent()
 {
@@ -86,20 +95,17 @@ void ShapeCollision::AttachToRigidComponent()
 	{
 		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
 
-		RigidBody* rd = GetGameObject().GetComponent<RigidBody>();
-		RigidStatic* rs = GetGameObject().GetComponent<RigidStatic>();
+		Rigid* rigid = GetGameObject().GetComponent<Rigid>();
 
-		if (rd)
+		if (rigid)
 		{
-			ZASSERT(shape->getGeometryType() != physx::PxGeometryType::ePLANE, "Plane must be created with a RigidStatic");
-			rd->actor->attachShape(*shape);
+			//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
+			physx::PxBoxGeometry box;
+			shape->getBoxGeometry(box);
+			shape->release();
+			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, box, *material);
+			shape->setLocalPose(PxTransformFromTransform(transform));
 		}
-		
-		if (rs)
-		{
-			rs->actor->attachShape(*shape);
-		}
-
 	}
 }
 
@@ -128,13 +134,10 @@ void ShapeCollision::InternalDehactivate()
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 }
 
-void ShapeCollision::UpdateTransform(Transform _transform)
+void ShapeCollision::UpdateTransform()
 {
-	transform = _transform;
-
-	//does not work atm
-	//if (shape)
-	//	shape->setLocalPose(PxTransformFromTransform(transform));
+	if (shape)
+		shape->setLocalPose(PxTransformFromTransform(transform));
 }
 
 void ShapeCollision::DrawGizmos(const Camera& _camera)

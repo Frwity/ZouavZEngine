@@ -19,7 +19,8 @@ using namespace physx;
 SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _tranform)
 	: ShapeCollision(_gameObject, _tranform, _isTrigger), radius(_radius)
 {	
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
+	geometry = new PxSphereGeometry(_radius);
+	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
 	//attach shape to rigidbody or rigidstatic if exist
 	AttachToRigidComponent();
@@ -48,12 +49,12 @@ void SphereCollision::Editor()
 	ShapeCollision::Editor();
 
 	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
-		UpdateRadius(radius);
+		UpdateScale();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void SphereCollision::UpdateRadius(float _radius)
+void SphereCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
@@ -62,7 +63,6 @@ void SphereCollision::UpdateRadius(float _radius)
 
 	rigid->actor->detachShape(*shape);
 
-	radius = _radius;
 	shape = PhysicSystem::physics->createShape(PxSphereGeometry(radius), *material);
 
 	AttachToRigidComponent();
@@ -75,16 +75,10 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 
 	materialShader.shader->Use();
 
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius, radius, radius));
+	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	Mat4 mat = Mat4FromPxMat44(m) * Mat4::CreateScaleMatrix(Vec3(radius, radius, radius) * gameObject->localScale);
+	Mat4 mat = trsGlobal * trsLocal;
 
 	materialShader.shader->SetMatrix("matrix", mat);
 	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());

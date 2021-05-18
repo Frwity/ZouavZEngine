@@ -8,6 +8,7 @@
 #include "System/PhysicSystem.hpp"
 #include "PxScene.h"
 #include "extensions/PxSimpleFactory.h"
+#include "extensions/PxRigidActorExt.h"
 #include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
 #include "Component/ShapeCollision.hpp"
@@ -58,9 +59,10 @@ void Rigid::AttachShape()
 	if (collision && !collision->isAttach)
 	{
 		collision->isAttach = true;
-		if (!actor->attachShape(*collision->shape))
-			std::cout << "Attach to shape failed !" << std::endl;
-		collision->shape->release();
+
+		collision->shape = physx::PxRigidActorExt::createExclusiveShape(*actor, *collision->geometry, *collision->material);
+		if(!collision->shape)
+			Debug::LogError("Attach to shape failed !");
 	}
 }
 
