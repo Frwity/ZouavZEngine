@@ -20,7 +20,7 @@ public:
 	~Engine();
 	
 	void LoadDefaultResources();
-	void Load();
+	void Load(bool _changedScene);
 	void Update();
 	void Save();
 

@@ -33,6 +33,8 @@ private:
 
 	class Engine& engine;
 
+	bool changedScene = true;
+
 public:
 	bool isKeyboardEnable;
 	Editor(class Engine& _engine);

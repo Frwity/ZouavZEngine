@@ -75,9 +75,9 @@ void Engine::LoadDefaultResources()
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 
-void Engine::Load()
+void Engine::Load(bool _changedScene)
 {
-    scene.Load();
+    scene.Load(_changedScene);
 }
 
 void Engine::Save()

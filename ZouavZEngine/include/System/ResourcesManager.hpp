@@ -33,7 +33,8 @@ public:
 	ResourcesManager() = delete;
 	
 	static void InitDefaultResources();
-	static void Clear();
+	static void PrepareClear();
+	static void ClearHasToBeDelete();
 
 	template <class Archive>
 	static void load(Archive& _ar)
@@ -46,37 +47,37 @@ public:
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceSound(name, deletable, path.c_str());
+			AddResourceSound(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceMesh(name, deletable, path.c_str());
+			AddResourceMesh(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceTexture(name, deletable, path.c_str());
+			AddResourceTexture(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceShader(name, deletable, path.c_str());
+			AddResourceShader(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceFont(name, deletable, path.c_str());
+			AddResourceFont(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 		_ar(count);
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceCubemapTexture(name, deletable, path.c_str());
+			AddResourceCubemapTexture(name, deletable, path.c_str())->get()->hasToBeDelete = false;
 		}
 	}
 
@@ -111,6 +112,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<Sound>* AddResourceSound(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = soundResources.find(_name);
+		if (find != soundResources.end())
+			return &find->second;
+
 		auto a = soundResources.emplace(_name, std::make_shared<Sound>(_name, _args...));
 		if (a.second)
 		{
@@ -118,8 +123,6 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
 
 		Debug::LogError("Sound resource : " + _name + " not loaded");
 		return nullptr;
@@ -128,6 +131,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<Mesh>* AddResourceMesh(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = meshResources.find(_name);
+		if (find != meshResources.end())
+			return &find->second;
+
 		auto a = meshResources.emplace(_name, std::make_shared<Mesh>(_name, _args...));
 		if (a.second)
 		{
@@ -135,8 +142,6 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
 
 
 		Debug::LogError("Mesh resource : " + _name + " not loaded");
@@ -146,6 +151,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<Texture>* AddResourceTexture(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = textureResources.find(_name);
+		if (find != textureResources.end())
+			return &find->second;
+
 		auto a = textureResources.emplace(_name, std::make_shared<Texture>(_name, _args...));
 		if (a.second)
 		{
@@ -153,8 +162,6 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
 
 		Debug::LogError("Texture resource : " + _name + " not loaded");
 		return nullptr;
@@ -163,6 +170,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<Shader>* AddResourceShader(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = shaderResources.find(_name);
+		if (find != shaderResources.end())
+			return &find->second;
+
 		auto a = shaderResources.emplace(_name, std::make_shared<Shader>(_name, _args...));
 		if (a.second)
 		{
@@ -170,8 +181,6 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
 
 		Debug::LogError("Shader resource : " + _name + " not loaded");
 		return nullptr;
@@ -180,6 +189,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<Font>* AddResourceFont(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = fontResources.find(_name);
+		if (find != fontResources.end())
+			return &find->second;
+
 		auto a = fontResources.emplace(_name, std::make_shared<Font>(_name, _args...));
 		if (a.second)
 		{
@@ -187,8 +200,7 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
+
 
 		Debug::LogError("Font resource : " + _name + " not loaded");
 		return nullptr;
@@ -197,6 +209,10 @@ public:
 	template<typename... Args>
 	static typename std::shared_ptr<CubemapTexture>* AddResourceCubemapTexture(std::string _name, bool _deletable, Args... _args)
 	{
+		auto find = cubemapTextureResources.find(_name);
+		if (find != cubemapTextureResources.end())
+			return &find->second;
+
 		auto a = cubemapTextureResources.emplace(_name, std::make_shared<CubemapTexture>(_name, _args...));
 		if (a.second)
 		{
@@ -204,8 +220,7 @@ public:
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}
-		else if (a.first->second)
-			return &a.first->second;
+
 
 		Debug::LogError("Cubemap texture resource : " + _name + " not loaded");
 		return nullptr;

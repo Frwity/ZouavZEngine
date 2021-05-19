@@ -50,7 +50,8 @@ bool Scene::NewScene(const std::string& _sceneName, bool _force)
 	sceneWorld.children.clear();
 	PhysicSystem::scene->release();
 	PhysicSystem::InitScene();
-	ResourcesManager::Clear();	
+	ResourcesManager::PrepareClear();	
+	ResourcesManager::ClearHasToBeDelete();
 	GetCurrentScene()->Save();
 }
 
@@ -73,8 +74,9 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 		{
 			cereal::JSONInputArchive iarchive(saveFile);
 
-			ResourcesManager::Clear();
+			ResourcesManager::PrepareClear();
 			ResourcesManager::load(iarchive);
+			ResourcesManager::ClearHasToBeDelete();
 		}
 		saveFile.close();
 	}

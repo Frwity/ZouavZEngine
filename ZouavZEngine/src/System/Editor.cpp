@@ -212,7 +212,8 @@ void Editor::DisplayOptionWindow()
     if (ImGui::Button("Load"))
     {
         gameObjectInspector = nullptr;
-        engine.Load();
+        engine.Load(changedScene);
+        changedScene = false;
     }
 	ImGui::SameLine();
 
@@ -660,7 +661,8 @@ void Editor::DisplayInspector()
             ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
-            ImGui::InputText("##name", &gameObjectInspector->name);
+            if (ImGui::InputText("##name", &gameObjectInspector->name) && !gameObjectInspector->parent)
+                changedScene = true;
             ImGui::SameLine();
             ImGui::Text("Tag : ");
             ImGui::SameLine();
