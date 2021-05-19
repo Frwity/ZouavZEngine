@@ -76,10 +76,10 @@ class SceneCamera : public Camera
 {
 private:
 	friend cereal::access;
+	friend class Editor;
 
 	static SceneCamera* sceneCamera;
 
-	Vec2 mousePosition{ 0.0f, 0.0f };
 	float pitch{ 0.0f };
 	float yaw{ 0.0f };
 	float speed{ 0.0f };
@@ -98,9 +98,6 @@ public:
 	void MoveTo(const Vec3& _direction);
 	Mat4 GetMatrix() const final;
 	Mat4 GetLookAtMatrix(const Vec3& _target) const;
-	void UpdateRotation(const Vec2& _newMousePosition);
-
-	void Update(bool _isKeyboardEnable, float _deltaTime);
 
 	template <class Archive>
 	void serialize(Archive& _ar)
@@ -111,7 +108,6 @@ public:
 			projection.matrix[12], projection.matrix[13], projection.matrix[14], projection.matrix[15],
 			position.x, position.y, position.z,
 			target.x, target.y, target.z,
-			mousePosition.x, mousePosition.y,
 			pitch, yaw, speed);
 	}
 
@@ -121,7 +117,6 @@ public:
 		Mat4 _projection;
 		Vec3 _position;
 		Vec3 _target;
-		Vec2 _mousePosition;
 		float _pitch, _yaw, _speed;
 		_ar(_projection.matrix[0], _projection.matrix[1], _projection.matrix[2], _projection.matrix[3],
 			_projection.matrix[4], _projection.matrix[5], _projection.matrix[6], _projection.matrix[7],
@@ -129,13 +124,11 @@ public:
 			_projection.matrix[12], _projection.matrix[13], _projection.matrix[14], _projection.matrix[15],
 			_position.x, _position.y, _position.z,
 			_target.x, _target.y, _target.z,
-			_mousePosition.x, _mousePosition.y,
 			_pitch, _yaw, _speed);
 		_construct(10, 10);
 		_construct->projection = _projection;
 		_construct->position = _position;
 		_construct->target = _target;
-		_construct->mousePosition = _mousePosition;
 		_construct->pitch = _pitch;
 		_construct->yaw = _yaw;
 		_construct->speed = _speed;

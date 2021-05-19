@@ -134,7 +134,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
 }
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height, true), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
+    : Camera(nullptr, _width, _height, true), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;
@@ -180,46 +180,4 @@ Mat4 SceneCamera::GetLookAtMatrix(const Vec3& _target) const
     cameraMatrix.Accessor(3, 3) = 1;
 
     return cameraMatrix;
-}
-
-void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
-{
-	float dx = mousePosition.x - _newMousePosition.x;
-    float dy = mousePosition.y - _newMousePosition.y;
-    yaw += dx / 1000.0f;
-    pitch += dy / 1000.0f;
-
-    pitch = pitch > -(float)M_PI_2 ? (pitch < (float)M_PI_2 ? pitch : (float)M_PI_2) : -(float)M_PI_2;
-
-    mousePosition = _newMousePosition;
-} 
-
-void SceneCamera::Update(bool _isKeyboardEnable, float _deltaTime)
-{
-    if (!_isKeyboardEnable)
-        return;
-   
-    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = _deltaTime * Speed() + Speed() * sprint * 1.2f;
-
-    if (InputManager::GetKeyPressed(E_KEYS::W))
-        MoveTo({ 0.0f, 0.0f, -cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::S))
-        MoveTo({ 0.0f, 0.0f, cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::D))
-        MoveTo({ cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::A))
-        MoveTo({ -cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
-        MoveTo({ 0.0f, cameraSpeed, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
-        MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-
-
-    UpdateRotation(InputManager::GetCursorPos());
 }

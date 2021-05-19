@@ -132,5 +132,6 @@ void Engine::Update()
         
         editor.Update();
         render.Update();
+        InputManager::UpdateOldMousePos();
     }
 }

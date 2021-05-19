@@ -27,9 +27,13 @@
 #include "Scene.hpp"
 #include "System/TimeManager.hpp"
 #include "System/Engine.hpp"
-#include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
 #include "System/ScriptSystem.hpp"
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#include "System/Editor.hpp"
 
 bool newFolderWindow = false;
 bool newFileWindow = false;
@@ -380,7 +384,6 @@ bool CreateNewClass(std::string className, std::string parentClassName)
             "public:\n"
             "    " << className << "() = delete;\n"
             "    " << className << "(class GameObject* _gameobject);\n"
-            "    Component* Clone() const override { return new " << className << "(*this); }\n"  
             "    void Begin() override;\n"
             "    void Update() override;\n"
             "    const char* GetComponentName() override { return \"" << className << "\"; }\n"
@@ -506,7 +509,7 @@ void NewClassWindow()
     }
 }
 
-void NewSceneWindow(Engine& engine)
+void Editor::NewSceneWindow(Engine& _engine)
 {
     if (newSceneWindow)
     {
@@ -517,7 +520,7 @@ void NewSceneWindow(Engine& engine)
         static std::string sceneName = "New Scene";
         ImGui::InputText("Scene Name", sceneName.data(), 256);
         
-        if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+        if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
             newSceneWindow = false;
 
         if (!newSceneWindowWarning && ImGui::Button("Create"))
@@ -527,7 +530,7 @@ void NewSceneWindow(Engine& engine)
                 newSceneWindowWarning = true;
             else
             {
-                engine.LoadDefaultResources();
+                _engine.LoadDefaultResources();
                 sceneName = "New Scene";
                 newSceneWindow = false;
             }
@@ -539,7 +542,7 @@ void NewSceneWindow(Engine& engine)
             {
                 Scene::NewScene(sceneName.c_str(), true);
                 newSceneWindowWarning = false;
-                engine.LoadDefaultResources();
+                _engine.LoadDefaultResources();
                 sceneName = "New Scene";
                 newSceneWindow = false;
             }
@@ -583,6 +586,44 @@ void Editor::FileMenu()
 {
 
 }
+void Editor::CameraUpdateRotation()
+{
+    Vec2 offset = InputManager::EditorGetCursorOffsetFromLastFrame();
+    sceneCamera.yaw -= offset.x / 1000.0f;
+    sceneCamera.pitch -= offset.y / 1000.0f;
+
+    sceneCamera.pitch = sceneCamera.pitch > -(float)M_PI_2 ? (sceneCamera.pitch < (float)M_PI_2 ? sceneCamera.pitch : (float)M_PI_2) : -(float)M_PI_2;
+}
+
+void Editor::CameraUpdate(float _deltaTime)
+{
+    if (!isKeyboardEnable)
+        return;
+
+    bool sprint = InputManager::EditorGetKeyPressed(E_KEYS::LCTRL);
+    float cameraSpeed = _deltaTime * sceneCamera.Speed() + sceneCamera.Speed() * sprint * 1.2f;
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::W))
+        sceneCamera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::S))
+        sceneCamera.MoveTo({ 0.0f, 0.0f, cameraSpeed });
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::D))
+        sceneCamera.MoveTo({ cameraSpeed, 0.0f, 0.0f });
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::A))
+        sceneCamera.MoveTo({ -cameraSpeed, 0.0f, 0.0f });
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::SPACEBAR))
+        sceneCamera.MoveTo({ 0.0f, cameraSpeed, 0.0f });
+
+    if (InputManager::EditorGetKeyPressed(E_KEYS::LSHIFT))
+        sceneCamera.MoveTo({ 0.0f, -cameraSpeed, 0.0f });
+
+
+    CameraUpdateRotation();
+}
 
 void Editor::Update()
 {
@@ -598,7 +639,7 @@ void Editor::Update()
     }
 
     if (sceneFocused)
-        sceneCamera.Update(isKeyboardEnable, editorClock->GetDeltaTime());
+        CameraUpdate(editorClock->GetDeltaTime());
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
@@ -608,7 +649,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
     if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs))
     {
         sceneFocused = ImGui::IsWindowFocused();
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT) && !isKeyboardEnable)
+        if (ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && !isKeyboardEnable)
         {
             ImGui::SetWindowFocus("Scene");
             isKeyboardEnable = true;
@@ -617,7 +658,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
-        if (InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
+        if (InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
         {
             isKeyboardEnable = false;
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
@@ -830,7 +871,7 @@ void Editor::DisplayInspector()
                     }
 
                 }
-                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                     addComponentWindow = false;
                 
                 ImGui::End();
@@ -877,16 +918,18 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
 {
     if (ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoScrollWithMouse))
     {
-        if (ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable && state == EDITOR_STATE::PLAYING)
+        if (ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
+            InputManager::isGameInputActive = true;
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
-        if (ImGui::IsWindowFocused() && InputManager::GetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
+        if (ImGui::IsWindowFocused() && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
+            InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -986,7 +1029,7 @@ void Editor::DisplayProject()
             }
         }
     
-        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             projectNewFolderPos = ImGui::GetMousePos();
             projectNewFolder = true;
@@ -998,7 +1041,7 @@ void Editor::DisplayProject()
             ImGui::SetNextWindowPos(projectNewFolderPos);
             if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                     projectNewFolder = false;
 
                 static std::string newHierarchyFolderName = "New Folder";
@@ -1026,14 +1069,14 @@ void Editor::DisplayChild(GameObject* _parent)
     {
         if (ImGui::IsItemHovered())
         {
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
+            if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
             {
                 hierarchyMenuPos = ImGui::GetMousePos();
                 hierarchyMenu = true;
                 newGameObjectParent = _parent;
             }
 
-            if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+            if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                 gameObjectInspector = _parent;
             
             if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -1090,7 +1133,7 @@ void Editor::DisplayHierarchy()
 
         DisplayChild(&Scene::GetCurrentScene()->GetWorld());
 
-        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             hierarchyMenuPos = ImGui::GetMousePos();
             hierarchyMenu = true;
@@ -1136,7 +1179,7 @@ void Editor::DisplayHierarchy()
                         GameObject::Instanciate(newGameObjectParent);
                 }
 
-                if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                     hierarchyMenu = false;
             }
             ImGui::End();
@@ -1150,15 +1193,15 @@ void Editor::MoveSelectedGameobject()
     if (gameObjectInspector == nullptr || state == EDITOR_STATE::PLAYING || state == EDITOR_STATE::PAUSE)
         return;
 
-    if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+    if (InputManager::EditorGetKeyPressed(E_KEYS::ARROW_UP))
         gameObjectInspector->Translate(-gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
-    if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+    if (InputManager::EditorGetKeyPressed(E_KEYS::ARROW_DOWN))
         gameObjectInspector->Translate(gameObjectInspector->Forward() * editorClock->GetDeltaTime());
 
-    if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+    if (InputManager::EditorGetKeyPressed(E_KEYS::ARROW_RIGHT))
         gameObjectInspector->Translate(gameObjectInspector->Right() * editorClock->GetDeltaTime());
 
-    if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+    if (InputManager::EditorGetKeyPressed(E_KEYS::ARROW_LEFT))
         gameObjectInspector->Translate(-gameObjectInspector->Right() * editorClock->GetDeltaTime());
 }

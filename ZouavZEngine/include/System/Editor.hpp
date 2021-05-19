@@ -54,7 +54,10 @@ public:
 	void DisplayProject();
 	void FileMenu();
 	void Update();
+	void CameraUpdateRotation();
+	void CameraUpdate(float _deltaTime);
 	void DisplayHierarchy();
 	void DisplayChild(class GameObject* _parent);
 	void MoveSelectedGameobject();
+	void NewSceneWindow(class Engine& _engine);
 };
