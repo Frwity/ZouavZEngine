@@ -22,16 +22,7 @@ Player::Player(GameObject* _gameobject)
 void Player::Begin()
 {
 	ICharacter::Begin();
-	if (GetGameObject().GetComponent<MeshRenderer>())
-	{
-		material = &GetGameObject().GetComponent<MeshRenderer>()->material;
-		baseColor = material->color;
-	}
-	if (GetGameObject().GetComponent<FontComponent>())
-	{
-		lifeFont = GetGameObject().GetComponent<FontComponent>();
-		lifeFont->ChangeText(std::to_string(life));
-	}
+	
 	if (GetGameObject().GetComponent<Camera>())
 	{
 		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
@@ -88,8 +79,8 @@ void Player::Update()
 		xCameraAngle = xCameraAngle > -(float)89.0f ? (xCameraAngle < (float)89.0f ? xCameraAngle : (float)89.0f) : -(float)89.0f;
 		offset.y = 0;
 	}
-	GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
-	GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
+	//GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
+	//GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
 
 	oldMousePos = newMousePos;
 }

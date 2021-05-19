@@ -38,13 +38,15 @@ void ICharacter::Update()
 {
 	if (asTakenDamage)
 	{
-		material->color = Vec4::Lerp(damageColor, baseColor, invulnerabilityTimer / invulnerabilityFrame);
+		if (material)
+			material->color = Vec4::Lerp(damageColor, baseColor, invulnerabilityTimer / invulnerabilityFrame);
 		invulnerabilityTimer += TimeManager::GetDeltaTime();
 		if (invulnerabilityTimer >= invulnerabilityFrame)
 		{
 			asTakenDamage = false;
 			invulnerabilityTimer = 0.0f;
-			material->color = baseColor;
+			if (material)
+				material->color = baseColor;
 		}
 	}
 }
@@ -59,7 +61,8 @@ bool ICharacter::Damage(int _damage)
 	if (IsAlive())
 	{
 		asTakenDamage = true;
-		//lifeFont->ChangeText(std::to_string(life));
+		if (lifeFont)
+			lifeFont->ChangeText(std::to_string(life));
 	}
 	else
 		return false;

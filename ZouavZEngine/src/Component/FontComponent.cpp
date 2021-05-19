@@ -187,8 +187,7 @@ void FontComponent::DrawBillboard(const Camera& _camera)
 	font->GetTexture().Use();
 
 	shaderBillboard->SetVector3("centerPos", GetGameObject().WorldPosition());
-	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale())
-										* Mat4::CreateTranslationMatrix(position));	
+	shaderBillboard->SetMatrix("model", Mat4::CreateTranslationMatrix(position));	
 	shaderBillboard->SetVector4("color", color);
 	shaderBillboard->SetFloat("width", width);
 	shaderBillboard->SetFloat("edge", edge);

@@ -64,27 +64,27 @@ Vec4 Vec4::Lerp(const Vec4& _v1, const Vec4& _v2, float _t)
 
 Vec4 Vec4::operator+(const Vec4& _v) const
 {
-    return {w + _v.w, x + _v.x, y  + _v.y, z + _v.z};
+    return {x + _v.x, y + _v.y, z + _v.z, w + _v.w};
 }
 
 Vec4 Vec4::operator-(const Vec4& _v) const
 {
-    return {w - _v.w, x - _v.x, y - _v.y, z - _v.z };
+    return {x - _v.x, y - _v.y, z - _v.z, w - _v.w };
 }
 
 Vec4 Vec4::operator*(const Vec4& _v) const
 {
-    return {w * _v.w, x * _v.x, y * _v.y, z * _v.z };
+    return {x * _v.x, y * _v.y, z * _v.z, w * _v.w };
 }
 
 Vec4 Vec4::operator*(float _value) const
 {
-    return {w * _value, x * _value, y * _value, z * _value };
+    return {x * _value, y * _value, z * _value, w * _value };
 }
 
 Vec4 Vec4::operator/(float _value) const
 {
-    return {w / _value, x / _value, y / _value, z / _value };
+    return {x / _value, y / _value, z / _value, w / _value };
 }
 
 void Vec4::operator=(const Vec4& _v)
