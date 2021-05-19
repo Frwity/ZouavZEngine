@@ -145,26 +145,7 @@ void ShapeCollision::UpdateTransform()
 		shape->setLocalPose(PxTransformFromTransform(transform));
 }
 
-void ShapeCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
+void ShapeCollision::DrawGizmos(const Camera& _camera)
 {
-	if (shape == nullptr)
-		return;
 
-	gizmoShader.get()->Use();
-
-	Rigid* rigid = gameObject->GetComponent<Rigid>();
-
-	physx::PxMat44 m;
-
-	if (rigid)
-		m = rigid->actor->getGlobalPose();
-	else
-		m = physx::PxMat44(shape->getLocalPose());
-
-	gizmoShader.get()->SetMatrix("matrix", Mat4FromPxMat44(m) * _modelMatrix);
-
-	gizmoShader.get()->SetVector4("color", { 0.0f, 1.0f, 0.0f, 1.0f });
-
-	glBindVertexArray(gizmoMesh.get()->GetID());
-	glDrawElements(GL_LINE_LOOP, gizmoMesh.get()->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

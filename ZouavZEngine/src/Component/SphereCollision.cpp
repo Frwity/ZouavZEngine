@@ -25,7 +25,7 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	//attach shape to a Rigid component if exist
 	AttachToRigidComponent();
 
-	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 	UpdateScale();
 }
 
@@ -69,23 +69,23 @@ void SphereCollision::UpdateScale()
 	shape->userData = this;
 }
 
-void SphereCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
+void SphereCollision::DrawGizmos(const Camera& _camera)
 {
 	if (shape == nullptr)
 		return;
 
-	materialShader.shader->Use();
+	gizmoShader->Use();
 
 	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius / 1.5f, radius /1.5f, radius / 1.5f));
 	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
 	Mat4 mat = trsGlobal * trsLocal;
 
-	materialShader.shader->SetMatrix("matrix", mat);
-	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-	materialShader.shader->SetVector4("color", materialShader.color);
+	gizmoShader->SetMatrix("matrix", mat);
+	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
+	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-	glBindVertexArray(sphereMesh->GetID());
-	glDrawElements(GL_TRIANGLES, sphereMesh->GetNbElements(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(gizmoMesh->GetID());
+	glDrawElements(GL_TRIANGLES, gizmoMesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

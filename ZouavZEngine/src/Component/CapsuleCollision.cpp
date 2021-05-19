@@ -22,7 +22,7 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 
 	AttachToRigidComponent();
 
-	capsule = *ResourcesManager::GetResource<Mesh>("Capsule");
+	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
 	UpdateScale();
 }
 
@@ -68,23 +68,23 @@ void CapsuleCollision::UpdateScale()
 	shape->userData = this;
 }
 
-void CapsuleCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
+void CapsuleCollision::DrawGizmos(const Camera& _camera)
 {
 	if (shape == nullptr)
 		return;
 
-	materialShader.shader->Use();
+	gizmoShader->Use();
 
 	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius, halfHeight, radius));
 	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
 	Mat4 mat = trsGlobal * trsLocal;
 
-	materialShader.shader->SetMatrix("matrix", mat);
-	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-	materialShader.shader->SetVector4("color", materialShader.color);
+	gizmoShader->SetMatrix("matrix", mat);
+	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
+	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-	glBindVertexArray(capsule->GetID());
-	glDrawElements(GL_LINE_LOOP, capsule->GetNbElements(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(gizmoMesh->GetID());
+	glDrawElements(GL_LINE_LOOP, gizmoMesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }

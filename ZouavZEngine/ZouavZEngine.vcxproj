@@ -167,7 +167,6 @@
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\ImSequencer.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
-    <ClCompile Include="include\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
     <ClCompile Include="src\Component\AudioListener.cpp" />
     <ClCompile Include="src\Component\BoxCollision.cpp" />
@@ -179,6 +178,7 @@
     <ClCompile Include="src\Component\Plane.cpp" />
     <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
+    <ClCompile Include="src\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
     <ClCompile Include="src\Component\Skybox.cpp" />

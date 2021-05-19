@@ -195,9 +195,6 @@
     <ClCompile Include="src\Component\RigidBody.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="include\Component\RigidStatic.cpp">
-      <Filter>src\Component</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\Plane.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -251,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\Generato.cpp">
       <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\RigidStatic.cpp">
+      <Filter>src\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
