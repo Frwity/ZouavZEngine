@@ -106,6 +106,7 @@ void ShapeCollision::AttachToRigidComponent()
 			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
 			if (shape)
 			{
+				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
 				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
 				shape->setLocalPose(PxTransformFromTransform(transform));
 			}

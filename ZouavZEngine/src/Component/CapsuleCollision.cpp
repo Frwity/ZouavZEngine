@@ -65,6 +65,7 @@ void CapsuleCollision::UpdateScale()
 	geometry = new PxCapsuleGeometry(radius, halfHeight);
 
 	AttachToRigidComponent();
+	shape->userData = this;
 }
 
 void CapsuleCollision::DrawGizmos(const Camera& _camera)

@@ -66,6 +66,7 @@ void BoxCollision::UpdateScale()
 	geometry = new PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f);
 
 	AttachToRigidComponent();
+	shape->userData = this;
 }
 
 void BoxCollision::DrawGizmos(const Camera& _camera)

@@ -53,9 +53,7 @@ void Rigid::InternalDehactivate()
 
 void Rigid::AttachShape()
 {
-	//TODO use getComponents
 	std::vector<ShapeCollision*> collisions = GetGameObject().GetComponents<ShapeCollision>();
-
 
 	for (ShapeCollision* collision : collisions)
 	{
@@ -70,26 +68,30 @@ void Rigid::AttachShape()
 	}
 }
 
-void Rigid::OnContact(GameObject* _other)
+void Rigid::OnContact(GameObject* _other, physx::PxShape* _collidingShape)
 {
 	if (gameObject == nullptr)
 		return;
 
 	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
 
+	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
+
 	if (script)
-		script->OnContact(_other);
+		script->OnContact(_other, collision);
 }
 
-void Rigid::OnTrigger(GameObject* _other)
+void Rigid::OnTrigger(GameObject* _other, physx::PxShape* _collidingShape)
 {
 	if (gameObject == nullptr)
 		return;
 
 	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
 
+	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
+
 	if (script)
-		script->OnTrigger(_other);
+		script->OnTrigger(_other, collision);
 }
 
 Rigid::~Rigid()

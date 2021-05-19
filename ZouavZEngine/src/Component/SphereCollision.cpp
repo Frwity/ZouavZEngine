@@ -22,7 +22,7 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	geometry = new PxSphereGeometry(_radius);
 	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
-	//attach shape to rigidbody or rigidstatic if exist
+	//attach shape to a Rigid component if exist
 	AttachToRigidComponent();
 
 	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
@@ -66,6 +66,7 @@ void SphereCollision::UpdateScale()
 	geometry = new PxSphereGeometry(radius);
 
 	AttachToRigidComponent();
+	shape->userData = this;
 }
 
 void SphereCollision::DrawGizmos(const Camera& _camera)
