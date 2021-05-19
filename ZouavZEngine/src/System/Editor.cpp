@@ -23,7 +23,6 @@
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/Skybox.hpp"
-#include "Game/Player.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -32,9 +31,6 @@
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
 #include "System/ScriptSystem.hpp"
-
-#include "Game/Player.hpp"
-#include "Game/Generato.hpp"
 
 bool newFolderWindow = false;
 bool newFileWindow = false;
@@ -638,8 +634,6 @@ GENADDCOMPONENT(RigidBody)
 GENADDCOMPONENT(RigidStatic)
 GENADDCOMPONENT(Camera)
 GENADDCOMPONENT(Skybox)
-GENADDCOMPONENT(Generato)
-GENADDCOMPONENT(Player)
 
 void Editor::DisplayInspector()
 {
@@ -761,14 +755,12 @@ void Editor::DisplayInspector()
 
                     if (ComponentButton<Skybox>("Add Skybox", true))
                         addComponentWindow = false;
+                    for (auto& addComponentFunction : ScriptSystem::addComponentsFunctions)
+                    {
+                        if (addComponentFunction(gameObjectInspector))
+                            addComponentWindow = false;
+                    }
 
-                    if (ComponentButton<Player>("Add Player", true))
-                        addComponentWindow = false;
-
-                    if (ComponentButton<Generato>("Add Generato", true))
-                        addComponentWindow = false;
-
-                    ScriptSystem::AddComponents(gameObjectInspector);
                 }
                 if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
                     addComponentWindow = false;

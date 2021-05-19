@@ -255,6 +255,9 @@
     <ClCompile Include="src\Rendering\CubemapTexture.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\RegisterComponents.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
     <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
       <Filter>external_lib</Filter>
     </ClCompile>
@@ -442,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\CubemapTexture.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RegisterComponent.hpp">
+      <Filter>include\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

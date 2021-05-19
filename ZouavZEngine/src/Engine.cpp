@@ -20,8 +20,6 @@
 #include "System/FontSystem.hpp"
 #include "System/Engine.hpp"
 #include "System/SoundManager.hpp"
-#include "Game/Move.hpp"
-#include "Game/Player.hpp"
 #include "Sound.hpp"
 #include "cereal/archives/json.hpp"
 #include <iostream>
@@ -44,8 +42,9 @@ Engine::Engine()
 
     SoundManager::Init();
     PhysicSystem::Init();
-
     TimeManager::Init();
+    ScriptSystem::Init();
+
 
 #ifdef EDITOR
     editor.Init();
