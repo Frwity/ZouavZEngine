@@ -236,8 +236,11 @@ void Editor::DisplayOptionWindow()
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
-        if (state == EDITOR_STATE::EDITING) 
+        if (state == EDITOR_STATE::EDITING)
+        {
+            ScriptSystem::Begin();
             engine.Save();
+        }
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
@@ -596,6 +599,13 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
                 gameObjectInspector->localPosition = translation;
                 gameObjectInspector->localRotation = Quaternion(rotation);
                 gameObjectInspector->localScale = scale;
+
+                //TODO use GetComponents
+                ShapeCollision* collision = gameObjectInspector->GetComponent<ShapeCollision>();
+
+                //UpdateScale of shapeCollision
+                if (collision)
+                    collision->UpdateScale();
             }
         }
     }

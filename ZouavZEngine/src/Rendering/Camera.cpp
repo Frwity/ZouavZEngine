@@ -22,7 +22,7 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height, bool _sce
     }
 
     target = { 0.0f, 0.0f, 0.0f };
-    position = { 0.0f, 0.0f, 0.0f };
+    position = { 0.0f, 0.0f, -5.0f };
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 

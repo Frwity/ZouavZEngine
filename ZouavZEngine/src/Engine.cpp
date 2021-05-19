@@ -88,8 +88,6 @@ void Engine::Save()
 
 void Engine::Update()
 {
-    ScriptSystem::Begin();
-
     while (!render.Stop())
     {
         TimeManager::Update();
@@ -101,11 +99,11 @@ void Engine::Update()
 
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {
-            SoundManager::Update();
             ScriptSystem::FixedUpdate();
-            ScriptSystem::Update();
-            scene.GetWorld().UpdateTransform(Mat4::identity);
             scene.Update();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
+            ScriptSystem::Update();
+            SoundManager::Update();
         }
         else
             scene.GetWorld().UpdateTransform(Mat4::identity);
@@ -115,20 +113,24 @@ void Engine::Update()
         if (editor.Display(render))
             scene.DisplayTerrainOptionWindow();
 
+        ////////////////
         render.BindSceneFBO(); 
-       
-        scene.Draw(&scene.GetWorld(), *SceneCamera::GetSceneCamera());
+
+        scene.UpdateShaderUniform(*SceneCamera::GetSceneCamera());
+        scene.Draw(&scene.GetWorld(), SceneCamera::GetSceneCamera());
         FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
         
         if (Camera::GetMainCamera())
         {
-            scene.Draw(&scene.GetWorld(), *Camera::GetMainCamera());
+            scene.UpdateShaderUniform(*Camera::GetMainCamera());
+            scene.Draw(&scene.GetWorld(), Camera::GetMainCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }
         
         render.BindMainFBO();
+        /////////////////
         
         editor.Update();
         render.Update();

@@ -42,7 +42,7 @@ public:
 		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
 		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
 
-		triggerActor->OnTrigger(&otherActor->GetGameObject());
+		triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs->triggerShape);
 	}
 
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
@@ -56,8 +56,8 @@ public:
 			Rigid* rb1 = static_cast<Rigid*>(rd->userData);
 			Rigid* rb2 = static_cast<Rigid*>(rd2->userData);
 
-			rb1->OnContact(&rb2->GetGameObject());
-			rb2->OnContact(&rb1->GetGameObject());
+			rb1->OnContact(&rb2->GetGameObject(), pairHeader.pairs->shapes[0]);
+			rb2->OnContact(&rb1->GetGameObject(), pairHeader.pairs->shapes[1]);
 		}
 
 		PX_UNUSED((pairs));
