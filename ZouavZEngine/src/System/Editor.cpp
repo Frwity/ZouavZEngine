@@ -1,4 +1,5 @@
 #include "imgui.h"
+#include "imgui_stdlib.h"
 #include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -30,6 +31,7 @@
 #include "System/Engine.hpp"
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
+#include "System/ScriptSystem.hpp"
 
 #include "Game/Player.hpp"
 #include "Game/Generato.hpp"
@@ -380,7 +382,7 @@ void NewFolderWindow()
         ListActualFolder(newFolderWindow);
         static std::string folderName = "New Folder";
 
-        ImGui::InputText("Folder Name", folderName.data(), 256);
+        ImGui::InputText("Folder Name", &folderName);
 
         if (ImGui::Button("Create"))
         {
@@ -408,7 +410,7 @@ void NewFileWindow()
         ListActualFolder(newFileWindow);
 
         static std::string fileName = "New File";
-        ImGui::InputText("File Name", fileName.data(), 256);
+        ImGui::InputText("File Name", &fileName);
 
         if (ImGui::Button("Create"))
         {
@@ -437,7 +439,7 @@ void NewClassWindow()
         ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
         static std::string className = "NewClass";
-        ImGui::InputText("Class Name", className.data(), 256);
+        ImGui::InputText("Class Name", &className);
 
         if (ImGui::Button("Create"))
             CreateNewClass(className);
@@ -455,7 +457,7 @@ void NewSceneWindow(Engine& engine)
         ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
 
         static std::string sceneName = "New Scene";
-        ImGui::InputText("Scene Name", sceneName.data(), 256);
+        ImGui::InputText("Scene Name", &sceneName);
         
         if (!ImGui::IsWindowHovered() && InputManager::GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
             newSceneWindow = false;
@@ -654,17 +656,11 @@ void Editor::DisplayInspector()
             ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
-            std::string name = gameObjectInspector->name;
-            if (ImGui::InputText("##name", name.data(), 256))
-                gameObjectInspector->name = name.data();
-
+            ImGui::InputText("##name", &gameObjectInspector->name);
             ImGui::SameLine();
             ImGui::Text("Tag : ");
             ImGui::SameLine();
-            std::string tag = gameObjectInspector->tag;
-            if (ImGui::InputText("##tag", tag.data(), 256))
-                gameObjectInspector->tag = tag.data();
-
+            ImGui::InputText("##name", &gameObjectInspector->tag);
 
             if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
             {
@@ -946,7 +942,7 @@ void Editor::DisplayProject()
                     projectNewFolder = false;
 
                 static std::string newHierarchyFolderName = "New Folder";
-                ImGui::InputText("##newhierarchyfoldername", newHierarchyFolderName.data(), 256);
+                ImGui::InputText("##newhierarchyfoldername", &newHierarchyFolderName);
                 if (ImGui::Button("Create"))
                 {
                     if (_mkdir(std::string(currentProjectFolder).append("/").append(newHierarchyFolderName).c_str()) == 0)
