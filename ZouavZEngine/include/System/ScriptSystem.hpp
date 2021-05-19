@@ -6,14 +6,15 @@
 class ScriptSystem
 {
 private:
+	friend class Editor;
 	static std::vector<class ScriptComponent*> scripts;
-	static std::vector<std::function<bool(std::string, bool, class GameObject*)>*> addComponentsFunctions;
+	static std::vector<bool (*)(class GameObject*)> addComponentsFunctions;
 
 public:
 	ScriptSystem() = delete;
 	~ScriptSystem() = delete;
 
-	static bool AddComponents(class GameObject* _gameObjectInspector);
+	static void Init();
 
 	static void AddScript(class ScriptComponent* _script);
 	static void RemoveScript(class ScriptComponent* _script);
