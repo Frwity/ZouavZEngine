@@ -255,6 +255,9 @@
     <ClCompile Include="src\Rendering\CubemapTexture.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">

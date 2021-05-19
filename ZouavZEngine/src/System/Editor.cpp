@@ -660,7 +660,7 @@ void Editor::DisplayInspector()
             ImGui::SameLine();
             ImGui::Text("Tag : ");
             ImGui::SameLine();
-            ImGui::InputText("##name", &gameObjectInspector->tag);
+            ImGui::InputText("##tag", &gameObjectInspector->tag);
 
             if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
             {

@@ -36,7 +36,7 @@ public:
 	{
 		ar(speed, vie, distance);
 
-		ar(cereal::base_class<Component>(this));
+		ar(cereal::base_class<ScriptComponent>(this));
 	}
 
 	template <class Archive>
@@ -53,7 +53,7 @@ public:
 		_construct->vie = _vie;
 		_construct->distance = _distance;		
 
-		_ar(cereal::base_class<Component>(_construct.ptr()));
+		_ar(cereal::base_class<ScriptComponent>(_construct.ptr()));
 	}
 };
 

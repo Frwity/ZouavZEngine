@@ -113,9 +113,7 @@ void FontComponent::ChangeType(E_FONT_TYPE _newType)
 void FontComponent::Editor()
 {
 	if (ImGui::InputText("Text : ", &text))
-	{
 		ChangeText(text.c_str(), text.size());
-	}
 
 	std::string oldValue = fontType == E_FONT_TYPE::FONT3D ? "Font 3D" : fontType == E_FONT_TYPE::FONTBILLBOARD ? "Font Billboard" : "Font 2D";
 	if (ImGui::BeginCombo("Type : ", oldValue.c_str()))
