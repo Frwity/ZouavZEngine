@@ -12,7 +12,7 @@ public:
 	float radius;
 	std::shared_ptr<Mesh> sphereMesh;
 
-	SphereCollision(GameObject* _gameObject, float _radius = 0.5f, bool _isTrigger = false, Transform _tranform = Transform());
+	SphereCollision(GameObject* _gameObject, float _radius = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
 	SphereCollision(const SphereCollision&);
 	Component* Clone() const override { return new SphereCollision(*this); }
 	~SphereCollision();

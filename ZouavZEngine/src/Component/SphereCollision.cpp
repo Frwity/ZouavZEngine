@@ -38,7 +38,7 @@ SphereCollision::SphereCollision(const SphereCollision& _other)
 
 	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 
-}
+} 
 
 SphereCollision::~SphereCollision()
 {
@@ -76,7 +76,7 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 
 	materialShader.shader->Use();
 
-	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius, radius, radius));
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius / 1.5f, radius /1.5f, radius / 1.5f));
 	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
 	Mat4 mat = trsGlobal * trsLocal;
