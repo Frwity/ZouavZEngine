@@ -311,8 +311,57 @@ void ListActualFolder(bool& windowOpened)
     }
 }
 
-void CreateNewClass(std::string className)
+void AddToVSProj(std::string className)
 {
+    std::ostringstream text;
+    std::ifstream in_file("ZouavZEngine.vcxproj");
+
+    text << in_file.rdbuf();
+    std::string str = text.str();
+
+    std::string firstSearch = "    <!--Compile End-->";
+    std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\" />\n" + firstSearch;
+    std::string secondSearch = "    <!--Include End-->";
+    std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\" />\n" + secondSearch;
+
+    size_t pos = str.find(firstSearch);
+    str.replace(pos, std::string(firstSearch).length(), firstReplace);
+    pos = str.find(secondSearch);
+    str.replace(pos, std::string(secondSearch).length(), secondReplace);
+    in_file.close();
+
+    std::ofstream out_file("ZouavZEngine.vcxproj");
+    out_file << str;
+}
+
+void AddToRegisterComponents(std::string className)
+{
+    std::ostringstream text;
+    std::ifstream in_file("src/Component/RegisterComponents.cpp");
+
+    text << in_file.rdbuf();
+    std::string str = text.str();
+
+    std::string firstSearch = "//</REGISTERINCLUDE>";
+    std::string firstReplace = "#include \"Game/" + className + ".hpp\"\n" + firstSearch;
+    std::string secondSearch = "	//</REGISTER>";
+    std::string secondReplace = "    REGISTER(" + className + ");\n" + secondSearch;
+
+    size_t pos = str.find(firstSearch);
+    str.replace(pos, std::string(firstSearch).length(), firstReplace);
+    pos = str.find(secondSearch);
+    str.replace(pos, std::string(secondSearch).length(), secondReplace);
+    in_file.close();
+
+    std::ofstream out_file("src/Component/RegisterComponents.cpp");
+    out_file << str;
+}
+
+bool CreateNewClass(std::string className, std::string parentClassName)
+{
+    if (std::filesystem::exists("include/Game/" + className + ".hpp") || std::filesystem::exists("src/Game/" + className + ".cpp"))
+        return false;
+
     std::ofstream hppFile(std::string("include/Game/").append(className).append(".hpp").c_str());
     std::ofstream cppFile(std::string("src/Game/").append(className).append(".cpp").c_str());
 
@@ -320,42 +369,46 @@ void CreateNewClass(std::string className)
     {
         hppFile <<
             "#pragma once\n"
-            "#include \"Component/ScriptComponent.hpp\"\n"
+            "#include \"" << (parentClassName.compare("ScriptComponent") == 0 ? "Component/" : "Game/") << parentClassName << ".hpp\"\n"
             "#include \"cereal/archives/json.hpp\"\n"
             "#include \"cereal/types/polymorphic.hpp\"\n"
             "#include \"cereal/access.hpp\"\n\n"
-            "class " << className << " : public ScriptComponent\n"
+            "class " << className << " : public " << parentClassName << "\n"
             "{\n"
-            "   private:\n"
-            "       friend class cereal::access;\n"  
-            "   public:\n"
-            "        " << className << "() = delete;\n"
-            "        " << className << "(class GameObject* _gameobject);\n"
-            "        Component* Clone() const override { return new " << className << "(*this); }\n"  
-            "        void Begin() final;\n"
-            "        void Update() final;\n"
-            "        const char* GetComponentName() override { return \"" << className << "\"; }\n"
-            "template <class Archive>\n"
-            "void serialize(Archive & ar)\n"
-            "{\n"
-            "    ar(cereal::base_class<Component>(this));\n"
-            "}\n"
-            "template <class Archive>\n"
-            "static void load_and_construct(Archive & _ar, cereal::construct<" << className << ">&_construct)\n"
-            "{\n"
-            "    _construct(GameObject::currentLoadedGameObject);\n"
-            "    _ar(cereal::base_class<Component>(_construct.ptr()));\n"
-            "}\n"
+            "   friend class cereal::access;\n"  
+            "private:\n"
+            "public:\n"
+            "    " << className << "() = delete;\n"
+            "    " << className << "(class GameObject* _gameobject);\n"
+            "    Component* Clone() const override { return new " << className << "(*this); }\n"  
+            "    void Begin() override;\n"
+            "    void Update() override;\n"
+            "    const char* GetComponentName() override { return \"" << className << "\"; }\n"
+            "    void Editor() override;\n\n"
+            "    template <class Archive>\n"
+            "    void serialize(Archive & _ar)\n"
+            "    {\n"
+            "        _ar(cereal::base_class<" << parentClassName << ">(this));\n"
+            "    }\n"
+            "    template <class Archive>\n"
+            "    static void load_and_construct(Archive & _ar, cereal::construct<" << className << ">&_construct)\n"
+            "    {\n"
+            "        _construct(GameObject::currentLoadedGameObject);\n"
+            "        _ar(cereal::base_class<" << parentClassName << ">(_construct.ptr()));\n"
+            "    }\n"
             "};\n"
             "CEREAL_REGISTER_TYPE(" << className << ")\n"
-            "CEREAL_REGISTER_POLYMORPHIC_RELATION(ScriptComponent, " << className << ")\0";
+            "CEREAL_REGISTER_POLYMORPHIC_RELATION(" << parentClassName << ", " << className << ")\0";
 
         cppFile <<
-            "#include \"Game/" << className << ".hpp\"\n"
-            "#include \"GameObject.hpp\"\n\n"
+            "#include \"GameObject.hpp\"\n"
+            "#include \"Game/" << className << ".hpp\"\n\n"
 
             << className << "::" << className << "(GameObject * _gameobject)\n"
-            ": ScriptComponent(_gameobject)\n"
+            ": " << parentClassName << "(_gameobject)\n"
+            "{}\n\n"
+
+            "void " << className << "::Editor()\n"
             "{}\n\n"
 
             "void " << className << "::Begin()\n"
@@ -363,7 +416,13 @@ void CreateNewClass(std::string className)
 
             "void " << className << "::Update()\n"
             "{}\0";
+
+        AddToRegisterComponents(className);
+        AddToVSProj(className);
+        return true;
     }
+
+    return false;
 }
 
 void NewFolderWindow()
@@ -435,10 +494,14 @@ void NewClassWindow()
 
         static std::string className = "NewClass";
         ImGui::InputText("Class Name", className.data(), 256);
+        static std::string parentClassName = "ScriptComponent";
+        ImGui::InputText("Parent Class Name", parentClassName.data(), 256);
 
         if (ImGui::Button("Create"))
-            CreateNewClass(className);
-
+        {
+            CreateNewClass(className, parentClassName) ? Debug::Log("New class " + className + " created") : Debug::LogWarning("Class " + className + " not created");
+            newClassWindow = false;
+        }
         ImGui::End();
     }
 }

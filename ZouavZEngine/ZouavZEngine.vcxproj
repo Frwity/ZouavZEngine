@@ -223,6 +223,7 @@
     <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
+    <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\include\ImCurveEdit.h" />
@@ -287,6 +288,7 @@
     <ClInclude Include="include\System\SoundManager.hpp" />
     <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
+    <!--Include End-->
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Gizmos.fs" />
