@@ -137,9 +137,13 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
 		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
 	if (_parent->GetComponent<Skybox>())
-		_parent->GetComponent<Skybox>()->Draw(*_camera);
-	if (_parent->GetComponent<ShapeCollision>() && dynamic_cast<const SceneCamera*>(_camera))
-		_parent->GetComponent<ShapeCollision>()->DrawGizmos(*_camera);
+		_parent->GetComponent<Skybox>()->Draw(_camera);
+
+	std::vector<ShapeCollision*> shapes = _parent->GetComponents<ShapeCollision>();
+
+	for (ShapeCollision* shape : shapes)
+		shape->DrawGizmos(_camera);
+	
 		
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);

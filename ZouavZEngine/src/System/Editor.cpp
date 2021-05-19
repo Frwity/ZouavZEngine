@@ -575,6 +575,13 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
                 gameObjectInspector->localPosition = translation;
                 gameObjectInspector->localRotation = Quaternion(rotation);
                 gameObjectInspector->localScale = scale;
+
+                //TODO use GetComponents
+                ShapeCollision* collision = gameObjectInspector->GetComponent<ShapeCollision>();
+
+                //UpdateScale of shapeCollision
+                if (collision)
+                    collision->UpdateScale();
             }
         }
     }

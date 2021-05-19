@@ -19,12 +19,14 @@ using namespace physx;
 SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _tranform)
 	: ShapeCollision(_gameObject, _tranform, _isTrigger), radius(_radius)
 {	
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_radius), *material);
+	geometry = new PxSphereGeometry(_radius);
+	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
-	//attach shape to rigidbody or rigidstatic if exist
+	//attach shape to a Rigid component if exist
 	AttachToRigidComponent();
 
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	sphereMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
+	UpdateScale();
 }
 
 SphereCollision::SphereCollision(const SphereCollision& _other)
@@ -36,7 +38,7 @@ SphereCollision::SphereCollision(const SphereCollision& _other)
 
 	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 
-}
+} 
 
 SphereCollision::~SphereCollision()
 {
@@ -47,28 +49,43 @@ void SphereCollision::Editor()
 {
 	ShapeCollision::Editor();
 
-	if (ImGui::SliderFloat("Radius : ", &radius, 0.0f, 100.0f))
-		UpdateRadius(radius);
+	if (ImGui::SliderFloat("Radius : ", &radius, 0.1f, 100.0f))
+		UpdateScale();
 
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void SphereCollision::UpdateRadius(float _radius)
+void SphereCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	if (!rigid)
-		return;
+	if (rigid)
+		rigid->actor->detachShape(*shape);
 
-	rigid->actor->detachShape(*shape);
-
-	radius = _radius;
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(radius), *material);
+	//TODO world scale
+	geometry = new PxSphereGeometry(radius);
 
 	AttachToRigidComponent();
+	shape->userData = this;
 }
 
 void SphereCollision::DrawGizmos(const Camera& _camera, const Mat4& _modelMatrix)
 {
-	ShapeCollision::DrawGizmos(_camera, Mat4::CreateScaleMatrix(Vec3(radius, radius, radius) * gameObject->localScale));
+	if (shape == nullptr)
+		return;
+
+	materialShader.shader->Use();
+
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, Vec3(radius / 1.5f, radius /1.5f, radius / 1.5f));
+	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
+
+	Mat4 mat = trsGlobal * trsLocal;
+
+	materialShader.shader->SetMatrix("matrix", mat);
+	materialShader.shader->SetMatrix("view", _camera.GetMatrix().Reversed());
+	materialShader.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	materialShader.shader->SetVector4("color", materialShader.color);
+
+	glBindVertexArray(sphereMesh->GetID());
+	glDrawElements(GL_TRIANGLES, sphereMesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }
