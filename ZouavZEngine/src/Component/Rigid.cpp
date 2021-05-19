@@ -21,12 +21,6 @@ Rigid::Rigid(GameObject* _gameObject)
 
 }
 
-Rigid::Rigid(const Rigid& _other)
-	: Component(_other)
-{
-
-}
-
 void Rigid::Activate()
 {
 	Component::Activate();

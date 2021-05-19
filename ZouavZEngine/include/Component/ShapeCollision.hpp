@@ -33,8 +33,6 @@ public:
 	bool isTrigger = false;
 
 	ShapeCollision(GameObject* _gameObject, Transform _transform = Transform(), bool _isTrigger = false);
-	ShapeCollision(const ShapeCollision&);
-	Component* Clone() const override { return new ShapeCollision(*this); }
 	~ShapeCollision();
 
 	const char* GetComponentName() override { return "ShapeCollision"; }

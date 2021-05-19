@@ -26,17 +26,6 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 		InternalDehactivate();
 }
 
-
-ShapeCollision::ShapeCollision(const ShapeCollision& _other)
-	: Component(_other)
-{
-	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f); // TODO physxsystem material manager
-	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
-	isTrigger = _other.isTrigger;
-	if (!_other.IsActive())
-		InternalDehactivate();
-}
-
 ShapeCollision::~ShapeCollision()
 {
 	

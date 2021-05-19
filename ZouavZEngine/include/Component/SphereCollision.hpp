@@ -11,8 +11,6 @@ public:
 	float radius;
 
 	SphereCollision(GameObject* _gameObject, float _radius = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
-	SphereCollision(const SphereCollision&);
-	Component* Clone() const override { return new SphereCollision(*this); }
 	~SphereCollision();
 
 	void Editor() override;

@@ -29,17 +29,6 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	UpdateScale();
 }
 
-SphereCollision::SphereCollision(const SphereCollision& _other)
-	: ShapeCollision(_other), radius{_other.radius}
-{
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_other.radius), *material);
-	
-	AttachToRigidComponent();
-
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
-
-} 
-
 SphereCollision::~SphereCollision()
 {
 

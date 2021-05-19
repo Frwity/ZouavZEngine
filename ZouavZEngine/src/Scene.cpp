@@ -96,7 +96,6 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 void Scene::Save()
 {
 	std::ofstream saveFile;
-
 	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);

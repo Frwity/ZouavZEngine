@@ -9,12 +9,6 @@ Component::Component(GameObject* _gameObject)
 {
 }
 
-Component::Component(const Component& _other)
-{
-	gameObject = GameObject::currentLoadedGameObject;
-	isActive = _other.isActive;
-}
-
 void Component::Editor()
 {
 

@@ -54,8 +54,6 @@ public:
 	FontComponent() = delete;
 	FontComponent(class GameObject* _gameObject);
 	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font);
-	FontComponent(const FontComponent&);
-	Component* Clone() const override { return new FontComponent(*this); }
 	~FontComponent() override;
 
 	const std::string& GetText() const { return text; }

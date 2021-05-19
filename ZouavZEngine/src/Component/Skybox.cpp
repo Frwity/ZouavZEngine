@@ -19,10 +19,6 @@ Skybox::Skybox(class GameObject* _gameObject, std::shared_ptr<CubemapTexture>& _
 	: Component(_gameObject), cubeMesh(ResourcesManager::GetResource<Mesh>("Default")->get()), shader(ResourcesManager::GetResource<Shader>("Skybox")->get()), texture{ _cubemapTexture }
 {}
 
-Skybox::Skybox(const Skybox& _other)
-    : Component(_other), cubeMesh{_other.cubeMesh}, shader{_other.shader}, texture{_other.texture}
-{}
-
 void Skybox::Draw(const Camera& _camera)
 {
     glDisable(GL_CULL_FACE);

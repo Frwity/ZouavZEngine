@@ -12,8 +12,6 @@ public:
 	float halfHeight;
 
 	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
-	CapsuleCollision(const CapsuleCollision&);
-	Component* Clone() const override { return new CapsuleCollision(*this); }
 	~CapsuleCollision();
 
 	void Editor() override;

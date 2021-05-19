@@ -15,12 +15,6 @@ Light::Light(GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, 
 	Scene::GetCurrentScene()->AddLight(this);
 }
 
-Light::Light(const Light& _other)
-	: Component(_other), ambient(_other.ambient), diffuse(_other.diffuse), specular(_other.specular), constLineQuad(_other.constLineQuad), direction(_other.direction), cutOffOuterCutOff(_other.cutOffOuterCutOff), type(_other.type)
-{
-	Scene::GetCurrentScene()->AddLight(this);
-}
-
 Light::~Light()
 {
 	toDestroy = true;

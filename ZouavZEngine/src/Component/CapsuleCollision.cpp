@@ -26,16 +26,6 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 	UpdateScale();
 }
 
-CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
-	: ShapeCollision(_other), radius(_other.radius), halfHeight(_other.halfHeight)
-{
-	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
-
-	AttachToRigidComponent();
-
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
-}
-
 CapsuleCollision::~CapsuleCollision()
 {
 

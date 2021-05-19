@@ -21,8 +21,6 @@ public:
 	MeshRenderer() = delete;
 	MeshRenderer(class GameObject* _gameObject);
 	MeshRenderer(class GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader);
-	MeshRenderer(const MeshRenderer&) = default;
-	Component* Clone() const override { return new MeshRenderer(*this); }
 	~MeshRenderer();
 
 	void Draw(const class Camera& _camera);

@@ -14,14 +14,6 @@ Plane::Plane(GameObject* _gameObject)
 	AttachToRigidComponent();
 }
 
-Plane::Plane(const Plane& _other)
-	: ShapeCollision(_other)
-{
-	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
-
-	AttachToRigidComponent();
-}
-
 Plane::~Plane()
 {
 

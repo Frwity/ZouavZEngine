@@ -54,6 +54,13 @@ class Vec3
         void operator/=(float _value);
 
         Vec3 operator-() const;
+
+
+        template <class Archive>
+        void serialize(Archive& _ar)
+        {
+            _ar(x, y, z);
+        }
 };
 
 Vec3 operator*(float _number, const Vec3& _rhs);

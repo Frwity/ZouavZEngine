@@ -32,15 +32,6 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	UpdateScale();
 }
 
-BoxCollision::BoxCollision(const BoxCollision& _other)
-	: ShapeCollision(_other), halfExtends{ _other.halfExtends }
-{
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_other.halfExtends)), *material);
-
-	AttachToRigidComponent();
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
-}
-
 BoxCollision::~BoxCollision()
 {
 	 

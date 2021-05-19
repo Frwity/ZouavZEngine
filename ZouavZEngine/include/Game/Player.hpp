@@ -24,7 +24,6 @@ public:
 
 	Player() = delete;
 	Player(class GameObject* _gameobject);
-	Component* Clone() const override { return new Player(*this); }
 	void Begin() final;
 	void Update() final;
 

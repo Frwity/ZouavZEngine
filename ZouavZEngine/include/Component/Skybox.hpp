@@ -16,8 +16,6 @@ public:
 	Skybox() = delete;
 	Skybox(class GameObject* _gameObject);
 	Skybox(class GameObject* _gameObject, std::shared_ptr<class CubemapTexture>& _cubemapTexture);
-	Skybox(const Skybox& _other);
-	Component* Clone() const override { return new Skybox(*this); }
 	~Skybox() = default;
 
 	void Draw(const class Camera& _camera);

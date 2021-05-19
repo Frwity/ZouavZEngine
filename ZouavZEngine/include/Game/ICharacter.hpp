@@ -24,7 +24,6 @@ protected:
 public:
     ICharacter() = delete;
     ICharacter(class GameObject* _gameobject);
-    Component* Clone() const override { return new ICharacter(*this); }
     void Begin() override;
     void Update() override;
     const char* GetComponentName() override { return "Character"; }
@@ -38,7 +37,7 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
-        _ar(invulnerabilityFrame, life);
+        _ar(damageColor, invulnerabilityFrame, life);
         _ar(cereal::base_class<Component>(this));
     }
     template <class Archive>

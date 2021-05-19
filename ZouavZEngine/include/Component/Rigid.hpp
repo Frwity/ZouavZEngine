@@ -20,8 +20,6 @@ public:
 
 	Rigid() = delete;
 	Rigid(class GameObject* _gameObject);
-	Rigid(const Rigid&);
-	Component* Clone() const override { return new Rigid(*this); }
 	~Rigid();
 
 	const char* GetComponentName() override { return "Rigid"; }

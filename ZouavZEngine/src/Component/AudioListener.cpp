@@ -12,14 +12,6 @@ AudioListener::AudioListener(GameObject* _gameObject)
 		SoundManager::SetListenerPosition(_gameObject->WorldPosition());
 }
 
-AudioListener::AudioListener(const AudioListener& _other)
-	: Component(_other)
-{
-	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
-	if (gameObject)
-		SoundManager::SetListenerPosition(gameObject->WorldPosition());
-}
-
 void AudioListener::Update()
 {
 	SoundManager::SetListenerPosition(GetGameObject().WorldPosition());

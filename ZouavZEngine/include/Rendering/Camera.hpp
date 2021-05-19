@@ -31,7 +31,6 @@ public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1, bool _sceneCamera = false);
 	Camera() = delete;
 	Camera(const Camera&);
-	Component* Clone() const override { return new Camera(*this); }
 	~Camera();
 
 	void Editor() override;

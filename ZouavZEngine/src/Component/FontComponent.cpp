@@ -31,29 +31,6 @@ FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _fo
 	FontSystem::AddFont3D(this);
 }
 
-FontComponent::FontComponent(const FontComponent& _other)
-	: Component(_other), font{ _other.font }, shader3D{ _other.shader3D }, shaderBillboard{ _other.shaderBillboard }, shader2D{ _other.shader2D }
-{
-	color = _other.color;
-	position = _other.position;
-	fontSize = _other.fontSize;
-
-	width = _other.width;
-	edge = _other.edge;
-
-	outlineWidth = _other.outlineWidth;
-	outlineEdge = _other.outlineEdge;
-	outlineColor = _other.outlineColor;
-
-	offset = _other.offset;
-
-	depthTest = _other.depthTest;
-	fontType = E_FONT_TYPE::NOFONT;
-
-	ChangeType(_other.fontType);
-	ChangeText(_other.text.c_str(), _other.text.size());
-}
-
 FontComponent::~FontComponent()
 {
 	switch (fontType)

@@ -4,7 +4,6 @@
 #include "Component/Component.hpp"
 
 #include <cereal/types/base_class.hpp>
-#include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 #include <cereal/types/memory.hpp>
 #include <cereal/types/string.hpp>
@@ -14,11 +13,6 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-
-namespace cereal
-{
-	class JSONOutputArchive;
-};
 
 class GameObject : public Transform
 {
@@ -50,8 +44,6 @@ public:
 	GameObject(const std::string& _name);
 	GameObject(const std::string& _name, const std::string& _tag);
 	GameObject& operator=(const GameObject&);
-	GameObject(const GameObject&);
-	GameObject(GameObject&&) = default;
 	~GameObject() = default;
 
 	void Destroy();
@@ -134,10 +126,7 @@ public:
 
 		currentLoadedGameObject = this;
 
-		_ar(name, tag, nbChild, components,
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z, isActive, isPrefab);
+		_ar(name, tag, nbChild, components, localPosition, localRotation, localScale, isActive, isPrefab);
 
 		std::string childName;
 		std::string childTag;
@@ -155,10 +144,7 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive, gameobject->isPrefab);
+			_ar(gameobject->components,	gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
 
 			loadRecurss(_ar, gameobject, nbChild2);
 		}
@@ -184,10 +170,7 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive, gameobject->isPrefab);
+			_ar(gameobject->components,	gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
 
 			_gameobject->AddChild(gameobject);
 
@@ -199,10 +182,7 @@ public:
 	void save(Archive& _ar) const
 	{
 		int nbChild = (int)children.size();
-		_ar(name, tag, nbChild, components, 
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z, isActive, isPrefab);
+		_ar(name, tag, nbChild, components, localPosition, localRotation, localScale, isActive, isPrefab);
 
 		for (GameObject* child : children)
 		{

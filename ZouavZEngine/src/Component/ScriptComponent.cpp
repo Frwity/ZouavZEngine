@@ -7,13 +7,6 @@ ScriptComponent::ScriptComponent(class GameObject* _gameObject)
 	ScriptSystem::AddScript(this);
 }
 
-ScriptComponent::ScriptComponent(const ScriptComponent& _other)
-	: Component(_other)
-{
-	ScriptSystem::AddScript(this);
-}
-
-
 ScriptComponent::~ScriptComponent()
 {
 	ScriptSystem::RemoveScript(this);

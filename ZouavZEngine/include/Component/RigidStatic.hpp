@@ -20,8 +20,6 @@ public:
 
 	RigidStatic() = delete;
 	RigidStatic(GameObject* _gameObject);
-	RigidStatic(const RigidStatic&);
-	Component* Clone() const override { return new RigidStatic(*this); }
 	~RigidStatic();
 
 	void Editor() override;

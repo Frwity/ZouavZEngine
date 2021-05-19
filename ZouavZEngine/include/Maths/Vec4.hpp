@@ -43,5 +43,11 @@ class Vec4
         void operator*=(const Vec4& _v);
         void operator*=(float _value);
         void operator/=(float _value);
+
+        template <class Archive>
+        void serialize(Archive& _ar)
+        {
+            _ar(x, y, z, w);
+        }
 };
 #endif
