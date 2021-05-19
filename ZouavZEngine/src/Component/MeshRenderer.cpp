@@ -121,7 +121,7 @@ void MeshRenderer::Editor()
     TextureEditor();
     MeshEditor();
     ShaderEditor();
-	ImGui::ColorEdit4("Color : ", &material.color.w);
+	ImGui::ColorEdit4("Color : ", &material.color.x);
 }
 
 template <class Archive>

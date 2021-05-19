@@ -61,6 +61,7 @@ public:
 	const std::string& GetText() const { return text; }
 
 	void ChangeText(const char* _newText, int _size);
+	void ChangeText(std::string _newText);
 	void ChangeType(E_FONT_TYPE _newType);
 	void Draw3D(const class Camera& _camera);
 	void DrawBillboard(const class Camera& _camera);

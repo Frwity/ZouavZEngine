@@ -261,6 +261,9 @@
     <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
       <Filter>external_lib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\ICharacter.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\RegisterComponent.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\ICharacter.hpp">
+      <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

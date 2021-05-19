@@ -129,7 +129,7 @@ void FontComponent::Editor()
 	if (ImGui::InputFloat("Font Size :", &fontSize, 0.1f))
 		ChangeText(text.c_str(), text.size());
 
-	ImGui::ColorEdit4("Color :", &color.w);
+	ImGui::ColorEdit4("Color :", &color.x);
 	
 	ImGui::DragFloat3("Position :", &position.x, 0.1f);
 	
@@ -243,6 +243,12 @@ void FontComponent::Draw2D(const Camera& _camera)
 
 	if (!depthTest)
 		glEnable(GL_DEPTH_TEST);
+}
+
+void FontComponent::ChangeText(std::string _newText)
+{
+	const char* _text = _newText.c_str();
+	ChangeText(_text, _newText.size());
 }
 
 void FontComponent::ChangeText(const char* _newText, int _size)

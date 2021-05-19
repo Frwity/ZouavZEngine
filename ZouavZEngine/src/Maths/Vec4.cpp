@@ -12,7 +12,7 @@ Vec4::Vec4(float _x, float _y, float _z)
     : w{ 1 }, x{ _x }, y{ _y }, z{ _z }
 {}
 
-Vec4::Vec4(float _w, float _x, float _y, float _z)
+Vec4::Vec4(float _x, float _y, float _z, float _w)
     : w{ _w }, x{ _x }, y{ _y }, z{ _z }
 {}
 
@@ -49,6 +49,17 @@ float Vec4::GetMagnitude() const
 float Vec4::GetSquaredMagnitude() const
 {
     return w * w + x * x + y * y + z * z;
+}
+
+void Vec4::Lerp(const Vec4& _v2, float _t)
+{
+    *this = *this + (_v2 - *this) * _t;
+
+}
+
+Vec4 Vec4::Lerp(const Vec4& _v1, const Vec4& _v2, float _t)
+{
+    return _v1 + (_v2 - _v1) * _t;
 }
 
 Vec4 Vec4::operator+(const Vec4& _v) const
