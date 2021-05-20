@@ -163,6 +163,7 @@
     <ClCompile Include="external_lib\src\imgui_draw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="external_lib\src\imgui_stdlib.cpp" />
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\ImSequencer.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="external_lib\include\ImCurveEdit.h" />
     <ClInclude Include="external_lib\include\ImGradient.h" />
     <ClInclude Include="external_lib\include\ImGuizmo.h" />
+    <ClInclude Include="external_lib\include\imgui_stdlib.h" />
     <ClInclude Include="external_lib\include\ImSequencer.h" />
     <ClInclude Include="external_lib\include\ImZoomSlider.h" />
     <ClInclude Include="external_lib\src\imgui_internal.h" />

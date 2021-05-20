@@ -3,10 +3,11 @@
 #include "Maths/Mat4.hpp"
 #include "System/ResourcesManager.hpp"
 #include "System/FontSystem.hpp"
-#include "Component/FontComponent.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
+#include "imgui_stdlib.h"
+#include "Component/FontComponent.hpp"
 
 
 
@@ -111,10 +112,8 @@ void FontComponent::ChangeType(E_FONT_TYPE _newType)
 
 void FontComponent::Editor()
 {
-	std::string tempText = text;
-	if (ImGui::InputText("Text : ", tempText.data(), 1024))
+	if (ImGui::InputText("Text : ", &text))
 	{
-		text = tempText;
 		ChangeText(text.c_str(), text.size());
 	}
 

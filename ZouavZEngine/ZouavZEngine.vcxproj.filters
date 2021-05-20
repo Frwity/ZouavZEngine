@@ -258,6 +258,9 @@
     <ClCompile Include="src\Component\RegisterComponents.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -445,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\RegisterComponent.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\imgui_stdlib.h">
+      <Filter>external_lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
