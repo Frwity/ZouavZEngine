@@ -3,22 +3,46 @@
 #include "GameObject.hpp"
 #include "Rendering/Camera.hpp"
 #include "Component/RigidBody.hpp"
+#include "Component/BoxCollision.hpp"
 #include "Game/Player.hpp"
-
 
 #include <iostream>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-Player::Player(GameObject* _gameobject)
-	: ICharacter(_gameobject)
+Player::Player(GameObject* _gameobject, std::string _name)
+	: ICharacter(_gameobject, _name)
 {
 
 }
-#include "Rendering/Material.hpp"
-#include "Component/MeshRenderer.hpp"
-#include "Component/FontComponent.hpp"
+
+void Player::OnAddComponent()
+{
+	GameObject* anchor = GameObject::CreateGameObject("Anchor");
+	anchor->SetParent(&GetGameObject());
+	GameObject* camera = GameObject::CreateGameObject("Camera");
+	camera->SetParent(anchor);
+	rb = GetGameObject().AddComponent<RigidBody>();
+	GetGameObject().AddComponent<BoxCollision>();
+	attackCollision = GetGameObject().AddComponent<BoxCollision>();
+	attackCollision->SetTrigger(true);
+	attackCollision->Dehactivate();
+}
+
+void Player::OnTrigger(GameObject* _other, ShapeCollision* _triggerShape)
+{
+	if (_triggerShape == attackCollision)
+	{
+		ICharacter* characterOther = _other->GetComponent<ICharacter>();
+		if (characterOther)
+		{
+			characterOther->Damage(attackDamage);
+			std::cout << "Ouch !!!" << std::endl;
+		}
+	}
+}
+
 void Player::Begin()
 {
 	ICharacter::Begin();
@@ -28,7 +52,6 @@ void Player::Begin()
 		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
 		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
 	}
-	rb = GetGameObject().GetComponent<RigidBody>();
 	oldMousePos = InputManager::GetCursorPos();
 }
 
@@ -37,6 +60,20 @@ void Player::Begin()
 void Player::Update()
 {
 	ICharacter::Update();
+
+	if (timerAttackCooldown >= 0.0f)
+		timerAttackCooldown -= TimeManager::GetDeltaTime();
+
+	if (timerAttackDuration >= 0.0f)
+	{
+		timerAttackDuration -= TimeManager::GetDeltaTime();
+
+		if (timerAttackDuration < 0.0f)
+		{
+			attackCollision->Dehactivate();
+			timerAttackCooldown = attackCooldown;
+		}
+	}
 
 	if (!rb)
 		rb = GetGameObject().GetComponent<RigidBody>();
@@ -69,6 +106,13 @@ void Player::Update()
 
 	if (InputManager::GetKeyPressed(E_KEYS::T))
 		Damage(1);
+
+	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f)
+	{
+		std::cout << "A l'attaque !!!" << std::endl;
+		attackCollision->Activate();
+		timerAttackDuration = attackDuration;
+	}
 
 	Vec2 newMousePos = InputManager::GetCursorPos();
 	Vec2 offset = newMousePos - oldMousePos;

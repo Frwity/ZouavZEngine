@@ -9,8 +9,8 @@
 
 #include "imgui.h"
 
-ICharacter::ICharacter(GameObject* _gameobject)
-	: ScriptComponent(_gameobject)
+ICharacter::ICharacter(GameObject* _gameobject, std::string _name)
+	: ScriptComponent(_gameobject, _name)
 {
 }
 

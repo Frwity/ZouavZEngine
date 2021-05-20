@@ -17,8 +17,8 @@
 using namespace physx;
 
 
-RigidBody::RigidBody(GameObject* _gameObject)
-	: Rigid(_gameObject)
+RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
+	: Rigid(_gameObject, _name)
 {
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 

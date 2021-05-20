@@ -20,10 +20,8 @@ void Prefab::Editor(const char* _label)
         {
             ZASSERT(payload->DataSize == sizeof(std::string), "Error in moving file in hierarchy");
             path = *(const std::string*)payload->Data;
-            if (path.find(".zepref") != std::string::npos) //abcdefg
-            {
+            if (path.find(".zepref") != std::string::npos)
                 gameobject = GameObject::LoadPrefab(path);
-            }
         }
         ImGui::EndDragDropTarget();
     }

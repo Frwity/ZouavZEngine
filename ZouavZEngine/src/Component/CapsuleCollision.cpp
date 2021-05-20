@@ -14,9 +14,10 @@
 
 using namespace physx;
 
-CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger, Transform _transform)
+CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger, Transform _transform, std::string _name)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), radius(_radius), halfHeight(_halfHeight)
 {
+	name = _name;
 	geometry = new PxCapsuleGeometry(radius, halfHeight);
 	shape = PhysicSystem::physics->createShape(*geometry, *material);
 

@@ -38,15 +38,16 @@ protected:
 
 	virtual void InternalActivate() {}
 	virtual void InternalDehactivate() {}
+
 public:
 
 	Component() = delete;
-	Component(class GameObject* _gameObject);
+	Component(class GameObject* _gameObject, std::string _name = "Component");
 	virtual ~Component() = default;
 
 	virtual void Editor();
 
-	virtual const char* GetComponentName() = 0;
+	std::string name = "Component";
 
 	static bool EditorCollapsingHeader(const char* _name = "Component", std::function<void()> _f = [](){});
 
@@ -63,6 +64,7 @@ public:
 	void serialize(Archive& _ar)
 	{
 		_ar(isActive);
+		_ar(name);
 	}
 
 	template <class Archive>

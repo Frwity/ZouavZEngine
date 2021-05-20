@@ -20,9 +20,10 @@
 
 using namespace physx;
 
-BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger, Transform _transform)
+BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger, Transform _transform, std::string _name)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), halfExtends(_halfExtends)
 {
+	name = _name;
 	geometry = new PxBoxGeometry(PxVec3FromVec3(_halfExtends));
 	shape = PhysicSystem::physics->createShape(*geometry, *material, true);
 

@@ -15,8 +15,8 @@
 
 using namespace physx;
 
-Rigid::Rigid(GameObject* _gameObject)
-	: Component(_gameObject)
+Rigid::Rigid(GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name)
 {
 
 }

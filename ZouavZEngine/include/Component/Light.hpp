@@ -25,15 +25,13 @@ public:
 	E_LIGHT_TYPE type{ E_LIGHT_TYPE::DIRECTIONAL };
 
 	Light() = delete;
-	Light(class GameObject* _gameObject);
-	Light(class GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type);
+	Light(class GameObject* _gameObject, std::string _name = "Light");
+	Light(class GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type, std::string _name = "Light");
 	~Light();
 
 	bool toDestroy{ false };
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "Light"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

@@ -11,8 +11,8 @@
 
 
 
-FontComponent::FontComponent(class GameObject* _gameObject)
-	: Component( _gameObject),	font{ *ResourcesManager::GetResource<Font>("Default") }, 
+FontComponent::FontComponent(class GameObject* _gameObject, std::string _name)
+	: Component( _gameObject, _name),	font{ *ResourcesManager::GetResource<Font>("Default") }, 
 								shader3D { *ResourcesManager::GetResource<Shader>("Font3DShader") },
 								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
 								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }
@@ -21,8 +21,8 @@ FontComponent::FontComponent(class GameObject* _gameObject)
 	FontSystem::AddFont3D(this);
 }
 
-FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _font)
-	: Component(_gameObject),	font{ _font }, 
+FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _font, std::string _name)
+	: Component(_gameObject, _name),	font{ _font }, 
 								shader3D{ *ResourcesManager::GetResource<Shader>("Font3DShader") },
 								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
 								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }

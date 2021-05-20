@@ -52,8 +52,8 @@ private:
 
 public:
 	FontComponent() = delete;
-	FontComponent(class GameObject* _gameObject);
-	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font);
+	FontComponent(class GameObject* _gameObject, std::string _name = "FontComponent");
+	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font, std::string _name = "FontComponent");
 	~FontComponent() override;
 
 	const std::string& GetText() const { return text; }
@@ -66,8 +66,6 @@ public:
 	void Draw2D(const class Camera& _camera);
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "FontComponent"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

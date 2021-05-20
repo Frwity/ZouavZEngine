@@ -25,18 +25,20 @@ protected:
 	void AttachToRigidComponent();
 	void InternalActivate() override;
 	void InternalDehactivate() override;
+	bool isTrigger = false;
+
 public:
 	physx::PxGeometry* geometry;
 	physx::PxMaterial* material = nullptr;
 	physx::PxShape* shape = nullptr;
 	bool isAttach = false;
-	bool isTrigger = false;
 
-	ShapeCollision(GameObject* _gameObject, Transform _transform = Transform(), bool _isTrigger = false);
+	ShapeCollision(GameObject* _gameObject, Transform _transform = Transform(), bool _isTrigger = false, std::string _name = "ShapeCollision");
 	~ShapeCollision();
 
-	const char* GetComponentName() override { return "ShapeCollision"; }
 	void releasePhysXComponent();
+	bool IsTrigger() { return isTrigger; }
+	void SetTrigger(bool _isTrigger);
 	void UpdateIsTrigger();
 	void UpdateTransform();
 	virtual void Editor() override;

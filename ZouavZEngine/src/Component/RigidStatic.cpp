@@ -9,8 +9,8 @@
 
 using namespace physx;
 
-RigidStatic::RigidStatic(GameObject* _gameObject)
-	: Rigid(_gameObject)
+RigidStatic::RigidStatic(GameObject* _gameObject, std::string _name)
+	: Rigid(_gameObject, _name)
 {
 	if (_gameObject == nullptr)
 		return;

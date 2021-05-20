@@ -808,7 +808,7 @@ void Editor::DisplayInspector()
                 if (active != comp->isActive)
                     active ? comp->Activate() : comp->Dehactivate();
                 ImGui::SameLine();
-                if (!Component::EditorCollapsingHeader(comp->GetComponentName(), [comp]() {comp->Editor(); }))
+                if (!Component::EditorCollapsingHeader(comp->name.c_str(), [comp]() {comp->Editor(); }))
                 {
                     comp->DeleteFromGameObject();
                     ImGui::PopID();

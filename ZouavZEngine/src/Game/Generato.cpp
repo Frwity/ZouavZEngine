@@ -2,8 +2,8 @@
 #include "System/InputManager.hpp"
 #include "GameObject.hpp"
 
-Generato::Generato(GameObject * _gameobject)
-: ScriptComponent(_gameobject)
+Generato::Generato(GameObject * _gameobject, std::string _name)
+: ScriptComponent(_gameobject, _name)
 {}
 
 void Generato::Begin()

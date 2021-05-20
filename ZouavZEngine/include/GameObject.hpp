@@ -37,6 +37,9 @@ private:
 
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
+
+	void ScriptOnAddComponent();
+
 public:
 	static GameObject* currentLoadedGameObject;
 
@@ -77,6 +80,7 @@ public:
 	T* AddComponent(Args&&... _args)
 	{
 		components.emplace_back(std::make_unique<T>(this, _args...));
+		ScriptOnAddComponent();
 		return static_cast<T*>(components.back().get());
 	}
 

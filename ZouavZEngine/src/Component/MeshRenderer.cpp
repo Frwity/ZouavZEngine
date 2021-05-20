@@ -8,12 +8,12 @@
 #include "System/Debug.hpp"
 #include "imgui.h"
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader)
-    : Component(_gameObject), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
+MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader, std::string _name)
+    : Component(_gameObject, _name), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
 {}
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject)
-    : Component(_gameObject), 
+MeshRenderer::MeshRenderer(GameObject* _gameObject, std::string _name)
+    : Component(_gameObject, _name), 
       mesh{ *ResourcesManager::GetResource<Mesh>("Default") }
 {}
 

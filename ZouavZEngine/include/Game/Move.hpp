@@ -7,11 +7,9 @@ class Move : public ScriptComponent
 {
 public:
 	Move() = delete;
-	Move(class GameObject* _gameobject);
+	Move(class GameObject* _gameobject, std::string _name = "Move");
 	void Begin() final;
 	void Update() final;
-
-	const char* GetComponentName() override { return "Move"; }
 
 	template <class Archive>
 	void serialize(Archive& ar)

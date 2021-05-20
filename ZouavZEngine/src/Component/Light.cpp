@@ -3,14 +3,14 @@
 #include "imgui.h"
 #include "Scene.hpp"
 
-Light::Light(GameObject* _gameObject)
-	: Component(_gameObject)
+Light::Light(GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name)
 {
 	Scene::GetCurrentScene()->AddLight(this);
 }
 
-Light::Light(GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type)
-	: Component(_gameObject), ambient(_ambient), diffuse(_diffuse), specular(_specular), constLineQuad(_constLineQuad), direction(_direction), cutOffOuterCutOff(_cutOffOuterCutOff), type(_type)
+Light::Light(GameObject* _gameObject, const Vec3 _ambient, const Vec3 _diffuse, const Vec3 _specular, const Vec3 _constLineQuad, const Vec3 _direction, const Vec2 _cutOffOuterCutOff, E_LIGHT_TYPE _type, std::string _name)
+	: Component(_gameObject, _name), ambient(_ambient), diffuse(_diffuse), specular(_specular), constLineQuad(_constLineQuad), direction(_direction), cutOffOuterCutOff(_cutOffOuterCutOff), type(_type)
 {
 	Scene::GetCurrentScene()->AddLight(this);
 }
