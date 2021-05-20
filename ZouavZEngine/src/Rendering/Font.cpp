@@ -43,8 +43,8 @@ MetaData::MetaData(const char* _path)
 	std::getline(file >> std::ws, line);
 
 	int lineHeightPixels = GetValueOf(line, "lineHeight", ' ') - paddingHeight;
-	verticalPerPixelSize = 0.03f / lineHeightPixels; // TODO: look into the 0.03f
-	horizontalPerPixelSize = verticalPerPixelSize / 1.f; // todo aspect ratio replace the 1.f
+	verticalPerPixelSize = 0.03f / lineHeightPixels;
+	horizontalPerPixelSize = verticalPerPixelSize;
 
 	int imageWidth = GetValueOf(line, "scaleW", ' ');
 

@@ -458,6 +458,12 @@
     <ClInclude Include="include\Game\ICharacter.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
+    <ClInclude Include="VisualLeakDetector\include\vld.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualLeakDetector\include\vld_def.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\TerrainShader.fs">

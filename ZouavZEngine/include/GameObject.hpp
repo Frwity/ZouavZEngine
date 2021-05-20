@@ -132,7 +132,7 @@ public:
 		std::string childTag;
 		int nbChild2;
 
-		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
+		for (int i = 0; i < nbChild; ++i)
 		{
 			GameObject* gameobject;
 			_ar(childName, childTag, nbChild2);
