@@ -36,24 +36,6 @@ RigidBody::RigidBody(GameObject* _gameObject)
 	LockAxis();
 }
 
-RigidBody::RigidBody(const RigidBody& _other)
-	: Rigid(_other)
-{
-	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
-
-	actor = PhysicSystem::physics->createRigidDynamic(t);
-
-	actor->userData = this;
-
-	AttachShape();
-
-	PhysicSystem::scene->addActor(*actor);
-
-	if (!_other.IsActive())
-		InternalDehactivate();
-	LockAxis();
-}
-
 RigidBody::~RigidBody()
 {
 	

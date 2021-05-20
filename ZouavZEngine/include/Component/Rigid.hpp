@@ -6,6 +6,7 @@
 namespace physx
 {
 	class PxRigidActor;
+	class PxShape;
 }
 
 class Rigid : public Component
@@ -19,8 +20,6 @@ public:
 
 	Rigid() = delete;
 	Rigid(class GameObject* _gameObject);
-	Rigid(const Rigid&);
-	Component* Clone() const override { return new Rigid(*this); }
 	~Rigid();
 
 	const char* GetComponentName() override { return "Rigid"; }
@@ -30,6 +29,6 @@ public:
 
 	virtual void UpdateTransform(Transform transform) {};
 
-	virtual void OnContact(GameObject* _other);
-	virtual void OnTrigger(GameObject* _other);
+	virtual void OnContact(GameObject* _other, physx::PxShape* _collidingShap);
+	virtual void OnTrigger(GameObject* _other, physx::PxShape* _collidingShape);
 };

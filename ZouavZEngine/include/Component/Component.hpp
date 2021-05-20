@@ -42,8 +42,6 @@ public:
 
 	Component() = delete;
 	Component(class GameObject* _gameObject);
-	Component(const Component& _other);
-	virtual Component* Clone() const = 0;
 	virtual ~Component() = default;
 
 	virtual void Editor();

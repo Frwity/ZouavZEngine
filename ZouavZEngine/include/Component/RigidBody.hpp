@@ -18,8 +18,6 @@ public:
 
 	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject);
-	RigidBody(const RigidBody&);
-	Component* Clone() const override { return new RigidBody(*this); }
 	~RigidBody();
 
 	void Editor() override;

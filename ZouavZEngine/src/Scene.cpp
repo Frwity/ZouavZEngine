@@ -50,7 +50,8 @@ bool Scene::NewScene(const std::string& _sceneName, bool _force)
 	sceneWorld.children.clear();
 	PhysicSystem::scene->release();
 	PhysicSystem::InitScene();
-	ResourcesManager::Clear();	
+	ResourcesManager::PrepareClear();	
+	ResourcesManager::ClearHasToBeDelete();
 	GetCurrentScene()->Save();
 }
 
@@ -73,8 +74,9 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 		{
 			cereal::JSONInputArchive iarchive(saveFile);
 
-			ResourcesManager::Clear();
+			ResourcesManager::PrepareClear();
 			ResourcesManager::load(iarchive);
+			ResourcesManager::ClearHasToBeDelete();
 		}
 		saveFile.close();
 	}
@@ -96,7 +98,6 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 void Scene::Save()
 {
 	std::ofstream saveFile;
-
 	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
@@ -115,19 +116,35 @@ void Scene::Save()
 	saveFile.close();
 }
 
-void Scene::Draw(GameObject* _parent, const Camera& _camera) const
+void Scene::UpdateShaderUniform(const Camera& _camera)
+{
+	for (auto& shader : ResourcesManager::GetResources<Shader>())
+	{
+		shader.second->Use();
+
+		Mat4 matrixCamera = _camera.GetMatrix();
+
+		shader.second->SetMatrix("view", matrixCamera.Reversed());
+		shader.second->SetMatrix("projection", _camera.GetProjetionMatrix());
+		shader.second->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
+		shader.second->SetLight(lights);
+	}
+}
+
+void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 {
 	if (!_parent->IsActive())
 		return;
 	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
-	{
-		_parent->GetComponent<MeshRenderer>()->material.shader->SetLight(lights);
-		_parent->GetComponent<MeshRenderer>()->Draw(_camera);
-	}
+		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
 	if (_parent->GetComponent<Skybox>())
-		_parent->GetComponent<Skybox>()->Draw(_camera);
-	if (_parent->GetComponent<ShapeCollision>())
-		_parent->GetComponent<ShapeCollision>()->DrawGizmos(_camera);
+		_parent->GetComponent<Skybox>()->Draw(*_camera);
+
+	std::vector<ShapeCollision*> shapes = _parent->GetComponents<ShapeCollision>();
+
+	for (ShapeCollision* shape : shapes)
+		shape->DrawGizmos(*_camera);
+	
 		
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);

@@ -12,13 +12,17 @@
 #include <math.h>
 
 Player::Player(GameObject* _gameobject)
-	: ScriptComponent(_gameobject)
+	: ICharacter(_gameobject)
 {
 
 }
-
+#include "Rendering/Material.hpp"
+#include "Component/MeshRenderer.hpp"
+#include "Component/FontComponent.hpp"
 void Player::Begin()
 {
+	ICharacter::Begin();
+	
 	if (GetGameObject().GetComponent<Camera>())
 	{
 		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
@@ -32,6 +36,8 @@ void Player::Begin()
 
 void Player::Update()
 {
+	ICharacter::Update();
+
 	if (!rb)
 		rb = GetGameObject().GetComponent<RigidBody>();
 
@@ -61,6 +67,9 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
 
+	if (InputManager::GetKeyPressed(E_KEYS::T))
+		Damage(1);
+
 	Vec2 newMousePos = InputManager::GetCursorPos();
 	Vec2 offset = newMousePos - oldMousePos;
 
@@ -70,9 +79,8 @@ void Player::Update()
 		xCameraAngle = xCameraAngle > -(float)89.0f ? (xCameraAngle < (float)89.0f ? xCameraAngle : (float)89.0f) : -(float)89.0f;
 		offset.y = 0;
 	}
-	GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
-	GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
-	//GetGameObject().GetComponent<Camera>()->SetPosition(Quaternion(Vec3{ 0.0f, offset.x, -offset.y }).RotateVector(GetGameObject().GetComponent<Camera>()->GetPosition()));
+	//GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
+	//GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
 
 	oldMousePos = newMousePos;
 }

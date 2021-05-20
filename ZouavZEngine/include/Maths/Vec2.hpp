@@ -42,6 +42,12 @@ public:
     void operator-=(const Vec2& _v);
     void operator*=(float _value);
     void operator/=(float _value);
+
+    template <class Archive>
+    void serialize(Archive& _ar)
+    {
+        _ar(x, y);
+    }
 };
 
 #endif

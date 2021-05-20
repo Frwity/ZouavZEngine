@@ -9,8 +9,6 @@ class Plane: public ShapeCollision
 public:
 	Plane() = delete;
 	Plane(GameObject* _gameObject);
-	Plane(const Plane&);
-	Component* Clone() const override { return new Plane(*this); }
 	~Plane();
 
 	void Editor() override;

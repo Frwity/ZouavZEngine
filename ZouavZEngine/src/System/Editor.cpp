@@ -217,7 +217,8 @@ void Editor::DisplayOptionWindow()
     if (ImGui::Button("Load"))
     {
         gameObjectInspector = nullptr;
-        engine.Load();
+        engine.Load(changedScene);
+        changedScene = false;
     }
 	ImGui::SameLine();
 
@@ -241,8 +242,11 @@ void Editor::DisplayOptionWindow()
 
 	if (ImGui::Button(state == EDITOR_STATE::PAUSE ? "Continue" : "Play"))
 	{
-        if (state == EDITOR_STATE::EDITING) 
+        if (state == EDITOR_STATE::EDITING)
+        {
+            ScriptSystem::Begin();
             engine.Save();
+        }
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
 	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
@@ -699,6 +703,13 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
                 gameObjectInspector->localPosition = translation;
                 gameObjectInspector->localRotation = Quaternion(rotation);
                 gameObjectInspector->localScale = scale;
+
+                //TODO use GetComponents
+                ShapeCollision* collision = gameObjectInspector->GetComponent<ShapeCollision>();
+
+                //UpdateScale of shapeCollision
+                if (collision)
+                    collision->UpdateScale();
             }
         }
     }
@@ -753,11 +764,12 @@ void Editor::DisplayInspector()
             ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
-            ImGui::InputText("##name", &gameObjectInspector->name);
+            if (ImGui::InputText("##name", &gameObjectInspector->name) && !gameObjectInspector->parent)
+                changedScene = true;
             ImGui::SameLine();
             ImGui::Text("Tag : ");
             ImGui::SameLine();
-            ImGui::InputText("##name", &gameObjectInspector->tag);
+            ImGui::InputText("##tag", &gameObjectInspector->tag);
 
             if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
             {

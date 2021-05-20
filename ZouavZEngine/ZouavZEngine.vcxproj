@@ -168,7 +168,6 @@
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\ImSequencer.cpp" />
     <ClCompile Include="external_lib\src\tiny_obj_loader.cpp" />
-    <ClCompile Include="include\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\AudioBroadcaster.cpp" />
     <ClCompile Include="src\Component\AudioListener.cpp" />
     <ClCompile Include="src\Component\BoxCollision.cpp" />
@@ -181,6 +180,7 @@
     <ClCompile Include="src\Component\RegisterComponents.cpp" />
     <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
+    <ClCompile Include="src\Component\RigidStatic.cpp" />
     <ClCompile Include="src\Component\ScriptComponent.cpp" />
     <ClCompile Include="src\Component\ShapeCollision.cpp" />
     <ClCompile Include="src\Component\Skybox.cpp" />
@@ -188,6 +188,7 @@
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Game\ICharacter.cpp" />
     <ClCompile Include="src\Game\Generato.cpp" />
     <ClCompile Include="src\Game\Move.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="include\Component\SphereCollision.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
+    <ClInclude Include="include\Game\ICharacter.hpp" />
     <ClInclude Include="include\Game\Generato.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />
     <ClInclude Include="include\Game\Player.hpp" />

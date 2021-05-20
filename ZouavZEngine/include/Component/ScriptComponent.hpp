@@ -11,8 +11,6 @@ private:
 public:
 	ScriptComponent() = delete;
 	ScriptComponent(class GameObject* _gameObject);
-	ScriptComponent(const ScriptComponent& _other);
-	Component* Clone() const override { return new ScriptComponent(*this); }
 	virtual ~ScriptComponent();
 
 	const char* GetComponentName() override { return "ScriptComponent"; }
@@ -21,8 +19,8 @@ public:
 	virtual void FixedUpdate() {};
 	virtual void Update() {};
 	virtual void OnDestroy() {};
-	virtual void OnTrigger(class GameObject* _other) {};
-	virtual void OnContact(class GameObject* _other) {};
+	virtual void OnTrigger(class GameObject* _other, class ShapeCollision* _triggerShape) {};
+	virtual void OnContact(class GameObject* _other, class ShapeCollision* _triggerShape) {};
 
 	template <class Archive>
 	void serialize(Archive& _ar)

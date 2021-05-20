@@ -7,10 +7,10 @@
 #include "PxRigidDynamic.h"
 #include "PxRigidStatic.h"
 #include "PxActor.h"
+#include "cereal/archives/json.hpp"
 #include "GameObject.hpp"
 
 #include <fstream>
-#include "cereal/archives/json.hpp"
 #include <iostream>
 #include <algorithm>
 
@@ -44,63 +44,18 @@ GameObject::GameObject(const std::string& _name, const std::string& _tag)
 
 GameObject& GameObject::operator=(const GameObject& _other)
 {
-	currentLoadedGameObject = this;
-	worldPosition = _other.worldPosition;
-	worldRotation = _other.worldRotation;
-	worldScale = _other.worldScale;
-
-	localPosition = _other.localPosition;
-	localRotation = _other.localRotation;
-	localScale = _other.localScale;
-
-	isActive = _other.isActive;
-	name = _other.name;
-	tag = _other.tag;
-	for (const GameObject* otherChildren : _other.children)
+	std::stringstream saveFile;
 	{
-		if (!otherChildren)
-			break;
-		GameObject* child = CreateGameObject(otherChildren->name);
-		*child = *otherChildren;
-		child->SetParent(this);
+		cereal::JSONOutputArchive oArchive(saveFile);
 
+		_other.save(oArchive);
 	}
-	for (auto& otherComponent : _other.components)
 	{
-		components.emplace_back(otherComponent->Clone());
-		components.back().get()->gameObject = this;
+		cereal::JSONInputArchive iarchive(saveFile);
+
+		(*this).load(iarchive);
 	}
 	return *this;
-}
-
-GameObject::GameObject(const GameObject& _other)
-{
-	currentLoadedGameObject = this;
-	worldPosition = _other.worldPosition;
-	worldRotation = _other.worldRotation;
-	worldScale = _other.worldScale;
-
-	localPosition = _other.localPosition;
-	localRotation = _other.localRotation;
-	localScale = _other.localScale;
-
-	isActive = _other.isActive;
-	name = _other.name;
-	tag = _other.tag;
-	for (const GameObject* otherChildren : _other.children)
-	{
-		if (!otherChildren)
-			break;
-		GameObject* child = CreateGameObject(otherChildren->name);
-		*child = *otherChildren;
-		child->SetParent(this);
-
-	}
-	for (auto& otherComponent : _other.components)
-	{
-		components.emplace_back(otherComponent->Clone());
-		components.back().get()->gameObject = this;
-	}
 }
 
 void GameObject::Destroy() 

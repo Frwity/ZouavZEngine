@@ -54,13 +54,12 @@ public:
 	FontComponent() = delete;
 	FontComponent(class GameObject* _gameObject);
 	FontComponent(class GameObject* _gameObject, std::shared_ptr<Font>& _font);
-	FontComponent(const FontComponent&);
-	Component* Clone() const override { return new FontComponent(*this); }
 	~FontComponent() override;
 
 	const std::string& GetText() const { return text; }
 
 	void ChangeText(const char* _newText, int _size);
+	void ChangeText(std::string _newText);
 	void ChangeType(E_FONT_TYPE _newType);
 	void Draw3D(const class Camera& _camera);
 	void DrawBillboard(const class Camera& _camera);

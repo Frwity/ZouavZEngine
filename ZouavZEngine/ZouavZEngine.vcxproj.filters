@@ -195,9 +195,6 @@
     <ClCompile Include="src\Component\RigidBody.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="include\Component\RigidStatic.cpp">
-      <Filter>src\Component</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\Plane.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -252,6 +249,9 @@
     <ClCompile Include="src\Game\Generato.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\RigidStatic.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
     <ClCompile Include="src\Rendering\CubemapTexture.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
@@ -260,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
       <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ICharacter.cpp">
+      <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="external_lib\include\imgui_stdlib.h">
       <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\ICharacter.hpp">
+      <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

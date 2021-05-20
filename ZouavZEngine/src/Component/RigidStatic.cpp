@@ -29,23 +29,6 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 		InternalDehactivate();
 }
 
-RigidStatic::RigidStatic(const RigidStatic& _other)
-	: Rigid(_other)
-{
-	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
-
-	actor = PhysicSystem::physics->createRigidStatic(t);
-
-	actor->userData = this;
-
-	AttachShape();
-
-	PhysicSystem::scene->addActor(*actor);
-
-	if (!_other.IsActive())
-		InternalDehactivate();
-}
-
 void RigidStatic::Activate()
 {
 	Component::Activate();

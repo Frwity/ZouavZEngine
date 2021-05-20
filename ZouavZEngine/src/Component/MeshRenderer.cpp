@@ -32,12 +32,12 @@ void MeshRenderer::Draw(const Camera& _camera)
     material.shader->Use();
     glActiveTexture(GL_TEXTURE0);
     Texture::Use(material.texture.get());
-    Mat4 matrixCamera = _camera.GetMatrix();
+    //Mat4 matrixCamera = _camera.GetMatrix();
 
-    material.shader->SetMatrix("view", matrixCamera.Reversed());
-    material.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+    //material.shader->SetMatrix("view", matrixCamera.Reversed());
+    //material.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+    //material.shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
     material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
-    material.shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
     material.shader->SetVector4("color", material.color);
 
     glBindVertexArray(mesh->GetID());
@@ -121,7 +121,7 @@ void MeshRenderer::Editor()
     TextureEditor();
     MeshEditor();
     ShaderEditor();
-	ImGui::ColorEdit4("Color : ", &material.color.w);
+	ImGui::ColorEdit4("Color : ", &material.color.x);
 }
 
 template <class Archive>
