@@ -100,9 +100,9 @@ void Engine::Update()
         {
             ScriptSystem::FixedUpdate();
             scene.Update();
-            scene.GetWorld().UpdateTransform(Mat4::identity);
             ScriptSystem::Update();
             SoundManager::Update();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
         }
         else
             scene.GetWorld().UpdateTransform(Mat4::identity);

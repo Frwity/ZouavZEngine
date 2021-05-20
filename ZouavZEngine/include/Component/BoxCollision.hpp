@@ -22,11 +22,9 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
+		_ar(halfExtends);
 		_ar(isTrigger);
-		_ar(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z,
-			transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w,
-			transform.localScale.x, transform.localScale.y, transform.localScale.z);
+		_ar(transform.localPosition, transform.localRotation, transform.localScale);
 		_ar(cereal::base_class<Component>(this));
 	}
 
@@ -36,11 +34,9 @@ public:
 		Vec3 halfExtends;
 		bool trigger;
 		Transform t;
-		_ar(halfExtends.x, halfExtends.y, halfExtends.z);
+		_ar(halfExtends);
 		_ar(trigger);
-		_ar(t.localPosition.x, t.localPosition.y, t.localPosition.z,
-			t.localRotation.x, t.localRotation.y, t.localRotation.z, t.localRotation.w,
-			t.localScale.x, t.localScale.y, t.localScale.y);
+		_ar(t.localPosition, t.localRotation, t.localScale);
 
 		_construct(GameObject::currentLoadedGameObject, halfExtends, trigger, t);
 		_ar(cereal::base_class<Component>(_construct.ptr()));

@@ -264,6 +264,9 @@
     <ClCompile Include="src\Game\ICharacter.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Enemy.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -463,6 +466,9 @@
     </ClInclude>
     <ClInclude Include="VisualLeakDetector\include\vld_def.h">
       <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Enemy.hpp">
+      <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

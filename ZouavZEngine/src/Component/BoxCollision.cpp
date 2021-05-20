@@ -26,7 +26,6 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	geometry = new PxBoxGeometry(PxVec3FromVec3(_halfExtends));
 	shape = PhysicSystem::physics->createShape(*geometry, *material, true);
 
-	AttachToRigidComponent();
 	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
 
 	UpdateScale();

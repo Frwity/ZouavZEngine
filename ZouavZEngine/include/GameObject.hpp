@@ -126,7 +126,9 @@ public:
 
 		currentLoadedGameObject = this;
 
-		_ar(name, tag, nbChild, components, localPosition, localRotation, localScale, isActive, isPrefab);
+		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab);
+		UpdateTransform(Mat4::identity);
+		_ar(components);
 
 		std::string childName;
 		std::string childTag;
@@ -144,7 +146,9 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,	gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
+			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
+			UpdateTransform(Mat4::CreateTRSMatrix(WorldPosition(), WorldRotation(), WorldScale()));
+			_ar(gameobject->components);
 
 			loadRecurss(_ar, gameobject, nbChild2);
 		}
@@ -170,8 +174,9 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,	gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
-
+			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
+			UpdateTransform(Mat4::CreateTRSMatrix(_gameobject->WorldPosition(), _gameobject->WorldRotation(), _gameobject->WorldScale()));
+			_ar(gameobject->components);
 			_gameobject->AddChild(gameobject);
 
 			loadRecurss(_ar, gameobject, nbChild2);
@@ -182,7 +187,7 @@ public:
 	void save(Archive& _ar) const
 	{
 		int nbChild = (int)children.size();
-		_ar(name, tag, nbChild, components, localPosition, localRotation, localScale, isActive, isPrefab);
+		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab, components);
 
 		for (GameObject* child : children)
 		{

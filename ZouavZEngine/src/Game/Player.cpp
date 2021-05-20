@@ -5,7 +5,6 @@
 #include "Component/RigidBody.hpp"
 #include "Game/Player.hpp"
 
-
 #include <iostream>
 
 #define _USE_MATH_DEFINES
@@ -16,9 +15,7 @@ Player::Player(GameObject* _gameobject)
 {
 
 }
-#include "Rendering/Material.hpp"
-#include "Component/MeshRenderer.hpp"
-#include "Component/FontComponent.hpp"
+
 void Player::Begin()
 {
 	ICharacter::Begin();
@@ -31,8 +28,6 @@ void Player::Begin()
 	rb = GetGameObject().GetComponent<RigidBody>();
 	oldMousePos = InputManager::GetCursorPos();
 }
-
-#include <iostream>
 
 void Player::Update()
 {

@@ -605,7 +605,7 @@ void Editor::CameraUpdate(float _deltaTime)
         return;
 
     bool sprint = InputManager::EditorGetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = _deltaTime * sceneCamera.Speed() + sceneCamera.Speed() * sprint * 1.2f;
+    float cameraSpeed = _deltaTime * sceneCamera.Speed() + sprint * 60.0f * _deltaTime;
 
     if (InputManager::EditorGetKeyPressed(E_KEYS::W))
         sceneCamera.MoveTo({ 0.0f, 0.0f, -cameraSpeed });
@@ -690,16 +690,16 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 
             static ImGuizmo::MODE currentGizmosMode(ImGuizmo::LOCAL);
 
-            Mat4 matrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation, gameObjectInspector->localScale);
+            Mat4 localMatrix = Mat4::CreateTRSMatrix(gameObjectInspector->localPosition, gameObjectInspector->localRotation, gameObjectInspector->localScale);
+            //Mat4 globalMatrix = Mat4::CreateTRSMatrix(gameObjectInspector->WorldPosition(), gameObjectInspector->WorldRotation(), gameObjectInspector->WorldScale());
             Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
-            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, currentGizmosMode, matrix.matrix);
-            if (ImGuizmo::IsUsing)
+            if (ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, currentGizmosMode, localMatrix.matrix))
             {
                 Vec3 translation, rotation, scale;
 
-                ImGuizmo::DecomposeMatrixToComponents(matrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
+                ImGuizmo::DecomposeMatrixToComponents(localMatrix.matrix, translation.xyz, rotation.xyz, scale.xyz);
                 gameObjectInspector->localPosition = translation;
                 gameObjectInspector->localRotation = Quaternion(rotation);
                 gameObjectInspector->localScale = scale;

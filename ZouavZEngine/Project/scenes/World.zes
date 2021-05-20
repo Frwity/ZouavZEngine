@@ -1,97 +1,416 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 2,
-    "value3": [],
-    "value4": {
+    "value2": 3,
+    "value3": {
         "value0": 0.0,
         "value1": 0.0,
         "value2": 0.0
+    },
+    "value4": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
     },
     "value5": {
         "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value6": {
-        "value0": 1.0,
         "value1": 1.0,
         "value2": 1.0
     },
-    "value7": true,
-    "value8": false,
-    "value9": "New GameObject",
-    "value10": " ",
+    "value6": true,
+    "value7": false,
+    "value8": [
+        {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "Light",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 0.5,
+                    "value1": 0.5,
+                    "value2": 0.5,
+                    "value3": 0.5,
+                    "value4": 0.5,
+                    "value5": 0.5,
+                    "value6": 0.5,
+                    "value7": 0.5,
+                    "value8": 0.5,
+                    "value9": 1.0,
+                    "value10": 0.009999999776482582,
+                    "value11": 0.0010000000474974514,
+                    "value12": 0.0,
+                    "value13": -1.0,
+                    "value14": 0.0,
+                    "value15": 0.8999999761581421,
+                    "value16": 0.800000011920929,
+                    "value17": 0,
+                    "value18": {
+                        "value0": true
+                    }
+                }
+            }
+        }
+    ],
+    "value9": "Player",
+    "value10": "Player",
     "value11": 0,
-    "value12": [],
-    "value13": {
-        "value0": 5.0,
+    "value12": {
+        "value0": 3.107572555541992,
         "value1": 0.0,
         "value2": 0.0
     },
-    "value14": {
+    "value13": {
         "value0": 1.0,
         "value1": 0.0,
         "value2": 0.0,
         "value3": 0.0
     },
-    "value15": {
+    "value14": {
         "value0": 1.0,
         "value1": 1.0,
         "value2": 1.0
     },
-    "value16": true,
-    "value17": false,
-    "value18": "New GameObject",
+    "value15": true,
+    "value16": false,
+    "value17": [
+        {
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "BoxCollision",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483651,
+            "polymorphic_name": "RigidBody",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483652,
+            "polymorphic_name": "MeshRenderer",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Cube.obj",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483653,
+            "polymorphic_name": "Player",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": {
+                        "value0": {
+                            "value0": 1.0,
+                            "value1": 0.0,
+                            "value2": 0.0,
+                            "value3": 1.0
+                        },
+                        "value1": 1.0,
+                        "value2": 5,
+                        "value3": {
+                            "value0": true
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "value18": "Enemy",
     "value19": " ",
     "value20": 0,
-    "value21": [],
-    "value22": {
+    "value21": {
         "value0": 0.0,
         "value1": 0.0,
         "value2": 0.0
     },
-    "value23": {
+    "value22": {
         "value0": 1.0,
         "value1": 0.0,
         "value2": 0.0,
         "value3": 0.0
     },
-    "value24": {
+    "value23": {
         "value0": 1.0,
         "value1": 1.0,
         "value2": 1.0
     },
-    "value25": true,
-    "value26": false,
-    "value27": false,
-    "value28": 512.0,
-    "value29": 128,
-    "value30": 16,
-    "value31": 0,
-    "value32": 1,
-    "value33": 0,
-    "value34": -10.0,
-    "value35": 30.0,
-    "value36": 30.0,
-    "value37": 1,
+    "value24": true,
+    "value25": false,
+    "value26": [
+        {
+            "polymorphic_id": 4,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Cube.obj",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483654,
+            "polymorphic_name": "Enemy",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": {
+                            "value0": 1.0,
+                            "value1": 0.0,
+                            "value2": 0.0,
+                            "value3": 1.0
+                        },
+                        "value1": 1.0,
+                        "value2": 5,
+                        "value3": {
+                            "value0": true
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 3,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true
+                    }
+                }
+            }
+        }
+    ],
+    "value27": "New GameObject",
+    "value28": " ",
+    "value29": 1,
+    "value30": {
+        "value0": 1.1133238077163697,
+        "value1": -3.4409265518188478,
+        "value2": -2.801941156387329
+    },
+    "value31": {
+        "value0": 0.8708076477050781,
+        "value1": -0.2595152258872986,
+        "value2": 0.40015551447868349,
+        "value3": -0.11925386637449265
+    },
+    "value32": {
+        "value0": 0.9999997019767761,
+        "value1": 0.9999997615814209,
+        "value2": 0.9999998211860657
+    },
+    "value33": true,
+    "value34": false,
+    "value35": [],
+    "value36": "New GameObject",
+    "value37": " ",
     "value38": 0,
-    "value39": true,
-    "value40": 0,
-    "value41": 0,
-    "value42": 1,
-    "value43": 0.009999999776482582,
-    "value44": 2.0,
-    "value45": 0.5,
-    "value46": 0.0,
-    "value47": 2.0,
-    "value48": 0.0,
-    "value49": 0.0,
-    "value50": 0.0,
-    "value51": 0.0,
-    "value52": 0.0,
-    "value53": 0.0,
-    "value54": 1.0,
-    "value55": "nullptr"
+    "value39": {
+        "value0": -1.4333781003952027,
+        "value1": -0.6870497465133667,
+        "value2": 1.6515837907791138
+    },
+    "value40": {
+        "value0": 0.8920252323150635,
+        "value1": 0.2844333052635193,
+        "value2": -0.35091739892959597,
+        "value3": 0.01567169837653637
+    },
+    "value41": {
+        "value0": 5.903294086456299,
+        "value1": 1.0,
+        "value2": 2.9656105041503908
+    },
+    "value42": true,
+    "value43": false,
+    "value44": [
+        {
+            "polymorphic_id": 4,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Cube.obj",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483655,
+            "polymorphic_name": "RigidStatic",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true
+                    }
+                }
+            }
+        }
+    ],
+    "value45": false,
+    "value46": 512.0,
+    "value47": 128,
+    "value48": 16,
+    "value49": 0,
+    "value50": 1,
+    "value51": 0,
+    "value52": -10.0,
+    "value53": 30.0,
+    "value54": 30.0,
+    "value55": 1,
+    "value56": 0,
+    "value57": true,
+    "value58": 0,
+    "value59": 0,
+    "value60": 1,
+    "value61": 0.009999999776482582,
+    "value62": 2.0,
+    "value63": 0.5,
+    "value64": 0.0,
+    "value65": 2.0,
+    "value66": 0.0,
+    "value67": 0.0,
+    "value68": 0.0,
+    "value69": 0.0,
+    "value70": 0.0,
+    "value71": 0.0,
+    "value72": 1.0,
+    "value73": "nullptr"
 }

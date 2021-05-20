@@ -227,6 +227,7 @@
     <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
+    <ClCompile Include="src\Game\Enemy.cpp" />
     <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +297,7 @@
     <ClInclude Include="include\System\TimeManager.hpp" />
     <ClInclude Include="VisualLeakDetector\include\vld.h" />
     <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
+    <ClInclude Include="include\Game\Enemy.hpp" />
     <!--Include End-->
   </ItemGroup>
   <ItemGroup>
