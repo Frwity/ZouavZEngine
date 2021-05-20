@@ -160,11 +160,10 @@ void Editor::NewFrame()
 
 bool Editor::Display(Render& _render)
 {
-    DisplayMainWindow();
-    DisplayOptionWindow();
-    DisplayGameWindow(_render, _render.gameFramebuffer);
+    DisplayMainWindow(_render, _render.gameFramebuffer);
     if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
     {
+        DisplayGameWindow(_render, _render.gameFramebuffer);
         DisplaySceneWindow(_render, _render.sceneFramebuffer);
         DisplayInspector();
         DisplayConsoleWindow();
@@ -176,7 +175,7 @@ bool Editor::Display(Render& _render)
     return false;
 }
 
-void Editor::DisplayMainWindow()
+void Editor::DisplayMainWindow(const class Render& _render, class Framebuffer& _framebuffer)
 {
     ImGuiViewport* main_viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiCond_FirstUseEver);
@@ -184,6 +183,20 @@ void Editor::DisplayMainWindow()
     ImGui::SetNextWindowSize(ImVec2(main_viewport->Size.x, main_viewport->Size.y));
     ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
     DisplayMenuBar();
+    DisplayOptionWindow();
+    if (state == EDITOR_STATE::PLAYING && maximizeOnPlay)
+    {
+        ImVec2 windowSize = ImGui::GetWindowSize();
+
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+        {
+            if (Camera::GetMainCamera())
+                Camera::GetMainCamera()->Resize((int)windowSize.x, (int)windowSize.y - 100.0f);
+            _framebuffer.Resize((int)windowSize.x, (int)windowSize.y - 100.0f);
+        }
+        ImGui::SetCursorPosY(75.0f);
+        ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+    }
     ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton);
     ImGui::End();
 }
@@ -195,18 +208,6 @@ std::string GetRightName(const std::string& _str)
 
 void Editor::DisplayOptionWindow()
 {
-    ImGui::SetNextWindowDockID(dockspaceID, ImGuiCond_FirstUseEver);
-    ImGui::Begin("Option", NULL, ImGuiWindowFlags_NoMove
-                               | ImGuiWindowFlags_NoNav
-                               | ImGuiWindowFlags_NoBackground
-		                       | ImGuiWindowFlags_NoScrollWithMouse
-		                       | ImGuiWindowFlags_NoTitleBar
-		                       | ImGuiWindowFlags_NoScrollbar
-                               | ImGuiWindowFlags_NoCollapse
-		                       | ImGuiWindowFlags_NoResize
-    );
-
-    ImGui::SameLine();
     if (ImGui::Button("Save"))
     {
         engine.Save();
@@ -263,8 +264,6 @@ void Editor::DisplayOptionWindow()
 	}
     ImGui::SameLine();
     ImGui::Checkbox("Maximize On Play", &maximizeOnPlay);
-
-	ImGui::End();
 }
 
 void ListActualFolder(bool& windowOpened)
@@ -864,6 +863,7 @@ void Editor::DisplayInspector()
 
                     if (ComponentButton<Skybox>("Add Skybox", true))
                         addComponentWindow = false;
+
                     for (auto& addComponentFunction : ScriptSystem::addComponentsFunctions)
                     {
                         if (addComponentFunction(gameObjectInspector))

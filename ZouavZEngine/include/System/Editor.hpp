@@ -44,7 +44,7 @@ public:
 
 	bool Display(Render& _render);
 
-	void DisplayMainWindow();
+	void DisplayMainWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void DisplayOptionWindow();
 	void DisplayMenuBar();
 	void DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer);
