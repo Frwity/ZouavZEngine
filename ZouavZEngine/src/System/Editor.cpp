@@ -704,6 +704,9 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
                 gameObjectInspector->localRotation = Quaternion(rotation);
                 gameObjectInspector->localScale = scale;
 
+                gameObjectInspector->UpdateTransform(gameObjectInspector->parent->GetTRSMatrix());
+
+
                 //TODO use GetComponents
                 ShapeCollision* collision = gameObjectInspector->GetComponent<ShapeCollision>();
 

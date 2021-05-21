@@ -122,7 +122,6 @@ public:
 	}
 
 	void UpdateTransform(const class Mat4& _heritedTransform);
-
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 
 	void RemoveComponent(Component* _component);

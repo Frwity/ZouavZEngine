@@ -19,7 +19,6 @@ public:
     Enemy(class GameObject* _gameobject);
     void Begin() override;
     void Update() override;
-    const char* GetComponentName() override { return "Enemy"; }
     void Editor() override;
 
     template <class Archive>
