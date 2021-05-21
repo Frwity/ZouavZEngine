@@ -1,4 +1,6 @@
 #include "GameObject.hpp"
+#include "Component/Transform.hpp"
+
 #include "Rendering/Camera.hpp"
 #include "Game/ThirdPersonCamera.hpp"
 #include "System/InputManager.hpp"
@@ -15,25 +17,29 @@ void ThirdPersonCamera::Editor()
 
 void ThirdPersonCamera::OnAddComponent()
 {
-	GetGameObject().AddComponent<Camera>();
-	GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
-	GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
+	camera = GetGameObject().AddComponent<Camera>();
+	camera->SetPosition({ 0, 5, 8 });
+	camera->SetTarget({ 0, 0, 0 });
 }
 
 void ThirdPersonCamera::Begin()
 {
+	camera = GetGameObject().GetComponent<Camera>();
+	oldMousePos = InputManager::GetCursorPos();
 }
 
 void ThirdPersonCamera::Update()
 {
-	Vec2 offset = InputManager::GetCursorOffsetFromLastFrame();
+	//sceneCamera.pitch = sceneCamera.pitch > -(float)M_PI_2 ? (sceneCamera.pitch < (float)M_PI_2 ? sceneCamera.pitch : (float)M_PI_2) : -(float)M_PI_2;
 
-	xCameraAngle += offset.y / 10.0f;
-	if (xCameraAngle > 89.0f || xCameraAngle < -89.0f)
-	{
-		xCameraAngle = xCameraAngle > -89.0f ? (xCameraAngle < 89.0f ? xCameraAngle : 89.0f) : -89.0f;
-		offset.y = 0;
-	}
-	GetGameObject().GetParent().Rotate({0.0f, offset.x / 10.0f, 0.0f });
-	GetGameObject().Rotate({ offset.y / 10.0f, 0.0f, 0.0f });
+	Vec2 newMousePos = InputManager::GetCursorPos();
+	Vec2 offset = newMousePos - oldMousePos;
+	static Vec2 movement;
+	static Vec3 basePos = camera->GetPosition();
+	Transform t(basePos, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f, 1.0f });
+	movement += offset;
+
+	//Mat4::CreateTRSMatrix({ 1, 1, 1 }, { movement.y, movement.x, 0 }, { 1, 1, 1 });
+
+	oldMousePos = newMousePos;
 }

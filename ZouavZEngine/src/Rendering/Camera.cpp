@@ -150,30 +150,3 @@ Mat4 SceneCamera::GetMatrix() const
 {
     return Mat4::CreateTRSMatrix(position, { pitch, yaw, 0 }, { 1, 1, 1 });
 }
-
-Mat4 SceneCamera::GetLookAtMatrix(const Vec3& _target) const
-{
-    const Vec3 forward = (_target - position).Normalized();
-    const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
-    const Vec3 up = right.Cross(forward);
-
-    Mat4 cameraMatrix;
-
-    cameraMatrix.Accessor(0, 0) = right.x;
-    cameraMatrix.Accessor(0, 1) = right.y;
-    cameraMatrix.Accessor(0, 2) = right.z;
-    cameraMatrix.Accessor(1, 0) = up.x;
-    cameraMatrix.Accessor(1, 1) = up.y;
-    cameraMatrix.Accessor(1, 2) = up.z;
-    cameraMatrix.Accessor(2, 0) = -forward.x;
-    cameraMatrix.Accessor(2, 1) = -forward.y;
-    cameraMatrix.Accessor(2, 2) = -forward.z;
-
-    cameraMatrix.Accessor(0, 3) = -right.Dot(position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(position);
-
-    cameraMatrix.Accessor(3, 3) = 1;
-
-    return cameraMatrix;
-}

@@ -14,7 +14,6 @@
 #include <cstdlib>
 #include "Scene.hpp"
 
-#include "PxRigidStatic.h"
 #include "PxScene.h"
 #include "PxShape.h"
 #include "PxMaterial.h"
@@ -26,6 +25,7 @@
 #include "geometry/PxHeightFieldDesc.h"
 #include "geometry/PxHeightFieldSample.h"
 #include "geometry/PxHeightFieldGeometry.h"
+#include "extensions/PxSimpleFactory.h"
 #include "extensions/PxRigidActorExt.h"
 #include "System/Terrain.hpp"
 
@@ -57,7 +57,7 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk{nullptr});
+			chunks.emplace(pos.ToString(), Chunk());
 			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 															seed, noiseParams,
 															minHeight, maxHeight, heightIntensity }, false);
@@ -124,7 +124,7 @@ void Terrain::Update()
 			if (chunks.find(pos.ToString()) == chunks.end())
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
-				chunks.emplace(pos.ToString(), Chunk(nullptr));
+				chunks.emplace(pos.ToString(), Chunk());
 				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
 																seed, noiseParams,
 																minHeight, maxHeight, heightIntensity }, false);
@@ -137,15 +137,13 @@ void Terrain::Update()
 
 void Terrain::Draw(const class Camera& _camera) const
 {
+	glDisable(GL_CULL_FACE);
+
 	if (!shader || !isGenerated || !isActivated)
 		return;
 
 	shader->Use();
 	shader->SetLight(Scene::GetCurrentScene()->GetLights());
-	Mat4 matrixCamera = _camera.GetMatrix();
-	shader->SetMatrix("view", matrixCamera.Reversed());
-	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
-	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
 	shader->SetInt("colorCount", colorCount);
 
@@ -173,6 +171,9 @@ void Terrain::Draw(const class Camera& _camera) const
 		glBindVertexArray(it.second.GetMesh().GetID());
 		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
 	}
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void Terrain::DisplayOptionWindow()
@@ -430,7 +431,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = this;
+	actor->userData = nullptr;
 
 	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material->data(), 1);
 	PhysicSystem::scene->addActor(*actor);

@@ -15,6 +15,7 @@ private:
 
 	class RigidBody* rb{ nullptr };
 	class BoxCollision* attackCollision;
+	class GameObject* playerMesh;
 
 	int speed = 3;
 

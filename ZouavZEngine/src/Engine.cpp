@@ -120,6 +120,7 @@ void Engine::Update()
 
         scene.UpdateShaderUniform(*SceneCamera::GetSceneCamera());
         scene.Draw(&scene.GetWorld(), SceneCamera::GetSceneCamera());
+        scene.terrain.Draw(*SceneCamera::GetSceneCamera());
         FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
@@ -128,6 +129,7 @@ void Engine::Update()
         {
             scene.UpdateShaderUniform(*Camera::GetMainCamera());
             scene.Draw(&scene.GetWorld(), Camera::GetMainCamera());
+            scene.terrain.Draw(*SceneCamera::GetSceneCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }
         

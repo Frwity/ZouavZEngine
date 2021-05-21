@@ -59,7 +59,7 @@ public:
 		physx::PxRigidActor* rd = pairHeader.actors[0]->is<physx::PxRigidActor>();
 		physx::PxRigidActor* rd2 = pairHeader.actors[1]->is<physx::PxRigidActor>();
 
-		if (rd && rd2)
+		if (rd && rd2 && rd->userData && rd2->userData)
 		{
 			Rigid* rb1 = static_cast<Rigid*>(rd->userData);
 			Rigid* rb2 = static_cast<Rigid*>(rd2->userData);

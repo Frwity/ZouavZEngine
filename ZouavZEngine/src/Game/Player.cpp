@@ -1,6 +1,7 @@
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
 #include "GameObject.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Game/Player.hpp"
@@ -19,10 +20,11 @@ Player::Player(GameObject* _gameobject, std::string _name)
 
 void Player::OnAddComponent()
 {
-	GameObject* anchor = GameObject::CreateGameObject("Anchor");
-	anchor->SetParent(&GetGameObject());
+	playerMesh = GameObject::CreateGameObject("PlayerMesh");
+	playerMesh->SetParent(&GetGameObject());
+	playerMesh->AddComponent<MeshRenderer>();
 	GameObject* camera = GameObject::CreateGameObject("Camera");
-	camera->SetParent(anchor);
+	camera->SetParent(&GetGameObject());
 	camera->AddComponent<ThirdPersonCamera>();
 	GetGameObject().AddComponent<BoxCollision>();
 	rb = GetGameObject().AddComponent<RigidBody>();
@@ -44,8 +46,12 @@ void Player::OnTrigger(GameObject* _other, ShapeCollision* _triggerShape)
 
 void Player::Begin()
 {
+	playerMesh = &GetGameObject().GetChild(0);
+	material = &playerMesh->GetComponent<MeshRenderer>()->material;
+	baseColor = material->color;
+
 	ICharacter::Begin();
-	
+
 	rb = GetGameObject().GetComponent<RigidBody>();
 	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 }

@@ -5,6 +5,7 @@
 
 class Scene
 {
+	friend class Engine;
 private:
 	static Scene* currentScene;
 

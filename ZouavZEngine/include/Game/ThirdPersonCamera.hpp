@@ -4,11 +4,15 @@
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
 
+
 class ThirdPersonCamera : public ScriptComponent
 {
    friend class cereal::access;
 private:
+    class Camera* camera = nullptr;
     float xCameraAngle = 0.0f;
+
+    Vec2 oldMousePos{0.0f, 0.0f};
 
 public:
     ThirdPersonCamera() = delete;

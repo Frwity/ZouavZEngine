@@ -93,7 +93,6 @@ public:
 
 	void MoveTo(const Vec3& _direction);
 	Mat4 GetMatrix() const final;
-	Mat4 GetLookAtMatrix(const Vec3& _target) const;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

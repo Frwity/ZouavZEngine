@@ -1,9 +1,9 @@
 #pragma once
+
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
 #include "System/ResourcesManager.hpp"
-#include "Component/RigidStatic.hpp"
 
 #include <FastNoiseLite.h>
 
@@ -32,6 +32,7 @@ namespace physx
 	class PxRigidStatic;
 	class PxMaterial;
 	class PxShape;
+	class PxRigidActor;
 }	
 
 struct ChunkCreateArg
@@ -53,7 +54,7 @@ struct ChunkCreateArg
 };
 
 
-class Chunk : public RigidStatic
+class Chunk
 {
 private:
 	Mesh mesh{"chunkMesh"};
@@ -62,6 +63,8 @@ private:
 
 	Vec2 pos{};
 
+	physx::PxRigidActor* actor = nullptr;
+
 	int size = 0;
 	int vertexCount = 0;
 
@@ -69,7 +72,6 @@ private:
 public:
 
 	Chunk() = default; 
-	Chunk(GameObject* _gameObject = nullptr): RigidStatic(_gameObject) {};
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
