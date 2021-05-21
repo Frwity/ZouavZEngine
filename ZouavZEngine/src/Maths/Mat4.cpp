@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cassert>
 
+
 #include "Maths/Mat4.hpp"
 
 const Mat4 Mat4::identity = Matrix::Identity(4);
@@ -209,6 +210,16 @@ Vec4 Mat4::operator*(const Vec4& _v) const
             matrix[1] * _v.x + matrix[5] * _v.y + matrix[9] * _v.z + matrix[13] * _v.w,
             matrix[2] * _v.x + matrix[6] * _v.y + matrix[10] * _v.z + matrix[14] * _v.w,
             matrix[3] * _v.x + matrix[7] * _v.y + matrix[11] * _v.z + matrix[15] * _v.w };
+}
+
+Mat4 Mat4::ConvertAssimpMatrixToMat4(aiMatrix4x4t<ai_real> matrix)
+{
+    return {
+        matrix.a1, matrix.a2, matrix.a3, matrix.a4,
+        matrix.b1, matrix.b2, matrix.b3, matrix.b4,
+        matrix.c1, matrix.c2, matrix.c3, matrix.c4,
+        matrix.d1, matrix.d2, matrix.d3, matrix.d4
+    };
 }
 
 Mat4 Mat4::operator*(const Mat4& m) const

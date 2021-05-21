@@ -19,6 +19,7 @@
 #include "PhysX/foundation/PxMat44.h"
 #include "Component/RigidBody.hpp"
 #include "Component/ShapeCollision.hpp"
+#include "Component/Animation.hpp"
 
 #include <fstream>
 #include "cereal/archives/json.hpp"
@@ -134,7 +135,9 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 {
 	if (!_parent->IsActive())
 		return;
-	if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
+	if (_parent->GetComponent<Animation>() && _parent->GetComponent<Animation>()->play)
+		_parent->GetComponent<Animation>()->Draw(*_camera);
+	 else if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
 		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
 	if (_parent->GetComponent<Skybox>())
 		_parent->GetComponent<Skybox>()->Draw(*_camera);

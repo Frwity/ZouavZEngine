@@ -252,6 +252,12 @@
     <ClCompile Include="src\Component\RigidStatic.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Bone.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Animation.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -434,6 +440,15 @@
     <ClInclude Include="include\Game\Generato.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\Rendering\Bone.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Animation.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Animator.hpp">
+      <Filter>include\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\TerrainShader.fs">
@@ -446,6 +461,9 @@
       <Filter>resources</Filter>
     </None>
     <None Include="resources\Gizmos.vs">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\Anim.shader">
       <Filter>resources</Filter>
     </None>
   </ItemGroup>

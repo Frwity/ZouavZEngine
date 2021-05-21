@@ -30,7 +30,7 @@
 #include "System/Editor.hpp"
 #include "System/ResourcesManager.hpp"
 #include "System/ScriptSystem.hpp"
-
+#include "Component/Animation.hpp"
 #include "Game/Player.hpp"
 #include "Game/Generato.hpp"
 
@@ -743,6 +743,10 @@ void Editor::DisplayInspector()
                             break;
                         case E_COMPONENT::SKYBOX:
                             if (ComponentButton<Skybox>("Add Skybox", true))
+                                addComponentWindow = false;
+                            break;
+                        case E_COMPONENT::ANIMATION:
+                            if (ComponentButton<Animation>("Add animation", true))
                                 addComponentWindow = false;
                             break;
                         }

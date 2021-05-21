@@ -3,6 +3,7 @@
 
 #include "Matrix.hpp"
 #include <initializer_list>
+#include <assimp/matrix4x4.h>
 
 class Vec3;
 class Vec4;
@@ -32,6 +33,8 @@ class Mat4 : public Matrix
         static Mat4 CreateProjMatrix(float d);
         static Mat4 CreateOrthographicProjectionMatrix(float width, float height, float near, float far);
         static Mat4 CreatePerspectiveProjectionMatrix(float width, float height, float near, float far, float fov);
+        
+        static Mat4 ConvertAssimpMatrixToMat4(aiMatrix4x4t<ai_real> _matrix);
 
         Vec3 operator*(const Vec3& _v) const;
         Vec4 operator*(const Vec4& _v) const;
