@@ -37,10 +37,7 @@ void Player::OnTrigger(GameObject* _other, ShapeCollision* _triggerShape)
 	{
 		ICharacter* characterOther = _other->GetComponent<ICharacter>();
 		if (characterOther)
-		{
 			characterOther->Damage(attackDamage);
-			std::cout << _other->GetName() << " Ouch !!!" << std::endl;
-		}
 	}
 }
 
@@ -110,7 +107,6 @@ void Player::Update()
 
 	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f)
 	{
-		std::cout << GetGameObject().GetName() << " A l'attaque !!!" << std::endl;
 		attackCollision->Activate();
 		timerAttackDuration = attackDuration;
 	}
