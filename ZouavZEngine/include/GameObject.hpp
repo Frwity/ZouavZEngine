@@ -40,6 +40,8 @@ private:
 
 	void ScriptOnAddComponent();
 
+	static float minY;
+
 public:
 	static GameObject* currentLoadedGameObject;
 

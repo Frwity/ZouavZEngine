@@ -73,7 +73,7 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->SetMatrix("matrix", mat);
 	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(gizmoMesh->GetID());

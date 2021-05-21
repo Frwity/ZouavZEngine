@@ -125,7 +125,7 @@ void Scene::UpdateShaderUniform(const Camera& _camera)
 		Mat4 matrixCamera = _camera.GetMatrix();
 
 		shader.second->SetMatrix("view", matrixCamera.Reversed());
-		shader.second->SetMatrix("projection", _camera.GetProjetionMatrix());
+		shader.second->SetMatrix("projection", _camera.GetProjectionMatrix());
 		shader.second->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 		shader.second->SetLight(lights);
 	}
