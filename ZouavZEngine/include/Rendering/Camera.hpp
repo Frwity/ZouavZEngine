@@ -14,7 +14,7 @@ class Camera : public Component
 private:
 	friend cereal::access;
 	static Camera* mainCamera;
-	bool followGameObjectRotation = false;
+	bool followGameObjectRotation = true;
 	bool isMainCamera = false;
 
 protected:
@@ -30,7 +30,6 @@ protected:
 public:
 	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1, bool _sceneCamera = false, std::string _name = "Camera");
 	Camera() = delete;
-	Camera(const Camera&);
 	~Camera();
 
 	void Editor() override;

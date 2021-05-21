@@ -26,21 +26,6 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height, bool _sce
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
 }
 
-Camera::Camera(const Camera& _other)
-    : Component(_other)
-{
-    gameObject = GameObject::currentLoadedGameObject;
-    projection = _other.projection;
-    position = _other.position;
-    target = _other.target;
-    width = _other.width;
-    height = _other.height;
-    near = _other.near;
-    far = _other.far;
-    fov = _other.fov;
-    followGameObjectRotation = _other.followGameObjectRotation;
-}
-
 Camera::~Camera()
 {
     isMainCamera = false;
@@ -76,8 +61,19 @@ void Camera::Editor()
 
 Mat4 Camera::GetMatrix() const
 {
-    const Vec3 pos = GetGameObject().WorldPosition() + position;
-    const Vec3 targetPos = GetGameObject().WorldPosition() + target;
+    Vec3 pos;
+    Vec3 targetPos;
+
+    if (followGameObjectRotation)
+    {
+        pos = GetGameObject().GetTRSMatrix() * position;
+        targetPos = GetGameObject().GetTRSMatrix() * target;
+    }
+    else
+    {
+        pos = GetGameObject().WorldPosition() + position;
+        targetPos = GetGameObject().WorldPosition() + target;
+    }
 
     const Vec3 forward = (targetPos - pos).Normalized();
     const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
@@ -101,7 +97,7 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return followGameObjectRotation ? GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed() : cameraMatrix.Reversed();
+    return cameraMatrix.Reversed();
 }
 
 void Camera::Resize(int _width, int _height)

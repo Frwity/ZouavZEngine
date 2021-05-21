@@ -1,10 +1,10 @@
 #include "System/InputManager.hpp"
 #include "System/TimeManager.hpp"
 #include "GameObject.hpp"
-#include "Rendering/Camera.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Game/Player.hpp"
+#include "Game/ThirdPersonCamera.hpp"
 
 #include <iostream>
 
@@ -23,6 +23,7 @@ void Player::OnAddComponent()
 	anchor->SetParent(&GetGameObject());
 	GameObject* camera = GameObject::CreateGameObject("Camera");
 	camera->SetParent(anchor);
+	camera->AddComponent<ThirdPersonCamera>();
 	GetGameObject().AddComponent<BoxCollision>();
 	rb = GetGameObject().AddComponent<RigidBody>();
 	attackCollision = GetGameObject().AddComponent<BoxCollision>();
@@ -45,12 +46,6 @@ void Player::Begin()
 {
 	ICharacter::Begin();
 	
-	if (GetGameObject().GetComponent<Camera>())
-	{
-		GetGameObject().GetComponent<Camera>()->SetPosition({ 0, 5, 8 });
-		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
-	}
-	oldMousePos = InputManager::GetCursorPos();
 	rb = GetGameObject().GetComponent<RigidBody>();
 	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 }
@@ -110,18 +105,4 @@ void Player::Update()
 		attackCollision->Activate();
 		timerAttackDuration = attackDuration;
 	}
-
-	Vec2 newMousePos = InputManager::GetCursorPos();
-	Vec2 offset = newMousePos - oldMousePos;
-
-	xCameraAngle += offset.y;
-	if (xCameraAngle > 89.0f || xCameraAngle < -89.0f)
-	{
-		xCameraAngle = xCameraAngle > -(float)89.0f ? (xCameraAngle < (float)89.0f ? xCameraAngle : (float)89.0f) : -(float)89.0f;
-		offset.y = 0;
-	}
-	//GetGameObject().GetParent().Rotate({0.0f, offset.x, 0.0f });
-	//GetGameObject().Rotate({ -offset.y, 0.0f, 0.0f });
-
-	oldMousePos = newMousePos;
 }

@@ -261,7 +261,59 @@
     },
     "value33": true,
     "value34": false,
-    "value35": [],
+    "value35": [
+        {
+            "polymorphic_id": 2147483655,
+            "polymorphic_name": "ThirdPersonCamera",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": {
+                            "value0": true,
+                            "value1": "ThirdPersonCamera"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483656,
+            "polymorphic_name": "Camera",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.2165130376815797,
+                    "value1": 0.0,
+                    "value2": 0.0,
+                    "value3": 0.0,
+                    "value4": 0.0,
+                    "value5": 2.4142138957977297,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": -1.0000003576278687,
+                    "value11": -1.0,
+                    "value12": 0.0,
+                    "value13": 0.0,
+                    "value14": -0.0020000003278255464,
+                    "value15": 0.0,
+                    "value16": 0.0,
+                    "value17": 5.0,
+                    "value18": 8.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": true,
+                    "value23": {
+                        "value0": true,
+                        "value1": "Camera"
+                    }
+                }
+            }
+        }
+    ],
     "value36": "sol",
     "value37": " ",
     "value38": 0,
@@ -340,7 +392,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483655,
+            "polymorphic_id": 2147483657,
             "polymorphic_name": "RigidStatic",
             "ptr_wrapper": {
                 "valid": 1,
@@ -544,7 +596,57 @@
     },
     "value69": true,
     "value70": false,
-    "value71": [],
+    "value71": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": {
+                            "value0": true,
+                            "value1": "ThirdPersonCamera"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.22905433177948,
+                    "value1": 0.0,
+                    "value2": 0.0,
+                    "value3": 0.0,
+                    "value4": 0.0,
+                    "value5": 2.4142138957977297,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": -1.0000003576278687,
+                    "value11": -1.0,
+                    "value12": 0.0,
+                    "value13": 0.0,
+                    "value14": -0.0020000003278255464,
+                    "value15": 0.0,
+                    "value16": 0.0,
+                    "value17": 5.0,
+                    "value18": 8.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "Camera"
+                    }
+                }
+            }
+        }
+    ],
     "value72": false,
     "value73": 512.0,
     "value74": 128,

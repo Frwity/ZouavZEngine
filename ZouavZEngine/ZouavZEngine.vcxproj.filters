@@ -267,6 +267,9 @@
     <ClCompile Include="src\Game\Enemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\ThirdPersonCamera.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -468,6 +471,9 @@
       <Filter>external_lib</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Enemy.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\ThirdPersonCamera.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>

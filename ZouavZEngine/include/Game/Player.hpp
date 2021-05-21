@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game/ICharacter.hpp"
-#include "Component/ScriptComponent.hpp"
+#include "Game/ICharacter.hpp"
 #include "Maths/Vec2.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
@@ -17,9 +17,6 @@ private:
 	class BoxCollision* attackCollision;
 
 	int speed = 3;
-	float xCameraAngle = 0.0f;
-	
-	Vec2 oldMousePos{ 0.0f, 0.0f };
 
 	float attackDuration = 0.5f;
 	float attackCooldown = 1.0f;
