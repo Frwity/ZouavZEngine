@@ -51,7 +51,7 @@ public:
 
 	void Resize(int _width, int _height);
 
-	Mat4 GetProjetionMatrix() const { return projection; }
+	Mat4 GetProjectionMatrix() const { return projection; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

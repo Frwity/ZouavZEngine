@@ -110,7 +110,7 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::T))
 		Damage(1);
 
-	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f)
+	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
 	{
 		std::cout << GetGameObject().GetName() << " A l'attaque !!!" << std::endl;
 		attackCollision->Activate();

@@ -19,6 +19,7 @@ bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 std::unordered_map < std::string, std::unique_ptr<GameObject >> GameObject::prefabGameObjects;
+float GameObject::minY = -1000.0f;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
@@ -60,8 +61,14 @@ GameObject& GameObject::operator=(const GameObject& _other)
 }
 
 void GameObject::Destroy() 
-{ 
+{
+	SetParent(nullptr);
 	toDestroy = true;
+	for (GameObject* child : children)
+	{
+		child->Destroy();
+	}
+	destroyGameObject = true;
 }
 
 
@@ -180,6 +187,9 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	worldPosition = _heritedTransform * localPosition;
 	worldRotation = parent ? parent->worldRotation * localRotation : localRotation;
 	worldScale = parent ? parent->worldScale * localScale : localScale;
+
+	if (worldPosition.y < minY && parent != nullptr)
+		Destroy();
 
 	for (GameObject* _child : children)
 	{

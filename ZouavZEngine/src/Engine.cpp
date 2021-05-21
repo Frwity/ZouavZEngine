@@ -106,8 +106,6 @@ void Engine::Update()
         }
         else
             scene.GetWorld().UpdateTransform(Mat4::identity);
-       
-        GameObject::DestroyGameObjectIfNeedTo();
 
         if (editor.Display(render))
             scene.DisplayTerrainOptionWindow();
@@ -132,6 +130,7 @@ void Engine::Update()
         /////////////////
         
         editor.Update();
+        GameObject::DestroyGameObjectIfNeedTo();
         render.Update();
         InputManager::UpdateOldMousePos();
     }

@@ -694,7 +694,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
-            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, currentGizmosMode, matrix.matrix);
+            ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjectionMatrix().matrix, currentGizmoOperation, currentGizmosMode, matrix.matrix);
             if (ImGuizmo::IsUsing)
             {
                 Vec3 translation, rotation, scale;
@@ -799,6 +799,10 @@ void Editor::DisplayInspector()
                     gameObjectInspector->localScale.z = gameObjectInspector->localScale.z < 0.001f ? 0.001f : gameObjectInspector->localScale.z;
                 }
             }
+
+            if (gameObjectInspector->parent == nullptr)
+                ImGui::DragFloat("Min Z", &GameObject::minY, 0.1f);
+
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
                 Component* comp = component.get();
@@ -885,6 +889,9 @@ void Editor::DisplayInspector()
             }
             if (ImGui::Button("Add Component"))
                 addComponentWindow = true;
+
+            if (gameObjectInspector && gameObjectInspector->toDestroy)
+                gameObjectInspector = nullptr;
         }
     }
     ImGui::End();
@@ -1166,13 +1173,7 @@ void Editor::DisplayHierarchy()
                 {
                     if (ImGui::Button("Delete"))
                     {
-                        for (GameObject* child : newGameObjectParent->children)
-                        {
-                            child->SetParent(newGameObjectParent->parent);
-                        }
-                        newGameObjectParent->SetParent(nullptr);
-                        newGameObjectParent->toDestroy = true;
-                        GameObject::destroyGameObject = true;
+                        newGameObjectParent->Destroy();
                         hierarchyMenu = false;
                         if (newGameObjectParent == gameObjectInspector)
                             gameObjectInspector = nullptr;
