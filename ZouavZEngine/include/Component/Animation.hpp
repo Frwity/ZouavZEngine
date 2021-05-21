@@ -66,11 +66,7 @@ public :
     }
 
     template <class Archive>
-    static void load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct)
-    {
-        _construct(GameObject::currentLoadedGameObject);
-        _ar(cereal::base_class<Component>(_construct.ptr()));
-    }
+    static void load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct);
 };
 
 CEREAL_REGISTER_TYPE(Animation)

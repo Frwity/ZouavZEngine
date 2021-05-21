@@ -46,8 +46,9 @@ Bone::Bone(const std::string& _name, int _id, const aiNodeAnim* channel):
 void Bone::Update(float _animationTime)
 {
     Vec3 translation    = InterpolatePosition(_animationTime);
-    Quaternion rotation = InterpolateRotation(_animationTime);
-    Vec3 scale          = InterpolateScaling(_animationTime);
+    Quaternion rotation;// InterpolateRotation(_animationTime);
+    rotation.w = 1.f;
+    Vec3 scale(1.f, 1.f, 1.f);// = InterpolateScaling(_animationTime);
 
     localTransform = Mat4::CreateTRSMatrix(translation, rotation, scale);
 }
@@ -56,7 +57,7 @@ int Bone::GetPositionIndex(float _animationTime)
 {
     for (int index = 0; index < nbPositionsKeys - 1; ++index)
     {
-        if (_animationTime < positions[index + 1].timeStamp)
+        if (_animationTime < positions[index].timeStamp)
             return index;
     }
     
@@ -67,7 +68,7 @@ int Bone::GetRotationIndex(float _animationTime)
 {
     for (int index = 0; index < nbRotationsKeys - 1; ++index)
     {
-        if (_animationTime < rotations[index + 1].timeStamp)
+        if (_animationTime < rotations[index].timeStamp)
             return index;
     }
 
@@ -79,7 +80,7 @@ int Bone::GetScaleIndex(float _animationTime)
 {
     for (int index = 0; index < nbScalesKeys - 1; ++index)
     {
-        if (_animationTime < scales[index + 1].timeStamp)
+        if (_animationTime < scales[index].timeStamp)
             return index;
     }
 

@@ -214,12 +214,9 @@ Vec4 Mat4::operator*(const Vec4& _v) const
 
 Mat4 Mat4::ConvertAssimpMatrixToMat4(aiMatrix4x4t<ai_real> matrix)
 {
-    return {
-        matrix.a1, matrix.a2, matrix.a3, matrix.a4,
-        matrix.b1, matrix.b2, matrix.b3, matrix.b4,
-        matrix.c1, matrix.c2, matrix.c3, matrix.c4,
-        matrix.d1, matrix.d2, matrix.d3, matrix.d4
-    };
+    Mat4 r;
+    memcpy(r.matrix, &matrix.a1, sizeof(aiMatrix4x4t<ai_real>));
+    return r.Transposed();
 }
 
 Mat4 Mat4::operator*(const Mat4& m) const

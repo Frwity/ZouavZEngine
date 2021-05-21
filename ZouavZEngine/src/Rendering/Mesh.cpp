@@ -140,11 +140,11 @@ void Mesh::InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indi
 	
 	//For animation
 	// ids
-	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (const GLvoid*)(9 * sizeof(int)));
+	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (const GLvoid*)0);
 	glEnableVertexAttribArray(3);
 
 	// weights
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(13 * sizeof(float)));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
 	glEnableVertexAttribArray(4);
 }
 

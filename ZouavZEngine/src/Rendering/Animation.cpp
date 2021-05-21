@@ -164,3 +164,10 @@ void Animation::Draw(const Camera& _camera)
     glBindVertexArray(mesh->GetID());
     glDrawElements(GL_TRIANGLES, mesh->GetNbElements(), GL_UNSIGNED_INT, 0);
 }
+
+template <class Archive>
+static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct)
+{
+    _construct(GameObject::currentLoadedGameObject);
+    _ar(cereal::base_class<Component>(_construct.ptr()));
+}
