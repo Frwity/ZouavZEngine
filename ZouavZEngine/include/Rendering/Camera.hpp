@@ -28,14 +28,12 @@ protected:
 	float far = 5000.0f;
 	float fov = 45.0f;
 public:
-	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1, bool _sceneCamera = false);
+	Camera(class GameObject* _gameObject, int _width = 1, int _height = 1, bool _sceneCamera = false, std::string _name = "Camera");
 	Camera() = delete;
 	Camera(const Camera&);
 	~Camera();
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "Camera"; }
 
 	static Camera* GetMainCamera() { return mainCamera; }
 

@@ -11,12 +11,12 @@
 #include <imgui.h>
 #include "Component/Skybox.hpp"
 
-Skybox::Skybox(class GameObject* _gameObject)
-	: Component(_gameObject), cubeMesh(*ResourcesManager::GetResource<Mesh>("Default")), shader(*ResourcesManager::GetResource<Shader>("Skybox")), texture(*ResourcesManager::GetResource<CubemapTexture>("Default"))
+Skybox::Skybox(class GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name), cubeMesh(*ResourcesManager::GetResource<Mesh>("Default")), shader(*ResourcesManager::GetResource<Shader>("Skybox")), texture(*ResourcesManager::GetResource<CubemapTexture>("Default"))
 {}
 
-Skybox::Skybox(class GameObject* _gameObject, std::shared_ptr<CubemapTexture>& _cubemapTexture)
-	: Component(_gameObject), cubeMesh(ResourcesManager::GetResource<Mesh>("Default")->get()), shader(ResourcesManager::GetResource<Shader>("Skybox")->get()), texture{ _cubemapTexture }
+Skybox::Skybox(class GameObject* _gameObject, std::shared_ptr<CubemapTexture>& _cubemapTexture, std::string _name)
+	: Component(_gameObject, _name), cubeMesh(ResourcesManager::GetResource<Mesh>("Default")->get()), shader(ResourcesManager::GetResource<Shader>("Skybox")->get()), texture{ _cubemapTexture }
 {}
 
 void Skybox::Draw(const Camera& _camera)

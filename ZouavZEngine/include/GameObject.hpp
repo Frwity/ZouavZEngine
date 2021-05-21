@@ -37,6 +37,9 @@ private:
 
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
+
+	void ScriptOnAddComponent();
+
 public:
 	static GameObject* currentLoadedGameObject;
 
@@ -77,6 +80,7 @@ public:
 	T* AddComponent(Args&&... _args)
 	{
 		components.emplace_back(std::make_unique<T>(this, _args...));
+		ScriptOnAddComponent();
 		return static_cast<T*>(components.back().get());
 	}
 
@@ -103,6 +107,18 @@ public:
 				returnComponents.push_back(_component);
 		}
 		return returnComponents;
+	}
+
+	template<typename T>
+	T* GetComponentByName(std::string _name)
+	{
+		for (const std::unique_ptr<Component>& component : components)
+		{
+			T* returnComponent = dynamic_cast<T*>(component.get());
+			if (returnComponent && _name.compare(returnComponent->GetName()) == 0)
+				return returnComponent;
+		}
+		return nullptr;
 	}
 
 	void UpdateTransform(const class Mat4& _heritedTransform);

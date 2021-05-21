@@ -19,10 +19,8 @@ public:
 	physx::PxRigidActor* actor = nullptr;
 
 	Rigid() = delete;
-	Rigid(class GameObject* _gameObject);
+	Rigid(class GameObject* _gameObject, std::string _name = "Rigid");
 	~Rigid();
-
-	const char* GetComponentName() override { return "Rigid"; }
 
 	void Activate() override;
 	void Dehactivate() override;

@@ -19,8 +19,8 @@ public:
 	Material material;
 
 	MeshRenderer() = delete;
-	MeshRenderer(class GameObject* _gameObject);
-	MeshRenderer(class GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader);
+	MeshRenderer(class GameObject* _gameObject, std::string _name = "MeshRenderer");
+	MeshRenderer(class GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader, std::string _name = "MeshRenderer");
 	~MeshRenderer();
 
 	void Draw(const class Camera& _camera);
@@ -29,8 +29,6 @@ public:
 	void ShaderEditor();
 	void MeshEditor();
 	void Editor() override;
-
-	const char* GetComponentName() override { return "MeshRenderer"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

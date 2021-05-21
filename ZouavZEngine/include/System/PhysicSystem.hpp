@@ -16,6 +16,7 @@
 #include "Component/Rigid.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/ScriptComponent.hpp"
+#include "Component/ShapeCollision.hpp"
 
 namespace physx
 {
@@ -39,8 +40,12 @@ public:
 	
 	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override 
 	{ 
+		if (!static_cast<ShapeCollision*>(pairs->triggerShape->userData)->IsActive())
+			return;
+
 		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
 		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
+
 
 		triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs->triggerShape);
 	}

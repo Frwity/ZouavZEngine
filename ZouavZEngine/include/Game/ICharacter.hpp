@@ -19,14 +19,14 @@ protected:
     float invulnerabilityFrame = 1.0f;
     float invulnerabilityTimer = 0.0f;
     int life = 5;
+    int attackDamage = 1;
     bool asTakenDamage = false;
 
 public:
     ICharacter() = delete;
-    ICharacter(class GameObject* _gameobject);
+    ICharacter(class GameObject* _gameobject, std::string _name = "ICharacter");
     void Begin() override;
     void Update() override;
-    const char* GetComponentName() override { return "Character"; }
     void Editor() override;
 
 
@@ -37,14 +37,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
-        _ar(damageColor, invulnerabilityFrame, life);
+        _ar(damageColor, invulnerabilityFrame, life, attackDamage);
         _ar(cereal::base_class<Component>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<ICharacter>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
-        _ar(_construct->invulnerabilityFrame, _construct->life);
+        _ar(_construct->damageColor, _construct->invulnerabilityFrame, _construct->life, _construct->attackDamage);
         _ar(cereal::base_class<Component>(_construct.ptr()));
     }
 };

@@ -662,7 +662,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
-        if (InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
+        if (ImGui::IsWindowFocused() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
         {
             isKeyboardEnable = false;
             glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
@@ -808,7 +808,7 @@ void Editor::DisplayInspector()
                 if (active != comp->isActive)
                     active ? comp->Activate() : comp->Dehactivate();
                 ImGui::SameLine();
-                if (!Component::EditorCollapsingHeader(comp->GetComponentName(), [comp]() {comp->Editor(); }))
+                if (!Component::EditorCollapsingHeader(comp->name.c_str(), [comp]() {comp->Editor(); }))
                 {
                     comp->DeleteFromGameObject();
                     ImGui::PopID();
@@ -934,7 +934,7 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
-        if (ImGui::IsWindowFocused() && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
+        if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
@@ -1072,7 +1072,7 @@ void Editor::DisplayProject()
 void Editor::DisplayChild(GameObject* _parent)
 {
     ImGui::PushID(_parent);
-    if (ImGui::TreeNodeEx(_parent->GetName().c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+    if (ImGui::TreeNodeEx(_parent->GetName().c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
     {
         if (ImGui::IsItemHovered())
         {

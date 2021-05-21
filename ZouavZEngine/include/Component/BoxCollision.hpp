@@ -10,14 +10,12 @@ class BoxCollision: public ShapeCollision
 public:
 	Vec3 halfExtends;
 
-	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 1.0f, 1.0f, 1.0f }, bool _isTrigger = false, Transform _tranform = Transform());
+	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 1.0f, 1.0f, 1.0f }, bool _isTrigger = false, Transform _tranform = Transform(), std::string _name = "BoxCollision");
 	~BoxCollision();
 
 	void Editor() override;
 	void DrawGizmos(const Camera& _camera) override;
 	void UpdateScale() override;
-
-	const char* GetComponentName() override { return "BoxCollision"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

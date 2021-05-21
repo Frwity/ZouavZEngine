@@ -19,12 +19,10 @@ protected:
 public:
 
 	RigidStatic() = delete;
-	RigidStatic(GameObject* _gameObject);
+	RigidStatic(GameObject* _gameObject, std::string _name = "RigidStatic");
 	~RigidStatic();
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "RigidStatic"; }
 
 	void Activate() override;
 	void Dehactivate() override;

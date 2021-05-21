@@ -5,8 +5,8 @@
 #include "System/TimeManager.hpp"
 #include "System/InputManager.hpp"
 
-Move::Move(GameObject * _gameobject)
-: ScriptComponent(_gameobject)
+Move::Move(GameObject * _gameobject, std::string _name)
+: ScriptComponent(_gameobject, _name)
 {}
 
 void Move::Begin()

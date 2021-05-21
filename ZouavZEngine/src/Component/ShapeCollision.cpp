@@ -16,8 +16,8 @@
 #include "imgui.h"
 #include "extensions/PxRigidActorExt.h"
 
-ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger)
-	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
+ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger, std::string _name)
+	 : Component(_gameObject, _name), transform(_transform), isTrigger(_isTrigger)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
@@ -36,9 +36,24 @@ void ShapeCollision::releasePhysXComponent()
 
 }
 
+void ShapeCollision::SetTrigger(bool _isTrigger)
+{
+	isTrigger = _isTrigger;
+	UpdateIsTrigger();
+}
+
 void ShapeCollision::UpdateIsTrigger()
 {
-	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+	if (isTrigger)
+	{
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+	}
+	else
+	{
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+	}
 }
 
 void ShapeCollision::Editor()
@@ -106,26 +121,37 @@ void ShapeCollision::AttachToRigidComponent()
 void ShapeCollision::Activate()
 {
 	Component::Activate();
-	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+	if (shape)
+		UpdateIsTrigger();
 }
 
 void ShapeCollision::Dehactivate()
 {
 	Component::Dehactivate();
-	if(shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	if (shape)
+	{
+		if (IsTrigger())
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
+		else
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	}
 }
 
 void ShapeCollision::InternalActivate()
 {
 	if (isActive && shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+		UpdateIsTrigger();
 }
 
 void ShapeCollision::InternalDehactivate()
 {
 	if (isActive && shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	{
+		if (IsTrigger())
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
+		else
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	}
 }
 
 void ShapeCollision::UpdateTransform()

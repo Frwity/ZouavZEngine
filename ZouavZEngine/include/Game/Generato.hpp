@@ -10,12 +10,10 @@ class Generato : public ScriptComponent
 public:
     Prefab prefab;
     Generato() = delete;
-    Generato(class GameObject* _gameobject);
+    Generato(class GameObject* _gameobject, std::string _name = "Generato");
     void Editor() override;
     void Begin() final;
     void Update() final;
-
-	const char* GetComponentName() override { return "Generato"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

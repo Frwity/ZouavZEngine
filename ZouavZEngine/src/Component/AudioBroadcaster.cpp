@@ -1,6 +1,5 @@
 #include "GameObject.hpp"
 #include "Sound.hpp"
-#include "Component/AudioBroadcaster.hpp"
 #include "imgui.h"
 #include "System/ResourcesManager.hpp"
 #include <AL/al.h>
@@ -8,9 +7,10 @@
 #include <algorithm>
 #include "System/SoundManager.hpp"
 #include "Maths/Vec3.hpp"
+#include "Component/AudioBroadcaster.hpp"
 
-AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
-	: Component(_gameObject)
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name)
 {
 	alGenSources(1, &source);
 
@@ -28,8 +28,8 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject)
 	SoundManager::AddSound(this);
 }
 
-AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<class Sound>& _sound)
-	: Component(_gameObject), sound(_sound)
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<class Sound>& _sound, std::string _name)
+	: Component(_gameObject, _name), sound(_sound)
 {
 	alGenSources(1, &source);
 

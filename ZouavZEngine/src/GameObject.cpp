@@ -8,11 +8,12 @@
 #include "PxRigidStatic.h"
 #include "PxActor.h"
 #include "cereal/archives/json.hpp"
-#include "GameObject.hpp"
+#include "Component/ScriptComponent.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include "GameObject.hpp"
 
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
@@ -236,6 +237,13 @@ void GameObject::RemoveChild(GameObject* _child)
 		else
 			++it;
 	}
+}
+
+void GameObject::ScriptOnAddComponent()
+{
+	ScriptComponent* newComponent = dynamic_cast<ScriptComponent*>(components.back().get());
+	if (newComponent)
+		newComponent->OnAddComponent();
 }
 
 const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()

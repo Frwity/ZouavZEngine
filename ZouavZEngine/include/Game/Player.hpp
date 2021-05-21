@@ -14,20 +14,28 @@ private:
 	friend class cereal::access;
 
 	class RigidBody* rb{ nullptr };
+	class BoxCollision* attackCollision;
 
 	int speed = 3;
 	float xCameraAngle = 0.0f;
 	
 	Vec2 oldMousePos{ 0.0f, 0.0f };
 
+	float attackDuration = 0.5f;
+	float attackCooldown = 1.0f;
+	float timerAttackDuration = 0.0f;
+	float timerAttackCooldown = 0.0f;
+
 public:
 
 	Player() = delete;
-	Player(class GameObject* _gameobject);
+	Player(class GameObject* _gameobject, std::string _name = "Player");
 	void Begin() final;
 	void Update() final;
 
-	const char* GetComponentName() override { return "Player"; }
+	void OnAddComponent() override;
+
+	void OnTrigger(class GameObject* _other, class ShapeCollision* _triggerShape) override;
 
 	template <class Archive>
 	void serialize(Archive& ar)

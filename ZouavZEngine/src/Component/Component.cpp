@@ -4,8 +4,8 @@
 #include "imgui.h"
 #include "Component/Component.hpp"
 
-Component::Component(GameObject* _gameObject)
-	: gameObject(_gameObject)
+Component::Component(GameObject* _gameObject, std::string _name)
+	: gameObject(_gameObject), name{_name}
 {
 }
 
@@ -36,7 +36,9 @@ void Component::DeleteFromGameObject()
 }
 
 template <class Archive>
-static void Component::load_and_construct(Archive& _ar, cereal::construct<Component>& _construct)
+void Component::load_and_construct(Archive& _ar, cereal::construct<Component>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+	_ar(_construct->isActive);
+	_ar(_construct->name);
 }
