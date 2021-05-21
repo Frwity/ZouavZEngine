@@ -387,10 +387,9 @@ bool CreateNewClass(std::string className, std::string parentClassName)
             "private:\n"
             "public:\n"
             "    " << className << "() = delete;\n"
-            "    " << className << "(class GameObject* _gameobject);\n"
+            "    " << className << "(class GameObject* _gameobject, std::string _name = \"" << className << "\");\n"
             "    void Begin() override;\n"
             "    void Update() override;\n"
-            "    const char* GetComponentName() override { return \"" << className << "\"; }\n"
             "    void Editor() override;\n\n"
             "    template <class Archive>\n"
             "    void serialize(Archive & _ar)\n"
@@ -411,8 +410,8 @@ bool CreateNewClass(std::string className, std::string parentClassName)
             "#include \"GameObject.hpp\"\n"
             "#include \"Game/" << className << ".hpp\"\n\n"
 
-            << className << "::" << className << "(GameObject * _gameobject)\n"
-            ": " << parentClassName << "(_gameobject)\n"
+            << className << "::" << className << "(GameObject * _gameobject, std::string _name)\n"
+            ": " << parentClassName << "(_gameobject, _name)\n"
             "{}\n\n"
 
             "void " << className << "::Editor()\n"

@@ -35,6 +35,7 @@ class Vec3
         Vec3 Cross(const Vec3& _v) const;
         float Dot(const Vec3& _v) const;
         float AngleToVector(const Vec3& _v) const;  
+        float SignedAngleToVector(const Vec3& _v, const Vec3& _n) const;
         float DistanceToVector(const Vec3& _v) const;
         bool Colinear(const Vec3& _v) const;
 
