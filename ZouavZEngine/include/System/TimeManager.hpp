@@ -8,8 +8,8 @@ class Clock
 	friend class TimeManager;
 private:
 
-	float time = 0.0f;
-	float deltaTime = 0.0f;
+	float time = 0.01f;
+	float deltaTime = 0.01677f;
 	float previousTime = 0.0f;
 	float scale = 1.0f;
 
