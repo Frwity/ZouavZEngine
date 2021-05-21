@@ -104,12 +104,12 @@ void Mesh::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiM
 
 void Mesh::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
 {
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 4; i++)
 	{
 		if (vertex.boneIDs[i] < 0)
 		{
-			vertex.weights[i] = weight;
 			vertex.boneIDs[i] = boneID;
+			vertex.weights[i] = weight;
 			break;
 		}
 	}

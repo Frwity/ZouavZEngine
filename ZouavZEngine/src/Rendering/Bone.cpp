@@ -45,10 +45,10 @@ Bone::Bone(const std::string& _name, int _id, const aiNodeAnim* channel):
 
 void Bone::Update(float _animationTime)
 {
+    std::cout << _animationTime << std::endl;
     Vec3 translation    = InterpolatePosition(_animationTime);
-    Quaternion rotation;// InterpolateRotation(_animationTime);
-    rotation.w = 1.f;
-    Vec3 scale(1.f, 1.f, 1.f);// = InterpolateScaling(_animationTime);
+    Quaternion rotation = InterpolateRotation(_animationTime);
+    Vec3 scale = InterpolateScaling(_animationTime);
 
     localTransform = Mat4::CreateTRSMatrix(translation, rotation, scale);
 }

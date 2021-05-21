@@ -134,8 +134,6 @@ void Animation::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parent
     {
         int index = boneInfoMap[nodeName].id;
         Mat4 offset = boneInfoMap[nodeName].offset;
-        
-        //offset.Display();
 
         finalBonesMatrices[index] = globalTransformation * offset;
     }
