@@ -133,7 +133,12 @@ float Vec3::Dot(const Vec3& _v) const
 
 float Vec3::AngleToVector(const Vec3& _v) const
 {
-    return acos( Dot(_v) / ( GetMagnitude() * _v.GetMagnitude() ) );
+    return acos(Dot(_v) / (GetMagnitude() * _v.GetMagnitude()));
+}
+
+float Vec3::SignedAngleToVector(const Vec3& _v, const Vec3& _n) const
+{
+    return atan2(Cross(_v).Dot(_n), Dot(_v));
 }
 
 float Vec3::DistanceToVector(const Vec3& _v) const
