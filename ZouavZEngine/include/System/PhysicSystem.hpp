@@ -40,19 +40,22 @@ public:
 	
 	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override 
 	{ 
-		if (!static_cast<ShapeCollision*>(pairs->triggerShape->userData)->IsActive())
-			return;
+		for (physx::PxU32 i = 0; i < count; ++i)
+		{
+			if (!static_cast<ShapeCollision*>(pairs[i].triggerShape->userData)->IsActive())
+				return;
 
-		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
-		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
+			Rigid* otherActor = static_cast<Rigid*>(pairs[i].otherActor->userData);
+			Rigid* triggerActor = static_cast<Rigid*>(pairs[i].triggerActor->userData);
 
 
-		triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs->triggerShape);
+			triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs[i].triggerShape);
+		}
 	}
 
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
-	{
+	{ // TODO do all on contact like trigger
 		physx::PxRigidActor* rd = pairHeader.actors[0]->is<physx::PxRigidActor>();
 		physx::PxRigidActor* rd2 = pairHeader.actors[1]->is<physx::PxRigidActor>();
 

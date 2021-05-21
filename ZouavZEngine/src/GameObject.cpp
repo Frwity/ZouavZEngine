@@ -189,12 +189,12 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 
 		//update physx transform for simulation
 		if (rb)
-			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+			rb->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
 
 		RigidStatic* rs = _child->GetComponent<RigidStatic>();
 
 		if (rs)
-			rs->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+			rs->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
 	}
 }
 

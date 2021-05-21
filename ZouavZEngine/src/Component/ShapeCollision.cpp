@@ -82,7 +82,9 @@ void ShapeCollision::UpdateShapeTransform()
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 	physx::PxShape** shapeActor = nullptr;
 	
-	transform.UpdateWorldPos(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
+	rigid->actor->getGlobalPose();
+	
+	//transform.UpdateWorldPos(Vec3FromPxVec3(rigid->actor->getGlobalPose().p), QuaternionFromPxQuat(rigid->actor->getGlobalPose().q), {1.0f,1.0f,1.0f});
 
 	if (rigid)
 	{
@@ -93,7 +95,7 @@ void ShapeCollision::UpdateShapeTransform()
   		while(i++ < j - 1)
 		{
 			if (shapeActor[i] == shape)
-				shape->setLocalPose(PxTransformFromTransform(transform));
+				shape->setLocalPose(PxTransformFromTransformLocal(transform));
 		}
 
 		free(shapeActor);
@@ -112,8 +114,7 @@ void ShapeCollision::AttachToRigidComponent()
 		{
 			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
 			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
-			transform.UpdateWorldPos(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
-			shape->setLocalPose(PxTransformFromTransform(transform));
+			shape->setLocalPose(PxTransformFromTransformLocal(transform));
 		}
 	}
 }
@@ -154,10 +155,10 @@ void ShapeCollision::InternalDehactivate()
 	}
 }
 
-void ShapeCollision::UpdateTransform()
+void ShapeCollision::UpdateTransform() // never called
 {
 	if (shape)
-		shape->setLocalPose(PxTransformFromTransform(transform));
+		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 }
 
 void ShapeCollision::DrawGizmos(const Camera& _camera)
