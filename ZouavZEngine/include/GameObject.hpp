@@ -109,6 +109,18 @@ public:
 		return returnComponents;
 	}
 
+	template<typename T>
+	T* GetComponentByName(std::string _name)
+	{
+		for (const std::unique_ptr<Component>& component : components)
+		{
+			T* returnComponent = dynamic_cast<T*>(component.get());
+			if (returnComponent && _name.compare(returnComponent->GetName()) == 0)
+				return returnComponent;
+		}
+		return nullptr;
+	}
+
 	void UpdateTransform(const class Mat4& _heritedTransform);
 
 	const std::vector<std::unique_ptr<Component>>& GetComponents();

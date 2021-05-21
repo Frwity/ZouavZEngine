@@ -151,12 +151,12 @@ void Shader::SetVector3(const std::string& _name, const Vec3& _v) const
 
 void Shader::SetVector4(const std::string& _name, float _w, float _x, float _y, float _z) const
 {
-    glUniform4f(glGetUniformLocation(id, _name.c_str()), _w, _x, _y, _z);
+    glUniform4f(glGetUniformLocation(id, _name.c_str()), _x, _y, _z, _w);
 }
 
 void Shader::SetVector4(const std::string& _name, const Vec4& _v) const
 {
-    glUniform4f(glGetUniformLocation(id, _name.c_str()), _v.w, _v.x, _v.y, _v.z);
+    glUniform4f(glGetUniformLocation(id, _name.c_str()), _v.x, _v.y, _v.z, _v.w);
 }
 
 void Shader::SetLight(const std::vector<Light*>& _lights)

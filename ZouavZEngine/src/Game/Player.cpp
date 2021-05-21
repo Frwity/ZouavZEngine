@@ -23,9 +23,10 @@ void Player::OnAddComponent()
 	anchor->SetParent(&GetGameObject());
 	GameObject* camera = GameObject::CreateGameObject("Camera");
 	camera->SetParent(anchor);
-	rb = GetGameObject().AddComponent<RigidBody>();
 	GetGameObject().AddComponent<BoxCollision>();
+	rb = GetGameObject().AddComponent<RigidBody>();
 	attackCollision = GetGameObject().AddComponent<BoxCollision>();
+	attackCollision->SetName("Attack Collision");
 	attackCollision->SetTrigger(true);
 	attackCollision->Dehactivate();
 }
@@ -38,7 +39,7 @@ void Player::OnTrigger(GameObject* _other, ShapeCollision* _triggerShape)
 		if (characterOther)
 		{
 			characterOther->Damage(attackDamage);
-			std::cout << "Ouch !!!" << std::endl;
+			std::cout << _other->GetName() << " Ouch !!!" << std::endl;
 		}
 	}
 }
@@ -53,6 +54,8 @@ void Player::Begin()
 		GetGameObject().GetComponent<Camera>()->SetTarget({ 0, 0, 0 });
 	}
 	oldMousePos = InputManager::GetCursorPos();
+	rb = GetGameObject().GetComponent<RigidBody>();
+	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 }
 
 #include <iostream>
@@ -109,7 +112,7 @@ void Player::Update()
 
 	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f)
 	{
-		std::cout << "A l'attaque !!!" << std::endl;
+		std::cout << GetGameObject().GetName() << " A l'attaque !!!" << std::endl;
 		attackCollision->Activate();
 		timerAttackDuration = attackDuration;
 	}
