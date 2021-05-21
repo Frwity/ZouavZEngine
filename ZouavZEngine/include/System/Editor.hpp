@@ -41,7 +41,7 @@ public:
 
 	void Init();
 	void NewFrame();
-	
+
 	const EDITOR_STATE& GetState() const { return state; }
 
 	bool Display(Render& _render);

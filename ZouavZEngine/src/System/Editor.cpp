@@ -36,8 +36,6 @@
 
 #include "System/Editor.hpp"
 
-bool newFolderWindow = false;
-bool newFileWindow = false;
 bool newClassWindow = false;
 bool newSceneWindow = false;
 bool newSceneWindowWarning = false;
@@ -431,65 +429,6 @@ bool CreateNewClass(std::string className, std::string parentClassName)
     return false;
 }
 
-void NewFolderWindow()
-{
-    if (newFolderWindow)
-    {
-        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New Folder", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
-
-        ListActualFolder(newFolderWindow);
-        static std::string folderName = "New Folder";
-
-        ImGui::InputText("Folder Name", &folderName);
-
-        if (ImGui::Button("Create"))
-        {
-            if (_mkdir(std::string(actualFolder).append("/").append(folderName).c_str()) == 0)
-            {
-                std::cout << "Folder " << folderName << " created" << std::endl;
-                newFolderWindow = !newFolderWindow;
-                folderName = "New Folder";
-            }
-            else
-                std::cout << "Folder " << folderName << " not created" << std::endl;
-        }
-        ImGui::End();
-    }
-}
-
-void NewFileWindow()
-{
-    if (newFileWindow)
-    {
-        ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New File", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
-
-        ListActualFolder(newFileWindow);
-
-        static std::string fileName = "New File";
-        ImGui::InputText("File Name", &fileName);
-
-        if (ImGui::Button("Create"))
-        {
-            if (std::fstream(std::string(actualFolder).append("/").append(fileName).c_str()))
-                std::cout << "File " << fileName << " not created" << std::endl;
-            else
-                if (std::ofstream(std::string(actualFolder).append("/").append(fileName).c_str()))
-                {
-                    std::cout << "File " << fileName << " created" << std::endl;
-                    newFileWindow = !newFileWindow;
-                    fileName = "New File";
-                }
-                else
-                    std::cout << "File " << fileName << " not created " << std::string(actualFolder).append("/").append(fileName) << std::endl;
-        }
-        ImGui::End();
-    }
-}
-
 void NewClassWindow()
 {
     if (newClassWindow)
@@ -518,37 +457,37 @@ void Editor::NewSceneWindow(Engine& _engine)
     {
         ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
-
-        static std::string sceneName = "New Scene";
-        ImGui::InputText("Scene Name", &sceneName);
-        
-        if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
-            newSceneWindow = false;
-
-        if (!newSceneWindowWarning && ImGui::Button("Create"))
+        if (ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove))
         {
-            gameObjectInspector = nullptr;
-            if (!Scene::NewScene(sceneName.c_str(), false))
-                newSceneWindowWarning = true;
-            else
+            static std::string sceneName = "New Scene";
+            ImGui::InputText("Scene Name", &sceneName);
+
+            if (!newSceneWindowWarning && ImGui::Button("Create"))
             {
-                _engine.LoadDefaultResources();
-                sceneName = "New Scene";
-                newSceneWindow = false;
+                gameObjectInspector = nullptr;
+                if (!Scene::NewScene(sceneName.c_str(), false))
+                    newSceneWindowWarning = true;
+                else
+                {
+                    _engine.LoadDefaultResources();
+                    sceneName = "New Scene";
+                    newSceneWindow = false;
+                }
             }
-        }
-        if (newSceneWindowWarning)
-        {
-            ImGui::TextWrapped("A scene with the same name already exist, are you sure you want to create it ?");
-            if (ImGui::Button("Create"))
+            if (newSceneWindowWarning)
             {
-                Scene::NewScene(sceneName.c_str(), true);
-                newSceneWindowWarning = false;
-                _engine.LoadDefaultResources();
-                sceneName = "New Scene";
-                newSceneWindow = false;
+                ImGui::TextWrapped("A scene with the same name already exist, are you sure you want to create it ?");
+                if (ImGui::Button("Create"))
+                {
+                    Scene::NewScene(sceneName.c_str(), true);
+                    newSceneWindowWarning = false;
+                    _engine.LoadDefaultResources();
+                    sceneName = "New Scene";
+                    newSceneWindow = false;
+                }
             }
+            if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                newSceneWindow = false;
         }
         ImGui::End();
     }
@@ -556,10 +495,6 @@ void Editor::NewSceneWindow(Engine& _engine)
 
 void Editor::DisplayMenuBar()
 {
-    NewFolderWindow();
-
-    NewFileWindow();
-
     NewClassWindow();
 
     NewSceneWindow(engine);
@@ -568,8 +503,6 @@ void Editor::DisplayMenuBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            ImGui::MenuItem("New Folder", nullptr, &newFolderWindow);
-            ImGui::MenuItem("New File", nullptr, &newFileWindow);
             ImGui::MenuItem("New Class", nullptr, &newClassWindow);
             ImGui::MenuItem("New Scene", nullptr, &newSceneWindow);
             ImGui::EndMenu();
@@ -694,7 +627,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             Mat4 viewMatrix = SceneCamera::GetSceneCamera()->GetMatrix().Reversed();
 
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, _framebuffer.getWidth(), _framebuffer.getHeight());
-            if (ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjetionMatrix().matrix, currentGizmoOperation, currentGizmosMode, localMatrix.matrix))
+            if (ImGuizmo::Manipulate(viewMatrix.matrix, sceneCamera.GetProjectionMatrix().matrix, currentGizmoOperation, currentGizmosMode, localMatrix.matrix))
             {
                 Vec3 translation, rotation, scale;
 
@@ -801,6 +734,10 @@ void Editor::DisplayInspector()
                     gameObjectInspector->localScale.z = gameObjectInspector->localScale.z < 0.001f ? 0.001f : gameObjectInspector->localScale.z;
                 }
             }
+
+            if (gameObjectInspector->parent == nullptr)
+                ImGui::DragFloat("Min Z", &GameObject::minY, 0.1f);
+
             for (std::unique_ptr<Component>& component : gameObjectInspector->components)
             {
                 Component* comp = component.get();
@@ -887,6 +824,9 @@ void Editor::DisplayInspector()
             }
             if (ImGui::Button("Add Component"))
                 addComponentWindow = true;
+
+            if (gameObjectInspector && gameObjectInspector->toDestroy)
+                gameObjectInspector = nullptr;
         }
     }
     ImGui::End();
@@ -1168,13 +1108,7 @@ void Editor::DisplayHierarchy()
                 {
                     if (ImGui::Button("Delete"))
                     {
-                        for (GameObject* child : newGameObjectParent->children)
-                        {
-                            child->SetParent(newGameObjectParent->parent);
-                        }
-                        newGameObjectParent->SetParent(nullptr);
-                        newGameObjectParent->toDestroy = true;
-                        GameObject::destroyGameObject = true;
+                        newGameObjectParent->Destroy();
                         hierarchyMenu = false;
                         if (newGameObjectParent == gameObjectInspector)
                             gameObjectInspector = nullptr;

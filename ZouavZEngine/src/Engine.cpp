@@ -112,8 +112,6 @@ void Engine::Update()
         }
         else
             scene.GetWorld().UpdateTransform(Mat4::identity);
-       
-        GameObject::DestroyGameObjectIfNeedTo();
 
         ////////////////
         render.BindSceneFBO(); 
@@ -135,6 +133,7 @@ void Engine::Update()
         /////////////////
         
         editor.Update();
+        GameObject::DestroyGameObjectIfNeedTo();
         render.Update();
         InputManager::UpdateOldMousePos();
     }

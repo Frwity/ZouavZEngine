@@ -145,7 +145,7 @@ void Terrain::Draw(const class Camera& _camera) const
 	Mat4 matrixCamera = _camera.GetMatrix();
 	shader->SetMatrix("view", matrixCamera.Reversed());
 	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
-	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	shader->SetMatrix("projection", _camera.GetProjectionMatrix());
 
 	shader->SetInt("colorCount", colorCount);
 
