@@ -81,6 +81,8 @@ void ShapeCollision::UpdateShapeTransform()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 	physx::PxShape** shapeActor = nullptr;
+	
+	transform.UpdateWorldPos(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
 
 	if (rigid)
 	{
@@ -100,20 +102,18 @@ void ShapeCollision::UpdateShapeTransform()
 
 void ShapeCollision::AttachToRigidComponent()
 {
-	if (shape)
-	{
-		Rigid* rigid = GetGameObject().GetComponent<Rigid>();
+	Rigid* rigid = GetGameObject().GetComponent<Rigid>();
 
-		if (rigid)
+	if (rigid)
+	{
+		//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
+		shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
+		if (shape)
 		{
-			//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
-			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
-			if (shape)
-			{
-				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
-				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
-				shape->setLocalPose(PxTransformFromTransform(transform));
-			}
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+			transform.UpdateWorldPos(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
+			shape->setLocalPose(PxTransformFromTransform(transform));
 		}
 	}
 }

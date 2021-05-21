@@ -15,6 +15,13 @@ Transform Transform::InitTransform()
 	return Transform({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
 }
 
+void Transform::UpdateWorldPos(const Vec3& _position, const Quaternion& _rotation, const Vec3& _scale)
+{
+	worldPosition = Mat4::CreateTRSMatrix(_position, _rotation, _scale) * localPosition;
+	worldRotation = _rotation * localRotation;
+	worldScale = _scale * localScale;
+}
+
 const Vec3& Transform::WorldPosition() const
 {
 	return worldPosition;
@@ -29,6 +36,12 @@ const Vec3& Transform::WorldScale() const
 {
 	return worldScale;
 }
+
+Mat4 Transform::GetTRSMatrix() const
+{
+	return Mat4::CreateTRSMatrix(WorldPosition(), WorldRotation(), WorldScale());
+}
+
 void Transform::TranslateX(float _x)
 {
 	localPosition.x += _x;

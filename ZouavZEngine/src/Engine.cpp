@@ -96,6 +96,12 @@ void Engine::Update()
 
         ImGui::ShowDemoWindow();
 
+        if (editor.Display(render))
+        {
+            scene.DisplayTerrainOptionWindow();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
+        }
+
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {
             ScriptSystem::FixedUpdate();
@@ -108,9 +114,6 @@ void Engine::Update()
             scene.GetWorld().UpdateTransform(Mat4::identity);
        
         GameObject::DestroyGameObjectIfNeedTo();
-
-        if (editor.Display(render))
-            scene.DisplayTerrainOptionWindow();
 
         ////////////////
         render.BindSceneFBO(); 
