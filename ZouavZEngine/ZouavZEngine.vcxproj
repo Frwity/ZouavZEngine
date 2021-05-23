@@ -201,6 +201,7 @@
     <ClCompile Include="src\Multithread\ThreadPool.cpp" />
     <ClCompile Include="src\Prefab.cpp" />
     <ClCompile Include="src\Rendering\Animation.cpp" />
+    <ClCompile Include="src\Rendering\AnimResource.cpp" />
     <ClCompile Include="src\Rendering\Bone.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Font.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="include\Multithread\ThreadPool.h" />
     <ClInclude Include="include\Prefab.hpp" />
     <ClInclude Include="include\Rendering\Animator.hpp" />
+    <ClInclude Include="include\Rendering\AnimResource.hpp" />
     <ClInclude Include="include\Rendering\Bone.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\Font.hpp" />

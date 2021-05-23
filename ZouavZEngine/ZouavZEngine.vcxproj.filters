@@ -258,6 +258,9 @@
     <ClCompile Include="src\Rendering\Animation.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\AnimResource.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\Animator.hpp">
       <Filter>include\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\AnimResource.hpp">
+      <Filter>include\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

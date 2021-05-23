@@ -50,6 +50,7 @@ std::string currentProjectFolder = "Project";
 std::string currentMovingProjectFile;
 ImVec2 projectNewFolderPos = { 0.0f, 0.0f };
 bool projectNewFolder = false;
+//Clock* Editor::editorClock = nullptr;
 
 bool maximizeOnPlay = false;
 

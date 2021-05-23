@@ -2,6 +2,7 @@
 #include <string>
 #include "imgui.h"
 #include "ImGuizmo.h"
+#include "System/TimeManager.hpp"
 #include "Rendering/Camera.hpp"
 
 enum class EDITOR_STATE
@@ -29,7 +30,7 @@ private:
 
 	SceneCamera sceneCamera{ 100, 100 };
 
-	class Clock* editorClock = nullptr;
+	class Clock* editorClock;
 
 	class Engine& engine;
 

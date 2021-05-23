@@ -9,6 +9,7 @@
 #include "Rendering/Shader.hpp"
 #include <assimp/scene.h>
 #include "Rendering/Camera.hpp"
+#include "Rendering/AnimResource.hpp"
 #include <memory>
 
 struct AssimpNodeData
@@ -41,6 +42,8 @@ public :
     AssimpNodeData rootNode;
     std::map<std::string, BoneInfo> boneInfoMap;
     std::vector<Mat4> finalBonesMatrices;
+
+    //AnimResource* currentAnimation;
 
     Component* Clone() const override { return new Animation(*this); };
 

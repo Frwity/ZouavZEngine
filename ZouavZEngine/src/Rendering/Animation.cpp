@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "System/TimeManager.hpp"
 #include "System/ResourcesManager.hpp"
+#include "Component/MeshRenderer.hpp"
 #include "Rendering/Texture.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -30,7 +31,8 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
 
     animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
 
-    mesh = *ResourcesManager::GetResource<Mesh>("Vampire");
+    //TODO update mesh when mesh renderer is updated
+    mesh = gameObject->GetComponent<MeshRenderer>()->mesh;
     boneInfoMap = mesh->boneInfoMap;
 
     finalBonesMatrices.reserve(100);
