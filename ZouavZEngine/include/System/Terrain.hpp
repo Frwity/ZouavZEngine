@@ -65,6 +65,8 @@ private:
 
 	physx::PxRigidActor* actor = nullptr;
 
+	float yScalePrecision = 128.0f;
+
 	int size = 0;
 	int vertexCount = 0;
 
@@ -102,7 +104,7 @@ public:
 	
 	class GameObject* actualizer = nullptr;
 
-	float chunkDistanceRadius = 512;
+	float chunkDistanceRadius = 128;
 
 	// chunk variable
 

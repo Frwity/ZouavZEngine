@@ -23,7 +23,7 @@ void Player::OnAddComponent()
 	playerMesh = GameObject::CreateGameObject("PlayerMesh");
 	playerMesh->SetParent(&GetGameObject());
 	playerMesh->AddComponent<MeshRenderer>();
-	GameObject* camera = GameObject::CreateGameObject("Camera");
+	camera = GameObject::CreateGameObject("Camera");
 	camera->SetParent(&GetGameObject());
 	camera->AddComponent<ThirdPersonCamera>();
 	GetGameObject().AddComponent<BoxCollision>();
@@ -49,6 +49,8 @@ void Player::Begin()
 	playerMesh = &GetGameObject().GetChild(0);
 	material = &playerMesh->GetComponent<MeshRenderer>()->material;
 	baseColor = material->color;
+
+	camera = &GetGameObject().GetChild(1);
 
 	ICharacter::Begin();
 
@@ -93,15 +95,18 @@ void Player::Update()
 	//if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 	//	rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed, 0.0f));
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-		GetGameObject().Translate({ 0.0f, 0.0f, -TimeManager::GetDeltaTime() * speed });
+		GetGameObject().Translate(camera->Forward() * TimeManager::GetDeltaTime() * speed);
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-		GetGameObject().Translate({ 0.0f, 0.0f, TimeManager::GetDeltaTime() * speed });
+		GetGameObject().Translate(-camera->Forward() * TimeManager::GetDeltaTime() * speed);
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-		GetGameObject().Translate({ -TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
+		GetGameObject().Translate(camera->Right() * TimeManager::GetDeltaTime() * speed);
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-		GetGameObject().Translate({ TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f });
-	if (InputManager::GetKeyPressed(E_KEYS::NUM0))
-		GetGameObject().Translate({ 0.0f , TimeManager::GetDeltaTime() * speed, 0.0f });
+		GetGameObject().Translate(-camera->Right() * TimeManager::GetDeltaTime() * speed);
+	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
+	{
+		isJumping = true;
+		rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed * 100.0f, 0.0f));
+	}
 
 	if (InputManager::GetKeyPressed(E_KEYS::T))
 		Damage(1);

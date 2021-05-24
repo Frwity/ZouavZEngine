@@ -45,11 +45,14 @@ public:
 			if (!static_cast<ShapeCollision*>(pairs[i].triggerShape->userData)->IsActive())
 				return;
 
-			Rigid* otherActor = static_cast<Rigid*>(pairs[i].otherActor->userData);
-			Rigid* triggerActor = static_cast<Rigid*>(pairs[i].triggerActor->userData);
+			if (pairs[i].triggerShape->userData && pairs[i].triggerActor->userData)
+			{
+				Rigid* otherActor = static_cast<Rigid*>(pairs[i].otherActor->userData);
+				Rigid* triggerActor = static_cast<Rigid*>(pairs[i].triggerActor->userData);
 
-
-			triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs[i].triggerShape);
+				if (otherActor && triggerActor)
+					triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs[i].triggerShape);
+			}
 		}
 	}
 

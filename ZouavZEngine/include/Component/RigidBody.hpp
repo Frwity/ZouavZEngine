@@ -31,6 +31,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(lockX, lockY, lockZ);
 		_ar(cereal::base_class<Component>(this));
 	}
 

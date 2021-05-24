@@ -264,6 +264,25 @@ void Terrain::DisplayOptionWindow()
 		ImGui::ColorEdit3("Color", colors[colorID].xyz);
 		ImGui::SliderFloat("Texture Scale", &textureScale[colorID], 0.0f, 100.0f);
 		ResourcesManager::ResourceChanger<Texture>("Texture", textureID.at(colorID));
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+			{
+				ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+				std::string _path = *(const std::string*)payload->Data;
+				std::string _truePath = _path;
+				size_t start_pos = _truePath.find("\\");
+				_truePath.replace(start_pos, 1, "/");
+
+				if (_truePath.find(".png") != std::string::npos || _truePath.find(".jpg") != std::string::npos)
+				{
+					if (textureID.at(colorID).use_count() == 2 && textureID.at(colorID)->IsDeletable())
+						ResourcesManager::RemoveResourceTexture(textureID.at(colorID)->GetName());
+					textureID.at(colorID) = *ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
@@ -388,17 +407,17 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else
 		mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
-
+	
 	//physxq
 	std::vector<PxHeightFieldSample> samples;
 	samples.reserve(vertexCount * vertexCount);
-
 	int j = 0;
 	int k = 0;
 	for (int i = 0; i < vertexCount * vertexCount; ++i)
 	{
 		samples.push_back({});
-		samples[i].height = (physx::PxI16)vertices[j + k].pos.y;
+		samples[i].height = (physx::PxI16)(vertices[j + k].pos.y * yScalePrecision);
+		samples[i].setTessFlag();
 		if (k == vertexCount * (vertexCount - 1))
 		{
 			j += 1;
@@ -409,7 +428,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	}
 
 	PxHeightFieldDesc hfDesc;
-	hfDesc.format = PxHeightFieldFormat::eS16_TM;
+	hfDesc.format = PxHeightFieldFormat::Enum::eS16_TM;
 	hfDesc.nbColumns = vertexCount;
 	hfDesc.nbRows = vertexCount;
 	hfDesc.samples.data = samples.data();
@@ -417,8 +436,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	PxHeightField* aHeightField = PhysicSystem::cooking->createHeightField(hfDesc,
 		PhysicSystem::physics->getPhysicsInsertionCallback());
-
-	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1, (float)size / (float)(vertexCount -1),
+	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1.0f / yScalePrecision, (float)size / (float)(vertexCount -1),
 		(float)size / (float)(vertexCount -1));
 
 	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)));

@@ -86,5 +86,7 @@ template <class Archive>
 static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+	_ar(_construct->lockX, _construct->lockY, _construct->lockZ);
+	_construct->LockAxis();
 	_ar(cereal::base_class<Component>(_construct.ptr()));
 }

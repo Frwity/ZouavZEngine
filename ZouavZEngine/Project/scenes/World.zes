@@ -71,7 +71,7 @@
     "value11": 2,
     "value12": {
         "value0": 0.0,
-        "value1": 2.2603719234466554,
+        "value1": 3.046269416809082,
         "value2": 0.0
     },
     "value13": {
@@ -154,7 +154,10 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
                         "value0": true,
                         "value1": "RigidBody"
                     }
@@ -197,7 +200,7 @@
         }
     ],
     "value18": "PlayerMesh",
-    "value19": " ",
+    "value19": "",
     "value20": 0,
     "value21": {
         "value0": 0.0,
@@ -242,7 +245,7 @@
         }
     ],
     "value27": "Camera",
-    "value28": " ",
+    "value28": "",
     "value29": 0,
     "value30": {
         "value0": 0.0,
@@ -256,9 +259,9 @@
         "value3": 0.0
     },
     "value32": {
-        "value0": 1.0,
+        "value0": 0.9999999403953552,
         "value1": 1.0,
-        "value2": 1.0
+        "value2": 0.9999999403953552
     },
     "value33": true,
     "value34": false,
@@ -284,7 +287,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.280523657798767,
+                    "value0": 1.2057397365570069,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -301,10 +304,10 @@
                     "value14": -0.0020000003278255464,
                     "value15": 0.0,
                     "value16": 0.0,
-                    "value17": 5.0,
-                    "value18": 8.0,
+                    "value17": 3.700000047683716,
+                    "value18": -12.100000381469727,
                     "value19": 0.0,
-                    "value20": 0.0,
+                    "value20": 0.8999999761581421,
                     "value21": 0.0,
                     "value22": true,
                     "value23": {
@@ -316,7 +319,7 @@
         }
     ],
     "value36": true,
-    "value37": 512.0,
+    "value37": 128.0,
     "value38": 128,
     "value39": 16,
     "value40": 0,
@@ -342,6 +345,6 @@
     "value60": 0.0,
     "value61": 0.0,
     "value62": 0.0,
-    "value63": 9.090999603271485,
-    "value64": "Error"
+    "value63": 6.826000213623047,
+    "value64": "Grass.png"
 }

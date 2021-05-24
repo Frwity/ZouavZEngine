@@ -18,7 +18,7 @@ void ThirdPersonCamera::Editor()
 void ThirdPersonCamera::OnAddComponent()
 {
 	camera = GetGameObject().AddComponent<Camera>();
-	camera->SetPosition({ 0, 5, 8 });
+	camera->SetPosition({ 0, 5, -8 });
 	camera->SetTarget({ 0, 0, 0 });
 }
 
