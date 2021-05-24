@@ -3,6 +3,7 @@
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
+#include "Prefab.hpp"
 #include "System/ResourcesManager.hpp"
 
 #include <FastNoiseLite.h>
@@ -37,7 +38,8 @@ namespace physx
 
 struct ChunkCreateArg
 {
-	std::vector<physx::PxMaterial*>* material;
+	std::vector<physx::PxMaterial*>& material;
+	std::vector<Prefab>& toGeneratePrefabs;
 
 	Vec2 pos;
 
@@ -51,12 +53,17 @@ struct ChunkCreateArg
 	float minHeight;
 	float maxHeight;
 	float heightIntensity;
+
+	int nbObjectPerChunk;
 };
 
 
 class Chunk
 {
 private:
+
+	std::vector<class GameObject*> generatedGameObjects;
+
 	Mesh mesh{"chunkMesh"};
 
 	physx::PxShape* shape = nullptr;
@@ -92,6 +99,7 @@ private:
 	std::unordered_map<std::string, Chunk> chunks;
 
 	std::vector<physx::PxMaterial*> material;
+	std::vector<Prefab> toGeneratePrefabs;
 
 	std::shared_ptr<Shader> shader;
 	

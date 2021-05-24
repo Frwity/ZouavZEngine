@@ -58,9 +58,8 @@ void Terrain::Generate(GameObject* _actualizer)
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
-															seed, noiseParams,
-															minHeight, maxHeight, heightIntensity }, false);
+			chunks.at(pos.ToString()).Generate({ material, toGeneratePrefabs, pos,	chunkSize, chunkVertexCount,
+												 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
 
@@ -77,9 +76,8 @@ void Terrain::Actualise()
 
 	while (it != chunks.end())
 	{
-		it->second.Generate({ &material,	it->second.GetPos(), chunkSize, chunkVertexCount,
-											seed, noiseParams,
-											minHeight, maxHeight, heightIntensity }, true);
+		it->second.Generate({ material, toGeneratePrefabs,	it->second.GetPos(), chunkSize, chunkVertexCount,
+							  seed, noiseParams, minHeight, maxHeight, heightIntensity }, true);
 		it++;
 	}
 }
@@ -99,10 +97,7 @@ void Terrain::Update()
 	while (it != chunks.end())
 	{
 		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
-		{
-			//std::cout << "delete " << it->first << " of " << (it->second.GetWorldPos() - actualizerPos).GetMagnitude() << std::endl;
 			it = chunks.erase(it);
-		}
 		else
 			it++;
 	}
@@ -125,9 +120,8 @@ void Terrain::Update()
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
 				chunks.emplace(pos.ToString(), Chunk());
-				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
-																seed, noiseParams,
-																minHeight, maxHeight, heightIntensity }, false);
+				chunks.at(pos.ToString()).Generate({ material, toGeneratePrefabs, pos,	chunkSize, chunkVertexCount,
+													 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 			}
 		}
 	}
@@ -451,7 +445,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	actor->userData = nullptr;
 
-	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material->data(), 1);
+	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material.data(), 1);
 	PhysicSystem::scene->addActor(*actor);
 
 	isGenerated = true;
