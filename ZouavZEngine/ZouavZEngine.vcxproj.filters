@@ -476,6 +476,9 @@
     <ClInclude Include="include\Game\ThirdPersonCamera.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\Object.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\TerrainShader.fs">

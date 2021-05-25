@@ -33,13 +33,8 @@ GameObject* GameObject::CreateGameObject(const std::string& _name, const std::st
 	return gameObjects.back().get();
 }
 
-GameObject::GameObject(const std::string& _name)
-	: name(_name)
-{
-}
-
 GameObject::GameObject(const std::string& _name, const std::string& _tag)
-	: name(_name), tag(_tag)
+	: Object(_name, _tag)
 {
 
 }

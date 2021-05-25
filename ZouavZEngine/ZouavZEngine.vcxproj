@@ -191,7 +191,6 @@
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Game\ICharacter.cpp" />
-    <ClCompile Include="src\Game\Generato.cpp" />
     <ClCompile Include="src\Game\Move.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -228,7 +227,6 @@
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
     <ClCompile Include="src\Game\Enemy.cpp" />
-    <ClCompile Include="src\Game\ThirdPersonCamera.cpp" />
     <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -259,7 +257,6 @@
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
     <ClInclude Include="include\Game\ICharacter.hpp" />
-    <ClInclude Include="include\Game\Generato.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />
     <ClInclude Include="include\Game\Player.hpp" />
     <ClInclude Include="include\Maths\Mat4.hpp" />
@@ -271,6 +268,7 @@
     <ClInclude Include="include\Multithread\Task.h" />
     <ClInclude Include="include\Multithread\TaskSystem.h" />
     <ClInclude Include="include\Multithread\ThreadPool.h" />
+    <ClInclude Include="include\Object.hpp" />
     <ClInclude Include="include\Prefab.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
     <ClInclude Include="include\Rendering\CubemapTexture.hpp" />
@@ -299,7 +297,6 @@
     <ClInclude Include="VisualLeakDetector\include\vld.h" />
     <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
     <ClInclude Include="include\Game\Enemy.hpp" />
-    <ClInclude Include="include\Game\ThirdPersonCamera.hpp" />
     <!--Include End-->
   </ItemGroup>
   <ItemGroup>
