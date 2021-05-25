@@ -35,6 +35,7 @@ Terrain::Terrain()
 {
 	AddColorLayer();
 	AddNoiseLayer();
+	AddGenGO();
 }
 
 void Terrain::Generate(GameObject* _actualizer)
@@ -47,6 +48,8 @@ void Terrain::Generate(GameObject* _actualizer)
 		AddNoiseLayer();
 	if (colorCount <= 0)
 		AddColorLayer();
+	if (GenGOCount <= 0)
+		AddGenGO();
 
 	shader = *ResourcesManager::GetResource<Shader>("TerrainShader");
 	actualizer = _actualizer;
@@ -58,7 +61,7 @@ void Terrain::Generate(GameObject* _actualizer)
 		{
 			pos = { x, z };
 			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ material, toGeneratePrefabs, pos,	chunkSize, chunkVertexCount,
+			chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
 												 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
@@ -76,7 +79,7 @@ void Terrain::Actualise()
 
 	while (it != chunks.end())
 	{
-		it->second.Generate({ material, toGeneratePrefabs,	it->second.GetPos(), chunkSize, chunkVertexCount,
+		it->second.Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, it->second.GetPos(), chunkSize, chunkVertexCount,
 							  seed, noiseParams, minHeight, maxHeight, heightIntensity }, true);
 		it++;
 	}
@@ -120,7 +123,7 @@ void Terrain::Update()
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
 				chunks.emplace(pos.ToString(), Chunk());
-				chunks.at(pos.ToString()).Generate({ material, toGeneratePrefabs, pos,	chunkSize, chunkVertexCount,
+				chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
 													 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 			}
 		}
@@ -198,6 +201,7 @@ void Terrain::DisplayOptionWindow()
 		actualized |= ImGui::SliderFloat("Maximum Height", &maxHeight, minHeight, 100);
 		actualized |= ImGui::SliderFloat("Height Intensity", &heightIntensity, 1, 200);
 
+		ImGui::PushID(0);
 		if (ImGui::Button("<"))
 			noiseID = (noiseID - 1 + noiseCount) % (noiseCount - 1);
 		ImGui::SameLine();
@@ -232,13 +236,14 @@ void Terrain::DisplayOptionWindow()
 			if (noiseParams[noiseID].fractalType == 3)
 				actualized |= ImGui::SliderFloat("PingPong Stength", &noiseParams[noiseID].pingPongStength, 0.0f, 16.0f);
 		}
-		
-		if (ImGui::Button("< "))
+		ImGui::PopID();
+		ImGui::PushID(1);
+		if (ImGui::Button("<"))
 			colorID = (colorID - 1 + colorCount) % (colorCount);
 		ImGui::SameLine();
 		ImGui::Text("%d/%d", colorID + 1, colorCount);
 		ImGui::SameLine();
-		if (ImGui::Button("> "))
+		if (ImGui::Button(">"))
 			colorID = (colorID + 1) % (colorCount);
 		ImGui::SameLine();
 		if (ImGui::Button("Add Color Layer"))
@@ -277,10 +282,39 @@ void Terrain::DisplayOptionWindow()
 			}
 			ImGui::EndDragDropTarget();
 		}
+		ImGui::PopID();
+		ImGui::PushID(2);
 
+		if (ImGui::Button("<"))
+			GenGOID = (GenGOID - 1 + GenGOCount) % (GenGOCount);
+		ImGui::SameLine();
+		ImGui::Text("%d/%d", GenGOID + 1, GenGOCount);
+		ImGui::SameLine();
+		if (ImGui::Button(">"))
+			GenGOID = (GenGOID + 1) % (GenGOCount);
+		ImGui::SameLine();
+		if (ImGui::Button("Add Generated GameObject"))
+		{
+			actualized = true;
+			AddGenGO();
+			ComputeTotalRatio();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Generated GameObject"))
+		{
+			actualized = true;
+			DeleteCurrentGenGO();
+			ComputeTotalRatio();
+		}
+		GenGOParams[GenGOID].prefab.Editor("Prefab : ");
+		if (ImGui::InputInt("Ratio : ", &GenGOParams[GenGOID].ratio, 1))
+			ComputeTotalRatio();
+		ImGui::InputInt("GameObject Per Chunk", &nbGOPerChunk);
+		
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
+		ImGui::PopID();
 	}
 	ImGui::End();
 }
@@ -325,6 +359,29 @@ void Terrain::DeleteCurrentColorLayer()
 	colorStrength.erase(colorStrength.begin() + colorID);
 	textureScale.erase(textureScale.begin() + colorID);
 	colorID = (colorID - 1) % --colorCount;
+}
+
+void Terrain::AddGenGO()
+{
+	if (GenGOCount >= MAX_GENGO_COUNT)
+		return;
+	GenGOParams.emplace_back(GeneratedGameObjectParam{});
+	GenGOID = GenGOCount++;
+}
+
+void Terrain::ComputeTotalRatio()
+{
+	totalRatio = 0;
+	for (GeneratedGameObjectParam ggop : GenGOParams)
+		totalRatio += ggop.ratio;
+}
+
+void Terrain::DeleteCurrentGenGO()
+{
+	if (GenGOCount <= 1)
+		return;
+	GenGOParams.erase(GenGOParams.begin() + GenGOID);
+	GenGOID = (GenGOID - 1) % --GenGOCount;
 }
 
 float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
@@ -373,10 +430,37 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		{
 			float height = std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight);
 
+
 			// create vertices
 			vertices.push_back(Vertex{ Vec3(x / ((float)vertexCount - 1) * size, height, z / ((float)vertexCount - 1) * size),
 										Vec3(0.0f, 1.0f, 0.0f),
 										Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
+		}
+	}
+
+	// place gameobject randomly
+	if (_cca.toGeneratePrefabs.size() > 0 && *_cca.toGeneratePrefabs[0].prefab)
+	{
+		int x, z = 0;
+		int randomRatio = 0;
+		int ratioCursor = 0;
+		int actualRatio = _cca.toGeneratePrefabs[0].ratio;
+		Vec3 gopos{};
+		for (int i = 0; i < _cca.nbGOPerChunk; ++i)
+		{
+			x = rand() % vertexCount;
+			z = rand() % vertexCount;
+			randomRatio = rand() % _cca.totalRatio;
+			while (randomRatio > actualRatio)
+			{
+				actualRatio += _cca.toGeneratePrefabs[ratioCursor++].ratio;
+				if (randomRatio < actualRatio)
+					ratioCursor--;
+			}
+			gopos = vertices.at(x + z * vertexCount).pos;
+			generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
+			actualRatio = 0;
+			ratioCursor = 0;
 		}
 	}
 
@@ -453,9 +537,13 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
-	/*if (actor == nullptr || PhysicSystem::scene == nullptr)
-		return;
+	//for (GameObject* go : generatedGameObjects)
+	//	if (go)
+	//		go->Destroy();
 
+	if (actor == nullptr || PhysicSystem::scene == nullptr)
+		return;
+	/*
 	if (isGenerated)
 	{
 		if (actor->getScene() == PhysicSystem::scene)

@@ -16,6 +16,13 @@
 
 #define MAX_NOISE_COUNT 4
 #define MAX_COLOR_COUNT 8 // need to change the TerrainShader.vs define too // TODO change only one
+#define MAX_GENGO_COUNT 10
+
+struct GeneratedGameObjectParam
+{
+	Prefab prefab;
+	int ratio = 1;
+};
 
 struct NoiseParam
 {
@@ -40,7 +47,9 @@ namespace physx
 struct ChunkCreateArg
 {
 	std::vector<physx::PxMaterial*>& material;
-	std::vector<Prefab>& toGeneratePrefabs;
+	std::vector<GeneratedGameObjectParam>& toGeneratePrefabs;
+	int nbGOPerChunk;
+	int totalRatio;
 
 	Vec2 pos;
 
@@ -54,8 +63,6 @@ struct ChunkCreateArg
 	float minHeight;
 	float maxHeight;
 	float heightIntensity;
-
-	int nbObjectPerChunk;
 };
 
 
@@ -100,7 +107,6 @@ private:
 	std::unordered_map<std::string, Chunk> chunks;
 
 	std::vector<physx::PxMaterial*> material;
-	std::vector<Prefab> toGeneratePrefabs;
 
 	std::shared_ptr<Shader> shader;
 	
@@ -141,6 +147,14 @@ public:
 	std::vector<float> textureScale;
 	std::vector<std::shared_ptr<Texture>> textureID;
 
+	// Generated Gameobject variable
+	
+	std::vector<GeneratedGameObjectParam> GenGOParams;
+	int totalRatio = 1;
+	int nbGOPerChunk = 1;
+	int GenGOCount = 0;
+	int GenGOID = 0;
+
 	// editor variable
 
 	bool alwaysActualize = true;
@@ -162,6 +176,11 @@ public:
 
 	void AddColorLayer();
 	void DeleteCurrentColorLayer();
+
+	void AddGenGO();
+	void DeleteCurrentGenGO();
+
+	void ComputeTotalRatio();
 
 	template <class Archive>
 	void load(Archive& _ar)

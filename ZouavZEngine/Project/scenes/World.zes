@@ -23,19 +23,6 @@
     "value8": [
         {
             "polymorphic_id": 2147483649,
-            "polymorphic_name": "Skybox",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": true,
-                        "value1": "Skybox"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483650,
             "polymorphic_name": "Light",
             "ptr_wrapper": {
                 "valid": 1,
@@ -68,10 +55,10 @@
     ],
     "value9": "New GameObject",
     "value10": "Player",
-    "value11": 2,
+    "value11": 0,
     "value12": {
         "value0": 0.0,
-        "value1": 15.953163146972657,
+        "value1": 0.0,
         "value2": 0.0
     },
     "value13": {
@@ -87,212 +74,34 @@
     },
     "value15": true,
     "value16": false,
-    "value17": [
-        {
-            "polymorphic_id": 2147483651,
-            "polymorphic_name": "Player",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 3,
-                    "value1": {
-                        "value0": {
-                            "value0": 1.0,
-                            "value1": 0.0,
-                            "value2": 0.0,
-                            "value3": 1.0
-                        },
-                        "value1": 1.0,
-                        "value2": 5,
-                        "value3": 1,
-                        "value4": {
-                            "value0": true,
-                            "value1": "Player"
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483652,
-            "polymorphic_name": "BoxCollision",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 0.0,
-                        "value2": 0.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483653,
-            "polymorphic_name": "RigidBody",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 4,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 0.0,
-                        "value2": 0.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        }
-    ],
-    "value18": "PlayerMesh",
-    "value19": "",
-    "value20": 0,
-    "value21": {
-        "value0": 0.0,
-        "value1": 0.0,
-        "value2": 0.0
-    },
-    "value22": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value23": {
-        "value0": 1.0,
-        "value1": 1.0,
-        "value2": 1.0
-    },
-    "value24": true,
-    "value25": false,
-    "value26": [
-        {
-            "polymorphic_id": 2147483654,
-            "polymorphic_name": "MeshRenderer",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Cube.obj",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        }
-    ],
-    "value27": "Camera",
-    "value28": "",
+    "value17": [],
+    "value18": true,
+    "value19": 128.0,
+    "value20": 128,
+    "value21": 16,
+    "value22": 0,
+    "value23": 1,
+    "value24": 0,
+    "value25": -10.0,
+    "value26": 30.0,
+    "value27": 30.0,
+    "value28": 1,
     "value29": 0,
-    "value30": {
-        "value0": 0.0,
-        "value1": 0.0,
-        "value2": 0.0
-    },
-    "value31": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value32": {
-        "value0": 1.0,
-        "value1": 1.0,
-        "value2": 1.0
-    },
-    "value33": true,
-    "value34": false,
-    "value35": [],
-    "value36": true,
-    "value37": 128.0,
-    "value38": 128,
-    "value39": 16,
-    "value40": 0,
-    "value41": 1,
-    "value42": 0,
-    "value43": -10.0,
-    "value44": 30.0,
-    "value45": 30.0,
-    "value46": 1,
-    "value47": 0,
-    "value48": true,
-    "value49": 0,
-    "value50": 0,
-    "value51": 1,
-    "value52": 0.009999999776482582,
-    "value53": 2.0,
-    "value54": 0.5,
-    "value55": 0.0,
-    "value56": 2.0,
-    "value57": 0.0,
-    "value58": 0.0,
-    "value59": 0.0,
-    "value60": 0.0,
-    "value61": 0.0,
-    "value62": 0.0,
-    "value63": 51.10100173950195,
-    "value64": "Grass.png"
+    "value30": true,
+    "value31": 0,
+    "value32": 0,
+    "value33": 1,
+    "value34": 0.009999999776482582,
+    "value35": 2.0,
+    "value36": 0.5,
+    "value37": 0.0,
+    "value38": 2.0,
+    "value39": 0.0,
+    "value40": 0.0,
+    "value41": 0.0,
+    "value42": 0.0,
+    "value43": 0.0,
+    "value44": 0.0,
+    "value45": 1.0,
+    "value46": "nullptr"
 }

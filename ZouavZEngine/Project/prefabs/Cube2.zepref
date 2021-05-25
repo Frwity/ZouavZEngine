@@ -1,11 +1,11 @@
 {
-    "value0": "Cube",
+    "value0": "Cube2",
     "value1": "",
     "value2": 0,
     "value3": {
         "value0": 0.0,
-        "value1": 0.0,
-        "value2": 0.0
+        "value1": -0.6895591616630554,
+        "value2": 76.80000305175781
     },
     "value4": {
         "value0": 1.0,
