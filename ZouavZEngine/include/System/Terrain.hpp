@@ -4,6 +4,7 @@
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
 #include "System/ResourcesManager.hpp"
+#include "Object.hpp"
 
 #include <FastNoiseLite.h>
 
@@ -54,7 +55,7 @@ struct ChunkCreateArg
 };
 
 
-class Chunk
+class Chunk : public Object
 {
 private:
 	Mesh mesh{"chunkMesh"};
@@ -73,7 +74,7 @@ private:
 	bool isGenerated = false;
 public:
 
-	Chunk() = default; 
+	Chunk() : Object("Chink", "Ground") {}
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);

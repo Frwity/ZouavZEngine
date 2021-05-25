@@ -162,9 +162,9 @@ bool Editor::Display(Render& _render)
     DisplayMainWindow(_render, _render.gameFramebuffer);
     if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
     {
+        DisplayInspector();
         DisplayGameWindow(_render, _render.gameFramebuffer);
         DisplaySceneWindow(_render, _render.sceneFramebuffer);
-        DisplayInspector();
         DisplayConsoleWindow();
         DisplayHierarchy();
         DisplayProject();
@@ -576,6 +576,9 @@ void Editor::Update()
 
     if (sceneFocused)
         CameraUpdate(editorClock->GetDeltaTime());
+
+    if (gameObjectInspector && gameObjectInspector->toDestroy)
+        gameObjectInspector = nullptr;
 }
 
 void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer)
@@ -824,9 +827,6 @@ void Editor::DisplayInspector()
             }
             if (ImGui::Button("Add Component"))
                 addComponentWindow = true;
-
-            if (gameObjectInspector && gameObjectInspector->toDestroy)
-                gameObjectInspector = nullptr;
         }
     }
     ImGui::End();
@@ -887,11 +887,13 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
         }
 
         ImVec2 windowSize = ImGui::GetWindowSize();
+        Camera* mainCamera = Camera::GetMainCamera();
 
-        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight())
+        if ((int)windowSize.x != _framebuffer.getWidth() || (int)windowSize.y != _framebuffer.getHeight()
+        || (mainCamera && (windowSize.x != mainCamera->GetWidth() || windowSize.y != mainCamera->GetHeight())))
         {
-            if (Camera::GetMainCamera())
-                Camera::GetMainCamera()->Resize((int)windowSize.x, (int)windowSize.y);
+            if (mainCamera)
+                mainCamera->Resize((int)windowSize.x, (int)windowSize.y);
             _framebuffer.Resize((int)windowSize.x, (int)windowSize.y);
         }
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));

@@ -2,6 +2,7 @@
 
 #include "Component/Transform.hpp"
 #include "Component/Component.hpp"
+#include "Object.hpp"
 
 #include <cereal/types/base_class.hpp>
 #include "cereal/types/vector.hpp"
@@ -14,7 +15,7 @@
 #include <unordered_map>
 #include <memory>
 
-class GameObject : public Transform
+class GameObject : public Transform, public Object
 {
 private:
 	friend class Editor;
@@ -32,9 +33,6 @@ private:
 	bool toDestroy{ false };
 	bool isPrefab{ false };
 
-	std::string name;
-	std::string tag;
-
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
 
@@ -46,17 +44,11 @@ public:
 	static GameObject* currentLoadedGameObject;
 
 	GameObject() = delete;
-	GameObject(const std::string& _name);
-	GameObject(const std::string& _name, const std::string& _tag);
+	GameObject(const std::string& _name, const std::string& _tag = "");
 	GameObject& operator=(const GameObject&);
 	~GameObject() = default;
 
 	void Destroy();
-
-	const std::string& GetName() const { return name; }
-	void SetName(const std::string& _newName) { name = _newName; }
-	const std::string& GetTag() const { return tag; }
-	void SetTag(const std::string& _newTag) { tag = _newTag; }
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
@@ -100,7 +92,7 @@ public:
 	}
 
 	template<typename T>
-	std::vector<T*> GetComponents()
+	std::vector<T*> GetComponents() const
 	{
 		std::vector<T*> returnComponents;
 		for (const std::unique_ptr<Component>& component : components)

@@ -67,11 +67,11 @@ void Rigid::OnContact(GameObject* _other, physx::PxShape* _collidingShape)
 	if (gameObject == nullptr)
 		return;
 
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
+	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();
 
 	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
 
-	if (script)
+	for (ScriptComponent* script : scripts)
 		script->OnContact(_other, collision);
 }
 
@@ -80,11 +80,11 @@ void Rigid::OnTrigger(GameObject* _other, physx::PxShape* _collidingShape)
 	if (gameObject == nullptr)
 		return;
 
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
+	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();
 
 	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
 
-	if (script)
+	for (ScriptComponent* script : scripts)
 		script->OnTrigger(_other, collision);
 }
 
