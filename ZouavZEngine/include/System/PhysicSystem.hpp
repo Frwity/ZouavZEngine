@@ -92,7 +92,6 @@ public:
 	static physx::PxPhysics* physics;
 	static physx::PxCooking* cooking;
 	static physx::PxScene* scene;
-	static physx::PxPvdSceneClient* pvdClient;
 	static physx::PxPvdTransport* transport;
 	//static PhysicEventCallback* physicEventCallback;
 

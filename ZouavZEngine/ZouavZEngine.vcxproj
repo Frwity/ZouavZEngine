@@ -112,7 +112,6 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -131,7 +130,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation.lib;PhysXCommon.lib;PhysX.lib;PhysXExtensions_static.lib;PhysXCooking.lib;PhysXPvdSDK_static.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation_d.lib;PhysXCommon_d.lib;PhysX_d.lib;PhysXExtensions_static_d.lib;PhysXCooking_d.lib;PhysXPvdSDK_static_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,12 +144,13 @@
       <AdditionalIncludeDirectories>external_lib/include; include;external_lib/include/PhysX</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation.lib;PhysXCommon.lib;PhysX.lib;PhysXExtensions_static.lib;PhysXCooking.lib;PhysXPvdSDK_static.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
     </Link>

@@ -16,7 +16,6 @@ PxPhysics* PhysicSystem::physics = nullptr;
 PxCooking* PhysicSystem::cooking = nullptr;
 PxPvd* PhysicSystem::pvd = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
-PxPvdSceneClient* PhysicSystem::pvdClient = nullptr;
 PxPvdTransport* PhysicSystem::transport = nullptr;
 //PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
 
@@ -43,7 +42,7 @@ void PhysicSystem::Init()
 	ZASSERT(foundation != nullptr, "PxCreateFoundation failed !");
 
 	PxTolerancesScale scale = PxTolerancesScale();
-
+	
 	pvd = PxCreatePvd(*foundation);
 	ZASSERT(pvd != nullptr, "PxCreatePvd failed !");
 	transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
@@ -58,11 +57,6 @@ void PhysicSystem::Init()
 	ZASSERT(cooking != nullptr, "PxCreateCooking failed !");
 	InitScene();
 
-	PxPvdSceneClient* pvdClient = scene->getScenePvdClient();
-	if (pvdClient)
-	{
-		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-	}
 }
 
 void PhysicSystem::InitScene()
@@ -85,9 +79,6 @@ void PhysicSystem::InitScene()
 
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");
-
-	pvdClient = scene->getScenePvdClient();
-	ZASSERT(pvdClient != nullptr, "getScenePvdClient failed !");
 }
 
 void PhysicSystem::Destroy()
