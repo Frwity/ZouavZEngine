@@ -14,7 +14,7 @@ class Camera : public Component
 private:
 	friend cereal::access;
 	static Camera* mainCamera;
-	bool followGameObjectRotation = true;
+	bool followGameObjectRotation = false;
 	bool isMainCamera = false;
 
 protected:

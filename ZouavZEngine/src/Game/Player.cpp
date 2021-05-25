@@ -5,7 +5,6 @@
 #include "Component/RigidBody.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Game/Player.hpp"
-#include "Game/ThirdPersonCamera.hpp"
 
 #include <iostream>
 
@@ -23,9 +22,7 @@ void Player::OnAddComponent()
 	playerMesh = GameObject::CreateGameObject("PlayerMesh");
 	playerMesh->SetParent(&GetGameObject());
 	playerMesh->AddComponent<MeshRenderer>();
-	camera = GameObject::CreateGameObject("Camera");
-	camera->SetParent(&GetGameObject());
-	camera->AddComponent<ThirdPersonCamera>();
+	camera = GetGameObject().AddComponent<Camera>();
 	GetGameObject().AddComponent<BoxCollision>();
 	rb = GetGameObject().AddComponent<RigidBody>();
 	attackCollision = GetGameObject().AddComponent<BoxCollision>();
@@ -50,7 +47,7 @@ void Player::Begin()
 	material = &playerMesh->GetComponent<MeshRenderer>()->material;
 	baseColor = material->color;
 
-	camera = &GetGameObject().GetChild(1);
+	camera = GetGameObject().GetComponent<Camera>();
 
 	ICharacter::Begin();
 
@@ -94,14 +91,32 @@ void Player::Update()
 	//	rb->SetLinearVelocity(Vec3(TimeManager::GetDeltaTime() * speed, 0.0f, 0.0f));
 	//if (InputManager::GetKeyPressed(E_KEYS::NUM0))
 	//	rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed, 0.0f));
+	Vec3 cameraForward = camera->GetTarget() - camera->GetPosition();
+	cameraForward.y = camera->GetPosition().y;
+	cameraForward.Normalize();
+	Vec3 cameraRight = cameraForward.Cross(Vec3::up).Normalized();
+
+	Vec3 direction;
+
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
-		GetGameObject().Translate(camera->Forward() * TimeManager::GetDeltaTime() * speed);
+		direction += cameraForward;
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
-		GetGameObject().Translate(-camera->Forward() * TimeManager::GetDeltaTime() * speed);
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
-		GetGameObject().Translate(camera->Right() * TimeManager::GetDeltaTime() * speed);
+		direction -= cameraForward;
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
-		GetGameObject().Translate(-camera->Right() * TimeManager::GetDeltaTime() * speed);
+		direction += cameraRight;
+	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+		direction -= cameraRight;
+
+	if (direction.GetSquaredMagnitude() > 0.01f)
+	{
+		float angleToDirection = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
+
+		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
+	
+		GetGameObject().Translate(GetGameObject().Forward() * TimeManager::GetDeltaTime() * speed);
+		std::cout << (angleToDirection / M_PI) * 180.0f * (1.0f - 1.0f / rotSpeed) << std::endl;
+	}
+
 	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
 	{
 		isJumping = true;
@@ -116,4 +131,10 @@ void Player::Update()
 		attackCollision->Activate();
 		timerAttackDuration = attackDuration;
 	}
+
+	Vec2 offset = InputManager::GetCursorOffsetFromLastFrame();
+
+	Quaternion camRot = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f }) * Quaternion(Vec3{ -offset.y * camSensitivity, 0.0f, 0.0f });
+
+	camera->SetPosition(camRot.RotateVector(camera->GetPosition()));
 }

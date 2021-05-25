@@ -40,7 +40,7 @@ public:
 	Quaternion Normalised() const;
 
 	void Conjugate();
-	const Quaternion Conjugate() const;
+	const Quaternion Conjugated() const;
 
 	float GetAngle() const;
 
