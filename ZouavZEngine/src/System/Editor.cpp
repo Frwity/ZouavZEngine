@@ -195,6 +195,25 @@ void Editor::DisplayMainWindow(const class Render& _render, class Framebuffer& _
         }
         ImGui::SetCursorPosY(75.0f);
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
+
+        if (ImGui::IsItemHovered() && InputManager::EditorGetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_LEFT) && !isKeyboardEnable && state == EDITOR_STATE::PLAYING)
+        {
+            InputManager::isGameInputActive = true;
+            ImGui::SetWindowFocus("Game");
+            isKeyboardEnable = true;
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+        }
+        if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
+        {
+            InputManager::isGameInputActive = false;
+            isKeyboardEnable = false;
+            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            ImGui::SetWindowFocus("Main");
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+        }
     }
     ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton);
     ImGui::End();

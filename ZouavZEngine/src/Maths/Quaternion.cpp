@@ -144,7 +144,7 @@ void Quaternion::Conjugate()
 	z = -z;
 }
 
-const Quaternion Quaternion::Conjugate() const
+const Quaternion Quaternion::Conjugated() const
 {
 	return Quaternion(w, -x, -y, -z);
 }
@@ -172,7 +172,7 @@ void Quaternion::Inverse()
 
 Quaternion Quaternion::Inversed() const
 {
-	return Conjugate().Scale(1 / Norm());
+	return Conjugated().Scale(1 / Norm());
 }
 
 float Quaternion::GetAngle() const

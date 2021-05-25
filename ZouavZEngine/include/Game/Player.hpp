@@ -16,7 +16,7 @@ private:
 	class RigidBody* rb{ nullptr };
 	class BoxCollision* attackCollision;
 	class GameObject* playerMesh;
-	class GameObject* camera;
+	class Camera* camera;
 
 	int speed = 3;
 
@@ -24,6 +24,8 @@ private:
 	float attackCooldown = 1.0f;
 	float timerAttackDuration = 0.0f;
 	float timerAttackCooldown = 0.0f;
+	float camSensitivity = 0.1f;
+	float rotSpeed = 0.1f;
 
 	bool isJumping = false;
 
