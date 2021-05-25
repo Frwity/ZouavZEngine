@@ -81,7 +81,7 @@ private:
 	bool isGenerated = false;
 public:
 
-	Chunk() : Object("Chink", "Ground") {}
+	Chunk() : Object("Chunk", "Ground") {}
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);

@@ -169,13 +169,13 @@ void Scene::SimulatePhyics() const
 
 	for (unsigned int i = 0; i < nbActiveActor; i++)
 	{
-		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
+		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
 
-		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
+		physx::PxTransform transform = go->GetComponent<RigidBody>()->actor->getGlobalPose();
 		physx::PxMat44 mat4(transform);
 
-		rigidbody->GetGameObject().localPosition = { transform.p.x, transform.p.y, transform.p.z };
-		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+		go->localPosition = { transform.p.x, transform.p.y, transform.p.z };
+		go->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
 

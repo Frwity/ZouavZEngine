@@ -36,7 +36,8 @@ public:
 
 	void OnAddComponent() override;
 
-	void OnTrigger(class GameObject* _other, class ShapeCollision* _triggerShape) override;
+	void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
+	void OnContact(class Object* _other, class ShapeCollision* _triggerShape) override;
 
 	template <class Archive>
 	void serialize(Archive& ar)

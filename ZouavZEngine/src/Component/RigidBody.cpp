@@ -24,7 +24,7 @@ RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
 
 	actor = PhysicSystem::physics->createRigidDynamic(t);
 
-	actor->userData = this;
+	actor->userData = _gameObject;
 
 	AttachShape();
 

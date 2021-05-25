@@ -5,7 +5,6 @@
 #include "Component/RigidBody.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Game/Player.hpp"
-#include "Game/ThirdPersonCamera.hpp"
 
 #include <iostream>
 
@@ -25,7 +24,6 @@ void Player::OnAddComponent()
 	playerMesh->AddComponent<MeshRenderer>();
 	camera = GameObject::CreateGameObject("Camera");
 	camera->SetParent(&GetGameObject());
-	camera->AddComponent<ThirdPersonCamera>();
 	GetGameObject().AddComponent<BoxCollision>();
 	rb = GetGameObject().AddComponent<RigidBody>();
 	attackCollision = GetGameObject().AddComponent<BoxCollision>();
@@ -34,14 +32,23 @@ void Player::OnAddComponent()
 	attackCollision->Dehactivate();
 }
 
-void Player::OnTrigger(GameObject* _other, ShapeCollision* _triggerShape)
+void Player::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
 {
+	GameObject* go = dynamic_cast<GameObject*>(_other);
+	if (!go)
+		return;
 	if (_triggerShape == attackCollision)
 	{
-		ICharacter* characterOther = _other->GetComponent<ICharacter>();
+		ICharacter* characterOther = go->GetComponent<ICharacter>();
 		if (characterOther)
 			characterOther->Damage(attackDamage);
 	}
+}
+
+void Player::OnContact(Object* _other, class ShapeCollision* _triggerShape)
+{
+	if (!_other->GetTag().compare("Ground"))
+		isJumping = false;
 }
 
 void Player::Begin()

@@ -443,7 +443,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = nullptr;
+	actor->userData = this;
 
 	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material.data(), 1);
 	PhysicSystem::scene->addActor(*actor);

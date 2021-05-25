@@ -17,8 +17,8 @@ public:
 	virtual void FixedUpdate() {};
 	virtual void Update() {};
 	virtual void OnDestroy() {};
-	virtual void OnTrigger(class GameObject* _other, class ShapeCollision* _triggerShape) {};
-	virtual void OnContact(class GameObject* _other, class ShapeCollision* _triggerShape) {};
+	virtual void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) {};
+	virtual void OnContact(class Object* _other, class ShapeCollision* _triggerShape) {};
 	virtual void OnAddComponent() {};
 
 	template <class Archive>

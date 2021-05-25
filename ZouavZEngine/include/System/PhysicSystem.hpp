@@ -12,6 +12,7 @@
 #include "System/Debug.hpp"
 #include "Terrain.hpp"
 
+#include "Object.hpp"
 #include "GameObject.hpp"
 #include "Component/Rigid.hpp"
 #include "Component/RigidStatic.hpp"
@@ -47,11 +48,11 @@ public:
 
 			if (pairs[i].triggerShape->userData && pairs[i].triggerActor->userData)
 			{
-				Rigid* otherActor = static_cast<Rigid*>(pairs[i].otherActor->userData);
-				Rigid* triggerActor = static_cast<Rigid*>(pairs[i].triggerActor->userData);
+				Object* otherActor = static_cast<Object*>(pairs[i].otherActor->userData);
+				GameObject* triggerActor = static_cast<GameObject*>(pairs[i].triggerActor->userData);
 
 				if (otherActor && triggerActor)
-					triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs[i].triggerShape);
+					triggerActor->GetComponent<Rigid>()->OnTrigger(otherActor, pairs[i].triggerShape);
 			}
 		}
 	}
@@ -64,11 +65,13 @@ public:
 
 		if (rd && rd2 && rd->userData && rd2->userData)
 		{
-			Rigid* rb1 = static_cast<Rigid*>(rd->userData);
-			Rigid* rb2 = static_cast<Rigid*>(rd2->userData);
+			Object* obj1 = static_cast<Object*>(rd->userData);
+			Object* obj2 = static_cast<Object*>(rd2->userData);
 
-			rb1->OnContact(&rb2->GetGameObject(), pairHeader.pairs->shapes[0]);
-			rb2->OnContact(&rb1->GetGameObject(), pairHeader.pairs->shapes[1]);
+			if (dynamic_cast<GameObject*>(obj1))
+				static_cast<GameObject*>(obj1)->GetComponent<Rigid>()->OnContact(obj2, pairHeader.pairs->shapes[0]);
+			if (dynamic_cast<GameObject*>(obj2))
+				static_cast<GameObject*>(obj2)->GetComponent<Rigid>()->OnContact(obj1, pairHeader.pairs->shapes[0]);
 		}
 
 		PX_UNUSED((pairs));

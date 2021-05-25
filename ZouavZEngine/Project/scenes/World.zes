@@ -23,6 +23,19 @@
     "value8": [
         {
             "polymorphic_id": 2147483649,
+            "polymorphic_name": "Skybox",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true,
+                        "value1": "Skybox"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483650,
             "polymorphic_name": "Light",
             "ptr_wrapper": {
                 "valid": 1,
@@ -51,27 +64,14 @@
                     }
                 }
             }
-        },
-        {
-            "polymorphic_id": 2147483650,
-            "polymorphic_name": "Skybox",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": true,
-                        "value1": "Skybox"
-                    }
-                }
-            }
         }
     ],
-    "value9": "Player",
+    "value9": "New GameObject",
     "value10": "Player",
     "value11": 2,
     "value12": {
         "value0": 0.0,
-        "value1": 3.046269416809082,
+        "value1": 15.953163146972657,
         "value2": 0.0
     },
     "value13": {
@@ -259,65 +259,13 @@
         "value3": 0.0
     },
     "value32": {
-        "value0": 0.9999999403953552,
+        "value0": 1.0,
         "value1": 1.0,
-        "value2": 0.9999999403953552
+        "value2": 1.0
     },
     "value33": true,
     "value34": false,
-    "value35": [
-        {
-            "polymorphic_id": 2147483655,
-            "polymorphic_name": "ThirdPersonCamera",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": {
-                            "value0": true,
-                            "value1": "ThirdPersonCamera"
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483656,
-            "polymorphic_name": "Camera",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 1.2057397365570069,
-                    "value1": 0.0,
-                    "value2": 0.0,
-                    "value3": 0.0,
-                    "value4": 0.0,
-                    "value5": 2.4142138957977297,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 0.0,
-                    "value9": 0.0,
-                    "value10": -1.0000003576278687,
-                    "value11": -1.0,
-                    "value12": 0.0,
-                    "value13": 0.0,
-                    "value14": -0.0020000003278255464,
-                    "value15": 0.0,
-                    "value16": 0.0,
-                    "value17": 3.700000047683716,
-                    "value18": -12.100000381469727,
-                    "value19": 0.0,
-                    "value20": 0.8999999761581421,
-                    "value21": 0.0,
-                    "value22": true,
-                    "value23": {
-                        "value0": true,
-                        "value1": "Camera"
-                    }
-                }
-            }
-        }
-    ],
+    "value35": [],
     "value36": true,
     "value37": 128.0,
     "value38": 128,
@@ -345,6 +293,6 @@
     "value60": 0.0,
     "value61": 0.0,
     "value62": 0.0,
-    "value63": 6.826000213623047,
+    "value63": 51.10100173950195,
     "value64": "Grass.png"
 }

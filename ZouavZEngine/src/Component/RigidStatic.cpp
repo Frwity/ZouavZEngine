@@ -19,7 +19,7 @@ RigidStatic::RigidStatic(GameObject* _gameObject, std::string _name)
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = this;
+	actor->userData = _gameObject;
 
 	AttachShape();
 

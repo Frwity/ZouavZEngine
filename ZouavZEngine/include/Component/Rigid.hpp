@@ -27,6 +27,6 @@ public:
 
 	virtual void UpdateTransform(Transform transform) {};
 
-	virtual void OnContact(GameObject* _other, physx::PxShape* _collidingShap);
-	virtual void OnTrigger(GameObject* _other, physx::PxShape* _collidingShape);
+	virtual void OnContact(class Object* _other, physx::PxShape* _collidingShap);
+	virtual void OnTrigger(class Object* _other, physx::PxShape* _collidingShape);
 };

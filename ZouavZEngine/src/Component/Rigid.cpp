@@ -1,4 +1,5 @@
 #include "Component/Rigid.hpp"
+#include "Object.hpp"
 #include "GameObject.hpp"
 #include "PxRigidBody.h"
 #include "PxRigidDynamic.h"
@@ -62,9 +63,9 @@ void Rigid::AttachShape()
 	}
 }
 
-void Rigid::OnContact(GameObject* _other, physx::PxShape* _collidingShape)
+void Rigid::OnContact(Object* _other, physx::PxShape* _collidingShape)
 {
-	if (gameObject == nullptr)
+	if (!gameObject)
 		return;
 
 	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();
@@ -75,9 +76,9 @@ void Rigid::OnContact(GameObject* _other, physx::PxShape* _collidingShape)
 		script->OnContact(_other, collision);
 }
 
-void Rigid::OnTrigger(GameObject* _other, physx::PxShape* _collidingShape)
+void Rigid::OnTrigger(Object* _other, physx::PxShape* _collidingShape)
 {
-	if (gameObject == nullptr)
+	if (!gameObject)
 		return;
 
 	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();

@@ -10,6 +10,7 @@ protected:
 
 public:
 	Object(const std::string& _name, const std::string& _tag = "") : name{ _name }, tag{ _tag } {}
+	virtual ~Object() = default;
 
 	const std::string& GetName() const { return name; }
 	void SetName(const std::string& _newName) { name = _newName; }
