@@ -163,10 +163,10 @@ void Terrain::Draw(const class Camera& _camera) const
 
 	for (const auto& it : chunks)
 	{
-		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y }));
+		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second->GetWorldPos().x, 0.f, it.second->GetWorldPos().y }));
 
-		glBindVertexArray(it.second.GetMesh().GetID());
-		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(it.second->GetMesh().GetID());
+		glDrawElements(GL_TRIANGLES, (int)it.second->GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
 	}
 
 	glEnable(GL_CULL_FACE);
