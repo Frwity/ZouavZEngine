@@ -62,6 +62,7 @@ void Scene::Load(bool _changingScene)
 
 void Scene::Load(const std::string& _path, bool _changingScene)
 {
+	terrain.Clear();
 	GameObject::gameObjects.clear();
 	world.children.clear();
 	PhysicSystem::Destroy();
@@ -87,6 +88,8 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 		world.load(iarchive);
 
 		terrain = Terrain{};
+
+
 		terrain.load(iarchive);
 	}
 	saveFile.close();
