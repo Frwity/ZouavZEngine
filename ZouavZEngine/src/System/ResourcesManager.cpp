@@ -6,6 +6,7 @@ std::unordered_map<std::string, std::shared_ptr<Mesh>> ResourcesManager::meshRes
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourcesManager::textureResources;
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shaderResources;
 std::unordered_map<std::string, std::shared_ptr<Font>> ResourcesManager::fontResources;
+std::unordered_map<std::string, std::shared_ptr<AnimResource>> ResourcesManager::animationsResources;
 
 void ResourcesManager::InitDefaultResources()
 {
@@ -27,6 +28,7 @@ void ResourcesManager::Clear()
     textureResources.clear();
     shaderResources.clear();
     fontResources.clear();
+    animationsResources.clear();
 }
 
 std::shared_ptr<Resource>& ResourcesManager::ResourceChangerImpl(const char* _label, std::shared_ptr<Resource>& _resource, const std::unordered_map<std::string, std::shared_ptr<Resource>>& _resources, bool& _changed)

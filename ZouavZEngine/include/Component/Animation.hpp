@@ -4,46 +4,28 @@
 #include "Maths/Mat4.hpp"
 #include "Rendering/Bone.hpp"
 #include "Rendering/Mesh.hpp"
-#include "cereal/types/polymorphic.hpp"
-#include "cereal/archives/json.hpp"
 #include "Rendering/Shader.hpp"
-#include <assimp/scene.h>
 #include "Rendering/Camera.hpp"
 #include "Rendering/AnimResource.hpp"
+#include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/json.hpp"
+#include <assimp/scene.h>
 #include <memory>
-
-struct AssimpNodeData
-{
-    Mat4 transformation;
-    std::string name;
-    int childrenCount;
-    std::vector<AssimpNodeData> children;
-};
 
 class Animation : public Component
 {
 private:
-    std::vector<Bone> bones;
-
     std::shared_ptr<Mesh> mesh;
-    
-    void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
 
-    float currentTime;
-
-    void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform);
+    float currentTime = 0.0f;
 
     std::shared_ptr<Shader> animationShader;
 
 public :
     bool play = false;
-    int tickPerSecond;
-    float duration;
     AssimpNodeData rootNode;
-    std::map<std::string, BoneInfo> boneInfoMap;
-    std::vector<Mat4> finalBonesMatrices;
-
-    //AnimResource* currentAnimation;
+    std::map<std::string, std::shared_ptr<AnimResource>> animations;
+    std::shared_ptr<AnimResource> currentAnimation;
 
     Component* Clone() const override { return new Animation(*this); };
 
@@ -51,16 +33,12 @@ public :
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr);
     ~Animation() = default;
 
-    void UpdateAnimation();
-
-    void ReadMissingBones(const aiAnimation* animation);
+    void LoadAnimation(std::string _name, std::string _path);
 
     void Draw(const Camera& _camera);
 
     void Editor() override;
     const char* GetComponentName() override { return "Animation"; }
-
-    Bone* FindBone(const std::string& _boneName);
 
     template <class Archive>
     void serialize(Archive& _ar)

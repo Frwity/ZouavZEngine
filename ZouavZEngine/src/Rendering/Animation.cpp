@@ -12,152 +12,64 @@
 #include "Rendering/Texture.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <map>
 
 	
 Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* _mesh):
 	Component(_gameObject)
 {
-	Assimp::Importer importer;
-
-    _animationPath = "resources/dancing_vampire.dae";
-
-    const aiScene* scene = importer.ReadFile(_animationPath, aiProcess_Triangulate);
-
-    //ZASSERT(scene && scene->mRootNode, "Cant read animation file");
-
-    auto animation = scene->mAnimations[0];
-    duration = (float)animation->mDuration;
-    tickPerSecond = (int)animation->mTicksPerSecond;
-
-    animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
-
-    //TODO update mesh when mesh renderer is updated
-    mesh = gameObject->GetComponent<MeshRenderer>()->mesh;
-    boneInfoMap = mesh->boneInfoMap;
-
-    finalBonesMatrices.reserve(100);
-    for (int i = 0; i < 100; i++)
-        finalBonesMatrices.push_back(Mat4::identity);
-
-    ReadHeirarchyData(rootNode, scene->mRootNode);
-    ReadMissingBones(animation);
-}
-
-void Animation::ReadMissingBones(const aiAnimation* animation)
-{
-    for (int i = 0; i < animation->mNumChannels; i++)
-    {
-        auto channel = animation->mChannels[i];
-
-        std::string boneName = channel->mNodeName.data;
-
-        if (boneInfoMap.find(boneName) == boneInfoMap.end())
-        {
-            boneInfoMap[boneName].id = mesh->boneCounter;
-            mesh->boneCounter++;
-        }
-        bones.push_back(Bone(channel->mNodeName.data,
-            boneInfoMap[channel->mNodeName.data].id, channel));
-    }
-
-    mesh->boneInfoMap = boneInfoMap;
-}
-
-void Animation::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
-{
-    dest.name = src->mName.data;
-    dest.transformation = Mat4::ConvertAssimpMatrixToMat4(src->mTransformation);
-    dest.childrenCount = src->mNumChildren;
-
-    for (unsigned int i = 0; i < src->mNumChildren; i++)
-    {
-        AssimpNodeData newData;
-        ReadHeirarchyData(newData, src->mChildren[i]);
-        dest.children.push_back(newData);
-    }
-}
-
-Bone* Animation::FindBone(const std::string& _boneName)
-{
-    auto iter = std::find_if(bones.begin(), bones.end(),
-        [&](const Bone& Bone)
-        {
-            return Bone.name == _boneName;
-        }
-    );
-
-    if (iter == bones.end())
-    {
-        //std::cout << "Bone not found" << _boneName << std::endl;
-        return nullptr;
-    }
-    else
-    {
-        //std::cout << "Bone FOUND" << std::endl;
-        return &(*iter);
-    }
+    //TODO init with animations already loaded ?
 }
 
 void Animation::Editor()
 {
+    ResourcesManager::ResourceChanger<AnimResource>("Animation", currentAnimation);
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+        {
+            ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new animation");
+
+            std::string _path = *(const std::string*)payload->Data;
+            std::string _truePath = _path;
+            size_t start_pos = _truePath.find("\\");
+            _truePath.replace(start_pos, 1, "/");
+
+            if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".dae") != std::string::npos)
+            {
+                if (currentAnimation.use_count() == 2 && currentAnimation->IsDeletable())
+                    ResourcesManager::RemoveResourceAnimation(currentAnimation->GetName());
+                currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
+            }
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
     if (ImGui::Button("Play"))
     {
         play = !play;
         currentTime = 0.0f;
+        //TODO set currentAnimation
     }
-}
-
-void Animation::UpdateAnimation()
-{
-    if (play)
-    {
-        currentTime += tickPerSecond * TimeManager::GetDeltaTime();
-        currentTime = fmod(currentTime, duration);
-        CalculateBoneTransform(&rootNode, Mat4::identity);
-    }
-}
-
-void Animation::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform)
-{
-    std::string nodeName = _node->name;
-    Mat4 nodeTransform = _node->transformation;
-
-    Bone* Bone = FindBone(nodeName);
-
-    if (Bone)
-    {
-        Bone->Update(currentTime);
-        nodeTransform = Bone->localTransform;
-    }
-
-    Mat4 globalTransformation = _parentTransform * nodeTransform;
-
-    if (boneInfoMap.find(nodeName) != boneInfoMap.end())
-    {
-        int index = boneInfoMap[nodeName].id;
-        Mat4 offset = boneInfoMap[nodeName].offset;
-
-        finalBonesMatrices[index] = globalTransformation * offset;
-    }
-
-    for (int i = 0; i < _node->childrenCount; i++)
-        CalculateBoneTransform(&_node->children[i], globalTransformation);
 }
 
 void Animation::Draw(const Camera& _camera)
 {
-    UpdateAnimation();
+    if (play && currentAnimation)
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime());
 
     animationShader->Use();
 
     animationShader->SetMatrix("view", _camera.GetMatrix().Reversed());
     animationShader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
-    for (int i = 0; i < finalBonesMatrices.size(); ++i)
-        animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", finalBonesMatrices[i]);
+    for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
+        animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
 
     animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
 
+    //TODO use current texture
     std::shared_ptr<Texture> text = *ResourcesManager::GetResource<Texture>("Default");
 
     text->Use();
@@ -170,4 +82,10 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
 {
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
+}
+
+void Animation::LoadAnimation(std::string _name, std::string _path)
+{
+    std::shared_ptr<Mesh> mesh = gameObject->GetComponent<MeshRenderer>()->mesh;
+    animations.insert(std::pair<std::string, std::shared_ptr<AnimResource>>(_name, std::make_shared<AnimResource>(_name, _path, mesh)));
 }

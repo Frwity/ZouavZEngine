@@ -6,6 +6,7 @@
 #include "Rendering/Texture.hpp"
 #include "Rendering/Shader.hpp"
 #include "Rendering/Font.hpp"
+#include "Rendering/AnimResource.hpp"
 #include <unordered_map>
 #include <cstdarg>
 #include <memory>
@@ -26,6 +27,7 @@ private:
 	static std::unordered_map<std::string, std::shared_ptr<Texture>> textureResources;
 	static std::unordered_map<std::string, std::shared_ptr<Shader>> shaderResources;
 	static std::unordered_map<std::string, std::shared_ptr<Font>> fontResources;
+	static std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsResources;
 
 public:
 	ResourcesManager() = delete;
@@ -70,6 +72,12 @@ public:
 			_ar(name, deletable, path);
 			AddResourceFont(name, deletable, path.c_str());
 		}
+		_ar(count);
+		for (int i = 0; i < count; ++i)
+		{
+			_ar(name, deletable, path);
+			AddResourceAnimation(name, deletable, path);
+		}
 	}
 
 	template <class Archive>
@@ -94,6 +102,10 @@ public:
 		_ar(fontResources.size());
 		for (auto& font : fontResources)
 			_ar(font.first, font.second->deletable, font.second.get()->paths[0]);
+
+		_ar(animationsResources.size());
+		for (auto& animation : animationsResources)
+			_ar(animation.first, animation.second->deletable, animation.second.get()->paths[0]);
 	}
 
 	template<typename... Args>
@@ -128,6 +140,25 @@ public:
 
 
 		Debug::LogError("Mesh resource : " + _name + " not loaded");
+		return nullptr;
+	}
+
+
+	template<typename... Args>
+	static typename std::shared_ptr<AnimResource>* AddResourceAnimation(std::string _name, bool _deletable, Args... _args)
+	{
+		auto a = animationsResources.emplace(_name, std::make_shared<AnimResource>(_name, _args...));
+		if (a.second)
+		{
+			Debug::Log("Animation resource : " + _name + " loaded");
+			a.first->second->deletable = _deletable;
+			return &a.first->second;
+		}
+		else if (a.first->second)
+			return &a.first->second;
+
+
+		Debug::LogError("Animation resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -237,6 +268,16 @@ public:
 		return nullptr;
 	}
 
+	template<>
+	static std::shared_ptr<AnimResource>* GetResource<AnimResource>(std::string _name)
+	{
+		if (animationsResources.find(_name) != animationsResources.end())
+			return &animationsResources.at(_name);
+		else
+			Debug::LogError("Animation resource : " + _name + " not found");
+		return nullptr;
+	}
+
 	template<typename T>
 	static const std::unordered_map<std::string, std::shared_ptr<T>>& GetResources()
 	{
@@ -273,6 +314,12 @@ public:
 		return soundResources;
 	}
 
+	template<>
+	static const std::unordered_map<std::string, std::shared_ptr<AnimResource>>& GetResources<AnimResource>()
+	{
+		return animationsResources;
+	}
+
 	static void RemoveResourceSound(std::string _name)
 	{
 		soundResources.erase(_name);
@@ -296,6 +343,11 @@ public:
 	static void RemoveResourceShader(std::string _name)
 	{
 		shaderResources.erase(_name);
+	}
+
+	static void RemoveResourceAnimation(std::string _name)
+	{
+		animationsResources.erase(_name);
 	}
 
 	template<typename T>
