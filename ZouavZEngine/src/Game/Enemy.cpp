@@ -2,11 +2,12 @@
 #include "System/TimeManager.hpp"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "Component/BoxCollision.hpp"
 
 #include "Game/Enemy.hpp"
 
-Enemy::Enemy(GameObject * _gameobject)
-: ICharacter(_gameobject)
+Enemy::Enemy(GameObject * _gameobject, std::string _name)
+: ICharacter(_gameobject, _name)
 {}
 
 void Enemy::Editor()
@@ -14,11 +15,13 @@ void Enemy::Editor()
 
 void Enemy::Begin()
 {
+	ICharacter::Begin();
 	player = GameObject::GetGameObjectByTag("Player");
 }
 
 void Enemy::Update()
 {
+	ICharacter::Update();
 	if (player)
 	{
 		Vec3 direction = player->WorldPosition() - GetGameObject().WorldPosition();
@@ -28,7 +31,15 @@ void Enemy::Update()
 		if (angleToPlayer > 0.2f)
 			GetGameObject().RotateY((angleToPlayer / M_PI) * 180.0f);
 
-		if ((direction).GetMagnitude() < detectionDistance)
-			GetGameObject().Translate(direction.Normalized() * TimeManager::GetDeltaTime() * speed);
+		float distanceToPlayer = direction.GetMagnitude();
+
+		if (distanceToPlayer < detectionDistance)
+		{
+			if (distanceToPlayer > distanceToStop)
+				GetGameObject().Translate(direction.Normalized() * TimeManager::GetDeltaTime() * speed);
+
+			if (distanceToPlayer < distanceToAttack && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
+				Attack();
+		}
 	}
 }

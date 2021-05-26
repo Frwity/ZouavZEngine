@@ -155,6 +155,18 @@ void ShapeCollision::InternalDehactivate()
 	}
 }
 
+void ShapeCollision::EditPosition(const Vec3& _newPos)
+{
+	transform.localPosition = _newPos;
+	UpdateShapeTransform();
+}
+
+void ShapeCollision::EditRotation(const Vec3& _newRot)
+{
+	transform.localRotation = _newRot;
+	UpdateShapeTransform();
+}
+
 void ShapeCollision::UpdateTransform() // never called
 {
 	if (shape)

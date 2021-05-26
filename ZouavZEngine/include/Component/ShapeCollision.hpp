@@ -40,6 +40,8 @@ public:
 	bool IsTrigger() { return isTrigger; }
 	void SetTrigger(bool _isTrigger);
 	void UpdateIsTrigger();
+	void EditPosition(const Vec3& _newPos);
+	void EditRotation(const Vec3& _newRot);
 	void UpdateTransform();
 	virtual void Editor() override;
 	virtual void DrawGizmos(const Camera& _camera);

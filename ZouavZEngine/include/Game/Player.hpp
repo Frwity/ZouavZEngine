@@ -13,17 +13,10 @@ private:
 
 	friend class cereal::access;
 
-	class RigidBody* rb{ nullptr };
-	class BoxCollision* attackCollision;
-	class GameObject* playerMesh;
 	class Camera* camera;
 
 	int speed = 3;
 
-	float attackDuration = 0.5f;
-	float attackCooldown = 1.0f;
-	float timerAttackDuration = 0.0f;
-	float timerAttackCooldown = 0.0f;
 	float camSensitivity = 0.1f;
 	float rotSpeed = 0.1f;
 
@@ -38,7 +31,6 @@ public:
 
 	void OnAddComponent() override;
 
-	void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
 	void OnContact(class Object* _other, class ShapeCollision* _triggerShape) override;
 
 	template <class Archive>

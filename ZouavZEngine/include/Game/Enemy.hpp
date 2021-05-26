@@ -16,7 +16,7 @@ private:
 
 public:
     Enemy() = delete;
-    Enemy(class GameObject* _gameobject);
+    Enemy(class GameObject* _gameobject, std::string _name = "Enemy");
     void Begin() override;
     void Update() override;
     void Editor() override;

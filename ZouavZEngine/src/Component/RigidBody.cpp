@@ -78,7 +78,7 @@ void RigidBody::LockAxis()
 	PxRigidDynamic* rd = static_cast<PxRigidDynamic*>(actor);
 
 	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, lockZ);
-	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, lockZ);
+	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, lockX);
 	rd->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, lockY);
 }
 

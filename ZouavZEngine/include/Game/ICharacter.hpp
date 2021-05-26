@@ -21,6 +21,12 @@ protected:
     int life = 5;
     int attackDamage = 1;
     bool asTakenDamage = false;
+    float attackDuration = 0.5f;
+    float attackCooldown = 1.0f;
+    float timerAttackDuration = 0.0f;
+    float timerAttackCooldown = 0.0f;
+    class BoxCollision* attackCollision;
+    class RigidBody* rb{ nullptr };
 
 public:
     ICharacter() = delete;
@@ -29,10 +35,14 @@ public:
     void Update() override;
     void Editor() override;
 
+    void OnAddComponent() override;
+
+    void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
 
     int GetLife() const { return life; }
     bool IsAlive() const { return life > 0; }
     bool Damage(int _damage);
+    void Attack();
 
     template <class Archive>
     void serialize(Archive & _ar)
