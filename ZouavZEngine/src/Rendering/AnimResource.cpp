@@ -37,6 +37,9 @@ void AnimResource::RemoveFromResourcesManager()
 
 void AnimResource::UpdateAnimation(float _deltaTime)
 {
+	if (currentTime >= duration)
+		currentTime = 0.0f;
+
 	currentTime += tickPerSecond * _deltaTime;
 	currentTime = fmod(currentTime, duration);
 	CalculateBoneTransform(&rootNode, Mat4::identity);
