@@ -65,9 +65,11 @@ struct ChunkCreateArg
 	float heightIntensity;
 };
 
+class Terrain;
 
 class Chunk : public Object
 {
+	friend Terrain;
 private:
 
 	std::vector<class GameObject*> generatedGameObjects;
@@ -89,6 +91,7 @@ private:
 public:
 
 	Chunk() : Object("Chunk", "Ground") {}
+	Chunk(const Chunk&) = delete;
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
@@ -104,7 +107,7 @@ public:
 class Terrain
 {
 private:
-	std::unordered_map<std::string, Chunk> chunks;
+	std::unordered_map<std::string, std::unique_ptr<Chunk>> chunks;
 
 	std::vector<physx::PxMaterial*> material;
 
@@ -182,13 +185,16 @@ public:
 
 	void ComputeTotalRatio();
 
+	void Clear();
+
 	template <class Archive>
 	void load(Archive& _ar)
 	{
 		int _noiseCount = 0;
 		int _colorCount = 0;
+		int _GenGOCount = 0;
 		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, _noiseCount, noiseID,
-			minHeight, maxHeight, heightIntensity, _colorCount, colorID, alwaysActualize);
+			minHeight, maxHeight, heightIntensity, _colorCount, colorID, alwaysActualize, _GenGOCount);
 
 		int _noiseType;
 		int _fractalType;
@@ -212,22 +218,41 @@ public:
 			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], _textureName);
 			textureID[i] = _textureName.compare("nullptr") == 0 ? nullptr : *ResourcesManager::GetResource<Texture>(_textureName);
 		}
+
+		_ar(nbGOPerChunk);
+		for (int i = 0; i < _GenGOCount; ++i)
+		{
+			if (i != 0)
+				AddGenGO();
+			for (int i = 0; i < GenGOCount; ++i)
+			{
+				GenGOParams[i].prefab.load(_ar);
+				_ar(GenGOParams[i].ratio);
+			}
+		}
 	}
 	
 	template <class Archive>
-	void save(Archive& _ar) const
+	void save(Archive& _ar)
 	{
 		_ar(isActivated, chunkDistanceRadius, chunkSize, chunkVertexCount, seed, noiseCount, noiseID,
-			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize);
+			minHeight, maxHeight, heightIntensity, colorCount, colorID, alwaysActualize, GenGOCount);
 
 		for (int i = 0; i < noiseCount; ++i)
-			_ar((int)noiseParams[i].noiseType, (int)noiseParams[i].fractalType, 
-					noiseParams[i].octaves, noiseParams[i].frequency, noiseParams[i].lacunarity, 
-					noiseParams[i].gain, noiseParams[i].weightedStrength, noiseParams[i].pingPongStength);
+			_ar((int)noiseParams[i].noiseType, (int)noiseParams[i].fractalType,
+				noiseParams[i].octaves, noiseParams[i].frequency, noiseParams[i].lacunarity,
+				noiseParams[i].gain, noiseParams[i].weightedStrength, noiseParams[i].pingPongStength);
 
 		std::string null = "nullptr";
 
 		for (int i = 0; i < colorCount; ++i)
 			_ar(colors[i].x, colors[i].y, colors[i].z, colorHeight[i], colorBlend[i], colorStrength[i], textureScale[i], textureID[i] == nullptr ? null : textureID[i]->GetName());
+
+		_ar(nbGOPerChunk);
+		for (int i = 0; i < GenGOCount; ++i)
+		{
+			GenGOParams[i].prefab.save(_ar);
+			_ar(GenGOParams[i].ratio);
+		}
 	}
 };
