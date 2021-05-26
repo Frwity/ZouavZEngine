@@ -16,24 +16,13 @@
 #include "imgui.h"
 #include "extensions/PxRigidActorExt.h"
 
-ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger)
-	 : Component(_gameObject), transform(_transform), isTrigger(_isTrigger)
+ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bool _isTrigger, std::string _name)
+	 : Component(_gameObject, _name), transform(_transform), isTrigger(_isTrigger)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
 	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
-}
-
-
-ShapeCollision::ShapeCollision(const ShapeCollision& _other)
-	: Component(_other)
-{
-	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f); // TODO physxsystem material manager
-	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
-	isTrigger = _other.isTrigger;
-	if (!_other.IsActive())
 		InternalDehactivate();
 }
 
@@ -47,9 +36,24 @@ void ShapeCollision::releasePhysXComponent()
 
 }
 
+void ShapeCollision::SetTrigger(bool _isTrigger)
+{
+	isTrigger = _isTrigger;
+	UpdateIsTrigger();
+}
+
 void ShapeCollision::UpdateIsTrigger()
 {
-	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+	if (isTrigger)
+	{
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+	}
+	else
+	{
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+	}
 }
 
 void ShapeCollision::Editor()
@@ -77,6 +81,10 @@ void ShapeCollision::UpdateShapeTransform()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 	physx::PxShape** shapeActor = nullptr;
+	
+	rigid->actor->getGlobalPose();
+	
+	//transform.UpdateWorldPos(Vec3FromPxVec3(rigid->actor->getGlobalPose().p), QuaternionFromPxQuat(rigid->actor->getGlobalPose().q), {1.0f,1.0f,1.0f});
 
 	if (rigid)
 	{
@@ -87,7 +95,7 @@ void ShapeCollision::UpdateShapeTransform()
   		while(i++ < j - 1)
 		{
 			if (shapeActor[i] == shape)
-				shape->setLocalPose(PxTransformFromTransform(transform));
+				shape->setLocalPose(PxTransformFromTransformLocal(transform));
 		}
 
 		free(shapeActor);
@@ -96,20 +104,17 @@ void ShapeCollision::UpdateShapeTransform()
 
 void ShapeCollision::AttachToRigidComponent()
 {
-	if (shape)
-	{
-		Rigid* rigid = GetGameObject().GetComponent<Rigid>();
+	Rigid* rigid = GetGameObject().GetComponent<Rigid>();
 
-		if (rigid)
+	if (rigid)
+	{
+		//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
+		shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
+		if (shape)
 		{
-			//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
-			shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
-			if (shape)
-			{
-				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
-				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
-				shape->setLocalPose(PxTransformFromTransform(transform));
-			}
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+			shape->setLocalPose(PxTransformFromTransformLocal(transform));
 		}
 	}
 }
@@ -117,32 +122,43 @@ void ShapeCollision::AttachToRigidComponent()
 void ShapeCollision::Activate()
 {
 	Component::Activate();
-	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+	if (shape)
+		UpdateIsTrigger();
 }
 
 void ShapeCollision::Dehactivate()
 {
 	Component::Dehactivate();
-	if(shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	if (shape)
+	{
+		if (IsTrigger())
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
+		else
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	}
 }
 
 void ShapeCollision::InternalActivate()
 {
 	if (isActive && shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
+		UpdateIsTrigger();
 }
 
 void ShapeCollision::InternalDehactivate()
 {
 	if (isActive && shape)
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	{
+		if (IsTrigger())
+			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, false);
+		else
+			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	}
 }
 
-void ShapeCollision::UpdateTransform()
+void ShapeCollision::UpdateTransform() // never called
 {
 	if (shape)
-		shape->setLocalPose(PxTransformFromTransform(transform));
+		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 }
 
 void ShapeCollision::DrawGizmos(const Camera& _camera)

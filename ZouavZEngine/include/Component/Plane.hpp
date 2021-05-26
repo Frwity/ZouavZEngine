@@ -8,14 +8,10 @@ class Plane: public ShapeCollision
 {
 public:
 	Plane() = delete;
-	Plane(GameObject* _gameObject);
-	Plane(const Plane&);
-	Component* Clone() const override { return new Plane(*this); }
+	Plane(GameObject* _gameObject, std::string _name = "Plane");
 	~Plane();
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "Plane"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

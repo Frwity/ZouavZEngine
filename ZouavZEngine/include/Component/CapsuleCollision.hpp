@@ -11,16 +11,12 @@ public:
 	float radius;
 	float halfHeight;
 
-	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
-	CapsuleCollision(const CapsuleCollision&);
-	Component* Clone() const override { return new CapsuleCollision(*this); }
+	CapsuleCollision(GameObject* _gameObject, float _radius = 1.0f, float _halfHeight = 1.0f, bool _isTrigger = false, Transform _tranform = Transform(), std::string _name = "CapsuleCollision");
 	~CapsuleCollision();
 
 	void Editor() override;
 	void UpdateScale() override;
 	void DrawGizmos(const Camera& _camera) override;
-
-	const char* GetComponentName() override { return "CapsuleCollision"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

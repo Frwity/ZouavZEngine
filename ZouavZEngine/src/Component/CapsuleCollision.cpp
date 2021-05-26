@@ -14,9 +14,10 @@
 
 using namespace physx;
 
-CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger, Transform _transform)
+CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float _halfHeight, bool _isTrigger, Transform _transform, std::string _name)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), radius(_radius), halfHeight(_halfHeight)
 {
+	name = _name;
 	geometry = new PxCapsuleGeometry(radius, halfHeight);
 	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
@@ -24,16 +25,6 @@ CapsuleCollision::CapsuleCollision(GameObject* _gameObject, float _radius, float
 
 	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
 	UpdateScale();
-}
-
-CapsuleCollision::CapsuleCollision(const CapsuleCollision& _other)
-	: ShapeCollision(_other), radius(_other.radius), halfHeight(_other.halfHeight)
-{
-	shape = PhysicSystem::physics->createShape(PxCapsuleGeometry(radius, halfHeight), *material);
-
-	AttachToRigidComponent();
-
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Capsule");
 }
 
 CapsuleCollision::~CapsuleCollision()
@@ -82,7 +73,7 @@ void CapsuleCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->SetMatrix("matrix", mat);
 	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(gizmoMesh->GetID());

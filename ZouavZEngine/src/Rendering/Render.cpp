@@ -27,7 +27,7 @@ Render::Render(int _width, int _height)
 
     glViewport(0, 0, width, height);
 
-    //TODO PUT IN DEBUG
+
     Debug::Log(std::string("GL_VENDOR = ").append(((const char*)glGetString(GL_VENDOR))));
     Debug::Log(std::string("GL_RENDERER = ").append(((const char*)glGetString(GL_RENDERER))));
     Debug::Log(std::string("GL_VERSION = ").append(((const char*)glGetString(GL_VERSION))));
@@ -58,7 +58,6 @@ void Render::Init(int _width, int _height)
     glfwMakeContextCurrent(window);
     ZASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)), "Failed to load glad");
 
-    //TODO PUT IN DEBUG
     Debug::Log(std::string("GL_VENDOR = ").append(((const char*)glGetString(GL_VENDOR))));
     Debug::Log(std::string("GL_RENDERER = ").append(((const char*)glGetString(GL_RENDERER))));
     Debug::Log(std::string("GL_VERSION = ").append(((const char*)glGetString(GL_VERSION))));

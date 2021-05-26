@@ -20,25 +20,16 @@
 
 using namespace physx;
 
-BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger, Transform _transform)
+BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isTrigger, Transform _transform, std::string _name)
 	: ShapeCollision(_gameObject, _transform, _isTrigger), halfExtends(_halfExtends)
 {
+	name = _name;
 	geometry = new PxBoxGeometry(PxVec3FromVec3(_halfExtends));
-	shape = PhysicSystem::physics->createShape(*geometry, *material, true);
+	shape = nullptr;
 
-	AttachToRigidComponent();
 	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
 
 	UpdateScale();
-}
-
-BoxCollision::BoxCollision(const BoxCollision& _other)
-	: ShapeCollision(_other), halfExtends{ _other.halfExtends }
-{
-	shape = PhysicSystem::physics->createShape(PxBoxGeometry(PxVec3FromVec3(_other.halfExtends)), *material);
-
-	AttachToRigidComponent();
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Default");
 }
 
 BoxCollision::~BoxCollision()
@@ -60,13 +51,14 @@ void BoxCollision::UpdateScale()
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	if (rigid)
+	if (rigid && shape)
 		rigid->actor->detachShape(*shape);
 
 	geometry = new PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f);
 
 	AttachToRigidComponent();
-	shape->userData = this;
+	if(shape)
+		shape->userData = this;
 }
 
 void BoxCollision::DrawGizmos(const Camera& _camera)
@@ -83,7 +75,7 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->SetMatrix("matrix", mat);
 	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(gizmoMesh->GetID());

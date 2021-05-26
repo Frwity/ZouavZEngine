@@ -12,10 +12,10 @@
 Camera* Camera::mainCamera = nullptr;
 SceneCamera* SceneCamera::sceneCamera = nullptr;
 
-Camera::Camera(class GameObject* _gameObject, int _width, int _height)
-    : Component(_gameObject), width{_width}, height{_height}
+Camera::Camera(class GameObject* _gameObject, int _width, int _height, bool _sceneCamera, std::string _name)
+    : Component(_gameObject, _name), width{_width}, height{_height}
 {
-    if (!mainCamera)
+    if (!mainCamera && !_sceneCamera)
     {
         mainCamera = this;
         isMainCamera = true;
@@ -24,21 +24,6 @@ Camera::Camera(class GameObject* _gameObject, int _width, int _height)
     target = { 0.0f, 0.0f, 0.0f };
     position = { 0.0f, 0.0f, -5.0f };
     projection = Mat4::CreatePerspectiveProjectionMatrix((float)_width, (float)_height, near, far, fov);
-}
-
-Camera::Camera(const Camera& _other)
-    : Component(_other)
-{
-    gameObject = GameObject::currentLoadedGameObject;
-    projection = _other.projection;
-    position = _other.position;
-    target = _other.target;
-    width = _other.width;
-    height = _other.height;
-    near = _other.near;
-    far = _other.far;
-    fov = _other.fov;
-    followGameObjectRotation = _other.followGameObjectRotation;
 }
 
 Camera::~Camera()
@@ -71,12 +56,24 @@ void Camera::Editor()
     if (ImGui::SliderFloat("Fov", &fov, 0.1f, 180.0f)) Resize(width, height);
     ImGui::DragFloat3("Postion", &position.x, 0.1f, -1000.f, 1000.f);
     ImGui::DragFloat3("Target", &target.x, 0.1f, -1000.f, 1000.f);
+    ImGui::Checkbox("Follow GameObject rotation", &followGameObjectRotation);
 }
 
 Mat4 Camera::GetMatrix() const
 {
-    const Vec3 pos = GetGameObject().WorldPosition() + position;
-    const Vec3 targetPos = GetGameObject().WorldPosition() + target;
+    Vec3 pos;
+    Vec3 targetPos;
+
+    if (followGameObjectRotation)
+    {
+        pos = GetGameObject().GetTRSMatrix() * position;
+        targetPos = GetGameObject().GetTRSMatrix() * target;
+    }
+    else
+    {
+        pos = GetGameObject().WorldPosition() + position;
+        targetPos = GetGameObject().WorldPosition() + target;
+    }
 
     const Vec3 forward = (targetPos - pos).Normalized();
     const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
@@ -100,7 +97,7 @@ Mat4 Camera::GetMatrix() const
 
     cameraMatrix.Accessor(3, 3) = 1;
 
-    return followGameObjectRotation ? GetGameObject().WorldRotation().GetRotationMatrix() * cameraMatrix.Reversed() : cameraMatrix.Reversed();
+    return cameraMatrix.Reversed();
 }
 
 void Camera::Resize(int _width, int _height)
@@ -133,7 +130,7 @@ static void Camera::load_and_construct(Archive& _ar, cereal::construct<Camera>& 
 }
 
 SceneCamera::SceneCamera(int _width, int _height)
-    : Camera(nullptr, _width, _height), mousePosition(0.0f, 0.0f), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
+    : Camera(nullptr, _width, _height, true, ""), pitch(0.0f), yaw(0.0f), speed{ 30.0f }
 {
     if (!sceneCamera)
         sceneCamera = this;
@@ -152,73 +149,4 @@ void SceneCamera::MoveTo(const Vec3& _direction)
 Mat4 SceneCamera::GetMatrix() const
 {
     return Mat4::CreateTRSMatrix(position, { pitch, yaw, 0 }, { 1, 1, 1 });
-}
-
-Mat4 SceneCamera::GetLookAtMatrix(const Vec3& _target) const
-{
-    const Vec3 forward = (_target - position).Normalized();
-    const Vec3 right = (forward.Cross(Vec3::up)).Normalized();
-    const Vec3 up = right.Cross(forward);
-
-    Mat4 cameraMatrix;
-
-    cameraMatrix.Accessor(0, 0) = right.x;
-    cameraMatrix.Accessor(0, 1) = right.y;
-    cameraMatrix.Accessor(0, 2) = right.z;
-    cameraMatrix.Accessor(1, 0) = up.x;
-    cameraMatrix.Accessor(1, 1) = up.y;
-    cameraMatrix.Accessor(1, 2) = up.z;
-    cameraMatrix.Accessor(2, 0) = -forward.x;
-    cameraMatrix.Accessor(2, 1) = -forward.y;
-    cameraMatrix.Accessor(2, 2) = -forward.z;
-
-    cameraMatrix.Accessor(0, 3) = -right.Dot(position);
-    cameraMatrix.Accessor(1, 3) = -up.Dot(position);
-    cameraMatrix.Accessor(2, 3) = forward.Dot(position);
-
-    cameraMatrix.Accessor(3, 3) = 1;
-
-    return cameraMatrix;
-}
-
-void SceneCamera::UpdateRotation(const Vec2& _newMousePosition)
-{
-	float dx = mousePosition.x - _newMousePosition.x;
-    float dy = mousePosition.y - _newMousePosition.y;
-    yaw += dx / 1000.0f;
-    pitch += dy / 1000.0f;
-
-    pitch = pitch > -(float)M_PI_2 ? (pitch < (float)M_PI_2 ? pitch : (float)M_PI_2) : -(float)M_PI_2;
-
-    mousePosition = _newMousePosition;
-} 
-
-void SceneCamera::Update(bool _isKeyboardEnable, float _deltaTime)
-{
-    if (!_isKeyboardEnable)
-        return;
-   
-    bool sprint = InputManager::GetKeyPressed(E_KEYS::LCTRL);
-    float cameraSpeed = _deltaTime * Speed() + Speed() * sprint * 1.2f;
-
-    if (InputManager::GetKeyPressed(E_KEYS::W))
-        MoveTo({ 0.0f, 0.0f, -cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::S))
-        MoveTo({ 0.0f, 0.0f, cameraSpeed });
-
-    if (InputManager::GetKeyPressed(E_KEYS::D))
-        MoveTo({ cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::A))
-        MoveTo({ -cameraSpeed, 0.0f, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR))
-        MoveTo({ 0.0f, cameraSpeed, 0.0f });
-
-    if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
-        MoveTo({ 0.0f, -cameraSpeed, 0.0f });
-
-
-    UpdateRotation(InputManager::GetCursorPos());
 }

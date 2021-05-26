@@ -34,28 +34,33 @@ private:
 
 	class Engine& engine;
 
+	bool changedScene = true;
+
 public:
 	bool isKeyboardEnable;
 	Editor(class Engine& _engine);
 
 	void Init();
 	void NewFrame();
-	
+
 	const EDITOR_STATE& GetState() const { return state; }
 
 	bool Display(Render& _render);
 
-	void DisplayMainWindow();
+	void DisplayMainWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void DisplayOptionWindow();
 	void DisplayMenuBar();
 	void DisplaySceneWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void DisplayInspector();
 	void DisplayConsoleWindow();
-	void DisplayGameWindow(class Framebuffer& _framebuffer);
+	void DisplayGameWindow(const class Render& _render, class Framebuffer& _framebuffer);
 	void DisplayProject();
 	void FileMenu();
 	void Update();
+	void CameraUpdateRotation();
+	void CameraUpdate(float _deltaTime);
 	void DisplayHierarchy();
 	void DisplayChild(class GameObject* _parent);
 	void MoveSelectedGameobject();
+	void NewSceneWindow(class Engine& _engine);
 };

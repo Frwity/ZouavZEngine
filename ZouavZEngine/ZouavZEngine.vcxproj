@@ -47,7 +47,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -78,11 +78,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>external_libs/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);VisualLeakDetector/include</IncludePath>
+    <LibraryPath>external_libs/lib;VisualLeakDetector/lib/Win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>external_libs/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,7 +112,6 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,7 +130,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation.lib;PhysXCommon.lib;PhysX.lib;PhysXExtensions_static.lib;PhysXCooking.lib;PhysXPvdSDK_static.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation_d.lib;PhysXCommon_d.lib;PhysX_d.lib;PhysXExtensions_static_d.lib;PhysXCooking_d.lib;PhysXPvdSDK_static_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,15 +141,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>external_lib/include;include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external_lib/include; include;external_lib/include/PhysX</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies);assimp-vc142-mtd.lib;OpenAL32.lib;libsndfile-1.lib;PhysXFoundation.lib;PhysXCommon.lib;PhysX.lib;PhysXExtensions_static.lib;PhysXCooking.lib;PhysXPvdSDK_static.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>external_lib/libs</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -163,6 +165,7 @@
     <ClCompile Include="external_lib\src\imgui_draw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="external_lib\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="external_lib\src\imgui_stdlib.cpp" />
     <ClCompile Include="external_lib\src\imgui_tables.cpp" />
     <ClCompile Include="external_lib\src\imgui_widgets.cpp" />
     <ClCompile Include="external_lib\src\ImSequencer.cpp" />
@@ -176,6 +179,7 @@
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\Plane.cpp" />
+    <ClCompile Include="src\Component\RegisterComponents.cpp" />
     <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
     <ClCompile Include="src\Component\RigidStatic.cpp" />
@@ -186,7 +190,7 @@
     <ClCompile Include="src\Component\Transform.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Game\Generato.cpp" />
+    <ClCompile Include="src\Game\ICharacter.cpp" />
     <ClCompile Include="src\Game\Move.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -204,6 +208,7 @@
     <ClCompile Include="src\Rendering\AnimResource.cpp" />
     <ClCompile Include="src\Rendering\Bone.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
+    <ClCompile Include="src\Rendering\CubemapTexture.cpp" />
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Material.cpp" />
@@ -224,11 +229,14 @@
     <ClCompile Include="src\System\Terrain.cpp" />
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
+    <ClCompile Include="src\Game\Enemy.cpp" />
+    <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external_lib\include\ImCurveEdit.h" />
     <ClInclude Include="external_lib\include\ImGradient.h" />
     <ClInclude Include="external_lib\include\ImGuizmo.h" />
+    <ClInclude Include="external_lib\include\imgui_stdlib.h" />
     <ClInclude Include="external_lib\include\ImSequencer.h" />
     <ClInclude Include="external_lib\include\ImZoomSlider.h" />
     <ClInclude Include="external_lib\src\imgui_internal.h" />
@@ -242,6 +250,7 @@
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\Plane.hpp" />
+    <ClInclude Include="include\Component\RegisterComponent.hpp" />
     <ClInclude Include="include\Component\Rigid.hpp" />
     <ClInclude Include="include\Component\RigidBody.hpp" />
     <ClInclude Include="include\Component\RigidStatic.hpp" />
@@ -251,7 +260,7 @@
     <ClInclude Include="include\Component\SphereCollision.hpp" />
     <ClInclude Include="include\Component\Transform.hpp" />
     <ClInclude Include="include\GameObject.hpp" />
-    <ClInclude Include="include\Game\Generato.hpp" />
+    <ClInclude Include="include\Game\ICharacter.hpp" />
     <ClInclude Include="include\Game\Move.hpp" />
     <ClInclude Include="include\Game\Player.hpp" />
     <ClInclude Include="include\Maths\Mat4.hpp" />
@@ -263,11 +272,13 @@
     <ClInclude Include="include\Multithread\Task.h" />
     <ClInclude Include="include\Multithread\TaskSystem.h" />
     <ClInclude Include="include\Multithread\ThreadPool.h" />
+    <ClInclude Include="include\Object.hpp" />
     <ClInclude Include="include\Prefab.hpp" />
     <ClInclude Include="include\Rendering\Animator.hpp" />
     <ClInclude Include="include\Rendering\AnimResource.hpp" />
     <ClInclude Include="include\Rendering\Bone.hpp" />
     <ClInclude Include="include\Rendering\Camera.hpp" />
+    <ClInclude Include="include\Rendering\CubemapTexture.hpp" />
     <ClInclude Include="include\Rendering\Font.hpp" />
     <ClInclude Include="include\Rendering\Framebuffer.hpp" />
     <ClInclude Include="include\Rendering\Material.hpp" />
@@ -290,6 +301,10 @@
     <ClInclude Include="include\System\SoundManager.hpp" />
     <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
+    <ClInclude Include="VisualLeakDetector\include\vld.h" />
+    <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
+    <ClInclude Include="include\Game\Enemy.hpp" />
+    <!--Include End-->
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Anim.shader" />

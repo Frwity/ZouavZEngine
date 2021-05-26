@@ -16,9 +16,10 @@
 
 using namespace physx;
 
-SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _tranform)
+SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _isTrigger, Transform _tranform, std::string _name)
 	: ShapeCollision(_gameObject, _tranform, _isTrigger), radius(_radius)
 {	
+	name = _name;
 	geometry = new PxSphereGeometry(_radius);
 	shape = PhysicSystem::physics->createShape(*geometry, *material);
 
@@ -28,17 +29,6 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
 	UpdateScale();
 }
-
-SphereCollision::SphereCollision(const SphereCollision& _other)
-	: ShapeCollision(_other), radius{_other.radius}
-{
-	shape = PhysicSystem::physics->createShape(PxSphereGeometry(_other.radius), *material);
-	
-	AttachToRigidComponent();
-
-	gizmoMesh = *ResourcesManager::GetResource<Mesh>("Sphere");
-
-} 
 
 SphereCollision::~SphereCollision()
 {
@@ -83,7 +73,7 @@ void SphereCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->SetMatrix("matrix", mat);
 	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	gizmoShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+	gizmoShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(gizmoMesh->GetID());

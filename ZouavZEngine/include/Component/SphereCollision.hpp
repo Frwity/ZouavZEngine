@@ -10,16 +10,12 @@ class SphereCollision : public ShapeCollision
 public:
 	float radius;
 
-	SphereCollision(GameObject* _gameObject, float _radius = 1.0f, bool _isTrigger = false, Transform _tranform = Transform());
-	SphereCollision(const SphereCollision&);
-	Component* Clone() const override { return new SphereCollision(*this); }
+	SphereCollision(GameObject* _gameObject, float _radius = 1.0f, bool _isTrigger = false, Transform _tranform = Transform(), std::string _name = "SphereCollision");
 	~SphereCollision();
 
 	void Editor() override;
 	void UpdateScale();
 	void DrawGizmos(const Camera& _camera) override;
-
-	const char* GetComponentName() override { return "SphereCollision"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

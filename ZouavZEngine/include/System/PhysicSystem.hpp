@@ -12,10 +12,12 @@
 #include "System/Debug.hpp"
 #include "Terrain.hpp"
 
+#include "Object.hpp"
 #include "GameObject.hpp"
 #include "Component/Rigid.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/ScriptComponent.hpp"
+#include "Component/ShapeCollision.hpp"
 
 namespace physx
 {
@@ -39,25 +41,37 @@ public:
 	
 	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count) override 
 	{ 
-		Rigid* otherActor = static_cast<Rigid*>(pairs->otherActor->userData);
-		Rigid* triggerActor = static_cast<Rigid*>(pairs->triggerActor->userData);
+		for (physx::PxU32 i = 0; i < count; ++i)
+		{
+			if (!static_cast<ShapeCollision*>(pairs[i].triggerShape->userData)->IsActive())
+				return;
 
-		triggerActor->OnTrigger(&otherActor->GetGameObject(), pairs->triggerShape);
+			if (pairs[i].triggerShape->userData && pairs[i].triggerActor->userData)
+			{
+				Object* otherActor = static_cast<Object*>(pairs[i].otherActor->userData);
+				GameObject* triggerActor = static_cast<GameObject*>(pairs[i].triggerActor->userData);
+
+				if (otherActor && triggerActor)
+					triggerActor->GetComponent<Rigid>()->OnTrigger(otherActor, pairs[i].triggerShape);
+			}
+		}
 	}
 
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
-	{
+	{ // TODO do all on contact like trigger
 		physx::PxRigidActor* rd = pairHeader.actors[0]->is<physx::PxRigidActor>();
 		physx::PxRigidActor* rd2 = pairHeader.actors[1]->is<physx::PxRigidActor>();
 
-		if (rd && rd2)
+		if (rd && rd2 && rd->userData && rd2->userData)
 		{
-			Rigid* rb1 = static_cast<Rigid*>(rd->userData);
-			Rigid* rb2 = static_cast<Rigid*>(rd2->userData);
+			Object* obj1 = static_cast<Object*>(rd->userData);
+			Object* obj2 = static_cast<Object*>(rd2->userData);
 
-			rb1->OnContact(&rb2->GetGameObject(), pairHeader.pairs->shapes[0]);
-			rb2->OnContact(&rb1->GetGameObject(), pairHeader.pairs->shapes[1]);
+			if (dynamic_cast<GameObject*>(obj1))
+				static_cast<GameObject*>(obj1)->GetComponent<Rigid>()->OnContact(obj2, pairHeader.pairs->shapes[0]);
+			if (dynamic_cast<GameObject*>(obj2))
+				static_cast<GameObject*>(obj2)->GetComponent<Rigid>()->OnContact(obj1, pairHeader.pairs->shapes[0]);
 		}
 
 		PX_UNUSED((pairs));
@@ -81,7 +95,6 @@ public:
 	static physx::PxPhysics* physics;
 	static physx::PxCooking* cooking;
 	static physx::PxScene* scene;
-	static physx::PxPvdSceneClient* pvdClient;
 	static physx::PxPvdTransport* transport;
 	//static PhysicEventCallback* physicEventCallback;
 

@@ -20,10 +20,7 @@
 #include "System/FontSystem.hpp"
 #include "System/Engine.hpp"
 #include "System/SoundManager.hpp"
-#include "Game/Move.hpp"
-#include "Game/Player.hpp"
 #include "Sound.hpp"
-#include "cereal/archives/json.hpp"
 #include <iostream>
 #include "System/PhysicSystem.hpp"
 #include "Component/BoxCollision.hpp"
@@ -44,8 +41,9 @@ Engine::Engine()
 
     SoundManager::Init();
     PhysicSystem::Init();
-
     TimeManager::Init();
+    ScriptSystem::Init();
+
 
 #ifdef EDITOR
     editor.Init();
@@ -78,9 +76,9 @@ void Engine::LoadDefaultResources()
     Texture::errorTexture = ResourcesManager::AddResourceTexture("Error", false, "resources/error.jpg")->get();
 }
 
-void Engine::Load()
+void Engine::Load(bool _changedScene)
 {
-    scene.Load();
+    scene.Load(_changedScene);
 }
 
 void Engine::Save()
@@ -99,27 +97,29 @@ void Engine::Update()
 
         ImGui::ShowDemoWindow();
 
+        if (editor.Display(render))
+        {
+            scene.DisplayTerrainOptionWindow();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
+        }
+
         if (editor.GetState() == EDITOR_STATE::PLAYING)
         {
             ScriptSystem::FixedUpdate();
             scene.Update();
-            scene.GetWorld().UpdateTransform(Mat4::identity);
             ScriptSystem::Update();
             SoundManager::Update();
+            scene.GetWorld().UpdateTransform(Mat4::identity);
         }
         else
             scene.GetWorld().UpdateTransform(Mat4::identity);
-       
-        GameObject::DestroyGameObjectIfNeedTo();
-
-        if (editor.Display(render))
-            scene.DisplayTerrainOptionWindow();
 
         ////////////////
         render.BindSceneFBO(); 
 
         scene.UpdateShaderUniform(*SceneCamera::GetSceneCamera());
         scene.Draw(&scene.GetWorld(), SceneCamera::GetSceneCamera());
+        scene.terrain.Draw(*SceneCamera::GetSceneCamera());
         FontSystem::DrawFonts(*SceneCamera::GetSceneCamera());
 
         render.BindGameFBO();
@@ -128,6 +128,7 @@ void Engine::Update()
         {
             scene.UpdateShaderUniform(*Camera::GetMainCamera());
             scene.Draw(&scene.GetWorld(), Camera::GetMainCamera());
+            scene.terrain.Draw(*SceneCamera::GetSceneCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }
         
@@ -135,6 +136,8 @@ void Engine::Update()
         /////////////////
         
         editor.Update();
+        GameObject::DestroyGameObjectIfNeedTo();
         render.Update();
+        InputManager::UpdateOldMousePos();
     }
 }

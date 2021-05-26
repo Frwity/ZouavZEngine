@@ -17,14 +17,10 @@ public:
 	bool lockX, lockY, lockZ = false;
 
 	RigidBody() = delete;
-	RigidBody(GameObject* _gameObject);
-	RigidBody(const RigidBody&);
-	Component* Clone() const override { return new RigidBody(*this); }
+	RigidBody(GameObject* _gameObject, std::string _name = "RigidBody");
 	~RigidBody();
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "RigidBody"; }
 
 	void SetLinearVelocity(const class Vec3& v);
 	class Vec3 GetLinearVelocity();
@@ -35,6 +31,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(lockX, lockY, lockZ);
 		_ar(cereal::base_class<Component>(this));
 	}
 

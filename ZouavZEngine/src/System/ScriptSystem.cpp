@@ -1,7 +1,16 @@
 #include "Component/ScriptComponent.hpp"
+#include "GameObject.hpp"
 #include "System/ScriptSystem.hpp"
 
+#include "Component/RegisterComponent.hpp"
+
 std::vector<ScriptComponent*> ScriptSystem::scripts;
+std::vector<bool (*)(GameObject*)> ScriptSystem::addComponentsFunctions;
+
+void ScriptSystem::Init()
+{
+	RegisterComponents(addComponentsFunctions);
+}
 
 void ScriptSystem::AddScript(ScriptComponent* _script)
 {

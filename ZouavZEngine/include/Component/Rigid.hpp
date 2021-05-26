@@ -19,18 +19,14 @@ public:
 	physx::PxRigidActor* actor = nullptr;
 
 	Rigid() = delete;
-	Rigid(class GameObject* _gameObject);
-	Rigid(const Rigid&);
-	Component* Clone() const override { return new Rigid(*this); }
+	Rigid(class GameObject* _gameObject, std::string _name = "Rigid");
 	~Rigid();
-
-	const char* GetComponentName() override { return "Rigid"; }
 
 	void Activate() override;
 	void Dehactivate() override;
 
 	virtual void UpdateTransform(Transform transform) {};
 
-	virtual void OnContact(GameObject* _other, physx::PxShape* _collidingShap);
-	virtual void OnTrigger(GameObject* _other, physx::PxShape* _collidingShape);
+	virtual void OnContact(class Object* _other, physx::PxShape* _collidingShap);
+	virtual void OnTrigger(class Object* _other, physx::PxShape* _collidingShape);
 };

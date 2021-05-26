@@ -2,6 +2,8 @@
 
 #include "Maths/Vec4.hpp"
 
+#include <memory>
+ 
 class Material
 {
 public:

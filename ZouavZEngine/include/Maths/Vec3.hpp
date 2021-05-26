@@ -35,6 +35,7 @@ class Vec3
         Vec3 Cross(const Vec3& _v) const;
         float Dot(const Vec3& _v) const;
         float AngleToVector(const Vec3& _v) const;  
+        float SignedAngleToVector(const Vec3& _v, const Vec3& _n) const;
         float DistanceToVector(const Vec3& _v) const;
         bool Colinear(const Vec3& _v) const;
 
@@ -54,6 +55,13 @@ class Vec3
         void operator/=(float _value);
 
         Vec3 operator-() const;
+
+
+        template <class Archive>
+        void serialize(Archive& _ar)
+        {
+            _ar(x, y, z);
+        }
 };
 
 Vec3 operator*(float _number, const Vec3& _rhs);

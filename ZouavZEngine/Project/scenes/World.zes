@@ -2,111 +2,106 @@
     "value0": "World",
     "value1": "",
     "value2": 1,
-    "value3": [],
-    "value4": 0.0,
-    "value5": 0.0,
-    "value6": 0.0,
-    "value7": 0.0,
-    "value8": 0.0,
-    "value9": 0.0,
-    "value10": 1.0,
-    "value11": 1.0,
-    "value12": 1.0,
-    "value13": 1.0,
-    "value14": true,
-    "value15": false,
-    "value16": "New GameObject",
-    "value17": " ",
-    "value18": 0,
-    "value19": [
+    "value3": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value4": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value5": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value6": true,
+    "value7": false,
+    "value8": [
         {
             "polymorphic_id": 2147483649,
-            "polymorphic_name": "MeshRenderer",
+            "polymorphic_name": "Light",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Cube.obj",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": true
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483650,
-            "polymorphic_name": "RigidBody",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": true
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 2147483651,
-            "polymorphic_name": "BoxCollision",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 1.0,
-                    "value1": 1.0,
-                    "value2": 1.0,
-                    "value3": {
-                        "value0": true
+                    "value0": 0.5,
+                    "value1": 0.5,
+                    "value2": 0.5,
+                    "value3": 0.5,
+                    "value4": 0.5,
+                    "value5": 0.5,
+                    "value6": 0.5,
+                    "value7": 0.5,
+                    "value8": 0.5,
+                    "value9": 1.0,
+                    "value10": 0.009999999776482582,
+                    "value11": 0.0010000000474974514,
+                    "value12": 0.0,
+                    "value13": -1.0,
+                    "value14": 0.0,
+                    "value15": 0.8999999761581421,
+                    "value16": 0.800000011920929,
+                    "value17": 0,
+                    "value18": {
+                        "value0": true,
+                        "value1": "Light"
                     }
                 }
             }
         }
     ],
-    "value20": 0.0,
-    "value21": 0.0,
-    "value22": 0.0,
-    "value23": 0.0,
-    "value24": 0.0,
-    "value25": 0.0,
-    "value26": 1.0,
-    "value27": 1.0,
-    "value28": 1.0,
-    "value29": 1.0,
+    "value9": "New GameObject",
+    "value10": "Player",
+    "value11": 0,
+    "value12": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value13": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value14": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value15": true,
+    "value16": false,
+    "value17": [],
+    "value18": true,
+    "value19": 128.0,
+    "value20": 128,
+    "value21": 16,
+    "value22": 0,
+    "value23": 1,
+    "value24": 0,
+    "value25": -10.0,
+    "value26": 30.0,
+    "value27": 30.0,
+    "value28": 1,
+    "value29": 0,
     "value30": true,
-    "value31": false,
-    "value32": false,
-    "value33": 512.0,
-    "value34": 128,
-    "value35": 16,
-    "value36": 0,
-    "value37": 1,
-    "value38": 0,
-    "value39": -10.0,
-    "value40": 30.0,
-    "value41": 30.0,
-    "value42": 1,
-    "value43": 0,
-    "value44": true,
-    "value45": 0,
-    "value46": 0,
-    "value47": 1,
-    "value48": 0.009999999776482582,
-    "value49": 2.0,
-    "value50": 0.5,
-    "value51": 0.0,
-    "value52": 2.0,
-    "value53": 0.0,
-    "value54": 0.0,
-    "value55": 0.0,
-    "value56": 0.0,
-    "value57": 0.0,
-    "value58": 0.0,
-    "value59": 1.0,
-    "value60": "nullptr"
+    "value31": 0,
+    "value32": 0,
+    "value33": 1,
+    "value34": 0.009999999776482582,
+    "value35": 2.0,
+    "value36": 0.5,
+    "value37": 0.0,
+    "value38": 2.0,
+    "value39": 0.0,
+    "value40": 0.0,
+    "value41": 0.0,
+    "value42": 0.0,
+    "value43": 0.0,
+    "value44": 0.0,
+    "value45": 1.0,
+    "value46": "nullptr"
 }

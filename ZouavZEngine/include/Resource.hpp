@@ -10,6 +10,7 @@ protected:
 	std::string name;
 	std::vector<std::string> paths;
 	bool deletable = true;
+	bool hasToBeDelete = false;
 
 public:
 

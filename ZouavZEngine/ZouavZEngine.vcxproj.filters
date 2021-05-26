@@ -260,6 +260,23 @@
     </ClCompile>
     <ClCompile Include="src\Rendering\AnimResource.cpp">
       <Filter>src\Rendering</Filter>
+    <ClCompile Include="src\Rendering\CubemapTexture.cpp">
+      <Filter>src\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\RegisterComponents.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="external_lib\src\imgui_stdlib.cpp">
+      <Filter>external_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ICharacter.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Enemy.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\ThirdPersonCamera.cpp">
+      <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +471,32 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\AnimResource.hpp">
       <Filter>include\Rendering</Filter>
+    <ClInclude Include="include\Rendering\CubemapTexture.hpp">
+      <Filter>include\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\RegisterComponent.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="external_lib\include\imgui_stdlib.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\ICharacter.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualLeakDetector\include\vld.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualLeakDetector\include\vld_def.h">
+      <Filter>external_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Enemy.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\ThirdPersonCamera.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object.hpp">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

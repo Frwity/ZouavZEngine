@@ -3,15 +3,16 @@
 #include "Maths/Mat4.hpp"
 #include "System/ResourcesManager.hpp"
 #include "System/FontSystem.hpp"
-#include "Component/FontComponent.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
+#include "imgui_stdlib.h"
+#include "Component/FontComponent.hpp"
 
 
 
-FontComponent::FontComponent(class GameObject* _gameObject)
-	: Component( _gameObject),	font{ *ResourcesManager::GetResource<Font>("Default") }, 
+FontComponent::FontComponent(class GameObject* _gameObject, std::string _name)
+	: Component( _gameObject, _name),	font{ *ResourcesManager::GetResource<Font>("Default") }, 
 								shader3D { *ResourcesManager::GetResource<Shader>("Font3DShader") },
 								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
 								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }
@@ -20,37 +21,14 @@ FontComponent::FontComponent(class GameObject* _gameObject)
 	FontSystem::AddFont3D(this);
 }
 
-FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _font)
-	: Component(_gameObject),	font{ _font }, 
+FontComponent::FontComponent(GameObject* _gameObject, std::shared_ptr<Font>& _font, std::string _name)
+	: Component(_gameObject, _name),	font{ _font }, 
 								shader3D{ *ResourcesManager::GetResource<Shader>("Font3DShader") },
 								shaderBillboard{ *ResourcesManager::GetResource<Shader>("FontBillboardShader") },
 								shader2D{ *ResourcesManager::GetResource<Shader>("Font2DShader") }
 {
 	ChangeText(text.c_str(), text.size());
 	FontSystem::AddFont3D(this);
-}
-
-FontComponent::FontComponent(const FontComponent& _other)
-	: Component(_other), font{ _other.font }, shader3D{ _other.shader3D }, shaderBillboard{ _other.shaderBillboard }, shader2D{ _other.shader2D }
-{
-	color = _other.color;
-	position = _other.position;
-	fontSize = _other.fontSize;
-
-	width = _other.width;
-	edge = _other.edge;
-
-	outlineWidth = _other.outlineWidth;
-	outlineEdge = _other.outlineEdge;
-	outlineColor = _other.outlineColor;
-
-	offset = _other.offset;
-
-	depthTest = _other.depthTest;
-	fontType = E_FONT_TYPE::NOFONT;
-
-	ChangeType(_other.fontType);
-	ChangeText(_other.text.c_str(), _other.text.size());
 }
 
 FontComponent::~FontComponent()
@@ -111,12 +89,8 @@ void FontComponent::ChangeType(E_FONT_TYPE _newType)
 
 void FontComponent::Editor()
 {
-	std::string tempText = text;
-	if (ImGui::InputText("Text : ", tempText.data(), 1024))
-	{
-		text = tempText;
+	if (ImGui::InputText("Text : ", &text))
 		ChangeText(text.c_str(), text.size());
-	}
 
 	std::string oldValue = fontType == E_FONT_TYPE::FONT3D ? "Font 3D" : fontType == E_FONT_TYPE::FONTBILLBOARD ? "Font Billboard" : "Font 2D";
 	if (ImGui::BeginCombo("Type : ", oldValue.c_str()))
@@ -132,7 +106,7 @@ void FontComponent::Editor()
 	if (ImGui::InputFloat("Font Size :", &fontSize, 0.1f))
 		ChangeText(text.c_str(), text.size());
 
-	ImGui::ColorEdit4("Color :", &color.w);
+	ImGui::ColorEdit4("Color :", &color.x);
 	
 	ImGui::DragFloat3("Position :", &position.x, 0.1f);
 	
@@ -190,8 +164,7 @@ void FontComponent::DrawBillboard(const Camera& _camera)
 	font->GetTexture().Use();
 
 	shaderBillboard->SetVector3("centerPos", GetGameObject().WorldPosition());
-	shaderBillboard->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale())
-										* Mat4::CreateTranslationMatrix(position));	
+	shaderBillboard->SetMatrix("model", Mat4::CreateTranslationMatrix(position));	
 	shaderBillboard->SetVector4("color", color);
 	shaderBillboard->SetFloat("width", width);
 	shaderBillboard->SetFloat("edge", edge);
@@ -237,6 +210,12 @@ void FontComponent::Draw2D(const Camera& _camera)
 
 	if (!depthTest)
 		glEnable(GL_DEPTH_TEST);
+}
+
+void FontComponent::ChangeText(std::string _newText)
+{
+	const char* _text = _newText.c_str();
+	ChangeText(_text, _newText.size());
 }
 
 void FontComponent::ChangeText(const char* _newText, int _size)

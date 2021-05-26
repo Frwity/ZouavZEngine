@@ -8,12 +8,12 @@
 #include "System/Debug.hpp"
 #include "imgui.h"
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader)
-    : Component(_gameObject), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
+MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader, std::string _name)
+    : Component(_gameObject, _name), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
 {}
 
-MeshRenderer::MeshRenderer(GameObject* _gameObject)
-    : Component(_gameObject), 
+MeshRenderer::MeshRenderer(GameObject* _gameObject, std::string _name)
+    : Component(_gameObject, _name), 
       mesh{ *ResourcesManager::GetResource<Mesh>("Default") }
 {}
 
@@ -32,11 +32,7 @@ void MeshRenderer::Draw(const Camera& _camera)
     material.shader->Use();
     glActiveTexture(GL_TEXTURE0);
     Texture::Use(material.texture.get());
-    //Mat4 matrixCamera = _camera.GetMatrix();
 
-    //material.shader->SetMatrix("view", matrixCamera.Reversed());
-    //material.shader->SetMatrix("projection", _camera.GetProjetionMatrix());
-    //material.shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
     material.shader->SetMatrix("model", Mat4::CreateTRSMatrix(GetGameObject().WorldPosition(), GetGameObject().WorldRotation(), GetGameObject().WorldScale()));
     material.shader->SetVector4("color", material.color);
 
@@ -121,7 +117,7 @@ void MeshRenderer::Editor()
     TextureEditor();
     MeshEditor();
     ShaderEditor();
-	ImGui::ColorEdit4("Color : ", &material.color.w);
+	ImGui::ColorEdit4("Color : ", &material.color.x);
 }
 
 template <class Archive>

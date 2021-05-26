@@ -1,20 +1,28 @@
 #pragma once
+
 #include "Rendering/Mesh.hpp"
 #include "Rendering/Shader.hpp"
 #include "Rendering/Texture.hpp"
+#include "Prefab.hpp"
 #include "System/ResourcesManager.hpp"
-#include "Component/RigidStatic.hpp"
+#include "Object.hpp"
 
 #include <FastNoiseLite.h>
 
 #include <unordered_map>
-#include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 #include <cereal/types/string.hpp>
 #include "cereal/access.hpp"
 
 #define MAX_NOISE_COUNT 4
 #define MAX_COLOR_COUNT 8 // need to change the TerrainShader.vs define too // TODO change only one
+#define MAX_GENGO_COUNT 10
+
+struct GeneratedGameObjectParam
+{
+	Prefab prefab;
+	int ratio = 1;
+};
 
 struct NoiseParam
 {
@@ -33,11 +41,15 @@ namespace physx
 	class PxRigidStatic;
 	class PxMaterial;
 	class PxShape;
+	class PxRigidActor;
 }	
 
 struct ChunkCreateArg
 {
-	std::vector<physx::PxMaterial*>* material;
+	std::vector<physx::PxMaterial*>& material;
+	std::vector<GeneratedGameObjectParam>& toGeneratePrefabs;
+	int nbGOPerChunk;
+	int totalRatio;
 
 	Vec2 pos;
 
@@ -54,14 +66,21 @@ struct ChunkCreateArg
 };
 
 
-class Chunk : public RigidStatic
+class Chunk : public Object
 {
 private:
+
+	std::vector<class GameObject*> generatedGameObjects;
+
 	Mesh mesh{"chunkMesh"};
 
 	physx::PxShape* shape = nullptr;
 
 	Vec2 pos{};
+
+	physx::PxRigidActor* actor = nullptr;
+
+	float yScalePrecision = 128.0f;
 
 	int size = 0;
 	int vertexCount = 0;
@@ -69,8 +88,7 @@ private:
 	bool isGenerated = false;
 public:
 
-	Chunk() = default; 
-	Chunk(GameObject* _gameObject = nullptr): RigidStatic(_gameObject) {};
+	Chunk() : Object("Chunk", "Ground") {}
 	~Chunk();
 
 	float CalculateHeigt(ChunkCreateArg _cca, float _x, float _z);
@@ -101,7 +119,7 @@ public:
 	
 	class GameObject* actualizer = nullptr;
 
-	float chunkDistanceRadius = 512;
+	float chunkDistanceRadius = 128;
 
 	// chunk variable
 
@@ -129,6 +147,14 @@ public:
 	std::vector<float> textureScale;
 	std::vector<std::shared_ptr<Texture>> textureID;
 
+	// Generated Gameobject variable
+	
+	std::vector<GeneratedGameObjectParam> GenGOParams;
+	int totalRatio = 1;
+	int nbGOPerChunk = 1;
+	int GenGOCount = 0;
+	int GenGOID = 0;
+
 	// editor variable
 
 	bool alwaysActualize = true;
@@ -150,6 +176,11 @@ public:
 
 	void AddColorLayer();
 	void DeleteCurrentColorLayer();
+
+	void AddGenGO();
+	void DeleteCurrentGenGO();
+
+	void ComputeTotalRatio();
 
 	template <class Archive>
 	void load(Archive& _ar)

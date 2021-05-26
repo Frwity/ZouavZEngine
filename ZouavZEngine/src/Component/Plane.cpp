@@ -6,18 +6,11 @@
 
 using namespace physx;
 
-Plane::Plane(GameObject* _gameObject)
+Plane::Plane(GameObject* _gameObject, std::string _name)
 	: ShapeCollision(_gameObject)
 {
 	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
-
-	AttachToRigidComponent();
-}
-
-Plane::Plane(const Plane& _other)
-	: ShapeCollision(_other)
-{
-	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
+	name = _name;
 
 	AttachToRigidComponent();
 }

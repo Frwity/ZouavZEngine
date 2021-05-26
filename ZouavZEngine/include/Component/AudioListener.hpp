@@ -7,17 +7,13 @@ class AudioListener : public Component
 {
 public:
 	AudioListener() = delete;
-	AudioListener(class GameObject* _gameObject);
-	AudioListener(const AudioListener&);
-	Component* Clone() const override { return new AudioListener(*this); }
+	AudioListener(class GameObject* _gameObject, std::string _name = "AudioListener");
 
 	~AudioListener() = default;
 
 	void Update();
 
 	void Editor() override;
-
-	const char* GetComponentName() override { return "AudioListener"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

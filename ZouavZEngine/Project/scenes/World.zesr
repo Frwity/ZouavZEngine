@@ -42,5 +42,9 @@
     "value40": 1,
     "value41": "Default",
     "value42": false,
-    "value43": "resources/Arial.fnt"
+    "value43": "resources/Arial.fnt",
+    "value44": 1,
+    "value45": "Default",
+    "value46": false,
+    "value47": "resources/Skybox.dds"
 }

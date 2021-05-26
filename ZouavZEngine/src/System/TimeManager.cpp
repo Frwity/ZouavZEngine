@@ -31,6 +31,9 @@ void TimeManager::Init()
 {
 	gameClock = CreateClock();
 	gameClock->activate = false;
+	time = 0.01f;
+	deltaTime = 0.01667f;
+	previousTime = 0.0f;
 }
 
 #include <iostream>

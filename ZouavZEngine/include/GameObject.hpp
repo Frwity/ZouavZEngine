@@ -2,9 +2,9 @@
 
 #include "Component/Transform.hpp"
 #include "Component/Component.hpp"
+#include "Object.hpp"
 
 #include <cereal/types/base_class.hpp>
-#include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 #include <cereal/types/memory.hpp>
 #include <cereal/types/string.hpp>
@@ -15,12 +15,7 @@
 #include <unordered_map>
 #include <memory>
 
-namespace cereal
-{
-	class JSONOutputArchive;
-};
-
-class GameObject : public Transform
+class GameObject : public Transform, public Object
 {
 private:
 	friend class Editor;
@@ -38,28 +33,22 @@ private:
 	bool toDestroy{ false };
 	bool isPrefab{ false };
 
-	std::string name;
-	std::string tag;
-
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
+
+	void ScriptOnAddComponent();
+
+	static float minY;
+
 public:
 	static GameObject* currentLoadedGameObject;
 
 	GameObject() = delete;
-	GameObject(const std::string& _name);
-	GameObject(const std::string& _name, const std::string& _tag);
+	GameObject(const std::string& _name, const std::string& _tag = "");
 	GameObject& operator=(const GameObject&);
-	GameObject(const GameObject&);
-	GameObject(GameObject&&) = default;
 	~GameObject() = default;
 
 	void Destroy();
-
-	const std::string& GetName() const { return name; }
-	void SetName(const std::string& _newName) { name = _newName; }
-	const std::string& GetTag() const { return tag; }
-	void SetTag(const std::string& _newTag) { tag = _newTag; }
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
@@ -74,7 +63,8 @@ public:
 	static GameObject* CreateGameObject(const std::string& _name, const std::string& _tag);
 
 	const std::vector<GameObject*>& GetChildren() const { return children; }
-	const GameObject* GetParent() const { return parent; }
+	GameObject& GetChild(int _at) const { return *children[_at]; }
+	GameObject& GetParent() const { return *parent; }
 
 	bool IsChildOf(const GameObject* _gameObject) const;
 	void AddChild(GameObject* _child);
@@ -85,6 +75,7 @@ public:
 	T* AddComponent(Args&&... _args)
 	{
 		components.emplace_back(std::make_unique<T>(this, _args...));
+		ScriptOnAddComponent();
 		return static_cast<T*>(components.back().get());
 	}
 
@@ -101,7 +92,7 @@ public:
 	}
 
 	template<typename T>
-	std::vector<T*> GetComponents()
+	std::vector<T*> GetComponents() const
 	{
 		std::vector<T*> returnComponents;
 		for (const std::unique_ptr<Component>& component : components)
@@ -113,8 +104,19 @@ public:
 		return returnComponents;
 	}
 
-	void UpdateTransform(const class Mat4& _heritedTransform);
+	template<typename T>
+	T* GetComponentByName(std::string _name)
+	{
+		for (const std::unique_ptr<Component>& component : components)
+		{
+			T* returnComponent = dynamic_cast<T*>(component.get());
+			if (returnComponent && _name.compare(returnComponent->GetName()) == 0)
+				return returnComponent;
+		}
+		return nullptr;
+	}
 
+	void UpdateTransform(const class Mat4& _heritedTransform);
 	const std::vector<std::unique_ptr<Component>>& GetComponents();
 
 	void RemoveComponent(Component* _component);
@@ -134,16 +136,15 @@ public:
 
 		currentLoadedGameObject = this;
 
-		_ar(name, tag, nbChild, components,
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z, isActive, isPrefab);
+		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab);
+		UpdateTransform(Mat4::identity);
+		_ar(components);
 
 		std::string childName;
 		std::string childTag;
 		int nbChild2;
 
-		for (int i = 0; i < nbChild; ++i) // TODO compress recurss
+		for (int i = 0; i < nbChild; ++i)
 		{
 			GameObject* gameobject;
 			_ar(childName, childTag, nbChild2);
@@ -155,10 +156,9 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive, gameobject->isPrefab);
+			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
+			UpdateTransform(Mat4::CreateTRSMatrix(WorldPosition(), WorldRotation(), WorldScale()));
+			_ar(gameobject->components);
 
 			loadRecurss(_ar, gameobject, nbChild2);
 		}
@@ -184,11 +184,9 @@ public:
 
 			currentLoadedGameObject = gameobject;
 
-			_ar(gameobject->components,
-				gameobject->localPosition.x, gameobject->localPosition.y, gameobject->localPosition.z,
-				gameobject->localRotation.x, gameobject->localRotation.y, gameobject->localRotation.z, gameobject->localRotation.w,
-				gameobject->localScale.x, gameobject->localScale.y, gameobject->localScale.z, gameobject->isActive, gameobject->isPrefab);
-
+			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
+			UpdateTransform(Mat4::CreateTRSMatrix(_gameobject->WorldPosition(), _gameobject->WorldRotation(), _gameobject->WorldScale()));
+			_ar(gameobject->components);
 			_gameobject->AddChild(gameobject);
 
 			loadRecurss(_ar, gameobject, nbChild2);
@@ -199,10 +197,7 @@ public:
 	void save(Archive& _ar) const
 	{
 		int nbChild = (int)children.size();
-		_ar(name, tag, nbChild, components, 
-			localPosition.x, localPosition.y, localPosition.z,
-			localRotation.x, localRotation.y, localRotation.z, localRotation.w,
-			localScale.x, localScale.y, localScale.z, isActive, isPrefab);
+		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab, components);
 
 		for (GameObject* child : children)
 		{

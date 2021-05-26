@@ -40,7 +40,7 @@ public:
 	Quaternion Normalised() const;
 
 	void Conjugate();
-	const Quaternion Conjugate() const;
+	const Quaternion Conjugated() const;
 
 	float GetAngle() const;
 
@@ -86,6 +86,13 @@ public:
 	Quaternion operator-() const
 	{
 		return Quaternion(-w, -x, -y, -z);
+	}
+
+
+	template <class Archive>
+	void serialize(Archive& _ar)
+	{
+		_ar(w, x, y, z);
 	}
 };
 

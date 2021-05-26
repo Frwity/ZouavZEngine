@@ -17,14 +17,14 @@
 using namespace physx;
 
 
-RigidBody::RigidBody(GameObject* _gameObject)
-	: Rigid(_gameObject)
+RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
+	: Rigid(_gameObject, _name)
 {
 	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
 
 	actor = PhysicSystem::physics->createRigidDynamic(t);
 
-	actor->userData = this;
+	actor->userData = _gameObject;
 
 	AttachShape();
 
@@ -33,24 +33,6 @@ RigidBody::RigidBody(GameObject* _gameObject)
 	if (!_gameObject->IsActive())
 		InternalDehactivate();
 	
-	LockAxis();
-}
-
-RigidBody::RigidBody(const RigidBody& _other)
-	: Rigid(_other)
-{
-	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
-
-	actor = PhysicSystem::physics->createRigidDynamic(t);
-
-	actor->userData = this;
-
-	AttachShape();
-
-	PhysicSystem::scene->addActor(*actor);
-
-	if (!_other.IsActive())
-		InternalDehactivate();
 	LockAxis();
 }
 
@@ -104,5 +86,7 @@ template <class Archive>
 static void RigidBody::load_and_construct(Archive& _ar, cereal::construct<RigidBody>& _construct)
 {
 	_construct(GameObject::currentLoadedGameObject);
+	_ar(_construct->lockX, _construct->lockY, _construct->lockZ);
+	_construct->LockAxis();
 	_ar(cereal::base_class<Component>(_construct.ptr()));
 }

@@ -14,7 +14,6 @@
 #include <cstdlib>
 #include "Scene.hpp"
 
-#include "PxRigidStatic.h"
 #include "PxScene.h"
 #include "PxShape.h"
 #include "PxMaterial.h"
@@ -26,6 +25,7 @@
 #include "geometry/PxHeightFieldDesc.h"
 #include "geometry/PxHeightFieldSample.h"
 #include "geometry/PxHeightFieldGeometry.h"
+#include "extensions/PxSimpleFactory.h"
 #include "extensions/PxRigidActorExt.h"
 #include "System/Terrain.hpp"
 
@@ -35,6 +35,7 @@ Terrain::Terrain()
 {
 	AddColorLayer();
 	AddNoiseLayer();
+	AddGenGO();
 }
 
 void Terrain::Generate(GameObject* _actualizer)
@@ -47,6 +48,8 @@ void Terrain::Generate(GameObject* _actualizer)
 		AddNoiseLayer();
 	if (colorCount <= 0)
 		AddColorLayer();
+	if (GenGOCount <= 0)
+		AddGenGO();
 
 	shader = *ResourcesManager::GetResource<Shader>("TerrainShader");
 	actualizer = _actualizer;
@@ -57,10 +60,9 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk{nullptr});
-			chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
-															seed, noiseParams,
-															minHeight, maxHeight, heightIntensity }, false);
+			chunks.emplace(pos.ToString(), Chunk());
+			chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
+												 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
 
@@ -77,9 +79,8 @@ void Terrain::Actualise()
 
 	while (it != chunks.end())
 	{
-		it->second.Generate({ &material,	it->second.GetPos(), chunkSize, chunkVertexCount,
-											seed, noiseParams,
-											minHeight, maxHeight, heightIntensity }, true);
+		it->second.Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, it->second.GetPos(), chunkSize, chunkVertexCount,
+							  seed, noiseParams, minHeight, maxHeight, heightIntensity }, true);
 		it++;
 	}
 }
@@ -99,10 +100,7 @@ void Terrain::Update()
 	while (it != chunks.end())
 	{
 		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
-		{
-			//std::cout << "delete " << it->first << " of " << (it->second.GetWorldPos() - actualizerPos).GetMagnitude() << std::endl;
 			it = chunks.erase(it);
-		}
 		else
 			it++;
 	}
@@ -124,10 +122,9 @@ void Terrain::Update()
 			if (chunks.find(pos.ToString()) == chunks.end())
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
-				chunks.emplace(pos.ToString(), Chunk(nullptr));
-				chunks.at(pos.ToString()).Generate({ &material, pos,	chunkSize, chunkVertexCount,
-																seed, noiseParams,
-																minHeight, maxHeight, heightIntensity }, false);
+				chunks.emplace(pos.ToString(), Chunk());
+				chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
+													 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 			}
 		}
 	}
@@ -137,15 +134,13 @@ void Terrain::Update()
 
 void Terrain::Draw(const class Camera& _camera) const
 {
+	glDisable(GL_CULL_FACE);
+
 	if (!shader || !isGenerated || !isActivated)
 		return;
 
 	shader->Use();
 	shader->SetLight(Scene::GetCurrentScene()->GetLights());
-	Mat4 matrixCamera = _camera.GetMatrix();
-	shader->SetMatrix("view", matrixCamera.Reversed());
-	shader->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
-	shader->SetMatrix("projection", _camera.GetProjetionMatrix());
 
 	shader->SetInt("colorCount", colorCount);
 
@@ -173,6 +168,9 @@ void Terrain::Draw(const class Camera& _camera) const
 		glBindVertexArray(it.second.GetMesh().GetID());
 		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
 	}
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void Terrain::DisplayOptionWindow()
@@ -203,6 +201,7 @@ void Terrain::DisplayOptionWindow()
 		actualized |= ImGui::SliderFloat("Maximum Height", &maxHeight, minHeight, 100);
 		actualized |= ImGui::SliderFloat("Height Intensity", &heightIntensity, 1, 200);
 
+		ImGui::PushID(0);
 		if (ImGui::Button("<"))
 			noiseID = (noiseID - 1 + noiseCount) % (noiseCount - 1);
 		ImGui::SameLine();
@@ -237,13 +236,14 @@ void Terrain::DisplayOptionWindow()
 			if (noiseParams[noiseID].fractalType == 3)
 				actualized |= ImGui::SliderFloat("PingPong Stength", &noiseParams[noiseID].pingPongStength, 0.0f, 16.0f);
 		}
-		
-		if (ImGui::Button("< "))
+		ImGui::PopID();
+		ImGui::PushID(1);
+		if (ImGui::Button("<"))
 			colorID = (colorID - 1 + colorCount) % (colorCount);
 		ImGui::SameLine();
 		ImGui::Text("%d/%d", colorID + 1, colorCount);
 		ImGui::SameLine();
-		if (ImGui::Button("> "))
+		if (ImGui::Button(">"))
 			colorID = (colorID + 1) % (colorCount);
 		ImGui::SameLine();
 		if (ImGui::Button("Add Color Layer"))
@@ -263,10 +263,58 @@ void Terrain::DisplayOptionWindow()
 		ImGui::ColorEdit3("Color", colors[colorID].xyz);
 		ImGui::SliderFloat("Texture Scale", &textureScale[colorID], 0.0f, 100.0f);
 		ResourcesManager::ResourceChanger<Texture>("Texture", textureID.at(colorID));
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+			{
+				ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+				std::string _path = *(const std::string*)payload->Data;
+				std::string _truePath = _path;
+				size_t start_pos = _truePath.find("\\");
+				_truePath.replace(start_pos, 1, "/");
 
+				if (_truePath.find(".png") != std::string::npos || _truePath.find(".jpg") != std::string::npos)
+				{
+					if (textureID.at(colorID).use_count() == 2 && textureID.at(colorID)->IsDeletable())
+						ResourcesManager::RemoveResourceTexture(textureID.at(colorID)->GetName());
+					textureID.at(colorID) = *ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::PopID();
+		ImGui::PushID(2);
+
+		if (ImGui::Button("<"))
+			GenGOID = (GenGOID - 1 + GenGOCount) % (GenGOCount);
+		ImGui::SameLine();
+		ImGui::Text("%d/%d", GenGOID + 1, GenGOCount);
+		ImGui::SameLine();
+		if (ImGui::Button(">"))
+			GenGOID = (GenGOID + 1) % (GenGOCount);
+		ImGui::SameLine();
+		if (ImGui::Button("Add Generated GameObject"))
+		{
+			actualized = true;
+			AddGenGO();
+			ComputeTotalRatio();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Remove Generated GameObject"))
+		{
+			actualized = true;
+			DeleteCurrentGenGO();
+			ComputeTotalRatio();
+		}
+		GenGOParams[GenGOID].prefab.Editor("Prefab : ");
+		if (ImGui::InputInt("Ratio : ", &GenGOParams[GenGOID].ratio, 1))
+			ComputeTotalRatio();
+		ImGui::InputInt("GameObject Per Chunk", &nbGOPerChunk);
+		
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
+		ImGui::PopID();
 	}
 	ImGui::End();
 }
@@ -311,6 +359,29 @@ void Terrain::DeleteCurrentColorLayer()
 	colorStrength.erase(colorStrength.begin() + colorID);
 	textureScale.erase(textureScale.begin() + colorID);
 	colorID = (colorID - 1) % --colorCount;
+}
+
+void Terrain::AddGenGO()
+{
+	if (GenGOCount >= MAX_GENGO_COUNT)
+		return;
+	GenGOParams.emplace_back(GeneratedGameObjectParam{});
+	GenGOID = GenGOCount++;
+}
+
+void Terrain::ComputeTotalRatio()
+{
+	totalRatio = 0;
+	for (GeneratedGameObjectParam ggop : GenGOParams)
+		totalRatio += ggop.ratio;
+}
+
+void Terrain::DeleteCurrentGenGO()
+{
+	if (GenGOCount <= 1)
+		return;
+	GenGOParams.erase(GenGOParams.begin() + GenGOID);
+	GenGOID = (GenGOID - 1) % --GenGOCount;
 }
 
 float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
@@ -359,10 +430,37 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		{
 			float height = std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight);
 
+
 			// create vertices
 			vertices.push_back(Vertex{ Vec3(x / ((float)vertexCount - 1) * size, height, z / ((float)vertexCount - 1) * size),
 										Vec3(0.0f, 1.0f, 0.0f),
 										Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
+		}
+	}
+
+	// place gameobject randomly
+	if (_cca.toGeneratePrefabs.size() > 0 && *_cca.toGeneratePrefabs[0].prefab)
+	{
+		int x, z = 0;
+		int randomRatio = 0;
+		int ratioCursor = 0;
+		int actualRatio = _cca.toGeneratePrefabs[0].ratio;
+		Vec3 gopos{};
+		for (int i = 0; i < _cca.nbGOPerChunk; ++i)
+		{
+			x = rand() % vertexCount;
+			z = rand() % vertexCount;
+			randomRatio = rand() % _cca.totalRatio;
+			while (randomRatio > actualRatio)
+			{
+				actualRatio += _cca.toGeneratePrefabs[ratioCursor++].ratio;
+				if (randomRatio < actualRatio)
+					ratioCursor--;
+			}
+			gopos = vertices.at(x + z * vertexCount).pos;
+			generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
+			actualRatio = 0;
+			ratioCursor = 0;
 		}
 	}
 
@@ -387,17 +485,17 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		mesh.ChangeSizeAndData(vertices.data(), vertices.size(), indices.data(), indices.size());
 	else
 		mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
-
+	
 	//physxq
 	std::vector<PxHeightFieldSample> samples;
 	samples.reserve(vertexCount * vertexCount);
-
 	int j = 0;
 	int k = 0;
 	for (int i = 0; i < vertexCount * vertexCount; ++i)
 	{
 		samples.push_back({});
-		samples[i].height = (physx::PxI16)vertices[j + k].pos.y;
+		samples[i].height = (physx::PxI16)(vertices[j + k].pos.y * yScalePrecision);
+		samples[i].setTessFlag();
 		if (k == vertexCount * (vertexCount - 1))
 		{
 			j += 1;
@@ -408,7 +506,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	}
 
 	PxHeightFieldDesc hfDesc;
-	hfDesc.format = PxHeightFieldFormat::eS16_TM;
+	hfDesc.format = PxHeightFieldFormat::Enum::eS16_TM;
 	hfDesc.nbColumns = vertexCount;
 	hfDesc.nbRows = vertexCount;
 	hfDesc.samples.data = samples.data();
@@ -416,8 +514,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	PxHeightField* aHeightField = PhysicSystem::cooking->createHeightField(hfDesc,
 		PhysicSystem::physics->getPhysicsInsertionCallback());
-
-	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1, (float)size / (float)(vertexCount -1),
+	PxHeightFieldGeometry hfGeom(aHeightField, PxMeshGeometryFlags(), 1.0f / yScalePrecision, (float)size / (float)(vertexCount -1),
 		(float)size / (float)(vertexCount -1));
 
 	PxTransform t(PxVec3FromVec3(Vec3(pos.x * (float)size, 0, pos.y * (float)size)));
@@ -432,7 +529,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 	actor->userData = this;
 
-	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material->data(), 1);
+	shape = PxRigidActorExt::createExclusiveShape(*actor, hfGeom, _cca.material.data(), 1);
 	PhysicSystem::scene->addActor(*actor);
 
 	isGenerated = true;
@@ -440,9 +537,13 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
-	/*if (actor == nullptr || PhysicSystem::scene == nullptr)
-		return;
+	//for (GameObject* go : generatedGameObjects)
+	//	if (go)
+	//		go->Destroy();
 
+	if (actor == nullptr || PhysicSystem::scene == nullptr)
+		return;
+	/*
 	if (isGenerated)
 	{
 		if (actor->getScene() == PhysicSystem::scene)

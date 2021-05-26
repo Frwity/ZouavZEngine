@@ -51,7 +51,8 @@ bool Scene::NewScene(const std::string& _sceneName, bool _force)
 	sceneWorld.children.clear();
 	PhysicSystem::scene->release();
 	PhysicSystem::InitScene();
-	ResourcesManager::Clear();	
+	ResourcesManager::PrepareClear();	
+	ResourcesManager::ClearHasToBeDelete();
 	GetCurrentScene()->Save();
 }
 
@@ -74,8 +75,9 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 		{
 			cereal::JSONInputArchive iarchive(saveFile);
 
-			ResourcesManager::Clear();
+			ResourcesManager::PrepareClear();
 			ResourcesManager::load(iarchive);
+			ResourcesManager::ClearHasToBeDelete();
 		}
 		saveFile.close();
 	}
@@ -97,7 +99,6 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 void Scene::Save()
 {
 	std::ofstream saveFile;
-
 	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
 		cereal::JSONOutputArchive oArchive(saveFile);
@@ -125,7 +126,7 @@ void Scene::UpdateShaderUniform(const Camera& _camera)
 		Mat4 matrixCamera = _camera.GetMatrix();
 
 		shader.second->SetMatrix("view", matrixCamera.Reversed());
-		shader.second->SetMatrix("projection", _camera.GetProjetionMatrix());
+		shader.second->SetMatrix("projection", _camera.GetProjectionMatrix());
 		shader.second->SetVector3("viewPos", matrixCamera.Accessor(0, 3), matrixCamera.Accessor(1, 3), matrixCamera.Accessor(2, 3));
 		shader.second->SetLight(lights);
 	}
@@ -142,12 +143,14 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 	if (_parent->GetComponent<Skybox>())
 		_parent->GetComponent<Skybox>()->Draw(*_camera);
 
-	std::vector<ShapeCollision*> shapes = _parent->GetComponents<ShapeCollision>();
+	if (dynamic_cast<const SceneCamera*>(_camera))
+	{
+		std::vector<ShapeCollision*> shapes = _parent->GetComponents<ShapeCollision>();
 
-	for (ShapeCollision* shape : shapes)
-		shape->DrawGizmos(*_camera);
-	
-		
+		for (ShapeCollision* shape : shapes)
+			shape->DrawGizmos(*_camera);
+	}
+
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);
 }
@@ -169,13 +172,13 @@ void Scene::SimulatePhyics() const
 
 	for (unsigned int i = 0; i < nbActiveActor; i++)
 	{
-		RigidBody* rigidbody = static_cast<RigidBody*>(activeActors[i]->userData);
+		GameObject* go = static_cast<GameObject*>(activeActors[i]->userData);
 
-		physx::PxTransform transform = rigidbody->actor->getGlobalPose();
+		physx::PxTransform transform = go->GetComponent<RigidBody>()->actor->getGlobalPose();
 		physx::PxMat44 mat4(transform);
 
-		rigidbody->GetGameObject().localPosition = { transform.p.x, transform.p.y, transform.p.z };
-		rigidbody->GetGameObject().localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
+		go->localPosition = { transform.p.x, transform.p.y, transform.p.z };
+		go->localRotation = { transform.q.w,  transform.q.x, transform.q.y, transform.q.z };
 	}
 }
 

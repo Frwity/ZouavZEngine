@@ -1,28 +1,23 @@
 #include "Component/Rigid.hpp"
+#include "Object.hpp"
 #include "GameObject.hpp"
 #include "PxRigidBody.h"
 #include "PxRigidDynamic.h"
 #include "PxShape.h"
+#include "extensions/PxSimpleFactory.h"
+#include "extensions/PxRigidActorExt.h"
+#include "extensions/PxRigidBodyExt.h"
 #include "foundation/PxTransform.h"
 #include "PxMaterial.h"
 #include "System/PhysicSystem.hpp"
 #include "PxScene.h"
-#include "extensions/PxSimpleFactory.h"
-#include "extensions/PxRigidActorExt.h"
-#include "extensions/PxRigidBodyExt.h"
 #include "System/PhysicUtils.hpp"
 #include "Component/ShapeCollision.hpp"
 
 using namespace physx;
 
-Rigid::Rigid(GameObject* _gameObject)
-	: Component(_gameObject)
-{
-
-}
-
-Rigid::Rigid(const Rigid& _other)
-	: Component(_other)
+Rigid::Rigid(GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name)
 {
 
 }
@@ -68,29 +63,29 @@ void Rigid::AttachShape()
 	}
 }
 
-void Rigid::OnContact(GameObject* _other, physx::PxShape* _collidingShape)
+void Rigid::OnContact(Object* _other, physx::PxShape* _collidingShape)
 {
-	if (gameObject == nullptr)
+	if (!gameObject)
 		return;
 
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
+	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();
 
 	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
 
-	if (script)
+	for (ScriptComponent* script : scripts)
 		script->OnContact(_other, collision);
 }
 
-void Rigid::OnTrigger(GameObject* _other, physx::PxShape* _collidingShape)
+void Rigid::OnTrigger(Object* _other, physx::PxShape* _collidingShape)
 {
-	if (gameObject == nullptr)
+	if (!gameObject)
 		return;
 
-	ScriptComponent* script = GetGameObject().GetComponent<ScriptComponent>();
+	std::vector<ScriptComponent*> scripts = GetGameObject().GetComponents<ScriptComponent>();
 
 	ShapeCollision* collision = static_cast<ShapeCollision*>(_collidingShape->userData);
 
-	if (script)
+	for (ScriptComponent* script : scripts)
 		script->OnTrigger(_other, collision);
 }
 

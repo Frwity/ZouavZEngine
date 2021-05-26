@@ -9,8 +9,8 @@
 
 using namespace physx;
 
-RigidStatic::RigidStatic(GameObject* _gameObject)
-	: Rigid(_gameObject)
+RigidStatic::RigidStatic(GameObject* _gameObject, std::string _name)
+	: Rigid(_gameObject, _name)
 {
 	if (_gameObject == nullptr)
 		return;
@@ -19,30 +19,13 @@ RigidStatic::RigidStatic(GameObject* _gameObject)
 
 	actor = PhysicSystem::physics->createRigidStatic(t);
 
-	actor->userData = this;
+	actor->userData = _gameObject;
 
 	AttachShape();
 
 	PhysicSystem::scene->addActor(*actor);
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
-}
-
-RigidStatic::RigidStatic(const RigidStatic& _other)
-	: Rigid(_other)
-{
-	PxTransform t(PxVec3FromVec3(GetGameObject().WorldPosition()), PxQuatFromQuaternion(GetGameObject().WorldRotation()));
-
-	actor = PhysicSystem::physics->createRigidStatic(t);
-
-	actor->userData = this;
-
-	AttachShape();
-
-	PhysicSystem::scene->addActor(*actor);
-
-	if (!_other.IsActive())
 		InternalDehactivate();
 }
 

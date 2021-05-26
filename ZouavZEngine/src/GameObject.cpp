@@ -7,21 +7,23 @@
 #include "PxRigidDynamic.h"
 #include "PxRigidStatic.h"
 #include "PxActor.h"
-#include "GameObject.hpp"
+#include "cereal/archives/json.hpp"
+#include "Component/ScriptComponent.hpp"
 
 #include <fstream>
-#include "cereal/archives/json.hpp"
 #include <iostream>
 #include <algorithm>
+#include "GameObject.hpp"
 
 bool GameObject::destroyGameObject = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 std::unordered_map < std::string, std::unique_ptr<GameObject >> GameObject::prefabGameObjects;
+float GameObject::minY = -1000.0f;
 
 GameObject* GameObject::CreateGameObject(const std::string& _name)
 {
-	return CreateGameObject(_name, " ");
+	return CreateGameObject(_name, "");
 }
 
 GameObject* GameObject::CreateGameObject(const std::string& _name, const std::string& _tag)
@@ -31,81 +33,37 @@ GameObject* GameObject::CreateGameObject(const std::string& _name, const std::st
 	return gameObjects.back().get();
 }
 
-GameObject::GameObject(const std::string& _name)
-	: name(_name)
-{
-}
-
 GameObject::GameObject(const std::string& _name, const std::string& _tag)
-	: name(_name), tag(_tag)
+	: Object(_name, _tag)
 {
 
 }
 
 GameObject& GameObject::operator=(const GameObject& _other)
 {
-	currentLoadedGameObject = this;
-	worldPosition = _other.worldPosition;
-	worldRotation = _other.worldRotation;
-	worldScale = _other.worldScale;
-
-	localPosition = _other.localPosition;
-	localRotation = _other.localRotation;
-	localScale = _other.localScale;
-
-	isActive = _other.isActive;
-	name = _other.name;
-	tag = _other.tag;
-	for (const GameObject* otherChildren : _other.children)
+	std::stringstream saveFile;
 	{
-		if (!otherChildren)
-			break;
-		GameObject* child = CreateGameObject(otherChildren->name);
-		*child = *otherChildren;
-		child->SetParent(this);
+		cereal::JSONOutputArchive oArchive(saveFile);
 
+		_other.save(oArchive);
 	}
-	for (auto& otherComponent : _other.components)
 	{
-		components.emplace_back(otherComponent->Clone());
-		components.back().get()->gameObject = this;
+		cereal::JSONInputArchive iarchive(saveFile);
+
+		(*this).load(iarchive);
 	}
 	return *this;
 }
 
-GameObject::GameObject(const GameObject& _other)
-{
-	currentLoadedGameObject = this;
-	worldPosition = _other.worldPosition;
-	worldRotation = _other.worldRotation;
-	worldScale = _other.worldScale;
-
-	localPosition = _other.localPosition;
-	localRotation = _other.localRotation;
-	localScale = _other.localScale;
-
-	isActive = _other.isActive;
-	name = _other.name;
-	tag = _other.tag;
-	for (const GameObject* otherChildren : _other.children)
-	{
-		if (!otherChildren)
-			break;
-		GameObject* child = CreateGameObject(otherChildren->name);
-		*child = *otherChildren;
-		child->SetParent(this);
-
-	}
-	for (auto& otherComponent : _other.components)
-	{
-		components.emplace_back(otherComponent->Clone());
-		components.back().get()->gameObject = this;
-	}
-}
-
 void GameObject::Destroy() 
-{ 
+{
+	SetParent(nullptr);
 	toDestroy = true;
+	for (GameObject* child : children)
+	{
+		child->Destroy();
+	}
+	destroyGameObject = true;
 }
 
 
@@ -225,6 +183,9 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	worldRotation = parent ? parent->worldRotation * localRotation : localRotation;
 	worldScale = parent ? parent->worldScale * localScale : localScale;
 
+	if (worldPosition.y < minY && parent != nullptr)
+		Destroy();
+
 	for (GameObject* _child : children)
 	{
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale)); 
@@ -233,12 +194,12 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 
 		//update physx transform for simulation
 		if (rb)
-			rb->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+			rb->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
 
 		RigidStatic* rs = _child->GetComponent<RigidStatic>();
 
 		if (rs)
-			rs->actor->setGlobalPose(PxTransformFromTransform(static_cast<Transform>(*_child)));
+			rs->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
 	}
 }
 
@@ -281,6 +242,13 @@ void GameObject::RemoveChild(GameObject* _child)
 		else
 			++it;
 	}
+}
+
+void GameObject::ScriptOnAddComponent()
+{
+	ScriptComponent* newComponent = dynamic_cast<ScriptComponent*>(components.back().get());
+	if (newComponent)
+		newComponent->OnAddComponent();
 }
 
 const std::vector<std::unique_ptr<Component>>& GameObject::GetComponents()

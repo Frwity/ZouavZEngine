@@ -35,21 +35,19 @@ protected:
 	friend class Editor;
 	friend class GameObject;
 	class GameObject* gameObject;
+	std::string name = "Component";
 	bool isActive = true;
 
 	virtual void InternalActivate() {}
 	virtual void InternalDehactivate() {}
+
 public:
 
 	Component() = delete;
-	Component(class GameObject* _gameObject);
-	Component(const Component& _other);
-	virtual Component* Clone() const = 0;
+	Component(class GameObject* _gameObject, std::string _name = "Component");
 	virtual ~Component() = default;
 
 	virtual void Editor();
-
-	virtual const char* GetComponentName() = 0;
 
 	static bool EditorCollapsingHeader(const char* _name = "Component", std::function<void()> _f = [](){});
 
@@ -62,13 +60,17 @@ public:
 	GameObject& GetGameObject() { return *gameObject; }
 	const GameObject& GetGameObject() const { return *gameObject; }
 
+	void SetName(std::string _name) { name = _name; }
+	std::string GetName() { return name; }
+
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
 		_ar(isActive);
+		_ar(name);
 	}
-
 	template <class Archive>
 	static void load_and_construct(Archive& _ar, cereal::construct<Component>& _construct);
 };
 
+CEREAL_REGISTER_TYPE(Component)

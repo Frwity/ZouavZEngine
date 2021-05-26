@@ -19,10 +19,8 @@ public:
 	float volumeIntensity = 1.0f;
 
 	AudioBroadcaster() = delete;
-	AudioBroadcaster(class GameObject* _gameObject);
-	AudioBroadcaster(class GameObject* _gameObject, std::shared_ptr<class Sound>& _sound);
-	AudioBroadcaster(const AudioBroadcaster&);
-	Component* Clone() const override { return new AudioBroadcaster(*this); }
+	AudioBroadcaster(class GameObject* _gameObject, std::string _name = "AudioBroadcaster");
+	AudioBroadcaster(class GameObject* _gameObject, std::shared_ptr<class Sound>& _sound, std::string _name = "AudioBroadcaster");
 	~AudioBroadcaster();
 
 	void Update();
@@ -37,8 +35,6 @@ public:
 
 	void SoundEditor();
 	void Editor() override;
-
-	const char* GetComponentName() override { return "AudioBroadcaster"; }
 
 	template <class Archive>
 	void serialize(Archive& _ar)

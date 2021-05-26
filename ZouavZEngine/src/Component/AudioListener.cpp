@@ -4,20 +4,12 @@
 #include "Component/AudioListener.hpp"
 #include "imgui.h"
 
-AudioListener::AudioListener(GameObject* _gameObject)
-	: Component(_gameObject)
+AudioListener::AudioListener(GameObject* _gameObject, std::string _name)
+	: Component(_gameObject, _name)
 {
 	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
 	if (_gameObject)
 		SoundManager::SetListenerPosition(_gameObject->WorldPosition());
-}
-
-AudioListener::AudioListener(const AudioListener& _other)
-	: Component(_other)
-{
-	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
-	if (gameObject)
-		SoundManager::SetListenerPosition(gameObject->WorldPosition());
 }
 
 void AudioListener::Update()

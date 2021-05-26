@@ -23,9 +23,13 @@ public:
 
     static Transform InitTransform();
 
+    void UpdateWorldPos(const Vec3&, const Quaternion&, const Vec3&);
+
     const Vec3& WorldPosition() const;
     const Quaternion& WorldRotation() const;
     const Vec3& WorldScale() const;
+
+    Mat4 GetTRSMatrix() const;
 
     void TranslateX(float _x);
     void TranslateY(float _y);

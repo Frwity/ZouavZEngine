@@ -84,6 +84,10 @@ enum class E_MOUSE_BUTTON
 class InputManager
 {
 private:
+	friend class Editor;
+
+	static bool isGameInputActive;
+
 	static struct GLFWwindow* window;
 
 	static std::unordered_map<E_MOUSE_BUTTON, std::pair<bool, bool>> mouseButtonsState;
@@ -94,6 +98,20 @@ private:
 	InputManager() = delete;
 	~InputManager() = delete;
 
+	static bool EditorGetKeyPressed(E_KEYS _key);
+	static bool EditorGetKeyPressedOneTime(E_KEYS _key);
+	static bool EditorGetKeyReleased(E_KEYS _key);
+	static bool EditorGetKeyReleasedOneTime(E_KEYS _key);
+	static bool EditorGetMouseButtonPressed(E_MOUSE_BUTTON _button);
+	static bool EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON _button);
+	static bool EditorGetMouseButtonReleased(E_MOUSE_BUTTON _button);
+	static bool EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button);
+	static Vec2 EditorGetCursorPos();
+	static Vec2 EditorGetCursorOffsetFromLastFrame();
+
+	static Vec2 oldMousePos; 
+	static Vec2 gameOldMousePos;
+
 public:
 
 	static void InitMouseButtons();
@@ -103,6 +121,8 @@ public:
 	static void UpdateMouseButtons();
 	static void UpdateKeys();
 	static void Update();
+	static void UpdateOldMousePos();
+
 	static bool GetKeyPressed(E_KEYS _key);
 	static bool GetKeyPressedOneTime(E_KEYS _key);
 	static bool GetKeyReleased(E_KEYS _key);
@@ -113,6 +133,7 @@ public:
 	static bool GetMouseButtonReleasedOneTime(E_MOUSE_BUTTON _button);
 
 	static Vec2 GetCursorPos();
+	static Vec2 GetCursorOffsetFromLastFrame();
 
 	static void SetWindow(struct GLFWwindow* _window);
 };
