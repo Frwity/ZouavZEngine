@@ -60,8 +60,8 @@ void Terrain::Generate(GameObject* _actualizer)
 		for (float x = 0; x < 4; x++)
 		{
 			pos = { x, z };
-			chunks.emplace(pos.ToString(), Chunk());
-			chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
+			chunks.emplace(pos.ToString(), std::make_unique<Chunk>());
+			chunks.at(pos.ToString())->Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
 												 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 		}
 	}
@@ -75,11 +75,11 @@ void Terrain::Actualise()
 		return;
 	Vec2 pos;
 
-	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+	std::unordered_map<std::string, std::unique_ptr<Chunk>>::iterator it = chunks.begin();
 
 	while (it != chunks.end())
 	{
-		it->second.Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, it->second.GetPos(), chunkSize, chunkVertexCount,
+		it->second->Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, it->second->GetPos(), chunkSize, chunkVertexCount,
 							  seed, noiseParams, minHeight, maxHeight, heightIntensity }, true);
 		it++;
 	}
@@ -94,12 +94,12 @@ void Terrain::Update()
 
 	Vec2 actualizerPos(actualizer->WorldPosition().x, actualizer->WorldPosition().z);
 
-	std::unordered_map<std::string, Chunk>::iterator it = chunks.begin();
+	std::unordered_map<std::string, std::unique_ptr<Chunk>>::iterator it = chunks.begin();
 
 	// delete far Chunk
 	while (it != chunks.end())
 	{
-		if ((it->second.GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
+		if ((it->second->GetWorldPos() - actualizerPos).GetMagnitude() > chunkDistanceRadius + chunkSize)
 			it = chunks.erase(it);
 		else
 			it++;
@@ -122,8 +122,8 @@ void Terrain::Update()
 			if (chunks.find(pos.ToString()) == chunks.end())
 			{
 				//std::cout << "create " << pos.ToString() << " of " << std::sqrtf(x * chunkSize * x * chunkSize + y * chunkSize * y * chunkSize) << std::endl;
-				chunks.emplace(pos.ToString(), Chunk());
-				chunks.at(pos.ToString()).Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
+				chunks.emplace(pos.ToString(), std::make_unique<Chunk>());
+				chunks.at(pos.ToString())->Generate({ material, GenGOParams, nbGOPerChunk, totalRatio, pos, chunkSize, chunkVertexCount,
 													 seed, noiseParams, minHeight, maxHeight, heightIntensity }, false);
 			}
 		}
@@ -163,12 +163,11 @@ void Terrain::Draw(const class Camera& _camera) const
 
 	for (const auto& it : chunks)
 	{
-		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second.GetWorldPos().x, 0.f, it.second.GetWorldPos().y }));
+		shader->SetMatrix("model", Mat4::CreateTranslationMatrix({ it.second->GetWorldPos().x, 0.f, it.second->GetWorldPos().y }));
 
-		glBindVertexArray(it.second.GetMesh().GetID());
-		glDrawElements(GL_TRIANGLES, (int)it.second.GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(it.second->GetMesh().GetID());
+		glDrawElements(GL_TRIANGLES, (int)it.second->GetMesh().GetNbElements(), GL_UNSIGNED_INT, 0);
 	}
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 }
@@ -384,6 +383,16 @@ void Terrain::DeleteCurrentGenGO()
 	GenGOID = (GenGOID - 1) % --GenGOCount;
 }
 
+void Terrain::Clear()
+{
+	for (auto& chunk : chunks)
+	{
+		for (auto& go : chunk.second->generatedGameObjects)
+			go->Destroy();
+		chunk.second->generatedGameObjects.clear();
+	}
+}
+
 float Chunk::CalculateHeigt(ChunkCreateArg _cca, float _x, float _z)
 {
 	FastNoiseLite noise;
@@ -459,6 +468,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			}
 			gopos = vertices.at(x + z * vertexCount).pos;
 			generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
+			generatedGameObjects.back()->SetNotToSave(true);
 			actualRatio = 0;
 			ratioCursor = 0;
 		}
@@ -537,19 +547,19 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
-	//for (GameObject* go : generatedGameObjects)
-	//	if (go)
-	//		go->Destroy();
-
 	if (actor == nullptr || PhysicSystem::scene == nullptr)
 		return;
-	/*
-	if (isGenerated)
+
+	 if (isGenerated)
 	{
+		for (GameObject* go : generatedGameObjects)
+			if (go)
+				go->Destroy();
+		/*
 		if (actor->getScene() == PhysicSystem::scene)
 		{
 			PhysicSystem::scene->removeActor(*actor);
 			actor = nullptr;
-		}
-	}*/
+		}*/
+	}
 }
