@@ -23,8 +23,7 @@ class AnimResource: public Resource
 private:
     std::shared_ptr<Shader> animationShader;
     std::vector<Bone> bones;
-    std::shared_ptr<Mesh> mesh;
-    std::shared_ptr<Texture> texture;
+    Mesh* mesh;
     float currentTime = 0.0f;
 
     void ReadMissingBones(const aiAnimation* animation);
@@ -40,7 +39,7 @@ public:
     int tickPerSecond;
     bool loop = true;
 
-    AnimResource(const std::string& _name, std::string& _path, std::shared_ptr<Mesh> _mesh = nullptr);
+    AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;
 
     void RemoveFromResourcesManager() override;

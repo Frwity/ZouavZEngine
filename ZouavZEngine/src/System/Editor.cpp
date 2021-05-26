@@ -31,8 +31,6 @@
 #include "System/ResourcesManager.hpp"
 #include "System/ScriptSystem.hpp"
 #include "Component/Animation.hpp"
-#include "Game/Player.hpp"
-#include "Game/Generato.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -709,6 +707,7 @@ GENADDCOMPONENT(RigidBody)
 GENADDCOMPONENT(RigidStatic)
 GENADDCOMPONENT(Camera)
 GENADDCOMPONENT(Skybox)
+GENADDCOMPONENT(Animation)
 
 void Editor::DisplayInspector()
 {
@@ -841,6 +840,9 @@ void Editor::DisplayInspector()
                         if (addComponentFunction(gameObjectInspector))
                             addComponentWindow = false;
                     }
+
+                    if (ComponentButton<Animation>("Add Animation", false))
+                        addComponentWindow = false;
 
                 }
                 if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))

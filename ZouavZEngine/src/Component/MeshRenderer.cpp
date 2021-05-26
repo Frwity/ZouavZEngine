@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include "System/ResourcesManager.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/Animation.hpp"
 #include "System/Debug.hpp"
 #include "imgui.h"
 
@@ -58,6 +59,11 @@ void MeshRenderer::TextureEditor()
                 if (material.texture.use_count() == 2 && material.texture->IsDeletable())
                     ResourcesManager::RemoveResourceTexture(material.texture->GetName());
                 material.texture = *ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+                
+                //Update animation texture
+                Animation* animComponent = gameObject->GetComponent<Animation>();
+                if (animComponent)
+                    animComponent->text = material.texture.get();
             }
         }
         ImGui::EndDragDropTarget();
@@ -82,6 +88,10 @@ void MeshRenderer::MeshEditor()
                 if (mesh.use_count() == 2 && mesh->IsDeletable())
                     ResourcesManager::RemoveResourceMesh(mesh->GetName());
                 mesh = *ResourcesManager::AddResourceMesh(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+
+                Animation* animComponent = gameObject->GetComponent<Animation>();
+                if (animComponent)
+                    animComponent->mesh = mesh.get();
             }
         }
         ImGui::EndDragDropTarget();

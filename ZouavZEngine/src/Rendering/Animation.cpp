@@ -15,10 +15,12 @@
 #include <map>
 
 	
-Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* _mesh):
-	Component(_gameObject)
+Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* _mesh, std::string _name):
+	Component(_gameObject, _name)
 {
-    //TODO init with animations already loaded ?
+    mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
+    animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
+    text = gameObject->GetComponent<MeshRenderer>()->material.texture.get();
 }
 
 void Animation::Editor()
@@ -50,7 +52,6 @@ void Animation::Editor()
     {
         play = !play;
         currentTime = 0.0f;
-        //TODO set currentAnimation
     }
 }
 
@@ -62,15 +63,12 @@ void Animation::Draw(const Camera& _camera)
     animationShader->Use();
 
     animationShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-    animationShader->SetMatrix("projection", _camera.GetProjetionMatrix());
+    animationShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
 
     animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
-
-    //TODO use current texture
-    std::shared_ptr<Texture> text = *ResourcesManager::GetResource<Texture>("Default");
 
     text->Use();
     glBindVertexArray(mesh->GetID());
@@ -82,10 +80,4 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
 {
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
-}
-
-void Animation::LoadAnimation(std::string _name, std::string _path)
-{
-    std::shared_ptr<Mesh> mesh = gameObject->GetComponent<MeshRenderer>()->mesh;
-    animations.insert(std::pair<std::string, std::shared_ptr<AnimResource>>(_name, std::make_shared<AnimResource>(_name, _path, mesh)));
 }

@@ -15,7 +15,6 @@
 class Animation : public Component
 {
 private:
-    std::shared_ptr<Mesh> mesh;
 
     float currentTime = 0.0f;
 
@@ -26,19 +25,17 @@ public :
     AssimpNodeData rootNode;
     std::map<std::string, std::shared_ptr<AnimResource>> animations;
     std::shared_ptr<AnimResource> currentAnimation;
+    Texture* text;
+    Mesh* mesh;
 
-    Component* Clone() const override { return new Animation(*this); };
 
     Animation() = default;
-    Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr);
+    Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");
     ~Animation() = default;
-
-    void LoadAnimation(std::string _name, std::string _path);
 
     void Draw(const Camera& _camera);
 
     void Editor() override;
-    const char* GetComponentName() override { return "Animation"; }
 
     template <class Archive>
     void serialize(Archive& _ar)

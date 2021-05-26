@@ -3,7 +3,7 @@
 #include <assimp/postprocess.h>
 #include "System/ResourcesManager.hpp"
 
-AnimResource::AnimResource(const std::string& _name, std::string& _path, std::shared_ptr<Mesh> _mesh)
+AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh)
 	:Resource(_name)
 {
 	Assimp::Importer importer;

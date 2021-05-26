@@ -324,6 +324,7 @@ public:
 		return nullptr;
 	}
 	
+	template<>
 	static std::shared_ptr<CubemapTexture>* GetResource<CubemapTexture>(std::string _name)
 	{
 		if (cubemapTextureResources.find(_name) != cubemapTextureResources.end())
