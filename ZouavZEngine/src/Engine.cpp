@@ -139,4 +139,7 @@ void Engine::Update()
         render.Update();
         InputManager::UpdateOldMousePos();
     }
+
+    GameObject::gameObjects.clear();
+    scene.world.children.clear();
 }

@@ -171,9 +171,6 @@
     <ClCompile Include="src\Component\AudioListener.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Move.cpp">
-      <Filter>src\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\System\Debug.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
@@ -246,9 +243,6 @@
     <ClCompile Include="src\Component\Skybox.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Generato.cpp">
-      <Filter>src\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\RigidStatic.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -265,9 +259,6 @@
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Enemy.cpp">
-      <Filter>src\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\ThirdPersonCamera.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -371,9 +362,6 @@
     <ClInclude Include="include\Component\AudioListener.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Game\Move.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\System\Debug.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
@@ -449,9 +437,6 @@
     <ClInclude Include="include\Component\Skybox.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Game\Generato.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\Rendering\CubemapTexture.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
@@ -471,9 +456,6 @@
       <Filter>external_lib</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Enemy.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Game\ThirdPersonCamera.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Object.hpp">

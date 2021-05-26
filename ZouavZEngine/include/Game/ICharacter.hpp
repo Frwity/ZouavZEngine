@@ -27,6 +27,7 @@ protected:
     float timerAttackCooldown = 0.0f;
     class BoxCollision* attackCollision;
     class RigidBody* rb{ nullptr };
+    class AudioBroadcaster* audioBroadcaster;
 
 public:
     ICharacter() = delete;

@@ -21,6 +21,9 @@ void Enemy::Begin()
 
 void Enemy::Update()
 {
+	if (!IsAlive())
+		return;
+
 	ICharacter::Update();
 	if (player)
 	{

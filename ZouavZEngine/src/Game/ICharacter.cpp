@@ -3,6 +3,7 @@
 #include "Component/FontComponent.hpp"
 #include "Component/BoxCollision.hpp"
 #include "Component/RigidBody.hpp"
+#include "Component/AudioBroadcaster.hpp"
 
 #include "System/TimeManager.hpp"
 
@@ -33,6 +34,8 @@ void ICharacter::OnAddComponent()
 	attackCollision->halfExtends.z = 1.5f;
 	attackCollision->EditPosition({ 0.0f, 0.0f, 1.25f });
 	baseColor = material->color;
+	GetGameObject().AddComponent<FontComponent>();
+	audioBroadcaster = GetGameObject().AddComponent<AudioBroadcaster>();
 }
 
 void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
@@ -70,10 +73,14 @@ void ICharacter::Begin()
 
 	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 	rb = GetGameObject().GetComponent<RigidBody>();
+	audioBroadcaster = GetGameObject().GetComponent<AudioBroadcaster>();
 }
 
 void ICharacter::Update()
 {
+	if (!IsAlive())
+		return;
+
 	if (timerAttackCooldown >= 0.0f)
 		timerAttackCooldown -= TimeManager::GetDeltaTime();
 
@@ -108,13 +115,18 @@ bool ICharacter::Damage(int _damage)
 	if (asTakenDamage)
 		return false;
 
-	life -= _damage;
-
 	if (IsAlive())
 	{
-		asTakenDamage = true;
-		if (lifeFont)
-			lifeFont->ChangeText(std::to_string(life));
+		life -= _damage;
+		if (IsAlive())
+		{
+			asTakenDamage = true;
+			if (lifeFont)
+				lifeFont->ChangeText(std::to_string(life));
+			audioBroadcaster->Play("damage.wav");
+		}
+		else
+			audioBroadcaster->Play("death.wav");
 	}
 	else
 		return false;
@@ -126,4 +138,5 @@ void ICharacter::Attack()
 {
 	attackCollision->Activate();
 	timerAttackDuration = attackDuration;
+	audioBroadcaster->Play("attack.wav");
 }

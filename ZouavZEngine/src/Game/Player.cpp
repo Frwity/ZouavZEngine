@@ -34,10 +34,16 @@ void Player::Begin()
 {
 	ICharacter::Begin();
 	camera = GetGameObject().GetComponent<Camera>();
+	camera->SetPosition({ 0.0f, 5.0f, -10.0f });
+	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
+	life = 10000;
 }
 
 void Player::Update()
 {
+	if (!IsAlive())
+		return;
+
 	ICharacter::Update();
 
 	if (InputManager::GetKeyPressed(E_KEYS::RSHIFT))

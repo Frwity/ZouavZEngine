@@ -6,7 +6,7 @@ class Vec3;
 class SoundManager
 {
 private:
-	static std::vector<class AudioBroadcaster*> sounds;
+	static std::vector<class AudioBroadcaster*> audioBroadcasters;
 
 public:
 	static float mainVolume;

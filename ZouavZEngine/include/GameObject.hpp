@@ -21,6 +21,7 @@ private:
 	friend class Editor;
 	friend class Scene;
 	friend class Prefab;
+	friend class Engine;
 	friend class cereal::access;
 
 	static bool destroyGameObject;
