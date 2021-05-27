@@ -15,19 +15,13 @@
 class Animation : public Component
 {
 private:
-
-    float currentTime = 0.0f;
-
     std::shared_ptr<Shader> animationShader;
 
 public :
     bool play = false;
-    AssimpNodeData rootNode;
-    std::map<std::string, std::shared_ptr<AnimResource>> animations;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
-
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");

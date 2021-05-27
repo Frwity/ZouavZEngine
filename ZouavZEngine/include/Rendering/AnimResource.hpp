@@ -21,10 +21,8 @@ struct AssimpNodeData
 class AnimResource: public Resource
 {
 private:
-    std::shared_ptr<Shader> animationShader;
     std::vector<Bone> bones;
     Mesh* mesh;
-    float currentTime = 0.0f;
 
     void ReadMissingBones(const aiAnimation* animation);
     void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
@@ -32,6 +30,8 @@ private:
     void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform);
 
 public:
+    std::string path;
+    float currentTime = 0.0f;
     AssimpNodeData rootNode;
     std::map<std::string, BoneInfo> boneInfoMap;
     std::vector<Mat4> finalBonesMatrices;
@@ -41,6 +41,8 @@ public:
 
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;
+
+    void UpdateAnimationResources(Mesh* _mesh = nullptr);
 
     void RemoveFromResourcesManager() override;
 

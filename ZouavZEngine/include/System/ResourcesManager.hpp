@@ -114,7 +114,7 @@ public:
 
 		_ar(animationsResources.size());
 		for (auto& animation : animationsResources)
-			_ar(animation.first, animation.second->deletable, animation.second.get()->paths[0]);
+			_ar(animation.first, animation.second->deletable, animation.second.get()->path);
 			
 		_ar(cubemapTextureResources.size());
 		for (auto& cubemapTexture : cubemapTextureResources)

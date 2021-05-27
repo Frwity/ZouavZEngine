@@ -18,9 +18,13 @@
 Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* _mesh, std::string _name):
 	Component(_gameObject, _name)
 {
-    mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
+    if (gameObject->GetComponent<MeshRenderer>())
+    {
+        mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
+        text = gameObject->GetComponent<MeshRenderer>()->material.texture.get();
+    }
+
     animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
-    text = gameObject->GetComponent<MeshRenderer>()->material.texture.get();
 }
 
 void Animation::Editor()
@@ -51,7 +55,7 @@ void Animation::Editor()
     if (ImGui::Button("Play"))
     {
         play = !play;
-        currentTime = 0.0f;
+        currentAnimation->currentTime = 0.0f;
     }
 }
 

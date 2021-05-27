@@ -4,11 +4,14 @@
 #include "System/ResourcesManager.hpp"
 
 AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh)
-	:Resource(_name)
+	:Resource(_name), path(_path)
 {
 	Assimp::Importer importer;
 
-	const aiScene* scene = importer.ReadFile(_path, aiProcess_Triangulate);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+
+	if (!scene)
+		return;
 
 	auto animation = scene->mAnimations[0];
 	duration = (float)animation->mDuration;
@@ -16,7 +19,8 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	mesh = _mesh;
 
-	animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
+	if (!mesh)
+		return;
 
 	boneInfoMap = mesh->boneInfoMap;
 
@@ -27,7 +31,31 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
 
-	paths.emplace_back(_path);
+	paths.emplace_back(path);
+}
+
+void AnimResource::UpdateAnimationResources(Mesh* _mesh)
+{
+	Assimp::Importer importer;
+
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+
+	auto animation = scene->mAnimations[0];
+	duration = (float)animation->mDuration;
+	tickPerSecond = (int)animation->mTicksPerSecond;
+
+	mesh = _mesh;
+
+	boneInfoMap = mesh->boneInfoMap;
+
+	finalBonesMatrices.reserve(100);
+	for (int i = 0; i < 100; i++)
+		finalBonesMatrices.push_back(Mat4::identity);
+
+	ReadHeirarchyData(rootNode, scene->mRootNode);
+	ReadMissingBones(animation);
+
+	//paths.emplace_back(path);
 }
 
 void AnimResource::RemoveFromResourcesManager()
