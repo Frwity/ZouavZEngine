@@ -261,6 +261,9 @@
     <ClCompile Include="src\Game\Enemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\ProgressBar.cpp">
+      <Filter>src\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -461,24 +464,8 @@
     <ClInclude Include="include\Object.hpp">
       <Filter>include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\TerrainShader.fs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\TerrainShader.vs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\Gizmos.fs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\Gizmos.vs">
-      <Filter>resources</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\texture.jpg">
-      <Filter>resources</Filter>
-    </Image>
+    <ClInclude Include="include\Component\ProgressBar.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

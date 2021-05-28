@@ -38,7 +38,7 @@ protected:
 	bool isActive = true;
 
 	virtual void InternalActivate() {}
-	virtual void InternalDehactivate() {}
+	virtual void InternalDeactivate() {}
 
 public:
 
@@ -54,7 +54,7 @@ public:
 
 	bool IsActive() const;
 	virtual void Activate() { isActive = true; }
-	virtual void Dehactivate() { isActive = false; }
+	virtual void Deactivate() { isActive = false; }
 
 	GameObject& GetGameObject() { return *gameObject; }
 	const GameObject& GetGameObject() const { return *gameObject; }

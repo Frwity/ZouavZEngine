@@ -74,11 +74,11 @@ void GameObject::Activate()
 		component->InternalActivate();
 }
 
-void GameObject::Dehactivate() 
+void GameObject::Deactivate() 
 {
 	isActive = false; 
 	for (auto& component : components)
-		component->InternalDehactivate();
+		component->InternalDeactivate();
 }
 
 GameObject* GameObject::Instanciate(GameObject* _gameobject)

@@ -23,7 +23,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
+		InternalDeactivate();
 }
 
 ShapeCollision::~ShapeCollision()
@@ -126,9 +126,9 @@ void ShapeCollision::Activate()
 		UpdateIsTrigger();
 }
 
-void ShapeCollision::Dehactivate()
+void ShapeCollision::Deactivate()
 {
-	Component::Dehactivate();
+	Component::Deactivate();
 	if (shape)
 	{
 		if (IsTrigger())
@@ -144,7 +144,7 @@ void ShapeCollision::InternalActivate()
 		UpdateIsTrigger();
 }
 
-void ShapeCollision::InternalDehactivate()
+void ShapeCollision::InternalDeactivate()
 {
 	if (isActive && shape)
 	{

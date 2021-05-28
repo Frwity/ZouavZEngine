@@ -31,7 +31,7 @@ RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
 	PhysicSystem::scene->addActor(*actor);
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
+		InternalDeactivate();
 	
 	LockAxis();
 }

@@ -4,6 +4,9 @@
 #include "Component/MeshRenderer.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/BoxCollision.hpp"
+#include "Component/ProgressBar.hpp"
+#include "Game/Enemy.hpp"
+#include <imgui.h>
 #include "Game/Player.hpp"
 
 #include <iostream>
@@ -21,6 +24,13 @@ void Player::OnAddComponent()
 {
 	ICharacter::OnAddComponent();
 	camera = GetGameObject().AddComponent<Camera>();
+	ProgressBar* progressBar = GetGameObject().AddComponent<ProgressBar>();
+	progressBar->currentValue = (float*)&currentXp;
+	progressBar->maxValue = (float*)&maxXp;
+	progressBar = GetGameObject().AddComponent<ProgressBar>();
+	progressBar->currentValue = (float*)&life;
+	progressBar->maxValue = (float*)&maxLife;
+	progressBar->pos = { 0.0f, 0.45f, 0.0f};
 	GetGameObject().SetTag("Player");
 }
 
@@ -32,11 +42,17 @@ void Player::OnContact(Object* _other, class ShapeCollision* _triggerShape)
 
 void Player::Begin()
 {
-	ICharacter::Begin();
 	camera = GetGameObject().GetComponent<Camera>();
 	camera->SetPosition({ 0.0f, 5.0f, -10.0f });
 	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
-	life = 10000;
+	ProgressBar* progressBar = GetGameObject().GetComponent<ProgressBar>();
+	progressBar->currentValue = (float*)&currentXp;
+	progressBar->maxValue = (float*)&maxXp;
+	maxLife = 10000;
+	maxXp = level * 10;
+	attackDamage += attackDamageGain * (level - 1);
+	maxLife += lifeGain * (level - 1);
+	ICharacter::Begin();
 }
 
 void Player::Update()
@@ -90,4 +106,27 @@ void Player::Update()
 	Quaternion camRot = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f }) * Quaternion(Vec3{ -offset.y * camSensitivity, 0.0f, 0.0f });
 
 	camera->SetPosition(camRot.RotateVector(camera->GetPosition()));
+}
+
+void Player::ManageXp(const Enemy& _enemyKilled)
+{
+	currentXp += _enemyKilled.xpGiven;
+	if (currentXp >= maxXp)
+	{
+		level++;
+		currentXp -= maxXp;
+		maxXp = level * 10;
+		attackDamage += attackDamageGain;
+		maxLife += lifeGain;
+	}
+}
+
+void Player::Editor()
+{
+	ICharacter::Editor();
+	ImGui::Text("Level : ");
+	ImGui::SameLine();
+	ImGui::DragInt("", &level);
+	ImGui::Text("Max Xp : %d", maxXp);
+	ImGui::Text("Current Xp : %d", currentXp);
 }

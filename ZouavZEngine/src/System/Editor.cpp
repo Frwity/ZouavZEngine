@@ -23,6 +23,7 @@
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/Skybox.hpp"
+#include "Component/ProgressBar.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -272,7 +273,7 @@ void Editor::DisplayOptionWindow()
     if (ImGui::Button("Pause"))
     {
         state = EDITOR_STATE::PAUSE;
-        TimeManager::gameClock->Dehactivate();
+        TimeManager::gameClock->Deactivate();
 
     }
     ImGui::SameLine();
@@ -705,6 +706,7 @@ GENADDCOMPONENT(RigidBody)
 GENADDCOMPONENT(RigidStatic)
 GENADDCOMPONENT(Camera)
 GENADDCOMPONENT(Skybox)
+GENADDCOMPONENT(ProgressBar)
 
 void Editor::DisplayInspector()
 {
@@ -717,7 +719,7 @@ void Editor::DisplayInspector()
             bool isActive = gameObjectInspector->isActive;
             ImGui::Checkbox(" ", &isActive);
             if (isActive != gameObjectInspector->isActive)
-                isActive ? gameObjectInspector->Activate() : gameObjectInspector->Dehactivate();
+                isActive ? gameObjectInspector->Activate() : gameObjectInspector->Deactivate();
             ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
@@ -767,7 +769,7 @@ void Editor::DisplayInspector()
                 bool active = comp->isActive;
                 ImGui::Checkbox("", &active);
                 if (active != comp->isActive)
-                    active ? comp->Activate() : comp->Dehactivate();
+                    active ? comp->Activate() : comp->Deactivate();
                 ImGui::SameLine();
                 if (!Component::EditorCollapsingHeader(comp->name.c_str(), [comp]() {comp->Editor(); }))
                 {
@@ -830,6 +832,9 @@ void Editor::DisplayInspector()
                     }
 
                     if (ComponentButton<Skybox>("Add Skybox", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<ProgressBar>("Add ProgressBar", false))
                         addComponentWindow = false;
 
                     for (auto& addComponentFunction : ScriptSystem::addComponentsFunctions)

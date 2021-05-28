@@ -19,7 +19,9 @@ protected:
     float invulnerabilityFrame = 1.0f;
     float invulnerabilityTimer = 0.0f;
     int life = 5;
+    int maxLife = 5;
     int attackDamage = 1;
+    int level = 1;
     bool asTakenDamage = false;
     float attackDuration = 0.5f;
     float attackCooldown = 1.0f;

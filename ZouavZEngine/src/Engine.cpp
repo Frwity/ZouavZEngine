@@ -127,6 +127,7 @@ void Engine::Update()
         {
             scene.UpdateShaderUniform(*Camera::GetMainCamera());
             scene.Draw(&scene.GetWorld(), Camera::GetMainCamera());
+            scene.DrawGUI(&scene.GetWorld());
             scene.terrain.Draw(*SceneCamera::GetSceneCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
         }

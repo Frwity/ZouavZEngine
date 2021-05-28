@@ -278,7 +278,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.5120750665664673,
+                    "value0": 2.107569694519043,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -307,6 +307,19 @@
                     }
                 }
             }
+        },
+        {
+            "polymorphic_id": 2147483658,
+            "polymorphic_name": "ProgressBar",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true,
+                        "value1": "ProgressBar"
+                    }
+                }
+            }
         }
     ],
     "value18": "New GameObject",
@@ -332,7 +345,7 @@
     "value25": false,
     "value26": [
         {
-            "polymorphic_id": 2147483658,
+            "polymorphic_id": 2147483659,
             "polymorphic_name": "Enemy",
             "ptr_wrapper": {
                 "valid": 1,

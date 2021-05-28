@@ -4,7 +4,6 @@
 #include "System/ResourcesManager.hpp"
 #include "System/FontSystem.hpp"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_stdlib.h"
 #include "Component/FontComponent.hpp"

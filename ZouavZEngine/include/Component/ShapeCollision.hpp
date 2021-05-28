@@ -24,7 +24,7 @@ protected:
 	std::shared_ptr<Mesh> gizmoMesh;
 	void AttachToRigidComponent();
 	void InternalActivate() override;
-	void InternalDehactivate() override;
+	void InternalDeactivate() override;
 	bool isTrigger = false;
 
 public:
@@ -49,7 +49,7 @@ public:
 	virtual void UpdateScale() { };
 		
 	void Activate() override;
-	void Dehactivate() override;
+	void Deactivate() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

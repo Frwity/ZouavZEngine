@@ -179,6 +179,7 @@
     <ClCompile Include="src\Component\Light.cpp" />
     <ClCompile Include="src\Component\MeshRenderer.cpp" />
     <ClCompile Include="src\Component\Plane.cpp" />
+    <ClCompile Include="src\Component\ProgressBar.cpp" />
     <ClCompile Include="src\Component\RegisterComponents.cpp" />
     <ClCompile Include="src\Component\Rigid.cpp" />
     <ClCompile Include="src\Component\RigidBody.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="include\Component\Light.hpp" />
     <ClInclude Include="include\Component\MeshRenderer.hpp" />
     <ClInclude Include="include\Component\Plane.hpp" />
+    <ClInclude Include="include\Component\ProgressBar.hpp" />
     <ClInclude Include="include\Component\RegisterComponent.hpp" />
     <ClInclude Include="include\Component\Rigid.hpp" />
     <ClInclude Include="include\Component\RigidBody.hpp" />
@@ -296,19 +298,6 @@
     <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
     <ClInclude Include="include\Game\Enemy.hpp" />
     <!--Include End-->
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\Gizmos.fs" />
-    <None Include="resources\Gizmos.vs" />
-    <None Include="resources\TerrainShader.fs">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="resources\TerrainShader.vs">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\texture.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

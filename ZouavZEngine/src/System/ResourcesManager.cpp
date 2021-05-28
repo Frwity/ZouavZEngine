@@ -15,6 +15,7 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceMesh("Capsule", false, "resources/capsule.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.shader");
     ResourcesManager::AddResourceShader("Skybox", false, "resources/Skybox.shader");
+    ResourcesManager::AddResourceShader("ProgressBar", false, "resources/ProgressBar.shader");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
     ResourcesManager::AddResourceFont("Default", false, "resources/Arial.fnt");
     ResourcesManager::AddResourceCubemapTexture("Default", false, "resources/Skybox.dds");

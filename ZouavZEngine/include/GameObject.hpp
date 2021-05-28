@@ -56,7 +56,7 @@ public:
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
-	void Dehactivate();
+	void Deactivate();
 
 	static GameObject* Instanciate(GameObject* _gameobject);
 	static GameObject* Instanciate(GameObject* _gameobject, const Vec3& _position);

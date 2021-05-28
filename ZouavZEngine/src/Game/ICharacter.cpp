@@ -11,6 +11,7 @@
 #include "imgui.h"
 
 #include "Game/Enemy.hpp"
+#include "Game/Player.hpp"
 #include "Game/ICharacter.hpp"
 
 ICharacter::ICharacter(GameObject* _gameobject, std::string _name)
@@ -30,7 +31,7 @@ void ICharacter::OnAddComponent()
 	attackCollision = GetGameObject().AddComponent<BoxCollision>();
 	attackCollision->SetName("Attack Collision");
 	attackCollision->SetTrigger(true);
-	attackCollision->Dehactivate();
+	attackCollision->Deactivate();
 	attackCollision->halfExtends.z = 1.5f;
 	attackCollision->EditPosition({ 0.0f, 0.0f, 1.25f });
 	baseColor = material->color;
@@ -48,14 +49,21 @@ void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
 		Enemy* otherEnemy = go->GetComponent<Enemy>();
 		Enemy* thisEnemy = GetGameObject().GetComponent<Enemy>();
 		if ((otherEnemy && !thisEnemy) || (!otherEnemy && thisEnemy))
-			go->GetComponent<ICharacter>()->Damage(attackDamage);
+		{
+			if (go->GetComponent<ICharacter>()->IsAlive())
+			{
+				go->GetComponent<ICharacter>()->Damage(attackDamage);
+				if (otherEnemy && !otherEnemy->IsAlive())
+					GetGameObject().GetComponent<Player>()->ManageXp(*otherEnemy);
+			}
+		}
 	}
 }
 
 void ICharacter::Editor()
 {
 	ImGui::ColorEdit4("Damage Color : ", &damageColor.x);
-	ImGui::DragInt("Life : ", &life);
+	ImGui::DragInt("Life : ", &life, 1.0f, 0, maxLife);
 }
 
 void ICharacter::Begin()
@@ -74,6 +82,7 @@ void ICharacter::Begin()
 	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 	rb = GetGameObject().GetComponent<RigidBody>();
 	audioBroadcaster = GetGameObject().GetComponent<AudioBroadcaster>();
+	life > maxLife ? life = maxLife : 0;
 }
 
 void ICharacter::Update()
@@ -90,7 +99,7 @@ void ICharacter::Update()
 
 		if (timerAttackDuration < 0.0f)
 		{
-			attackCollision->Dehactivate();
+			attackCollision->Deactivate();
 			timerAttackCooldown = attackCooldown;
 		}
 	}
@@ -126,7 +135,10 @@ bool ICharacter::Damage(int _damage)
 			audioBroadcaster->Play("damage.wav");
 		}
 		else
+		{
 			audioBroadcaster->Play("death.wav");
+			attackCollision->Deactivate();
+		}
 	}
 	else
 		return false;
