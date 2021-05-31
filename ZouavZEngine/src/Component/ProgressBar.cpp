@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <glad/glad.h>
 #include "System/ResourcesManager.hpp"
-#include "Rendering/Camera.hpp"
 #include "Component/ProgressBar.hpp"
 
 ProgressBar::ProgressBar(GameObject* _gameObject, std::string _name)
@@ -27,13 +26,13 @@ ProgressBar::ProgressBar(GameObject* _gameObject, std::string _name)
 	indices.push_back(0);
 	indices.push_back(1);
 	indices.push_back(2);
-	indices.push_back(1);
+	indices.push_back(0);
 	indices.push_back(2);
 	indices.push_back(3);
 	mesh.InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
-void ProgressBar::Draw(const Camera& _camera)
+void ProgressBar::Draw()
 {
 	if (currentValue && maxValue)
 	{
@@ -43,12 +42,18 @@ void ProgressBar::Draw(const Camera& _camera)
 
 		shader->Use();
 
-		shader->SetMatrix("projection", Mat4::CreateTranslationMatrix(Vec3{ -1.f + (float)_camera.GetHeight() / (float)_camera.GetWidth() , 0.0f, 0.0f } + pos / 100.f)
-										* Mat4::CreateScaleMatrix({ (float)_camera.GetHeight() / (float)_camera.GetWidth(), 1.f, 1.f }));
+		shader->SetMatrix("projection", Mat4::CreateTranslationMatrix(pos)
+			* Mat4::CreateScaleMatrix({ size.x, size.y, 1.f }));
 
-		shader->SetFloat("sizeFilled", (*currentValue / *maxValue) * size.x);
-		shader->SetVector4("backgroundColor", backgroundColor);
-		shader->SetVector4("fillColor", fillColor);
+		shader->SetVector4("color", backgroundColor);
+
+		glBindVertexArray(mesh.GetID());
+		glDrawElements(GL_TRIANGLES, (GLsizei)mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
+
+		shader->SetMatrix("projection", Mat4::CreateTranslationMatrix(Vec3(pos.x - size.x * (1 - (*currentValue / *maxValue)) / 2.0f, pos.y, pos.z))
+			* Mat4::CreateScaleMatrix({ (*currentValue / *maxValue) * size.x, size.y, 1.f }));
+
+		shader->SetVector4("color", fillColor);
 
 		glBindVertexArray(mesh.GetID());
 		glDrawElements(GL_TRIANGLES, (GLsizei)mesh.GetNbElements(), GL_UNSIGNED_INT, 0);
@@ -63,6 +68,8 @@ void ProgressBar::Editor()
 {
     ImGui::ColorEdit4("Background Color : ", &backgroundColor.x);
     ImGui::ColorEdit4("Fill Color : ", &fillColor.x);
+	ImGui::DragFloat3("Position : ", &pos.x, 0.05f);
+	ImGui::DragFloat2("Size : ", &size.x, 0.05f);
 }
 
 template <class Archive>

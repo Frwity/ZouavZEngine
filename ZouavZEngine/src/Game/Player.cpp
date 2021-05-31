@@ -25,12 +25,14 @@ void Player::OnAddComponent()
 	ICharacter::OnAddComponent();
 	camera = GetGameObject().AddComponent<Camera>();
 	ProgressBar* progressBar = GetGameObject().AddComponent<ProgressBar>();
-	progressBar->currentValue = (float*)&currentXp;
-	progressBar->maxValue = (float*)&maxXp;
-	progressBar = GetGameObject().AddComponent<ProgressBar>();
 	progressBar->currentValue = (float*)&life;
 	progressBar->maxValue = (float*)&maxLife;
 	progressBar->pos = { 0.0f, 0.45f, 0.0f};
+	progressBar->SetName("LifeBar");
+	progressBar = GetGameObject().AddComponent<ProgressBar>();
+	progressBar->currentValue = (float*)&currentXp;
+	progressBar->maxValue = (float*)&maxXp;
+	progressBar->SetName("XpBar");
 	GetGameObject().SetTag("Player");
 }
 
@@ -45,10 +47,13 @@ void Player::Begin()
 	camera = GetGameObject().GetComponent<Camera>();
 	camera->SetPosition({ 0.0f, 5.0f, -10.0f });
 	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
-	ProgressBar* progressBar = GetGameObject().GetComponent<ProgressBar>();
+	ProgressBar* progressBar = GetGameObject().GetComponentByName<ProgressBar>("XpBar");
 	progressBar->currentValue = (float*)&currentXp;
 	progressBar->maxValue = (float*)&maxXp;
-	maxLife = 10000;
+	progressBar = GetGameObject().GetComponentByName<ProgressBar>("LifeBar");
+	progressBar->currentValue = (float*)&life;
+	progressBar->maxValue = (float*)&maxLife;
+	progressBar->pos = { 0.0f, 1.0f, 0.0f };
 	maxXp = level * 10;
 	attackDamage += attackDamageGain * (level - 1);
 	maxLife += lifeGain * (level - 1);
