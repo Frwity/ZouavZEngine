@@ -35,6 +35,9 @@ public :
     template <class Archive>
     void serialize(Archive& _ar)
     {
+        if (currentAnimation)
+            _ar(currentAnimation->GetName());
+
         _ar(cereal::base_class<Component>(this));
     }
 

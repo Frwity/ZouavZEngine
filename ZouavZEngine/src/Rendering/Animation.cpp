@@ -70,6 +70,9 @@ void Animation::Draw(const Camera& _camera)
     else
         return;
 
+    if(!mesh)
+        return;
+
     animationShader->Use();
 
     animationShader->SetMatrix("view", _camera.GetMatrix().Reversed());
@@ -88,6 +91,13 @@ void Animation::Draw(const Camera& _camera)
 template <class Archive>
 static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct)
 {
+    std::string animationName;
+    std::string animationPath;
+    std::string meshName;
+
+    _ar(animationName);
+
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
+    _construct->currentAnimation = *ResourcesManager::GetResource<AnimResource>(animationName);
 }
