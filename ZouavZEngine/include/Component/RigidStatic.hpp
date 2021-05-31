@@ -26,7 +26,6 @@ public:
 
 	void Activate() override;
 	void Deactivate() override;
-	void UpdateTransform(Transform transform) override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)
