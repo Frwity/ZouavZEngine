@@ -62,4 +62,5 @@ public:
 	void DisplayChild(class GameObject* _parent);
 	void MoveSelectedGameobject();
 	void NewSceneWindow(class Engine& _engine);
+	void NewClassWindow();
 };
