@@ -19,6 +19,7 @@ private:
 
 public :
     bool play = false;
+    std::unordered_map<std::string, AnimResource*> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;

@@ -18,6 +18,7 @@
 Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* _mesh, std::string _name):
 	Component(_gameObject, _name)
 {
+    currentAnimation = nullptr;
     if (gameObject->GetComponent<MeshRenderer>())
     {
         mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
@@ -46,6 +47,7 @@ void Animation::Editor()
                 if (currentAnimation.use_count() == 2 && currentAnimation->IsDeletable())
                     ResourcesManager::RemoveResourceAnimation(currentAnimation->GetName());
                 currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
+                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation.get()));
             }
         }
 
@@ -55,7 +57,9 @@ void Animation::Editor()
     if (ImGui::Button("Play"))
     {
         play = !play;
-        currentAnimation->currentTime = 0.0f;
+
+        if(currentAnimation)
+            currentAnimation->currentTime = 0.0f;
     }
 }
 
@@ -63,6 +67,8 @@ void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)
         currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime());
+    else
+        return;
 
     animationShader->Use();
 
