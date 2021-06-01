@@ -85,12 +85,19 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject)
 {
 	GameObject* newGameobject = GameObject::CreateGameObject("");
 	*newGameobject = *_gameobject;
+
 	if (_gameobject->parent)
 		newGameobject->SetParent(_gameobject->parent);
 	else
 		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
 
 	newGameobject->isPrefab = false;
+	newGameobject->Activate();
+
+	auto scripts = newGameobject->GetComponents<ScriptComponent>();
+	for (auto script : scripts)
+		script->Begin();
+
 	return newGameobject;
 }
 
@@ -98,8 +105,10 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, const Vec3& _positi
 {
 	Vec3 _gameobjectPostion = _gameobject->localPosition;
 	_gameobject->localPosition = _position;
+
 	GameObject* newGameobject = GameObject::CreateGameObject("");
 	*newGameobject = *_gameobject;
+
 	if (_gameobject->parent)
 		newGameobject->SetParent(_gameobject->parent);
 	else
@@ -108,6 +117,11 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, const Vec3& _positi
 
 	newGameobject->isPrefab = false;
 	newGameobject->Activate();
+
+	auto scripts = newGameobject->GetComponents<ScriptComponent>();
+	for (auto script : scripts)
+		script->Begin();
+
 	return newGameobject;
 }
 
@@ -115,12 +129,19 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, GameObject* _parent
 {
 	GameObject* newGameobject = GameObject::CreateGameObject("");
 	*newGameobject = *_gameobject;
+
 	if (_parent)
 		newGameobject->SetParent(_parent);
 	else
 		newGameobject->SetParent(&Scene::GetCurrentScene()->GetWorld());
 
 	newGameobject->isPrefab = false;
+	newGameobject->Activate();
+
+	auto scripts = newGameobject->GetComponents<ScriptComponent>();
+	for (auto script : scripts)
+		script->Begin();
+
 	return newGameobject;
 }
 
@@ -128,8 +149,10 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, GameObject* _parent
 {
 	Vec3 _gameobjectPostion = _gameobject->localPosition;
 	_gameobject->localPosition = _position;
+
 	GameObject* newGameobject = GameObject::CreateGameObject("");
 	*newGameobject = *_gameobject;
+
 	if (_parent)
 		newGameobject->SetParent(_parent);
 	else
@@ -137,6 +160,12 @@ GameObject* GameObject::Instanciate(GameObject* _gameobject, GameObject* _parent
 	_gameobject->localPosition = _gameobjectPostion;
 
 	newGameobject->isPrefab = false;
+	newGameobject->Activate();
+
+	auto scripts = newGameobject->GetComponents<ScriptComponent>();
+	for (auto script : scripts)
+		script->Begin();
+
 	return newGameobject;
 }
 

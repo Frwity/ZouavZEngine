@@ -1,7 +1,7 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 1,
+    "value2": 2,
     "value3": {
         "value0": 0.0,
         "value1": 0.0,
@@ -66,7 +66,7 @@
             }
         }
     ],
-    "value9": "New GameObject",
+    "value9": "Player",
     "value10": "Player",
     "value11": 0,
     "value12": {
@@ -278,7 +278,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.4910497665405274,
+                    "value0": 0.9143616557121277,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -362,37 +362,240 @@
             }
         }
     ],
-    "value18": true,
-    "value19": 128.0,
-    "value20": 128,
-    "value21": 16,
-    "value22": 0,
-    "value23": 1,
-    "value24": 0,
-    "value25": -10.0,
-    "value26": 30.0,
-    "value27": 30.0,
-    "value28": 1,
-    "value29": 0,
-    "value30": true,
-    "value31": 1,
-    "value32": 0,
+    "value18": "Slime",
+    "value19": "",
+    "value20": 0,
+    "value21": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": -8.486381530761719
+    },
+    "value22": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value23": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value24": true,
+    "value25": false,
+    "value26": [
+        {
+            "polymorphic_id": 2147483659,
+            "polymorphic_name": "SlimeEnemy",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": {
+                            "value0": {
+                                "value0": 1.0,
+                                "value1": 0.0,
+                                "value2": 0.0,
+                                "value3": 1.0
+                            },
+                            "value1": 1.0,
+                            "value2": 5,
+                            "value3": 1,
+                            "value4": {
+                                "value0": true,
+                                "value1": "SlimeEnemy"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 4,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 6,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Cube.obj",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 4,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.5
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 1.25
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 1,
+                    "value4": "Default Text",
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 0.0,
+                    "value12": 4.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 0,
+                    "value3": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        }
+    ],
+    "value27": true,
+    "value28": 128.0,
+    "value29": 128,
+    "value30": 16,
+    "value31": 0,
+    "value32": 1,
     "value33": 0,
-    "value34": 1,
-    "value35": 0.009999999776482582,
-    "value36": 2.0,
-    "value37": 0.5,
-    "value38": 0.0,
-    "value39": 2.0,
-    "value40": 0.0,
-    "value41": 0.0,
-    "value42": 0.0,
-    "value43": 0.0,
-    "value44": 0.0,
-    "value45": 0.0,
-    "value46": 1.0,
-    "value47": "Grass.png",
-    "value48": 1,
-    "value49": "noPath",
-    "value50": 1
+    "value34": -10.0,
+    "value35": 30.0,
+    "value36": 30.0,
+    "value37": 1,
+    "value38": 0,
+    "value39": true,
+    "value40": 1,
+    "value41": 0,
+    "value42": 0,
+    "value43": 1,
+    "value44": 0.009999999776482582,
+    "value45": 2.0,
+    "value46": 0.5,
+    "value47": 0.0,
+    "value48": 2.0,
+    "value49": 0.0,
+    "value50": 0.0,
+    "value51": 0.0,
+    "value52": 0.0,
+    "value53": 0.0,
+    "value54": 0.0,
+    "value55": 1.0,
+    "value56": "Grass.png",
+    "value57": 1,
+    "value58": "noPath",
+    "value59": 1
 }

@@ -14,6 +14,9 @@ private:
     float distanceToStop = 1.5f;
     float speed = 2.0f;
 
+    float decayTimer = 0.0f;
+    float timeToDecay = 10.f;
+
 public:
     Enemy() = delete;
     Enemy(class GameObject* _gameobject, std::string _name = "Enemy");

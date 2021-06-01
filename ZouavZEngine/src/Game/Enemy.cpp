@@ -11,7 +11,9 @@ Enemy::Enemy(GameObject * _gameobject, std::string _name)
 {}
 
 void Enemy::Editor()
-{}
+{
+	ICharacter::Editor();
+}
 
 void Enemy::Begin()
 {
@@ -22,9 +24,15 @@ void Enemy::Begin()
 void Enemy::Update()
 {
 	if (!IsAlive())
+	{
+		decayTimer += TimeManager::GetDeltaTime();
+		if (decayTimer > timeToDecay)
+			GetGameObject().Destroy();
 		return;
+	}
 
 	ICharacter::Update();
+
 	if (player)
 	{
 		Vec3 direction = player->WorldPosition() - GetGameObject().WorldPosition();

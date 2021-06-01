@@ -64,7 +64,7 @@ void ICharacter::Editor()
 {
 	ImGui::ColorEdit4("Damage Color : ", &damageColor.x);
 	ImGui::DragInt("Life : ", &life, 1.0f, 0, maxLife);
-	ImGui::Text("Max Life : %d", maxLife);
+	ImGui::DragInt("Max Life : ", &maxLife, 1.0f, 0, 1000000);
 }
 
 void ICharacter::Begin()
@@ -139,6 +139,7 @@ bool ICharacter::Damage(int _damage)
 		{
 			audioBroadcaster->Play("death.wav");
 			StopAttack();
+			OnDeath();
 		}
 	}
 	else

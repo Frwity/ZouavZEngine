@@ -136,9 +136,9 @@ void Engine::Update()
         /////////////////
         
         editor.Update();
-        GameObject::DestroyGameObjectIfNeedTo();
         render.Update();
         InputManager::UpdateOldMousePos();
+        GameObject::DestroyGameObjectIfNeedTo();
     }
 
     GameObject::gameObjects.clear();

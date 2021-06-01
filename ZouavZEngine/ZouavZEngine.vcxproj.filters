@@ -264,6 +264,9 @@
     <ClCompile Include="src\Component\ProgressBar.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\SlimeEnemy.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\ProgressBar.hpp">
       <Filter>include\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\SlimeEnemy.hpp">
+      <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
