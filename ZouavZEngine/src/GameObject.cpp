@@ -186,21 +186,13 @@ void GameObject::UpdateTransform(const Mat4& _heritedTransform)
 	if (worldPosition.y < minY && parent != nullptr)
 		Destroy();
 
+	//update physx transform for simulation
+	Rigid* rd = GetComponent<Rigid>();
+	if (rd)
+		rd->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*this)));
+
 	for (GameObject* _child : children)
-	{
 		_child->UpdateTransform(_heritedTransform * Mat4::CreateTRSMatrix(localPosition, localRotation, localScale)); 
-		
-		RigidBody* rb = _child->GetComponent<RigidBody>();
-
-		//update physx transform for simulation
-		if (rb)
-			rb->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
-
-		RigidStatic* rs = _child->GetComponent<RigidStatic>();
-
-		if (rs)
-			rs->actor->setGlobalPose(PxTransformFromTransformGlobal(static_cast<Transform>(*_child)));
-	}
 }
 
 bool GameObject::IsChildOf(const GameObject* _gameObject) const
