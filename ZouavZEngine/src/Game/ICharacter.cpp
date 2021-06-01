@@ -10,6 +10,7 @@
 #include "GameObject.hpp"
 #include "imgui.h"
 
+#include "Game/Arrow.hpp"
 #include "Game/Enemy.hpp"
 #include "Game/Player.hpp"
 #include "Game/ICharacter.hpp"
@@ -42,7 +43,7 @@ void ICharacter::OnAddComponent()
 void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
 {
 	GameObject* go = dynamic_cast<GameObject*>(_other);
-	if (!go)
+	if (!go || go->GetComponent<Arrow>())
 		return;
 	if (_triggerShape == attackCollision)
 	{

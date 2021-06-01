@@ -230,6 +230,8 @@
     <ClCompile Include="src\System\TimeManager.cpp" />
     <ClCompile Include="src\System\ScriptSystem.cpp" />
     <ClCompile Include="src\Game\Enemy.cpp" />
+    <ClCompile Include="src\Game\EnemyArcher.cpp" />
+    <ClCompile Include="src\Game\Arrow.cpp" />
     <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +306,8 @@
     <ClInclude Include="VisualLeakDetector\include\vld.h" />
     <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
     <ClInclude Include="include\Game\Enemy.hpp" />
+    <ClInclude Include="include\Game\EnemyArcher.hpp" />
+    <ClInclude Include="include\Game\Arrow.hpp" />
     <!--Include End-->
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

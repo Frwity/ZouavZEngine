@@ -8,6 +8,8 @@
 //<REGISTERINCLUDE>
 #include "Game/Player.hpp"
 #include "Game/Enemy.hpp"
+#include "Game/EnemyArcher.hpp"
+#include "Game/Arrow.hpp"
 //</REGISTERINCLUDE>
 
 void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFunctions)
@@ -23,6 +25,8 @@ void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFu
 	//<REGISTER>
 	REGISTER(Player);
     REGISTER(Enemy);
+    REGISTER(EnemyArcher);
+    REGISTER(Arrow);
 	//</REGISTER>
 
 

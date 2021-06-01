@@ -253,7 +253,7 @@
       <Filter>src\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\AnimResource.cpp">
-      <Filter>src\Rendering</Filter> 
+      <Filter>src\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\CubemapTexture.cpp">
       <Filter>src\Rendering</Filter>
@@ -272,6 +272,12 @@
     </ClCompile>
     <ClCompile Include="src\Component\ProgressBar.cpp">
       <Filter>src\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\EnemyArcher.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Arrow.cpp">
+      <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,10 +494,11 @@
     <ClInclude Include="include\Component\ProgressBar.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\texture.jpg">
-      <Filter>resources</Filter>
-    </Image>
+    <ClInclude Include="include\Game\EnemyArcher.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\Arrow.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

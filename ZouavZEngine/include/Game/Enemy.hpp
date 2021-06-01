@@ -7,7 +7,7 @@
 class Enemy : public ICharacter
 {
    friend class cereal::access;
-private:
+protected:
     GameObject* player = nullptr;
     float detectionDistance = 25.0f;
     float distanceToAttack = 2.0f;
