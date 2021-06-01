@@ -277,6 +277,7 @@
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Arrow.cpp">
+    <ClCompile Include="src\Game\SlimeEnemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -498,6 +499,7 @@
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Arrow.hpp">
+    <ClInclude Include="include\Game\SlimeEnemy.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
   </ItemGroup>

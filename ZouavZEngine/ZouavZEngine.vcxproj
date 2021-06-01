@@ -232,6 +232,7 @@
     <ClCompile Include="src\Game\Enemy.cpp" />
     <ClCompile Include="src\Game\EnemyArcher.cpp" />
     <ClCompile Include="src\Game\Arrow.cpp" />
+    <ClCompile Include="src\Game\SlimeEnemy.cpp" />
     <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +309,7 @@
     <ClInclude Include="include\Game\Enemy.hpp" />
     <ClInclude Include="include\Game\EnemyArcher.hpp" />
     <ClInclude Include="include\Game\Arrow.hpp" />
+    <ClInclude Include="include\Game\SlimeEnemy.hpp" />
     <!--Include End-->
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

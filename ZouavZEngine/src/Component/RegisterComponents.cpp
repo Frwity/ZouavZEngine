@@ -10,6 +10,7 @@
 #include "Game/Enemy.hpp"
 #include "Game/EnemyArcher.hpp"
 #include "Game/Arrow.hpp"
+#include "Game/SlimeEnemy.hpp"
 //</REGISTERINCLUDE>
 
 void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFunctions)
@@ -27,6 +28,7 @@ void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFu
     REGISTER(Enemy);
     REGISTER(EnemyArcher);
     REGISTER(Arrow);
+    REGISTER(SlimeEnemy);
 	//</REGISTER>
 
 

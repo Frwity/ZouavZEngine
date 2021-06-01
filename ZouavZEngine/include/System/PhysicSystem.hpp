@@ -68,9 +68,9 @@ public:
 			Object* obj1 = static_cast<Object*>(rd->userData);
 			Object* obj2 = static_cast<Object*>(rd2->userData);
 
-			if (dynamic_cast<GameObject*>(obj1))
+			if (dynamic_cast<GameObject*>(obj1) && obj2)
 				static_cast<GameObject*>(obj1)->GetComponent<Rigid>()->OnContact(obj2, pairHeader.pairs->shapes[0]);
-			if (dynamic_cast<GameObject*>(obj2))
+			if (dynamic_cast<GameObject*>(obj2) && obj1)
 				static_cast<GameObject*>(obj2)->GetComponent<Rigid>()->OnContact(obj1, pairHeader.pairs->shapes[0]);
 		}
 
