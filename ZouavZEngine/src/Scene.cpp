@@ -161,8 +161,11 @@ void Scene::DrawGUI(GameObject* _parent)
 {
 	if (!_parent->IsActive())
 		return;
-	if (_parent->GetComponent<ProgressBar>())
-		_parent->GetComponent<ProgressBar>()->Draw(*Camera::GetMainCamera());
+
+	std::vector<ProgressBar*> progressBars = _parent->GetComponents<ProgressBar>();
+
+	for (ProgressBar* progressBar : progressBars)
+		progressBar->Draw();
 
 	for (GameObject* child : _parent->GetChildren())
 		DrawGUI(child);

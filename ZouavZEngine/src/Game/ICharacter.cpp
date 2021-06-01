@@ -64,6 +64,7 @@ void ICharacter::Editor()
 {
 	ImGui::ColorEdit4("Damage Color : ", &damageColor.x);
 	ImGui::DragInt("Life : ", &life, 1.0f, 0, maxLife);
+	ImGui::Text("Max Life : %d", maxLife);
 }
 
 void ICharacter::Begin()

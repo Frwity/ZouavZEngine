@@ -76,5 +76,10 @@ template <class Archive>
 static void ProgressBar::load_and_construct(Archive& _ar, cereal::construct<ProgressBar>& _construct)
 {
     _construct(GameObject::currentLoadedGameObject);
+
+	_ar(_construct->fillColor.x, _construct->fillColor.y, _construct->fillColor.z, _construct->fillColor.w,
+		_construct->backgroundColor.x, _construct->backgroundColor.y, _construct->backgroundColor.z, _construct->backgroundColor.w,
+		_construct->pos.x, _construct->pos.y, _construct->pos.z, _construct->size.x, _construct->size.y, _construct->name);
+
     _ar(cereal::base_class<Component>(_construct.ptr()));
 }

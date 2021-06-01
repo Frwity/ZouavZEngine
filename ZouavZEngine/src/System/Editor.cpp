@@ -203,14 +203,14 @@ void Editor::DisplayMainWindow(const class Render& _render, class Framebuffer& _
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
         if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -633,14 +633,12 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGui::SetWindowFocus("Scene");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
         if (ImGui::IsWindowFocused() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
         {
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -917,14 +915,14 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
         if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;

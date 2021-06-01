@@ -25,13 +25,16 @@ public:
 	float* currentValue{ nullptr };
 	float* maxValue{ nullptr };
 
-	void Draw(const class Camera& _camera);
+	void Draw();
 
 	void Editor() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
+		_ar(fillColor.x, fillColor.y, fillColor.z, fillColor.w,
+			backgroundColor.x, backgroundColor.y, backgroundColor.z, backgroundColor.w,
+			pos.x, pos.y, pos.z, size.x, size.y, name);
 		_ar(cereal::base_class<Component>(this));
 	}
 

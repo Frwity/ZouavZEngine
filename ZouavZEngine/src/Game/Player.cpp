@@ -27,7 +27,6 @@ void Player::OnAddComponent()
 	ProgressBar* progressBar = GetGameObject().AddComponent<ProgressBar>();
 	progressBar->currentValue = (float*)&life;
 	progressBar->maxValue = (float*)&maxLife;
-	progressBar->pos = { 0.0f, 0.45f, 0.0f};
 	progressBar->SetName("LifeBar");
 	progressBar = GetGameObject().AddComponent<ProgressBar>();
 	progressBar->currentValue = (float*)&currentXp;
