@@ -57,6 +57,18 @@ Quaternion::Quaternion(float _w, float _x, float _y, float _z)
 	z = _z;
 }
 
+Quaternion Quaternion::AngleAxis(const Vec3& _v, float _f)
+{
+	Quaternion toReturn;
+
+	toReturn.x = _v.x * sinf(_f / 2.f);
+	toReturn.y = _v.y * sinf(_f / 2.f);
+	toReturn.z = _v.z * sinf(_f / 2.f);
+	toReturn.w = cosf(_f / 2.f);
+
+	return toReturn;
+}
+
 void Quaternion::Mult(const Quaternion& _q2)
 {
 	float tempw = w;

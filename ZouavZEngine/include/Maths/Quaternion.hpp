@@ -22,6 +22,8 @@ public:
 	Quaternion(const Vec3& _v, float _f);
 	Quaternion(float _w, float _x, float _y, float _z);
 
+	static Quaternion AngleAxis(const Vec3& _v, float _f);
+
 	void Mult(const Quaternion& _q2);
 	Quaternion Mult(const Quaternion& _q2) const;
 

@@ -106,10 +106,18 @@ void Player::Update()
 		Attack();
 
 	Vec2 offset = InputManager::GetCursorOffsetFromLastFrame();
+	
+	Quaternion camRotY = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f });
+	camera->SetPosition(camRotY.RotateVector(camera->GetPosition()));
 
-	Quaternion camRot = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f }) * Quaternion(Vec3{ -offset.y * camSensitivity, 0.0f, 0.0f });
+	if (totalAngle < -M_PI_4 && offset.y > 0 || totalAngle > M_PI_4 && offset.y < 0)
+		return;
 
-	camera->SetPosition(camRot.RotateVector(camera->GetPosition()));
+	Vec3 right = (-camera->GetPosition().Cross(Vec3::up)).Normalized();
+	Quaternion camRotX = Quaternion::AngleAxis(right, -offset.y * camSensitivity / 30.f);
+
+	totalAngle += -offset.y * camSensitivity / 30.f;
+	camera->SetPosition(camRotX.RotateVector((camera->GetPosition() - GetGameObject().WorldPosition()) + GetGameObject().WorldPosition()));
 }
 
 void Player::ManageXp(const Enemy& _enemyKilled)
