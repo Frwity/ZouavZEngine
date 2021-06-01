@@ -6,11 +6,14 @@ std::unordered_map<std::string, std::shared_ptr<Mesh>> ResourcesManager::meshRes
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourcesManager::textureResources;
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shaderResources;
 std::unordered_map<std::string, std::shared_ptr<Font>> ResourcesManager::fontResources;
+std::unordered_map<std::string, std::shared_ptr<AnimResource>> ResourcesManager::animationsResources;
 std::unordered_map<std::string, std::shared_ptr<CubemapTexture>> ResourcesManager::cubemapTextureResources;
 
 void ResourcesManager::InitDefaultResources()
 {
     ResourcesManager::AddResourceMesh("Default", false, "resources/Cube.obj");
+    ResourcesManager::AddResourceMesh("Vampire", false, "resources/dancing_vampire.dae");
+    ResourcesManager::AddResourceTexture("VampireDiffuse", false, "resources/texture/Vampire_diffuse.png");
     ResourcesManager::AddResourceMesh("Sphere", false, "resources/spheregizmos.obj");
     ResourcesManager::AddResourceMesh("Capsule", false, "resources/capsule.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.shader");

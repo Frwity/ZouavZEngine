@@ -20,7 +20,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 	 : Component(_gameObject, _name), transform(_transform), isTrigger(_isTrigger)
 {
 	material = PhysicSystem::physics->createMaterial(0.5f, 0.5f, 0.1f);
-	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");;
+	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");
 
 	if (!_gameObject->IsActive())
 		InternalDehactivate();

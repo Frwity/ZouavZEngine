@@ -68,6 +68,7 @@ void Engine::LoadDefaultResources()
 {
     ResourcesManager::InitDefaultResources();
     ResourcesManager::AddResourceShader("TerrainShader", false, "resources/TerrainShader.shader");
+    ResourcesManager::AddResourceShader("AnimShader", false, "resources/Anim.shader");
     ResourcesManager::AddResourceShader("Font3DShader", false, "resources/Font3DShader.shader");
     ResourcesManager::AddResourceShader("FontBillboardShader", false, "resources/FontBillboardShader.shader");
     ResourcesManager::AddResourceShader("Font2DShader", false, "resources/Font2DShader.shader");

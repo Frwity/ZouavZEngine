@@ -5,17 +5,41 @@
 #include <GLFW/glfw3.h>
 #include "System/ResourcesManager.hpp"
 #include "Component/MeshRenderer.hpp"
+#include "Component/Animation.hpp"
 #include "System/Debug.hpp"
 #include "imgui.h"
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh, std::shared_ptr<Texture>& _texture, std::shared_ptr<Shader>& _shader, std::string _name)
     : Component(_gameObject, _name), mesh{ _mesh }, material{ _shader, _texture, {1.0f, 1.0f, 1.0f, 1.0f} }
-{}
+{
+    //Update Animation component on load if exist
+    Animation* animation = gameObject->GetComponent<Animation>();
+
+    if (animation)
+    {
+        animation->mesh = mesh.get();
+        animation->text = material.texture.get();
+        
+        if (animation->currentAnimation)
+            animation->currentAnimation->UpdateAnimationResources(mesh.get());
+    }
+}
 
 MeshRenderer::MeshRenderer(GameObject* _gameObject, std::string _name)
     : Component(_gameObject, _name), 
       mesh{ *ResourcesManager::GetResource<Mesh>("Default") }
-{}
+{
+    Animation* animation = gameObject->GetComponent<Animation>();
+
+    if (animation)
+    {
+        animation->mesh = mesh.get();
+        animation->text = material.texture.get();
+
+        if (animation->currentAnimation)
+            animation->currentAnimation->UpdateAnimationResources(mesh.get());
+    }
+}
 
 MeshRenderer::~MeshRenderer()
 {
@@ -42,7 +66,15 @@ void MeshRenderer::Draw(const Camera& _camera)
 
 void MeshRenderer::TextureEditor()
 {
-    ResourcesManager::ResourceChanger<Texture>("Texture", material.texture);
+    Animation* animComponent = gameObject->GetComponent<Animation>();
+
+    //Update texture of animation
+    if (ResourcesManager::ResourceChanger<Texture>("Texture", material.texture))
+    {
+        if(animComponent)
+            animComponent->text = animComponent->text = material.texture.get();
+    }
+
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
@@ -58,6 +90,10 @@ void MeshRenderer::TextureEditor()
                 if (material.texture.use_count() == 2 && material.texture->IsDeletable())
                     ResourcesManager::RemoveResourceTexture(material.texture->GetName());
                 material.texture = *ResourcesManager::AddResourceTexture(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+                
+                //Update animation texture
+                if (animComponent)
+                    animComponent->text = material.texture.get();
             }
         }
         ImGui::EndDragDropTarget();
@@ -66,7 +102,19 @@ void MeshRenderer::TextureEditor()
 
 void MeshRenderer::MeshEditor()
 {
-    ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh);
+    //Update animation component if exist
+    Animation* animComponent = gameObject->GetComponent<Animation>();
+    if (ResourcesManager::ResourceChanger<Mesh>("Mesh", mesh))
+    {
+        if (animComponent)
+        {
+            animComponent->mesh = mesh.get();
+
+            if (animComponent->currentAnimation)
+                animComponent->currentAnimation->UpdateAnimationResources(animComponent->mesh);
+        }
+    }
+
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
@@ -77,11 +125,18 @@ void MeshRenderer::MeshEditor()
             size_t start_pos = _truePath.find("\\");
             _truePath.replace(start_pos, 1, "/");
 
-            if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".obj") != std::string::npos)
+            if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".obj") != std::string::npos || _truePath.find(".dae") != std::string::npos)
             {
                 if (mesh.use_count() == 2 && mesh->IsDeletable())
                     ResourcesManager::RemoveResourceMesh(mesh->GetName());
                 mesh = *ResourcesManager::AddResourceMesh(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+
+                if (animComponent)
+                {
+                    animComponent->mesh = mesh.get();
+                    if (animComponent->currentAnimation)
+                        animComponent->currentAnimation->UpdateAnimationResources(animComponent->mesh);
+                }
             }
         }
         ImGui::EndDragDropTarget();

@@ -8,6 +8,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+
 #include "System/Debug.hpp"
 
 #include "Maths/Vec2.hpp"
@@ -41,11 +42,18 @@ Mesh::Mesh(const std::string& _name, const char* _path)
 	int test = scene->mNumMeshes;
 	for (unsigned int v = 0; v < mesh->mNumVertices; v++)
 	{
-		vertices.push_back(Vertex{	Vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z),
-									mesh->HasNormals() ? Vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z) : Vec3(),
-									mesh->HasTextureCoords(0) ? Vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y) : Vec2()});
+		Vertex vert;
+
+		SetVertexBoneDataToDefault(vert);
+		vert.pos = Vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z);
+		vert.normal = mesh->HasNormals() ? Vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z) : Vec3();
+		vert.texCoord = mesh->HasTextureCoords(0) ? Vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y) : Vec2();
+
+		vertices.push_back(vert);
 
 	}
+
+	ExtractBoneWeightForVertices(vertices, mesh, scene);
 
  	for(unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
@@ -56,10 +64,55 @@ Mesh::Mesh(const std::string& _name, const char* _path)
 		indices.push_back(face.mIndices[2]);
 	}
 
-
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
 
 	paths.emplace_back(_path);
+}
+
+void Mesh::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh, const aiScene* scene)
+{
+	for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+	{
+		int boneID = -1;
+		std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+		if (boneInfoMap.find(boneName) == boneInfoMap.end())
+		{
+			BoneInfo newBoneInfo;
+			newBoneInfo.id = boneCounter;
+			newBoneInfo.offset = Mat4::ConvertAssimpMatrixToMat4(mesh->mBones[boneIndex]->mOffsetMatrix);
+			boneInfoMap[boneName] = newBoneInfo;
+			boneID = boneCounter;
+			boneCounter++;
+		}
+		else
+		{
+			boneID = boneInfoMap[boneName].id;
+		}
+		assert(boneID != -1);
+		auto weights = mesh->mBones[boneIndex]->mWeights;
+		int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+		for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+		{
+			int vertexId = weights[weightIndex].mVertexId;
+			float weight = weights[weightIndex].mWeight;
+			assert(vertexId <= vertices.size());
+			SetVertexBoneData(vertices[vertexId], boneID, weight);
+		}
+	}
+}
+
+void Mesh::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (vertex.boneIDs[i] < 0)
+		{
+			vertex.boneIDs[i] = boneID;
+			vertex.weights[i] = weight;
+			break;
+		}
+	}
 }
 
 void Mesh::InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize)
@@ -84,6 +137,15 @@ void Mesh::InitMesh(Vertex* vertices, size_t vertSize, int* indices, size_t indi
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+	
+	//For animation
+	// ids
+	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (const GLvoid*)(8 * sizeof(int)));
+	glEnableVertexAttribArray(3);
+
+	// weights
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(const GLvoid*)(12 * sizeof(float)));
+	glEnableVertexAttribArray(4);
 }
 
 void Mesh::ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, size_t indicesSize)
@@ -96,8 +158,6 @@ void Mesh::ChangeSizeAndData(Vertex* vertices, size_t vertSize, int* indices, si
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize * sizeof(int), indices, GL_STATIC_DRAW);
-
-
 }
 
 Mesh::~Mesh()
