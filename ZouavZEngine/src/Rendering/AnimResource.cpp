@@ -37,7 +37,11 @@ void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
-
+	if (!scene)
+	{
+		Debug::LogWarning(std::string("Animation load failed!: ").append(path));
+		return;
+	}
 	auto animation = scene->mAnimations[0];
 	duration = (float)animation->mDuration;
 	tickPerSecond = (int)animation->mTicksPerSecond;

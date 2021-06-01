@@ -31,6 +31,7 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
 void Animation::Editor()
 {
     ResourcesManager::ResourceChanger<AnimResource>("Animation", currentAnimation);
+
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
