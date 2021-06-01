@@ -26,9 +26,9 @@ private:
 	static std::unordered_map<std::string, std::shared_ptr<Sound>> soundResources;
 	static std::unordered_map<std::string, std::shared_ptr<Mesh>> meshResources;
 	static std::unordered_map<std::string, std::shared_ptr<Texture>> textureResources;
-	static std::unordered_map<std::string, std::shared_ptr<CubemapTexture>> cubemapTextureResources;
 	static std::unordered_map<std::string, std::shared_ptr<Shader>> shaderResources;
 	static std::unordered_map<std::string, std::shared_ptr<Font>> fontResources;
+	static std::unordered_map<std::string, std::shared_ptr<CubemapTexture>> cubemapTextureResources;
 	static std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsResources;
 
 public:
@@ -85,7 +85,7 @@ public:
 		for (int i = 0; i < count; ++i)
 		{
 			_ar(name, deletable, path);
-			AddResourceAnimation(name, deletable, path);
+			AddResourceAnimation(name, deletable, path)->get()->hasToBeDelete = false;
 		}
 	}
 
@@ -94,31 +94,31 @@ public:
 	{
 		_ar(soundResources.size());
 		for (auto& sound : soundResources)
-			_ar(sound.first, sound.second->deletable, sound.second.get()->paths[0]);
+			_ar(sound.first, sound.second->deletable, sound.second.get()->path);
 		
 		_ar(meshResources.size());
 		for (auto& mesh : meshResources)
-			_ar(mesh.first, mesh.second->deletable, mesh.second.get()->paths[0]);
+			_ar(mesh.first, mesh.second->deletable, mesh.second.get()->path);
 		
 		_ar(textureResources.size());
 		for (auto& texture : textureResources)
-			_ar(texture.first, texture.second->deletable, texture.second.get()->paths[0]);
+			_ar(texture.first, texture.second->deletable, texture.second.get()->path);
 		
 		_ar(shaderResources.size());
 		for (auto& shader : shaderResources)
-			_ar(shader.first, shader.second->deletable, shader.second.get()->paths[0]);
+			_ar(shader.first, shader.second->deletable, shader.second.get()->path);
 
 		_ar(fontResources.size());
 		for (auto& font : fontResources)
-			_ar(font.first, font.second->deletable, font.second.get()->paths[0]);
+			_ar(font.first, font.second->deletable, font.second.get()->path);
+
+		_ar(cubemapTextureResources.size());
+		for (auto& cubemapTexture : cubemapTextureResources)
+			_ar(cubemapTexture.first, cubemapTexture.second->deletable, cubemapTexture.second.get()->path);
 
 		_ar(animationsResources.size());
 		for (auto& animation : animationsResources)
 			_ar(animation.first, animation.second->deletable, animation.second.get()->path);
-			
-		_ar(cubemapTextureResources.size());
-		for (auto& cubemapTexture : cubemapTextureResources)
-			_ar(cubemapTexture.first, cubemapTexture.second->deletable, cubemapTexture.second.get()->paths[0]);
 	}
 
 	template<typename... Args>
@@ -157,25 +157,6 @@ public:
 
 
 		Debug::LogError("Mesh resource : " + _name + " not loaded");
-		return nullptr;
-	}
-
-
-	template<typename... Args>
-	static typename std::shared_ptr<AnimResource>* AddResourceAnimation(std::string _name, bool _deletable, Args... _args)
-	{
-		auto a = animationsResources.emplace(_name, std::make_shared<AnimResource>(_name, _args...));
-		if (a.second)
-		{
-			Debug::Log("Animation resource : " + _name + " loaded");
-			a.first->second->deletable = _deletable;
-			return &a.first->second;
-		}
-		else if (a.first->second)
-			return &a.first->second;
-
-
-		Debug::LogError("Animation resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -232,7 +213,6 @@ public:
 			return &a.first->second;
 		}
 
-
 		Debug::LogError("Font resource : " + _name + " not loaded");
 		return nullptr;
 	}
@@ -252,8 +232,26 @@ public:
 			return &a.first->second;
 		}
 
-
 		Debug::LogError("Cubemap texture resource : " + _name + " not loaded");
+		return nullptr;
+	}
+
+	template<typename... Args>
+	static typename std::shared_ptr<AnimResource>* AddResourceAnimation(std::string _name, bool _deletable, Args... _args)
+	{
+		auto find = animationsResources.find(_name);
+		if (find != animationsResources.end())
+			return &find->second;
+
+		auto a = animationsResources.emplace(_name, std::make_shared<AnimResource>(_name, _args...));
+		if (a.second)
+		{
+			Debug::Log("Animation resource : " + _name + " loaded");
+			a.first->second->deletable = _deletable;
+			return &a.first->second;
+		}
+
+		Debug::LogError("Animation resource : " + _name + " not loaded");
 		return nullptr;
 	}
 
@@ -314,6 +312,16 @@ public:
 	}
 
 	template<>
+	static std::shared_ptr<CubemapTexture>* GetResource<CubemapTexture>(std::string _name)
+	{
+		if (cubemapTextureResources.find(_name) != cubemapTextureResources.end())
+			return &cubemapTextureResources.at(_name);
+		else
+			Debug::LogError("Cubemap Texture resource : " + _name + " not found");
+		return nullptr;
+	}
+
+	template<>
 	static std::shared_ptr<AnimResource>* GetResource<AnimResource>(std::string _name)
 	{
 		if (animationsResources.find(_name) != animationsResources.end())
@@ -321,16 +329,6 @@ public:
 		else
 			Debug::LogError("Animation resource : " + _name + " not found");
 		
-		return nullptr;
-	}
-	
-	template<>
-	static std::shared_ptr<CubemapTexture>* GetResource<CubemapTexture>(std::string _name)
-	{
-		if (cubemapTextureResources.find(_name) != cubemapTextureResources.end())
-			return &cubemapTextureResources.at(_name);
-		else
-			Debug::LogError("Cubemap Texture resource : " + _name + " not found");
 		return nullptr;
 	}
 
@@ -371,15 +369,15 @@ public:
 	}
 
 	template<>
-	static const std::unordered_map<std::string, std::shared_ptr<AnimResource>>& GetResources<AnimResource>()
-	{
-		return animationsResources;
-	}
-
-	template<>
 	static const std::unordered_map<std::string, std::shared_ptr<CubemapTexture>>& GetResources<CubemapTexture>()
 	{
 		return cubemapTextureResources;
+	}
+
+	template<>
+	static const std::unordered_map<std::string, std::shared_ptr<AnimResource>>& GetResources<AnimResource>()
+	{
+		return animationsResources;
 	}
 
 	static void RemoveResourceSound(std::string _name)
@@ -406,15 +404,15 @@ public:
 	{
 		shaderResources.erase(_name);
 	}
-
-	static void RemoveResourceAnimation(std::string _name)
-	{
-		animationsResources.erase(_name);
-	}
 	
 	static void RemoveResourceCubemapTexture(std::string _name)
 	{
 		cubemapTextureResources.erase(_name);
+	}
+
+	static void RemoveResourceAnimation(std::string _name)
+	{
+		animationsResources.erase(_name);
 	}
 
 	template<typename T>

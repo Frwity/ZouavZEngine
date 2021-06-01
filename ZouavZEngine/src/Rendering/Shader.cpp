@@ -12,7 +12,7 @@
 #include "Rendering/Shader.hpp"
 
 Shader::Shader(const std::string& _name, const char* _shaderPath)
-    : Resource(_name)
+    : Resource(_name, _shaderPath)
 {
     const char* shaderSource = LoadFile(_shaderPath);
     std::string vshader = "#version 330 core\r\n#define COMPILING_VS\r\n" + std::string(shaderSource);
@@ -29,8 +29,6 @@ Shader::Shader(const std::string& _name, const char* _shaderPath)
     glDeleteShader(fragmentShader);
 
     delete[] shaderSource;
-    
-    paths.emplace_back(_shaderPath);
 }
 
 unsigned int Shader::CreateVertexShader(const char* _vertexShaderContent, const char* _shaderPath)

@@ -19,13 +19,12 @@
 #include "Rendering/Mesh.hpp"
 
 Mesh::Mesh(const std::string& _name)
-	: Resource(_name)
+	: Resource(_name, "NoPath")
 {
-	paths.emplace_back("NoPath");
 }
 
 Mesh::Mesh(const std::string& _name, const char* _path)
-	: Resource(_name)
+	: Resource(_name, _path)
 {
     Assimp::Importer importer;
 		
@@ -65,8 +64,6 @@ Mesh::Mesh(const std::string& _name, const char* _path)
 	}
 
 	InitMesh(vertices.data(), vertices.size(), indices.data(), indices.size());
-
-	paths.emplace_back(_path);
 }
 
 void Mesh::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, const aiMesh* mesh, const aiScene* scene)

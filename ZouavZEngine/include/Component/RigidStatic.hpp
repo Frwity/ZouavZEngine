@@ -15,7 +15,7 @@ class RigidStatic: public Rigid
 protected:
 
 	void InternalActivate() override;
-	void InternalDehactivate() override;
+	void InternalDeactivate() override;
 public:
 
 	RigidStatic() = delete;
@@ -25,8 +25,7 @@ public:
 	void Editor() override;
 
 	void Activate() override;
-	void Dehactivate() override;
-	void UpdateTransform(Transform transform) override;
+	void Deactivate() override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)

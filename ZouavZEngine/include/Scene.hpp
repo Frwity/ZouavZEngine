@@ -32,6 +32,7 @@ public:
 
 	void Update();
 	void Draw(GameObject* _parent, const class Camera* _camera) const;
+	void DrawGUI(GameObject* _parent);
 	void SimulatePhyics() const;					//Simulate phyics and update transform of affected gameObjects
 
 	void AddLight(class Light* _newLight);

@@ -33,9 +33,9 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPaths()[0],
-			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPaths()[0],
-			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPaths()[0]);
+		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPath(),
+			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPath(),
+			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPath());
 		_ar(cereal::base_class<Component>(this));
 	}
 

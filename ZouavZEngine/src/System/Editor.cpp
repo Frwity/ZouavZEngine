@@ -23,6 +23,7 @@
 #include "Component/RigidBody.hpp"
 #include "Component/RigidStatic.hpp"
 #include "Component/Skybox.hpp"
+#include "Component/ProgressBar.hpp"
 #include "System/InputManager.hpp"
 #include "System/Debug.hpp"
 #include "Scene.hpp"
@@ -204,14 +205,14 @@ void Editor::DisplayMainWindow(const class Render& _render, class Framebuffer& _
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
         if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -274,7 +275,7 @@ void Editor::DisplayOptionWindow()
     if (ImGui::Button("Pause"))
     {
         state = EDITOR_STATE::PAUSE;
-        TimeManager::gameClock->Dehactivate();
+        TimeManager::gameClock->Deactivate();
 
     }
     ImGui::SameLine();
@@ -450,23 +451,35 @@ bool CreateNewClass(std::string className, std::string parentClassName)
     return false;
 }
 
-void NewClassWindow()
+void Editor::NewClassWindow()
 {
     if (newClassWindow)
     {
         ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
-
-        static std::string className = "NewClass";
-        ImGui::InputText("Class Name", &className);
-        static std::string parentClassName = "ScriptComponent";
-        ImGui::InputText("Parent Class Name", &parentClassName);
-
-        if (ImGui::Button("Create"))
+        if (ImGui::Begin("New Class", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize))
         {
-            CreateNewClass(className, parentClassName) ? Debug::Log("New class " + className + " created") : Debug::LogWarning("Class " + className + " not created");
-            newClassWindow = false;
+            static bool isClickWhenWindowNotHovered = false;
+
+            if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && !ImGui::IsWindowHovered())
+                isClickWhenWindowNotHovered = true;
+
+            static std::string className = "NewClass";
+            ImGui::InputText("Class Name", &className);
+            static std::string parentClassName = "ScriptComponent";
+            ImGui::InputText("Parent Class Name", &parentClassName);
+            
+            if (ImGui::Button("Create"))
+            {
+                CreateNewClass(className, parentClassName) ? Debug::Log("New class " + className + " created") : Debug::LogWarning("Class " + className + " not created");
+                newClassWindow = false;
+            }
+
+            if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && isClickWhenWindowNotHovered)
+            {
+                newClassWindow = false;
+                isClickWhenWindowNotHovered = false;
+            }
         }
         ImGui::End();
     }
@@ -478,8 +491,13 @@ void Editor::NewSceneWindow(Engine& _engine)
     {
         ImGui::SetNextWindowPos(ImVec2(200.0f, 200.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(400.0f, 400.0f));
-        if (ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove))
+        if (ImGui::Begin("New Scene", nullptr, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize))
         {
+            static bool isClickWhenWindowNotHovered = false;
+
+            if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && !ImGui::IsWindowHovered())
+                isClickWhenWindowNotHovered = true;
+
             static std::string sceneName = "New Scene";
             ImGui::InputText("Scene Name", &sceneName);
 
@@ -507,8 +525,11 @@ void Editor::NewSceneWindow(Engine& _engine)
                     newSceneWindow = false;
                 }
             }
-            if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+            if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && isClickWhenWindowNotHovered)
+            {
                 newSceneWindow = false;
+                isClickWhenWindowNotHovered = false;
+            }
         }
         ImGui::End();
     }
@@ -614,14 +635,12 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGui::SetWindowFocus("Scene");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
         if (ImGui::IsWindowFocused() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
         {
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -707,6 +726,7 @@ GENADDCOMPONENT(RigidBody)
 GENADDCOMPONENT(RigidStatic)
 GENADDCOMPONENT(Camera)
 GENADDCOMPONENT(Skybox)
+GENADDCOMPONENT(ProgressBar)
 GENADDCOMPONENT(Animation)
 
 void Editor::DisplayInspector()
@@ -720,7 +740,7 @@ void Editor::DisplayInspector()
             bool isActive = gameObjectInspector->isActive;
             ImGui::Checkbox(" ", &isActive);
             if (isActive != gameObjectInspector->isActive)
-                isActive ? gameObjectInspector->Activate() : gameObjectInspector->Dehactivate();
+                isActive ? gameObjectInspector->Activate() : gameObjectInspector->Deactivate();
             ImGui::SameLine();
             ImGui::Text("Name : ");
             ImGui::SameLine();
@@ -770,7 +790,7 @@ void Editor::DisplayInspector()
                 bool active = comp->isActive;
                 ImGui::Checkbox("", &active);
                 if (active != comp->isActive)
-                    active ? comp->Activate() : comp->Dehactivate();
+                    active ? comp->Activate() : comp->Deactivate();
                 ImGui::SameLine();
                 if (!Component::EditorCollapsingHeader(comp->name.c_str(), [comp]() {comp->Editor(); }))
                 {
@@ -833,6 +853,9 @@ void Editor::DisplayInspector()
                     }
 
                     if (ComponentButton<Skybox>("Add Skybox", true))
+                        addComponentWindow = false;
+
+                    if (ComponentButton<ProgressBar>("Add ProgressBar", false))
                         addComponentWindow = false;
 
                     for (auto& addComponentFunction : ScriptSystem::addComponentsFunctions)
@@ -898,14 +921,14 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             ImGui::SetWindowFocus("Game");
             isKeyboardEnable = true;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwSetCursorPos(_render.window, lastCursorScenePosX, lastCursorScenePosY);
+            glfwSetCursorPos(_render.window, lastCursorGamePosX, lastCursorGamePosY);
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
         if (InputManager::isGameInputActive && InputManager::EditorGetKeyReleasedOneTime(E_KEYS::ESCAPE) && isKeyboardEnable && state == EDITOR_STATE::PLAYING)
         {
             InputManager::isGameInputActive = false;
             isKeyboardEnable = false;
-            glfwGetCursorPos(_render.window, &lastCursorScenePosX, &lastCursorScenePosY);
+            glfwGetCursorPos(_render.window, &lastCursorGamePosX, &lastCursorGamePosY);
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             ImGui::SetWindowFocus("Main");
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -937,6 +960,18 @@ void Editor::DisplayProject()
             ImGui::SameLine();
             if(ImGui::Button("<--"))
                 currentProjectFolder = currentProjectFolder.substr(0, currentProjectFolder.find_last_of("/\\"));
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+                {
+                    ZASSERT(payload->DataSize == sizeof(std::string), "Error in project manager");
+                    std::string name = *(const std::string*)payload->Data;
+                    std::string newName = currentProjectFolder.substr(0, currentProjectFolder.find_last_of("/\\")).append("/").append(GetRightName(name));
+                    std::rename(name.c_str(), newName.c_str());
+                }
+                ImGui::EndDragDropTarget();
+            }
         }
         int i = 0;
         float windowWidth = ImGui::GetContentRegionAvailWidth();
@@ -1017,9 +1052,16 @@ void Editor::DisplayProject()
             ImGui::SetNextWindowPos(projectNewFolderPos);
             if (ImGui::Begin("New Folder", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
-                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
-                    projectNewFolder = false;
+                static bool isClickWhenWindowNotHovered = false;
 
+                if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && !ImGui::IsWindowHovered())
+                    isClickWhenWindowNotHovered = true;
+
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && isClickWhenWindowNotHovered)
+                {
+                    isClickWhenWindowNotHovered = false;
+                    projectNewFolder = false;
+                }
                 static std::string newHierarchyFolderName = "New Folder";
                 ImGui::InputText("##newhierarchyfoldername", &newHierarchyFolderName);
                 if (ImGui::Button("Create"))
@@ -1041,7 +1083,12 @@ void Editor::DisplayProject()
 void Editor::DisplayChild(GameObject* _parent)
 {
     ImGui::PushID(_parent);
-    if (ImGui::TreeNodeEx(_parent->GetName().c_str(), _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
+
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+    flags |= _parent->GetChildren().size() != 0 ? ImGuiTreeNodeFlags_OpenOnArrow : ImGuiTreeNodeFlags_Leaf;
+    flags |= _parent == gameObjectInspector ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None;
+
+    if (ImGui::TreeNodeEx(_parent->GetName().c_str(), flags))
     {
         if (ImGui::IsItemHovered())
         {
@@ -1120,6 +1167,11 @@ void Editor::DisplayHierarchy()
             ImGui::SetNextWindowPos(hierarchyMenuPos);
             if (ImGui::Begin("Hierarchy Menu", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
             {
+                static bool isClickWhenWindowNotHovered = false;
+
+                if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && !ImGui::IsWindowHovered())
+                    isClickWhenWindowNotHovered = true;
+
                 ImGui::InputText("New GameObject Name", newGameObjectName, 256);
                 if (ImGui::Button("New GameObject"))
                 {
@@ -1128,7 +1180,7 @@ void Editor::DisplayHierarchy()
                         newGameObject->SetParent(newGameObjectParent);
                     newGameObjectParent = nullptr;
                     hierarchyMenu = false;
-                    strcpy_s(newGameObjectName,"New GameObject");
+                    strcpy_s(newGameObjectName, "New GameObject");
                 }
 
                 if (newGameObjectParent && newGameObjectParent->parent)
@@ -1149,9 +1201,12 @@ void Editor::DisplayHierarchy()
                         GameObject::Instanciate(newGameObjectParent);
                 }
 
-                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT))
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && isClickWhenWindowNotHovered)
+                {
                     hierarchyMenu = false;
-            }
+                    isClickWhenWindowNotHovered = false;
+                }
+            }  
             ImGui::End();
         }
     }

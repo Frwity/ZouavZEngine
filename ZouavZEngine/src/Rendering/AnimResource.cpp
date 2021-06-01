@@ -4,7 +4,7 @@
 #include "System/ResourcesManager.hpp"
 
 AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh)
-	:Resource(_name), path(_path)
+	:Resource(_name, _path.c_str())
 {
 	Assimp::Importer importer;
 
@@ -30,8 +30,6 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
-
-	paths.emplace_back(path);
 }
 
 void AnimResource::UpdateAnimationResources(Mesh* _mesh)
@@ -54,8 +52,6 @@ void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
-
-	//paths.emplace_back(path);
 }
 
 void AnimResource::RemoveFromResourcesManager()

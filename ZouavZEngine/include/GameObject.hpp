@@ -21,6 +21,7 @@ private:
 	friend class Editor;
 	friend class Scene;
 	friend class Prefab;
+	friend class Engine;
 	friend class cereal::access;
 
 	static bool destroyGameObject;
@@ -55,7 +56,7 @@ public:
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
-	void Dehactivate();
+	void Deactivate();
 
 	static GameObject* Instanciate(GameObject* _gameobject);
 	static GameObject* Instanciate(GameObject* _gameobject, const Vec3& _position);

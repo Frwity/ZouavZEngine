@@ -130,6 +130,7 @@ void Engine::Update()
             scene.Draw(&scene.GetWorld(), Camera::GetMainCamera());
             scene.terrain.Draw(*SceneCamera::GetSceneCamera());
             FontSystem::DrawFonts(*Camera::GetMainCamera());
+            scene.DrawGUI(&scene.GetWorld());
         }
         
         render.BindMainFBO();
@@ -140,4 +141,7 @@ void Engine::Update()
         render.Update();
         InputManager::UpdateOldMousePos();
     }
+
+    GameObject::gameObjects.clear();
+    scene.world.children.clear();
 }

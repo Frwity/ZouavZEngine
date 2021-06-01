@@ -8,6 +8,8 @@ private:
 	unsigned int buffer = 0;
 
 public:
+	float volumeIntensity = 1.0f;
+
 	Sound(const std::string& _name, const char* _path);
 	~Sound();
 

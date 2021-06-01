@@ -171,9 +171,6 @@
     <ClCompile Include="src\Component\AudioListener.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Move.cpp">
-      <Filter>src\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\System\Debug.cpp">
       <Filter>src\System</Filter>
     </ClCompile>
@@ -246,9 +243,6 @@
     <ClCompile Include="src\Component\Skybox.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Generato.cpp">
-      <Filter>src\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component\RigidStatic.cpp">
       <Filter>src\Component</Filter>
     </ClCompile>
@@ -259,7 +253,8 @@
       <Filter>src\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\AnimResource.cpp">
-      <Filter>src\Rendering</Filter>
+      <Filter>src\Rendering</Filter> 
+    </ClCompile>
     <ClCompile Include="src\Rendering\CubemapTexture.cpp">
       <Filter>src\Rendering</Filter>
     </ClCompile>
@@ -275,8 +270,8 @@
     <ClCompile Include="src\Game\Enemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\ThirdPersonCamera.cpp">
-      <Filter>src\Game</Filter>
+    <ClCompile Include="src\Component\ProgressBar.cpp">
+      <Filter>src\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -379,9 +374,6 @@
     <ClInclude Include="include\Component\AudioListener.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Game\Move.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\System\Debug.hpp">
       <Filter>include\System</Filter>
     </ClInclude>
@@ -457,9 +449,6 @@
     <ClInclude Include="include\Component\Skybox.hpp">
       <Filter>include\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Game\Generato.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\Rendering\Bone.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
@@ -471,6 +460,7 @@
     </ClInclude>
     <ClInclude Include="include\Rendering\AnimResource.hpp">
       <Filter>include\Rendering</Filter>
+    </ClInclude>
     <ClInclude Include="include\Rendering\CubemapTexture.hpp">
       <Filter>include\Rendering</Filter>
     </ClInclude>
@@ -492,29 +482,12 @@
     <ClInclude Include="include\Game\Enemy.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
-    <ClInclude Include="include\Game\ThirdPersonCamera.hpp">
-      <Filter>include\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\Object.hpp">
       <Filter>include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\TerrainShader.fs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\TerrainShader.vs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\Gizmos.fs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\Gizmos.vs">
-      <Filter>resources</Filter>
-    </None>
-    <None Include="resources\Anim.shader">
-      <Filter>resources</Filter>
-    </None>
+    <ClInclude Include="include\Component\ProgressBar.hpp">
+      <Filter>include\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\texture.jpg">

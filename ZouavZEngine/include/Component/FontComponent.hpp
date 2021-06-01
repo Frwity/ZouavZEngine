@@ -70,7 +70,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& _ar)
 	{
-		_ar(font->GetName(), font->IsDeletable(), font->GetPaths()[0], (int)fontType, text, 
+		_ar(font->GetName(), font->IsDeletable(), font->GetPath(), (int)fontType, text,
 			color.x, color.y, color.z, color.w, position.x, position.y, position.z,
 			fontSize, width, edge, outlineWidth, outlineEdge, 
 			outlineColor.x, outlineColor.y, outlineColor.z, offset.x, offset.y, depthTest);

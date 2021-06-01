@@ -30,7 +30,6 @@ private:
     void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform);
 
 public:
-    std::string path;
     float currentTime = 0.0f;
     AssimpNodeData rootNode;
     std::map<std::string, BoneInfo> boneInfoMap;

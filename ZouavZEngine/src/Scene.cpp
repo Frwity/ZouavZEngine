@@ -21,6 +21,8 @@
 #include "Component/ShapeCollision.hpp"
 #include "Component/Animation.hpp"
 
+#include "Component/ProgressBar.hpp"
+
 #include <fstream>
 #include "cereal/archives/json.hpp"
 #include <iostream>
@@ -156,6 +158,20 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 
 	for (GameObject* child : _parent->GetChildren())
 		Draw(child, _camera);
+}
+
+void Scene::DrawGUI(GameObject* _parent)
+{
+	if (!_parent->IsActive())
+		return;
+
+	std::vector<ProgressBar*> progressBars = _parent->GetComponents<ProgressBar>();
+
+	for (ProgressBar* progressBar : progressBars)
+		progressBar->Draw();
+
+	for (GameObject* child : _parent->GetChildren())
+		DrawGUI(child);
 }
 
 void Scene::Update()

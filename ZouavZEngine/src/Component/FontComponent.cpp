@@ -4,7 +4,6 @@
 #include "System/ResourcesManager.hpp"
 #include "System/FontSystem.hpp"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_stdlib.h"
 #include "Component/FontComponent.hpp"
@@ -184,6 +183,8 @@ void FontComponent::DrawBillboard(const Camera& _camera)
 
 void FontComponent::Draw2D(const Camera& _camera)
 {
+	glDisable(GL_CULL_FACE);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (!depthTest)
@@ -210,6 +211,9 @@ void FontComponent::Draw2D(const Camera& _camera)
 
 	if (!depthTest)
 		glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void FontComponent::ChangeText(std::string _newText)

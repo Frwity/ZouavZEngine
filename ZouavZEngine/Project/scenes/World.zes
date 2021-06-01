@@ -58,8 +58,8 @@
     "value11": 0,
     "value12": {
         "value0": 0.0,
-        "value1": 0.0,
-        "value2": 0.0
+        "value1": 0.5094427466392517,
+        "value2": -1.8818329572677613
     },
     "value13": {
         "value0": 1.0,
@@ -74,7 +74,281 @@
     },
     "value15": true,
     "value16": false,
-    "value17": [],
+    "value17": [
+        {
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "Player",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": {
+                        "value0": {
+                            "value0": 1.0,
+                            "value1": 0.0,
+                            "value2": 0.0,
+                            "value3": 1.0
+                        },
+                        "value1": 1.0,
+                        "value2": 5,
+                        "value3": 1,
+                        "value4": {
+                            "value0": true,
+                            "value1": "Player"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483651,
+            "polymorphic_name": "BoxCollision",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483652,
+            "polymorphic_name": "RigidBody",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483653,
+            "polymorphic_name": "MeshRenderer",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Cube.obj",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 3,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.5
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 0.0,
+                        "value2": 1.25
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483654,
+            "polymorphic_name": "FontComponent",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 1,
+                    "value4": "Default Text",
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 0.0,
+                    "value12": 4.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483655,
+            "polymorphic_name": "AudioBroadcaster",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 0,
+                    "value3": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483656,
+            "polymorphic_name": "Camera",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.2468758821487427,
+                    "value1": 0.0,
+                    "value2": 0.0,
+                    "value3": 0.0,
+                    "value4": 0.0,
+                    "value5": 2.4142138957977297,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": -1.0000003576278687,
+                    "value11": -1.0,
+                    "value12": 0.0,
+                    "value13": 0.0,
+                    "value14": -0.0020000003278255464,
+                    "value15": 0.0,
+                    "value16": 0.0,
+                    "value17": 5.0,
+                    "value18": -10.0,
+                    "value19": 0.0,
+                    "value20": 2.0,
+                    "value21": 0.0,
+                    "value22": true,
+                    "value23": {
+                        "value0": true,
+                        "value1": "Camera"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483657,
+            "polymorphic_name": "ProgressBar",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0,
+                    "value3": 1.0,
+                    "value4": 0.0,
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 1.0,
+                    "value8": 0.0,
+                    "value9": 1.0,
+                    "value10": 0.0,
+                    "value11": 1.0,
+                    "value12": 0.30000001192092898,
+                    "value13": "LifeBar",
+                    "value14": {
+                        "value0": true,
+                        "value1": "LifeBar"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 9,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0,
+                    "value3": 1.0,
+                    "value4": 0.0,
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 1.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 1.0,
+                    "value12": 0.30000001192092898,
+                    "value13": "XpBar",
+                    "value14": {
+                        "value0": true,
+                        "value1": "XpBar"
+                    }
+                }
+            }
+        }
+    ],
     "value18": true,
     "value19": 128.0,
     "value20": 128,
@@ -88,20 +362,24 @@
     "value28": 1,
     "value29": 0,
     "value30": true,
-    "value31": 0,
+    "value31": 1,
     "value32": 0,
-    "value33": 1,
-    "value34": 0.009999999776482582,
-    "value35": 2.0,
-    "value36": 0.5,
-    "value37": 0.0,
-    "value38": 2.0,
-    "value39": 0.0,
+    "value33": 0,
+    "value34": 1,
+    "value35": 0.009999999776482582,
+    "value36": 2.0,
+    "value37": 0.5,
+    "value38": 0.0,
+    "value39": 2.0,
     "value40": 0.0,
     "value41": 0.0,
     "value42": 0.0,
     "value43": 0.0,
     "value44": 0.0,
-    "value45": 1.0,
-    "value46": "nullptr"
+    "value45": 0.0,
+    "value46": 1.0,
+    "value47": "Grass.png",
+    "value48": 1,
+    "value49": "noPath",
+    "value50": 1
 }

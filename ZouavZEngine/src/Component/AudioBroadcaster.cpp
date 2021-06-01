@@ -28,9 +28,11 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::string _name)
 	SoundManager::AddSound(this);
 }
 
-AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<class Sound>& _sound, std::string _name)
-	: Component(_gameObject, _name), sound(_sound)
+AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<Sound>& _sound, std::string _name)
+	: Component(_gameObject, _name)
 {
+	sounds.emplace_back(_sound);
+
 	alGenSources(1, &source);
 
 	alSourcef(source, AL_PITCH, 1.0f);
@@ -42,8 +44,6 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<clas
 	alSource3f(source, AL_POSITION, 0.0f, 0.0f, 0.0f);
 	alSource3f(source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
 	alSourcei(source, AL_LOOPING, AL_FALSE);
-	if (sound) 
-		sound->LinkSource(source);
 	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 	
 	SoundManager::AddSound(this);
@@ -52,28 +52,48 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<clas
 AudioBroadcaster::~AudioBroadcaster()
 {
 	SoundManager::RemoveSound(this);
-	if (sound.use_count() == 2 && sound->IsDeletable())
-		sound->RemoveFromResourcesManager();
-
+	for (std::shared_ptr<Sound> sound : sounds)
+	{
+		if (sound.use_count() == 2 && sound->IsDeletable())
+			sound->RemoveFromResourcesManager();
+	}
 	alSourcei(source, AL_BUFFER, 0);
 	alDeleteSources(1, &source);
 }
 
 void AudioBroadcaster::Update()
 {
-	if (!ambient && sound)
-		SetPosition(GetGameObject().WorldPosition());
+	for (std::shared_ptr<Sound> sound : sounds)
+	{
+		if (!ambient && sound)
+			SetPosition(GetGameObject().WorldPosition());
+	}
 }
 
-void AudioBroadcaster::Play()
+void AudioBroadcaster::Play(std::string _soundName)
 {
 	if (IsActive())
-		alSourcePlay(source);
+	{
+		for (std::shared_ptr<Sound> sound : sounds)
+		{
+			if (sound->GetName().compare(_soundName) == 0)
+			{
+				currentSound = sound;
+				sound->LinkSource(source);
+				alSourcePlay(source);
+			}
+		}
+	}
 }
 
 void AudioBroadcaster::Stop()
 {
 	alSourceStop(source);
+}
+
+float AudioBroadcaster::GetSoundIntensity()
+{
+	return currentSound ? currentSound->volumeIntensity : 0.0f;
 }
 
 void AudioBroadcaster::SetPosition(const Vec3& _position)
@@ -93,60 +113,56 @@ void AudioBroadcaster::SetMaxDistance(float _maxDistance)
 
 void AudioBroadcaster::SetLooping(bool _loop)
 {
-	if (sound)
-	{
-		alSourcei(source, AL_LOOPING, _loop);
-		loop = _loop;
-	}
+	alSourcei(source, AL_LOOPING, _loop);
+	loop = _loop;
 }
 
 void AudioBroadcaster::SetAmbient(bool _ambient)
 {
-	if (sound)
-	{
-		alSourcei(source, AL_SOURCE_RELATIVE, !_ambient);
-		SetPosition(Vec3::zero);
-		ambient = _ambient;
-	}
-}
-
-void AudioBroadcaster::SoundEditor()
-{
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
-		{
-			ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
-			std::string _path = *(const std::string*)payload->Data;
-			std::string _truePath = _path;
-			size_t start_pos = _truePath.find("\\");
-			_truePath.replace(start_pos, 1, "/");
-
-			if (_truePath.find(".wav") != std::string::npos)
-			{
-				if (sound.use_count() == 2 && sound->IsDeletable())
-				    ResourcesManager::RemoveResourceTexture(sound->GetName());
-				sound = *ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
-			}
-		}
-		ImGui::EndDragDropTarget();
-	}
-
-	if (ResourcesManager::ResourceChanger<Sound>("Sound", sound))
-		if (sound)
-			sound->LinkSource(source);
+	alSourcei(source, AL_SOURCE_RELATIVE, !_ambient);
+	SetPosition(Vec3::zero);
+	ambient = _ambient;
 }
 
 void AudioBroadcaster::Editor()
 {
-	SoundEditor();
+	if (ImGui::Button("Add Sound"))
+	{
+		sounds.emplace_back(nullptr);
+	}
+	for (std::shared_ptr<Sound>& sound : sounds)
+	{
+		ResourcesManager::ResourceChanger<Sound>("Sound", sound);
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
+			{
+				ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+				std::string _path = *(const std::string*)payload->Data;
+				std::string _truePath = _path;
+				size_t start_pos = _truePath.find("\\");
+				_truePath.replace(start_pos, 1, "/");
 
-	ImGui::Text("Ambient : "); 
+				if (_truePath.find(".wav") != std::string::npos)
+				{
+					if (sound.use_count() == 2 && sound->IsDeletable())
+						ResourcesManager::RemoveResourceTexture(sound->GetName());
+					sound = *ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		if (sound)
+			ImGui::DragFloat("Sound volume intensity", &sound->volumeIntensity, 0.01f, 0.0f, 1.0f);
+		ImGui::NewLine();
+	}
+	ImGui::DragFloat("Volume intensity", &volumeIntensity, 0.01f, 0.0f, 1.0f);
+	ImGui::Text("Ambient : ");
 	ImGui::SameLine();
 	if (ImGui::Checkbox("##ambient", &ambient))
 		SetAmbient(ambient);
 
-	ImGui::Text("Loop    : "); 
+	ImGui::Text("Loop    : ");
 	ImGui::SameLine();
 	if (ImGui::Checkbox("##loop", &loop))
 		SetAmbient(loop);
@@ -155,13 +171,17 @@ void AudioBroadcaster::Editor()
 template <class Archive>
 static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct<AudioBroadcaster>& _construct)
 {
+	_construct(GameObject::currentLoadedGameObject);
+	
 	std::string soundName;
-	bool _ambient;
-	bool _loop;
-	_ar(_ambient, _loop, soundName);
+	float soundsSize;
+	_ar(_construct->ambient, _construct->loop, soundsSize);
 
-	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::GetResource<Sound>(soundName));
+	for (int i = 0; i < soundsSize; i++)
+	{
+		_ar(soundName);
+		_construct->sounds.emplace_back(*ResourcesManager::GetResource<Sound>(soundName));
+	}
+
 	_ar(cereal::base_class<Component>(_construct.ptr()));
-	_construct->ambient = _ambient;
-	_construct->loop = _loop;
 }

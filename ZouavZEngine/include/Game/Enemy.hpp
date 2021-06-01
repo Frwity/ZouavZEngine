@@ -20,6 +20,8 @@ public:
     void Begin() override;
     void Update() override;
     void Editor() override;
+    
+    int xpGiven = 3;
 
     template <class Archive>
     void serialize(Archive & _ar)

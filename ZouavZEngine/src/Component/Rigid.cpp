@@ -28,9 +28,9 @@ void Rigid::Activate()
 	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
 }
 
-void Rigid::Dehactivate()
+void Rigid::Deactivate()
 {
-	Component::Dehactivate();
+	Component::Deactivate();
 	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
 }
 
@@ -40,7 +40,7 @@ void Rigid::InternalActivate()
 		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
 }
 
-void Rigid::InternalDehactivate()
+void Rigid::InternalDeactivate()
 {
 	if (isActive)
 		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);

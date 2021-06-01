@@ -23,7 +23,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 	gizmoShader = *ResourcesManager::GetResource<Shader>("GizmosShader");
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
+		InternalDeactivate();
 }
 
 ShapeCollision::~ShapeCollision()
@@ -62,18 +62,18 @@ void ShapeCollision::Editor()
 	ImGui::SameLine(); 
 	
 	if (ImGui::InputFloat3("##positionx", &transform.localPosition.x))
-		UpdateShapeTransform();
+		UpdateScale();
 
 	static Vec3 localEulerAngles;
 	localEulerAngles = transform.localRotation.ToEuler();
 
 	ImGui::Text("Local Rotation :");
 	ImGui::SameLine();
-	
+
 	if (ImGui::InputFloat3("##rotation", &localEulerAngles.x))
 	{
 		transform.localRotation = Quaternion(localEulerAngles);
-		UpdateShapeTransform();
+		UpdateScale();
 	}
 }
 
@@ -82,10 +82,6 @@ void ShapeCollision::UpdateShapeTransform()
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 	physx::PxShape** shapeActor = nullptr;
 	
-	rigid->actor->getGlobalPose();
-	
-	//transform.UpdateWorldPos(Vec3FromPxVec3(rigid->actor->getGlobalPose().p), QuaternionFromPxQuat(rigid->actor->getGlobalPose().q), {1.0f,1.0f,1.0f});
-
 	if (rigid)
 	{
 		int i = 0;
@@ -93,10 +89,8 @@ void ShapeCollision::UpdateShapeTransform()
 		int j = rigid->actor->getShapes(shapeActor, rigid->actor->getNbShapes());
 
   		while(i++ < j - 1)
-		{
 			if (shapeActor[i] == shape)
 				shape->setLocalPose(PxTransformFromTransformLocal(transform));
-		}
 
 		free(shapeActor);
 	}
@@ -110,12 +104,9 @@ void ShapeCollision::AttachToRigidComponent()
 	{
 		//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
 		shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
-		if (shape)
-		{
-			shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
-			shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
-			shape->setLocalPose(PxTransformFromTransformLocal(transform));
-		}
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
+		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 	}
 }
 
@@ -126,9 +117,9 @@ void ShapeCollision::Activate()
 		UpdateIsTrigger();
 }
 
-void ShapeCollision::Dehactivate()
+void ShapeCollision::Deactivate()
 {
-	Component::Dehactivate();
+	Component::Deactivate();
 	if (shape)
 	{
 		if (IsTrigger())
@@ -144,7 +135,7 @@ void ShapeCollision::InternalActivate()
 		UpdateIsTrigger();
 }
 
-void ShapeCollision::InternalDehactivate()
+void ShapeCollision::InternalDeactivate()
 {
 	if (isActive && shape)
 	{
@@ -165,12 +156,6 @@ void ShapeCollision::EditRotation(const Vec3& _newRot)
 {
 	transform.localRotation = _newRot;
 	UpdateShapeTransform();
-}
-
-void ShapeCollision::UpdateTransform() // never called
-{
-	if (shape)
-		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 }
 
 void ShapeCollision::DrawGizmos(const Camera& _camera)

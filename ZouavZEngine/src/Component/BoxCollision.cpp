@@ -59,6 +59,8 @@ void BoxCollision::UpdateScale()
 	AttachToRigidComponent();
 	if(shape)
 		shape->userData = this;
+
+	UpdateShapeTransform();
 }
 
 void BoxCollision::DrawGizmos(const Camera& _camera)
@@ -68,14 +70,13 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->Use();
 	
-	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, halfExtends);
-	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale());
+	Vec3 worldPosition = Mat4::CreateTRSMatrix(GetGameObject().WorldScale(), GetGameObject().WorldRotation(), {1.0f, 1.0f ,1.0f}) * transform.localPosition;
+	Quaternion worldRotation = GetGameObject().WorldRotation() * transform.localRotation;
+	Vec3 worldScale = GetGameObject().WorldScale() * halfExtends;
 
-	Mat4 mat = trsGlobal * trsLocal;
+	Mat4 mat = Mat4::CreateTRSMatrix(worldPosition, worldRotation, worldScale);
 
 	gizmoShader->SetMatrix("matrix", mat);
-	gizmoShader->SetMatrix("view", _camera.GetMatrix().Reversed());
-	gizmoShader->SetMatrix("projection", _camera.GetProjectionMatrix());
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(gizmoMesh->GetID());

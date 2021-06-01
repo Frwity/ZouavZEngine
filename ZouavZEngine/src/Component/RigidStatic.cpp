@@ -26,7 +26,7 @@ RigidStatic::RigidStatic(GameObject* _gameObject, std::string _name)
 	PhysicSystem::scene->addActor(*actor);
 
 	if (!_gameObject->IsActive())
-		InternalDehactivate();
+		InternalDeactivate();
 }
 
 void RigidStatic::Activate()
@@ -35,9 +35,9 @@ void RigidStatic::Activate()
 	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
 }
 
-void RigidStatic::Dehactivate()
+void RigidStatic::Deactivate()
 {
-	Component::Dehactivate();
+	Component::Deactivate();
 	actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
 }
 
@@ -47,7 +47,7 @@ void RigidStatic::InternalActivate()
 		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
 }
 
-void RigidStatic::InternalDehactivate()
+void RigidStatic::InternalDeactivate()
 {
 	if (isActive)
 		actor->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
@@ -68,9 +68,4 @@ static void RigidStatic::load_and_construct(Archive& _ar, cereal::construct<Rigi
 {
 	_construct(GameObject::currentLoadedGameObject);
 	_ar(cereal::base_class<Component>(_construct.ptr()));
-}
-
-void RigidStatic::UpdateTransform(Transform transform)
-{
-	
 }

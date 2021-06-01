@@ -9,7 +9,7 @@
 #include "Sound.hpp"
 
 Sound::Sound(const std::string& _name, const char* _path)
-    : Resource(_name)
+    : Resource(_name, _path)
 {
     SF_INFO FileInfos;
     SNDFILE* File = sf_open(_path, SFM_READ, &FileInfos);
@@ -48,7 +48,6 @@ Sound::Sound(const std::string& _name, const char* _path)
     {
         Debug::LogWarning(std::string(_path).append(" not loaded\n"));
     }
-    paths.emplace_back(_path);
 }
 
 Sound::~Sound()

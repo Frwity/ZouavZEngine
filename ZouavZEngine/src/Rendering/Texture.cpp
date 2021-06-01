@@ -9,7 +9,7 @@
 const Texture* Texture::errorTexture;
 
 Texture::Texture(const std::string& _name, const char* _path)
-    : Resource(_name)
+    : Resource(_name, _path)
 {
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -33,8 +33,6 @@ Texture::Texture(const std::string& _name, const char* _path)
         Debug::LogWarning(std::string("Failed to load texture : ").append(_path).append("\n"));
 
     stbi_image_free(data);
-
-    paths.emplace_back(_path);
 }
 
 void Texture::RemoveFromResourcesManager()

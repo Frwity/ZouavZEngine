@@ -7,7 +7,7 @@
 #include "System/SoundManager.hpp"
 
 float SoundManager::mainVolume = 1.0f;
-std::vector<AudioBroadcaster*> SoundManager::sounds;
+std::vector<AudioBroadcaster*> SoundManager::audioBroadcasters;
 
 void SoundManager::Init()
 {
@@ -39,8 +39,10 @@ void SoundManager::Init()
 
 void SoundManager::Update()
 {
-    for (AudioBroadcaster* sound : sounds)
-        sound->SetVolume(mainVolume * sound->volumeIntensity);
+    for (AudioBroadcaster* sound : audioBroadcasters)
+    {
+        sound->SetVolume(mainVolume * sound->volumeIntensity * sound->GetSoundIntensity());
+    }
 }
 
 void SoundManager::Destroy()
@@ -57,16 +59,16 @@ void SoundManager::Destroy()
 
 void SoundManager::AddSound(AudioBroadcaster* _newSound)
 {
-    sounds.push_back(_newSound);
+    audioBroadcasters.push_back(_newSound);
 }
 
 void SoundManager::RemoveSound(AudioBroadcaster* _newSound)
 {
-    for (auto it = sounds.begin(); it != sounds.end(); )
+    for (auto it = audioBroadcasters.begin(); it != audioBroadcasters.end(); )
     {
         if (*it == _newSound)
         {
-            sounds.erase(it);
+            audioBroadcasters.erase(it);
             return;
         }
         else

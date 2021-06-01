@@ -6,8 +6,8 @@ std::unordered_map<std::string, std::shared_ptr<Mesh>> ResourcesManager::meshRes
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourcesManager::textureResources;
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourcesManager::shaderResources;
 std::unordered_map<std::string, std::shared_ptr<Font>> ResourcesManager::fontResources;
-std::unordered_map<std::string, std::shared_ptr<AnimResource>> ResourcesManager::animationsResources;
 std::unordered_map<std::string, std::shared_ptr<CubemapTexture>> ResourcesManager::cubemapTextureResources;
+std::unordered_map<std::string, std::shared_ptr<AnimResource>> ResourcesManager::animationsResources;
 
 void ResourcesManager::InitDefaultResources()
 {
@@ -18,6 +18,7 @@ void ResourcesManager::InitDefaultResources()
     ResourcesManager::AddResourceMesh("Capsule", false, "resources/capsule.obj");
     ResourcesManager::AddResourceShader("Default", false, "resources/BlinnPhongShader.shader");
     ResourcesManager::AddResourceShader("Skybox", false, "resources/Skybox.shader");
+    ResourcesManager::AddResourceShader("ProgressBar", false, "resources/ProgressBar.shader");
     ResourcesManager::AddResourceTexture("Default", false, "resources/white.png");
     ResourcesManager::AddResourceFont("Default", false, "resources/Arial.fnt");
     ResourcesManager::AddResourceCubemapTexture("Default", false, "resources/Skybox.dds");
@@ -36,6 +37,8 @@ void ResourcesManager::PrepareClear()
     for (auto& res : fontResources)
         res.second->hasToBeDelete = true;
     for (auto& res : cubemapTextureResources)
+        res.second->hasToBeDelete = true;
+    for (auto& res : animationsResources)
         res.second->hasToBeDelete = true;
 }
 
@@ -69,6 +72,11 @@ void ResourcesManager::ClearHasToBeDelete()
     for (auto it = cubemapTextureResources.begin(); it != cubemapTextureResources.end();)
         if (it->second->hasToBeDelete)
             it = cubemapTextureResources.erase(it);
+        else
+            it++;
+    for (auto it = animationsResources.begin(); it != animationsResources.end();)
+        if (it->second->hasToBeDelete)
+            it = animationsResources.erase(it);
         else
             it++;
 }

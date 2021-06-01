@@ -14,7 +14,7 @@ class Rigid : public Component
 protected:
 	void AttachShape();
 	void InternalActivate() override;
-	void InternalDehactivate() override;
+	void InternalDeactivate() override;
 public:
 	physx::PxRigidActor* actor = nullptr;
 
@@ -23,7 +23,7 @@ public:
 	~Rigid();
 
 	void Activate() override;
-	void Dehactivate() override;
+	void Deactivate() override;
 
 	virtual void UpdateTransform(Transform transform) {};
 

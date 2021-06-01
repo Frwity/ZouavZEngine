@@ -97,7 +97,7 @@ void UploadCubemap(const char* _texturePath)
 }
 
 CubemapTexture::CubemapTexture(const std::string& _name, const char* _path)
-    : Resource(_name)
+    : Resource(_name, _path)
 {
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_CUBE_MAP, id);
@@ -108,8 +108,6 @@ CubemapTexture::CubemapTexture(const std::string& _name, const char* _path)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);
-
-    paths.emplace_back(_path);
 }
 
 void CubemapTexture::RemoveFromResourcesManager()

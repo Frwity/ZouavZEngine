@@ -96,9 +96,8 @@ const Character* MetaData::GetCharacter(int _ascii) const
 
 
 Font::Font(const std::string& _name, const char* _path)
-	: Resource(_name), metaData(_path), texture(_name, (std::string(_path).substr(0, std::string(_path).find(".", 0) + 1) + std::string("png")).c_str())
+	: Resource(_name, _path), metaData(_path), texture(_name, (std::string(_path).substr(0, std::string(_path).find(".", 0) + 1) + std::string("png")).c_str())
 {
-	paths.emplace_back(_path);
 }
 
 void Font::RemoveFromResourcesManager()

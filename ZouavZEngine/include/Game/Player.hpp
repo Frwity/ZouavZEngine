@@ -16,6 +16,10 @@ private:
 	class Camera* camera;
 
 	int speed = 3;
+	int maxXp = 10;
+	int currentXp = 0;
+	int attackDamageGain = 1;
+	int lifeGain = 5;
 
 	float camSensitivity = 0.1f;
 	float rotSpeed = 0.1f;
@@ -32,6 +36,10 @@ public:
 	void OnAddComponent() override;
 
 	void OnContact(class Object* _other, class ShapeCollision* _triggerShape) override;
+
+	void ManageXp(const class Enemy& _enemyKilled);
+
+	void Editor() override;
 
 	template <class Archive>
 	void serialize(Archive& ar)

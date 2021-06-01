@@ -17,8 +17,6 @@ class Editor
 private:
 	std::unordered_map<std::string, std::unique_ptr<Texture>> editorTextures;
 
-	double lastCursorScenePosX = 0;
-	double lastCursorScenePosY = 0;
 	double lastCursorGamePosX = 0;
 	double lastCursorGamePosY = 0;
 
@@ -63,4 +61,5 @@ public:
 	void DisplayChild(class GameObject* _parent);
 	void MoveSelectedGameobject();
 	void NewSceneWindow(class Engine& _engine);
+	void NewClassWindow();
 };

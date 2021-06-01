@@ -30,7 +30,7 @@ public:
 	void Update(float _deltaTime);
 
 	void Activate() { activate = true; }
-	void Dehactivate() { activate = false; }
+	void Deactivate() { activate = false; }
 	void Reset();
 
 };
