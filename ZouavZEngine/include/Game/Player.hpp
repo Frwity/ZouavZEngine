@@ -23,6 +23,7 @@ private:
 
 	float camSensitivity = 0.1f;
 	float rotSpeed = 0.1f;
+	float totalAngle = 0.0f;
 
 	bool isJumping = false;
 

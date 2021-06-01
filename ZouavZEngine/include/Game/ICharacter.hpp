@@ -45,7 +45,9 @@ public:
     int GetLife() const { return life; }
     bool IsAlive() const { return life > 0; }
     bool Damage(int _damage);
-    void Attack();
+    virtual void Attack();
+    virtual void StopAttack();
+    virtual void OnDeath() {};
 
     template <class Archive>
     void serialize(Archive & _ar)

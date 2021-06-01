@@ -100,7 +100,7 @@ void ICharacter::Update()
 
 		if (timerAttackDuration < 0.0f)
 		{
-			attackCollision->Deactivate();
+			StopAttack();
 			timerAttackCooldown = attackCooldown;
 		}
 	}
@@ -138,7 +138,7 @@ bool ICharacter::Damage(int _damage)
 		else
 		{
 			audioBroadcaster->Play("death.wav");
-			attackCollision->Deactivate();
+			StopAttack();
 		}
 	}
 	else
@@ -152,4 +152,9 @@ void ICharacter::Attack()
 	attackCollision->Activate();
 	timerAttackDuration = attackDuration;
 	audioBroadcaster->Play("attack.wav");
+}
+
+void ICharacter::StopAttack()
+{
+	attackCollision->Deactivate();
 }
