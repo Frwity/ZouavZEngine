@@ -44,16 +44,11 @@ Mat4 Mat4::CreateScaleMatrix(const Vec3& scale)
 
 Mat4 Mat4::CreateTranslationMatrix(const Vec3& translation)
 {
-    Mat4 translationMat;
+    Mat4 translationMat = Mat4::identity;
 
-    translationMat.Accessor(0, 0) = 1;
-    translationMat.Accessor(1, 1) = 1;
-    translationMat.Accessor(2, 2) = 1;
-    translationMat.Accessor(3, 3) = 1;
-
-    translationMat.Accessor(0, 3) = translation.x;
-    translationMat.Accessor(1, 3) = translation.y;
-    translationMat.Accessor(2, 3) = translation.z;
+    translationMat.matrix[12] = translation.x;
+    translationMat.matrix[13] = translation.y;
+    translationMat.matrix[14] = translation.z;
 
     return translationMat;
 }
@@ -224,13 +219,9 @@ Mat4 Mat4::operator*(const Mat4& m) const
     Mat4 result = zero;
 
     for (int i = 0; i < 4; ++i)
-    {
         for (int j = 0; j < 16; j+=4)
-        {
             for (int k = 0; k < 4; ++k)
                 result.matrix[i + j] += matrix[i + k * 4] * m.matrix[k + j];
-        }
-    }
 
     return result;
 }
