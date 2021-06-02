@@ -20,6 +20,13 @@ private:
 	int currentXp = 0;
 	int attackDamageGain = 1;
 	int lifeGain = 5;
+	int dashSpeed = 15;
+	Vec3 dashDirection;
+	float dashDuration = 0.3f;
+	float timerDashDuration = 0.0f;
+	float dashCooldown = 1.0f;
+	float timerDashCooldown = 0.0f;
+	bool isDashing = false;
 
 	float camSensitivity = 0.1f;
 	float rotSpeed = 0.1f;
@@ -42,10 +49,12 @@ public:
 
 	void Editor() override;
 
+	bool IsDashing() { return isDashing; }
+
 	template <class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(speed);
+		ar(speed, maxXp, currentXp, attackDamageGain, lifeGain);
 
 		ar(cereal::base_class<ICharacter>(this));
 	}
@@ -54,7 +63,7 @@ public:
 	static void load_and_construct(Archive& _ar, cereal::construct<Player>& _construct)
 	{
 		_construct(GameObject::currentLoadedGameObject);
-		_ar(_construct->speed);
+		_ar(_construct->speed, _construct->maxXp, _construct->currentXp, _construct->attackDamageGain, _construct->lifeGain);
 
 		_ar(cereal::base_class<ICharacter>(_construct.ptr()));
 	}

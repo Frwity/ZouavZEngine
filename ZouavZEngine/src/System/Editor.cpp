@@ -761,7 +761,7 @@ void Editor::DisplayInspector()
                 ImGui::Text("World Scale    : %.3f %.3f %.3f", gameObjectInspector->WorldScale().x, gameObjectInspector->WorldScale().y, gameObjectInspector->WorldScale().z);
 
                 ImGui::Text("Local Position :");
-                ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
+                ImGui::SameLine(); ImGui::InputFloat3("##positionx", &gameObjectInspector->localPosition.x, "%.3f");
                 
                 static Vec3 localEulerAngles;
                 localEulerAngles = gameObjectInspector->localRotation.ToEuler();
@@ -772,7 +772,7 @@ void Editor::DisplayInspector()
 
                 ImGui::Text("Local Scale    :");
                 ImGui::SameLine(); 
-                if (ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+                if (ImGui::InputFloat3("##scalex", &gameObjectInspector->localScale.x, "%.3f"))
                 {
                     gameObjectInspector->localScale.x = gameObjectInspector->localScale.x < 0.001f ? 0.001f : gameObjectInspector->localScale.x;
                     gameObjectInspector->localScale.y = gameObjectInspector->localScale.y < 0.001f ? 0.001f : gameObjectInspector->localScale.y;

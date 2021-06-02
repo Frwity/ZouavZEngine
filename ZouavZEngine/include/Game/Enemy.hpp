@@ -29,12 +29,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
+        _ar(detectionDistance, distanceToAttack, distanceToStop, speed, timeToDecay);
         _ar(cereal::base_class<ICharacter>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<Enemy>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
+        _ar(_construct->detectionDistance, _construct->distanceToAttack, _construct->distanceToStop, _construct->speed, _construct->timeToDecay);
         _ar(cereal::base_class<ICharacter>(_construct.ptr()));
     }
 };

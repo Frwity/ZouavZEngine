@@ -52,14 +52,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
-        _ar(damageColor, invulnerabilityFrame, life, attackDamage);
+        _ar(damageColor, invulnerabilityFrame, life, maxLife, attackDamage, level);
         _ar(cereal::base_class<Component>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<ICharacter>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
-        _ar(_construct->damageColor, _construct->invulnerabilityFrame, _construct->life, _construct->attackDamage);
+        _ar(_construct->damageColor, _construct->invulnerabilityFrame, _construct->life, _construct->maxLife, _construct->attackDamage, _construct->level);
         _ar(cereal::base_class<Component>(_construct.ptr()));
     }
 };

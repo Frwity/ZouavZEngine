@@ -53,6 +53,9 @@ void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
 		{
 			if (go->GetComponent<ICharacter>()->IsAlive())
 			{
+				Player* goPlayer = go->GetComponent<Player>();
+				if (goPlayer && goPlayer->IsDashing())
+					return;
 				go->GetComponent<ICharacter>()->Damage(attackDamage);
 				if (otherEnemy && !otherEnemy->IsAlive())
 					GetGameObject().GetComponent<Player>()->ManageXp(*otherEnemy);

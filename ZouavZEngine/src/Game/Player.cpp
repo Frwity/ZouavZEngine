@@ -64,12 +64,40 @@ void Player::Update()
 	if (!IsAlive())
 		return;
 
+	if (timerDashCooldown >= 0.0f)
+		timerDashCooldown -= TimeManager::GetDeltaTime();
+
+	if (timerDashDuration >= 0.0f)
+	{
+		timerDashDuration -= TimeManager::GetDeltaTime();
+
+		if (timerDashDuration < 0.0f)
+		{
+			isDashing = false;
+			timerDashCooldown = attackCooldown;
+		}
+	}
+
 	ICharacter::Update();
 
 	if (InputManager::GetKeyPressed(E_KEYS::RSHIFT))
 		speed = 100;
 	else
 		speed = 3;
+
+	Vec2 offset = InputManager::GetCursorOffsetFromLastFrame();
+
+	Quaternion camRotY = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f });
+	camera->SetPosition(camRotY.RotateVector(camera->GetPosition()));
+
+	if (totalAngle < -M_PI_4 && offset.y > 0 || totalAngle > M_PI_4 && offset.y < 0)
+		return;
+
+	Vec3 right = (-camera->GetPosition().Cross(Vec3::up)).Normalized();
+	Quaternion camRotX = Quaternion::AngleAxis(right, -offset.y * camSensitivity / 30.f);
+
+	totalAngle += -offset.y * camSensitivity / 30.f;
+	camera->SetPosition(camRotX.RotateVector((camera->GetPosition() - GetGameObject().WorldPosition()) + GetGameObject().WorldPosition()));
 
 	Vec3 cameraForward = camera->GetTarget() - camera->GetPosition();
 	cameraForward.y = camera->GetPosition().y;
@@ -87,13 +115,25 @@ void Player::Update()
 	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
 		direction -= cameraRight;
 
+	if (InputManager::GetKeyPressedOneTime(E_KEYS::LCTRL))
+	{
+		isDashing = true;
+		timerDashDuration = dashDuration;
+
+		if (direction.GetSquaredMagnitude() > 0.01f)
+			direction = GetGameObject().Forward();
+	}
+
+	if (isDashing)
+		direction = direction.GetSquaredMagnitude() > 0.01f ? direction : dashDirection;
+
 	if (direction.GetSquaredMagnitude() > 0.01f)
 	{
 		float angleToDirection = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
 
 		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
 	
-		GetGameObject().Translate(GetGameObject().Forward() * TimeManager::GetDeltaTime() * speed);
+		GetGameObject().Translate(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed));
 	}
 
 	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
@@ -104,20 +144,6 @@ void Player::Update()
 
 	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
 		Attack();
-
-	Vec2 offset = InputManager::GetCursorOffsetFromLastFrame();
-	
-	Quaternion camRotY = Quaternion(Vec3{ 0.0f, -offset.x * camSensitivity, 0.0f });
-	camera->SetPosition(camRotY.RotateVector(camera->GetPosition()));
-
-	if (totalAngle < -M_PI_4 && offset.y > 0 || totalAngle > M_PI_4 && offset.y < 0)
-		return;
-
-	Vec3 right = (-camera->GetPosition().Cross(Vec3::up)).Normalized();
-	Quaternion camRotX = Quaternion::AngleAxis(right, -offset.y * camSensitivity / 30.f);
-
-	totalAngle += -offset.y * camSensitivity / 30.f;
-	camera->SetPosition(camRotX.RotateVector((camera->GetPosition() - GetGameObject().WorldPosition()) + GetGameObject().WorldPosition()));
 }
 
 void Player::ManageXp(const Enemy& _enemyKilled)
