@@ -30,9 +30,9 @@ void EnemyArcher::Attack()
 {
 	if (*arrow)
 	{
-		Arrow* arrowComp = GameObject::Instanciate(*arrow)->GetComponent<Arrow>();
+		Arrow* arrowComp = GameObject::Instanciate(*arrow, GetGameObject().WorldPosition())->GetComponent<Arrow>();
 		if (arrowComp)
-			arrowComp->Initiate(GetGameObject().Forward(), attackDamage);
-		timerAttackDuration = attackDuration;
+			arrowComp->Initiate(player->WorldPosition() - GetGameObject().WorldPosition(), attackDamage);
+		timerAttackCooldown = attackCooldown;
 	}
 }

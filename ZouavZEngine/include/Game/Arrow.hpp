@@ -8,7 +8,6 @@ class Arrow : public ScriptComponent
 {
    friend class cereal::access;
 private:
-    class BoxCollision* collider;
 
 public:
     Vec3 direction{ 1.0f, 0.0f, 0.0f };

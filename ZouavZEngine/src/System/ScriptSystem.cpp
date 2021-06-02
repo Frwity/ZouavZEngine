@@ -47,7 +47,10 @@ void ScriptSystem::FixedUpdate()
 
 void ScriptSystem::Update()
 {
-	for (ScriptComponent* script : scripts)
-		if (script->IsActive())
-			script->Update();
+	float scriptsSize = scripts.size();
+	for (int i = 0; i < scriptsSize; i++)
+	{
+		if (scripts[i] && scripts[i]->IsActive())
+			scripts[i]->Update();
+	}
 }
