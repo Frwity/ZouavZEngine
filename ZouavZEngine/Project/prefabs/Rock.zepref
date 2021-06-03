@@ -4,7 +4,7 @@
     "value2": 0,
     "value3": {
         "value0": 0.0,
-        "value1": 0.0,
+        "value1": 1.7160743474960328,
         "value2": -7.277117729187012
     },
     "value4": {
@@ -64,13 +64,13 @@
                 "data": {
                     "value0": {
                         "value0": 700.0,
-                        "value1": 250.0,
-                        "value2": 300.0
+                        "value1": 400.0,
+                        "value2": 700.0
                     },
                     "value1": false,
                     "value2": {
                         "value0": 2.5,
-                        "value1": 0.0,
+                        "value1": 1.0,
                         "value2": 0.0
                     },
                     "value3": {

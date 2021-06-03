@@ -28,7 +28,7 @@ ShapeCollision::ShapeCollision(GameObject* _gameObject, Transform _transform, bo
 
 ShapeCollision::~ShapeCollision()
 {
-	
+	shape = nullptr;
 }
 
 void ShapeCollision::releasePhysXComponent()

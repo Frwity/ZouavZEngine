@@ -10,10 +10,10 @@ class Quaternion
 {
 public:
 
-	float w;
-	float x;
-	float y;
-	float z;
+	float w = 1.f;
+	float x = 0.f;
+	float y = 0.f;
+	float z = 0.f;
 
 	Quaternion();
 	Quaternion(const Vec3& _eulerAngles);
@@ -51,6 +51,8 @@ public:
 	Vec3 ToEuler() const;
 	 
 	Vec3 RotateVector(const Vec3& _vec) const;
+
+	static Quaternion RotateFromTo(const Vec3&, const Vec3&);
 
 	Mat4 GetRotationMatrix() const;
 

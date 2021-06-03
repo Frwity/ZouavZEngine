@@ -277,14 +277,17 @@
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Arrow.cpp">
-		<Filter>src\Game</Filter>
-	</ClCompile>
-	<ClCompile Include="src\Game\SlimeEnemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\PhysxShowcaseScript.cpp">
         <Filter>src\Game</Filter>
      </ClCompile>
+    <ClCompile Include="src\Game\SlimeEnemy.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\EnemyManager.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
   <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -505,14 +508,17 @@
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Arrow.hpp">
-		<Filter>include\Game</Filter>
-	</ClInclude>
-	<ClInclude Include="include\Game\SlimeEnemy.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\PhysxShowcaseScript.hpp">
         <Filter>include\Game</Filter>
      </ClInclude>
+    <ClInclude Include="include\Game\SlimeEnemy.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game\EnemyManager.hpp">
+      <Filter>include\Game</Filter>
+    </ClInclude>
   <!--Include End-->
   </ItemGroup>
 </Project>

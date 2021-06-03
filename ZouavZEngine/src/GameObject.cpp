@@ -57,12 +57,9 @@ GameObject& GameObject::operator=(const GameObject& _other)
 
 void GameObject::Destroy() 
 {
-	SetParent(nullptr);
 	toDestroy = true;
 	for (GameObject* child : children)
-	{
 		child->Destroy();
-	}
 	destroyGameObject = true;
 }
 
@@ -297,11 +294,13 @@ void GameObject::DestroyGameObjectIfNeedTo()
 		{
 			if (iter->get()->toDestroy)
 			{
+				iter->get()->SetParent(nullptr);
 				iter = gameObjects.erase(iter);
 			}
 			else
 				iter++;
 		}
+		destroyGameObject = false;
 	}
 }
 

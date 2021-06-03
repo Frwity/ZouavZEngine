@@ -5,7 +5,8 @@ using namespace std;
 
 Quaternion::Quaternion()
 {
-	w = x = y = z = 0;
+	w = 1.0f;
+	x = y = z = 0.0f;
 }
 
 Quaternion::Quaternion(const Vec3& _eulerAngles)
@@ -226,6 +227,15 @@ Vec3 Quaternion::RotateVector(const Vec3& _vec) const
 	float s = w;
 
 	return 2.0f * u.Dot(_vec) * u + (s * s - u.Dot(u)) * _vec + 2.0f * s * u.Cross(_vec);
+}
+
+Quaternion Quaternion::RotateFromTo(const Vec3& _vec1, const Vec3& _vec2)
+{
+	float dot = _vec1.Dot(_vec2);
+	if (dot > 0.999999f || dot < -0.999999f)
+		return Quaternion();
+	Quaternion toReturn(_vec1.Cross(_vec2), sqrtf(_vec1.GetSquaredMagnitude() * _vec2.GetSquaredMagnitude()) + dot);
+	return toReturn.Normalised();
 }
 
 Mat4 Quaternion::GetRotationMatrix() const

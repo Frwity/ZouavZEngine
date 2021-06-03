@@ -95,5 +95,8 @@ Rigid::~Rigid()
 		return;
 
 	if (actor)
-		PhysicSystem::scene->removeActor(*actor);
+	{
+		PhysicSystem::scene->removeActor(*actor, false);
+		actor = nullptr;
+	}
 }
