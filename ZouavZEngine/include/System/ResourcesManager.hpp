@@ -246,7 +246,6 @@ public:
 		auto a = animationsResources.emplace(_name, std::make_shared<AnimResource>(_name, _args...));
 		if (a.second)
 		{
-			Debug::Log("Animation resource : " + _name + " loaded");
 			a.first->second->deletable = _deletable;
 			return &a.first->second;
 		}

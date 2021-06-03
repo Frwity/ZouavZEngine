@@ -30,7 +30,7 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
 
 void Animation::Editor()
 {
-    ResourcesManager::ResourceChanger<AnimResource>("Animation", currentAnimation);
+    ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation);
 
     if (ImGui::BeginDragDropTarget())
     {
@@ -45,10 +45,8 @@ void Animation::Editor()
 
             if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".dae") != std::string::npos)
             {
-                if (currentAnimation.use_count() == 2 && currentAnimation->IsDeletable())
-                    ResourcesManager::RemoveResourceAnimation(currentAnimation->GetName());
                 currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
-                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation.get()));
+                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
             }
         }
 
@@ -67,7 +65,7 @@ void Animation::Editor()
 void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime());
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), animationSpeed, loop);
     else
         return;
 
@@ -81,7 +79,7 @@ void Animation::Draw(const Camera& _camera)
 
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
-
+    
     animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
 
     text->Use();

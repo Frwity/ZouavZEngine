@@ -11,7 +11,10 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
 
 	if (!scene)
+	{
+		Debug::LogWarning(std::string("Animation load failed!: ").append(_path));
 		return;
+	}
 
 	auto animation = scene->mAnimations[0];
 	duration = (float)animation->mDuration;
@@ -30,6 +33,7 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
+	Debug::Log("Animation resource : " + _name + " loaded");
 }
 
 void AnimResource::UpdateAnimationResources(Mesh* _mesh)
@@ -63,14 +67,22 @@ void AnimResource::RemoveFromResourcesManager()
 
 }
 
-void AnimResource::UpdateAnimation(float _deltaTime)
+void AnimResource::UpdateAnimation(float _deltaTime, float _animationSpeed, bool _loop)
 {
+	currentTime += tickPerSecond  * _animationSpeed * _deltaTime;
+	
 	if (currentTime >= duration)
-		currentTime = 0.0f;
+		animationFinish = true;
 
-	currentTime += tickPerSecond * _deltaTime;
-	currentTime = fmod(currentTime, duration);
-	CalculateBoneTransform(&rootNode, Mat4::identity);
+	if (animationFinish && _loop)
+	{
+		animationFinish = false;
+		currentTime = 0.0f;
+	}
+
+	if(!animationFinish)
+		CalculateBoneTransform(&rootNode, Mat4::identity);
+	
 }
 
 void AnimResource::ReadMissingBones(const aiAnimation* animation)

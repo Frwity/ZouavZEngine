@@ -16,13 +16,14 @@ class Animation : public Component
 {
 private:
     std::shared_ptr<Shader> animationShader;
-
 public :
     bool play = false;
-    std::unordered_map<std::string, AnimResource*> animationsAttached;
+    std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
+    float animationSpeed = 0.2f;
+    bool loop = true;
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");
@@ -31,6 +32,8 @@ public :
     void Draw(const Camera& _camera);
 
     void Editor() override;
+    void Play() { play = true; };
+    void Stop() { play = false; }
 
     template <class Archive>
     void serialize(Archive& _ar)
