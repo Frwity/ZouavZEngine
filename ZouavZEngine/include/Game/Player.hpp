@@ -54,7 +54,7 @@ public:
 	template <class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(speed, maxXp, currentXp, attackDamageGain, lifeGain);
+		ar(speed, maxXp, currentXp, attackDamageGain, lifeGain, dashSpeed, dashDuration, dashCooldown, camSensitivity, rotSpeed);
 
 		ar(cereal::base_class<ICharacter>(this));
 	}
@@ -63,7 +63,7 @@ public:
 	static void load_and_construct(Archive& _ar, cereal::construct<Player>& _construct)
 	{
 		_construct(GameObject::currentLoadedGameObject);
-		_ar(_construct->speed, _construct->maxXp, _construct->currentXp, _construct->attackDamageGain, _construct->lifeGain);
+		_ar(_construct->speed, _construct->maxXp, _construct->currentXp, _construct->attackDamageGain, _construct->lifeGain, _construct->dashSpeed, _construct->dashDuration, _construct->dashCooldown, _construct->camSensitivity, _construct->rotSpeed);
 
 		_ar(cereal::base_class<ICharacter>(_construct.ptr()));
 	}

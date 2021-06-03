@@ -22,12 +22,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
+        _ar(arrow);
         _ar(cereal::base_class<Enemy>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<EnemyArcher>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
+        _ar(_construct->arrow);
         _ar(cereal::base_class<Enemy>(_construct.ptr()));
     }
 };
