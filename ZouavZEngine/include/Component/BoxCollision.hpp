@@ -11,7 +11,7 @@ public:
 	Vec3 halfExtends;
 
 	BoxCollision(GameObject* _gameObject, Vec3 _halfExtends = { 1.0f, 1.0f, 1.0f }, bool _isTrigger = false, Transform _tranform = Transform(), std::string _name = "BoxCollision");
-	~BoxCollision();
+	~BoxCollision() = default;
 
 	void Editor() override;
 	void DrawGizmos(const Camera& _camera) override;

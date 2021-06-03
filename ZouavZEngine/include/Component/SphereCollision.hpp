@@ -11,7 +11,7 @@ public:
 	float radius;
 
 	SphereCollision(GameObject* _gameObject, float _radius = 1.0f, bool _isTrigger = false, Transform _tranform = Transform(), std::string _name = "SphereCollision");
-	~SphereCollision();
+	~SphereCollision() = default;
 
 	void Editor() override;
 	void UpdateScale();

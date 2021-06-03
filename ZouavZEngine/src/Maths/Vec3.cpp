@@ -77,6 +77,16 @@ Vec3 Vec3::operator/(float _value) const
     return { x / _value, y / _value, z / _value };
 }
 
+Vec3 Vec3::operator+(float _value) const
+{
+    return { x + _value, y + _value, z + _value ,};
+}
+
+Vec3 Vec3::operator-(float _value) const
+{
+    return { x - _value, y - _value, z - _value , };
+}
+
 void Vec3::operator=(const Vec3& _v)
 {
     x = _v.x;

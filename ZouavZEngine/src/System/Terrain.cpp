@@ -308,6 +308,7 @@ void Terrain::DisplayOptionWindow()
 		GenGOParams[GenGOID].prefab.Editor("Prefab : ");
 		if (ImGui::InputInt("Ratio : ", &GenGOParams[GenGOID].ratio, 1))
 			ComputeTotalRatio();
+		ImGui::Checkbox("Oriented By Normal : ", &GenGOParams[GenGOID].isOrientedByNormal);
 		ImGui::InputInt("GameObject Per Chunk", &nbGOPerChunk);
 		
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
@@ -427,7 +428,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	pos = _cca.pos;
 	size = _cca.size;
 	vertexCount = _cca.vertexCount;
-
+	Vec3 y, yx1, yx2, yz1, yz2;
 	std::vector<Vertex> vertices;
 	vertices.reserve((size_t)vertexCount * (size_t)vertexCount);
 	std::vector<int> indices;
@@ -439,10 +440,18 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 		{
 			float height = std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight);
 
+			// calculate normal with adjactent vertices
+			y = { x, height, z };
+			yx1 = { x - 1, x <= 0.0f ? std::clamp(CalculateHeigt(_cca, x - 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x - 1 + z * vertexCount).pos.y, z };
+			yz1 = { x, z <= 0.0f ? std::clamp(CalculateHeigt(_cca, x, z - 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x + (z - 1) * vertexCount).pos.y, z - 1 };
+			yx2 = { x + 1, std::clamp(CalculateHeigt(_cca, x + 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z };
+			yz2 = { x, std::clamp(CalculateHeigt(_cca, x, z + 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z + 1 };
+
+			Vec3 normal = ((yx1 - y).Cross(yz2 - y) + (yz2 - y).Cross(yx2 - y) + ((yx2 - y).Cross(yz1 - y)) + (yz1 - y).Cross(yz1 - y)).Normalized();
 
 			// create vertices
 			vertices.push_back(Vertex{ Vec3(x / ((float)vertexCount - 1) * size, height, z / ((float)vertexCount - 1) * size),
-										Vec3(0.0f, 1.0f, 0.0f),
+										normal,
 										Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
 		}
 	}
@@ -469,6 +478,8 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			gopos = vertices.at(x + z * vertexCount).pos;
 			generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
 			generatedGameObjects.back()->SetNotToSave(true);
+			if (_cca.toGeneratePrefabs[ratioCursor].isOrientedByNormal)
+				generatedGameObjects.back()->Rotate(Quaternion::RotateFromTo(Vec3::up, vertices.at(x + z * vertexCount).normal));
 			actualRatio = 0;
 			ratioCursor = 0;
 		}
@@ -550,16 +561,16 @@ Chunk::~Chunk()
 	if (actor == nullptr || PhysicSystem::scene == nullptr)
 		return;
 
-	 if (isGenerated)
+	if (isGenerated)
 	{
 		for (GameObject* go : generatedGameObjects)
 			if (go)
 				go->Destroy();
-		/*
-		if (actor->getScene() == PhysicSystem::scene)
-		{
-			PhysicSystem::scene->removeActor(*actor);
-			actor = nullptr;
-		}*/
+
+		//if (PhysicSystem::scene)
+		//{
+		//	PhysicSystem::scene->removeActor(*actor);
+		//	actor = nullptr;
+		//}
 	}
 }

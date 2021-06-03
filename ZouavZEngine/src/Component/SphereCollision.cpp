@@ -30,11 +30,6 @@ SphereCollision::SphereCollision(GameObject* _gameObject, float _radius, bool _i
 	UpdateScale();
 }
 
-SphereCollision::~SphereCollision()
-{
-
-}
-
 void SphereCollision::Editor()
 {
 	ShapeCollision::Editor();

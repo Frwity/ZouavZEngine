@@ -141,9 +141,9 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 {
 	if (!_parent->IsActive())
 		return;
-	if (_parent->GetComponent<Animation>() && _parent->GetComponent<Animation>()->play)
+	if (_parent->GetComponent<Animation>() && _parent->GetComponent<Animation>()->IsPlaying())
 		_parent->GetComponent<Animation>()->Draw(*_camera);
-	 else if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
+	else if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
 		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
 	if (_parent->GetComponent<Skybox>())
 		_parent->GetComponent<Skybox>()->Draw(*_camera);

@@ -46,6 +46,8 @@ class Vec3
         Vec3 operator*(const Vec3& v) const;
         Vec3 operator*(float _value) const;
         Vec3 operator/(float _value) const;
+        Vec3 operator+(float _value) const;
+        Vec3 operator-(float _value) const;
 
         void operator=(const Vec3& _v);
         void operator+=(const Vec3& _v);

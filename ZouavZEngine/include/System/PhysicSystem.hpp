@@ -43,6 +43,9 @@ public:
 	{ 
 		for (physx::PxU32 i = 0; i < count; ++i)
 		{
+			if (pairs[i].flags & physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER || pairs[i].flags & physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)
+				return;
+
 			if (!static_cast<ShapeCollision*>(pairs[i].triggerShape->userData)->IsActive())
 				return;
 
@@ -60,6 +63,9 @@ public:
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) override { Debug::Log("Avance !"); }
 	void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs) override
 	{ // TODO do all on contact like trigger
+		if (pairHeader.flags & physx::PxContactPairHeaderFlag::eREMOVED_ACTOR_0 || pairHeader.flags & physx::PxContactPairHeaderFlag::eREMOVED_ACTOR_1)
+			return;
+
 		physx::PxRigidActor* rd = pairHeader.actors[0]->is<physx::PxRigidActor>();
 		physx::PxRigidActor* rd2 = pairHeader.actors[1]->is<physx::PxRigidActor>();
 

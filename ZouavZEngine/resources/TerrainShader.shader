@@ -125,9 +125,9 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 color)
 
     vec3 ambient        = light.ambient * color;
     vec3 diffuse        = light.diffuse * diff * color;
-    vec3 specular       = light.specular * spec * color;
+    //vec3 specular       = light.specular * spec * color;
 
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse);
 }
 
 vec3 CalcPointLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir, vec3 color)
@@ -146,13 +146,13 @@ vec3 CalcPointLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir, vec3 color
 
     vec3 ambient        = light.ambient * color;
     vec3 diffuse        = light.diffuse * diff * color;
-    vec3 specular       = light.specular * spec * color;
+    //vec3 specular       = light.specular * spec * color;
     
     ambient            *= attenuation;
     diffuse            *= attenuation;
-    specular           *= attenuation;
+    //specular           *= attenuation;
 
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse);
 }
 
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir, vec3 color)
@@ -175,11 +175,11 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 Pos, vec3 viewDir, vec3 color)
 
     vec3 ambient        = light.ambient * color;
     vec3 diffuse        = light.diffuse * diff * color;
-    vec3 specular       = light.specular * spec * color;
+    //vec3 specular       = light.specular * spec * color;
     ambient            *= attenuation * intensity;
     diffuse            *= attenuation * intensity;
-    specular           *= attenuation * intensity;
+    //specular           *= attenuation * intensity;
 
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse);
 }
 #endif

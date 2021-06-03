@@ -36,11 +36,6 @@ RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
 	LockAxis();
 }
 
-RigidBody::~RigidBody()
-{
-	
-}
-
 void RigidBody::SetLinearVelocity(const class Vec3& v)
 {
 	((PxRigidBody*)actor)->setLinearVelocity(PxVec3FromVec3(v));

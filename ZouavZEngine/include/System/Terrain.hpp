@@ -22,6 +22,7 @@ struct GeneratedGameObjectParam
 {
 	Prefab prefab;
 	int ratio = 1;
+	bool isOrientedByNormal = true;
 };
 
 struct NoiseParam
@@ -122,7 +123,7 @@ public:
 	
 	class GameObject* actualizer = nullptr;
 
-	float chunkDistanceRadius = 128;
+	float chunkDistanceRadius = 196;
 
 	// chunk variable
 
@@ -227,7 +228,7 @@ public:
 			for (int i = 0; i < GenGOCount; ++i)
 			{
 				GenGOParams[i].prefab.load(_ar);
-				_ar(GenGOParams[i].ratio);
+				_ar(GenGOParams[i].ratio, GenGOParams[i].isOrientedByNormal);
 			}
 		}
 	}
@@ -252,7 +253,7 @@ public:
 		for (int i = 0; i < GenGOCount; ++i)
 		{
 			GenGOParams[i].prefab.save(_ar);
-			_ar(GenGOParams[i].ratio);
+			_ar(GenGOParams[i].ratio, GenGOParams[i].isOrientedByNormal);
 		}
 	}
 };

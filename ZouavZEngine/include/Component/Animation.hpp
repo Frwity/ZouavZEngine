@@ -16,9 +16,9 @@ class Animation : public Component
 {
 private:
     std::shared_ptr<Shader> animationShader;
+    bool play = false;
 
 public :
-    bool play = false;
     std::unordered_map<std::string, AnimResource*> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
@@ -32,6 +32,9 @@ public :
 
     void Editor() override;
 
+    void Play() { play = true; }
+    void Stop() { play = false; }
+    bool IsPlaying() { return play; }
     template <class Archive>
     void serialize(Archive& _ar)
     {

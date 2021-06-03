@@ -32,11 +32,6 @@ BoxCollision::BoxCollision(GameObject* _gameObject, Vec3 _halfExtends, bool _isT
 	UpdateScale();
 }
 
-BoxCollision::~BoxCollision()
-{
-	 
-}
-
 void BoxCollision::Editor()
 {
 	ShapeCollision::Editor();
@@ -70,11 +65,10 @@ void BoxCollision::DrawGizmos(const Camera& _camera)
 
 	gizmoShader->Use();
 	
-	Vec3 worldPosition = Mat4::CreateTRSMatrix(GetGameObject().WorldScale(), GetGameObject().WorldRotation(), {1.0f, 1.0f ,1.0f}) * transform.localPosition;
-	Quaternion worldRotation = GetGameObject().WorldRotation() * transform.localRotation;
-	Vec3 worldScale = GetGameObject().WorldScale() * halfExtends;
+	Mat4 trsLocal = Mat4::CreateTRSMatrix(transform.localPosition, transform.localRotation, halfExtends * gameObject->WorldScale());
+	Mat4 trsGlobal = Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), { 1.f, 1.f, 1.f });
 
-	Mat4 mat = Mat4::CreateTRSMatrix(worldPosition, worldRotation, worldScale);
+	Mat4 mat = trsGlobal * trsLocal;
 
 	gizmoShader->SetMatrix("matrix", mat);
 	gizmoShader->SetVector4("color", Vec4(1.0f, 0.0f, 0.0f, 1.0f));

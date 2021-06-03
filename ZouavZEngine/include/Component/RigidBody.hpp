@@ -18,7 +18,7 @@ public:
 
 	RigidBody() = delete;
 	RigidBody(GameObject* _gameObject, std::string _name = "RigidBody");
-	~RigidBody();
+	~RigidBody() = default;
 
 	void Editor() override;
 
