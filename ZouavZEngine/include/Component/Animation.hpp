@@ -38,8 +38,11 @@ public :
     template <class Archive>
     void serialize(Archive& _ar)
     {
-        if (currentAnimation)
-            _ar(currentAnimation->GetName());
+        //if (currentAnimation)
+        //    _ar(currentAnimation->GetName());
+        _ar(animationsAttached.size());
+        for (std::pair<std::string, std::shared_ptr<AnimResource>> element : animationsAttached)
+            _ar(element.second->GetName());
 
         _ar(cereal::base_class<Component>(this));
     }

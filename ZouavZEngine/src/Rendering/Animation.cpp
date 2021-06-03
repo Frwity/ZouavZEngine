@@ -80,7 +80,8 @@ void Animation::Draw(const Camera& _camera)
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
     
-    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
+    //temp fix mesh scale
+    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale() / 100));
 
     text->Use();
     glBindVertexArray(mesh->GetID());
@@ -93,10 +94,21 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     std::string animationName;
     std::string animationPath;
     std::string meshName;
-
-    _ar(animationName);
+    int animAttachSize = 0;
+    std::vector<std::string> animNames;
+    
+    _ar(animAttachSize);
+    for (int i = 0; i < animAttachSize; i++)
+    {
+        std::string name;
+        _ar(name);
+        animNames.push_back(name);
+    }
 
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
-    _construct->currentAnimation = *ResourcesManager::GetResource<AnimResource>(animationName);
+    for (int i = 0; i < animAttachSize; i++)
+    {
+        _construct->animationsAttached.insert(std::make_pair(animNames[i], *ResourcesManager::GetResource<AnimResource>(animNames[i])));
+    }
 }

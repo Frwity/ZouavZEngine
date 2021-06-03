@@ -72,13 +72,13 @@ void AnimResource::UpdateAnimation(float _deltaTime, float _animationSpeed, bool
 	currentTime += tickPerSecond  * _animationSpeed * _deltaTime;
 	
 	if (currentTime >= duration)
+	{
+		currentTime = 0.0f;
 		animationFinish = true;
+	}
 
 	if (animationFinish && _loop)
-	{
 		animationFinish = false;
-		currentTime = 0.0f;
-	}
 
 	if(!animationFinish)
 		CalculateBoneTransform(&rootNode, Mat4::identity);
