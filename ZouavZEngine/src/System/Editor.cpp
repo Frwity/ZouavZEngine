@@ -362,6 +362,30 @@ void AddToVSProj(std::string className)
     out_file << str;
 }
 
+void AddToVSProjFilters(std::string className)
+{
+    std::ostringstream text;
+    std::ifstream in_file("ZouavZEngine.vcxproj.filters");
+
+    text << in_file.rdbuf();
+    std::string str = text.str();
+
+    std::string firstSearch = "  <!--Compile End-->";
+    std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\">\n        <Filter>src\\Game</Filter>\n     </ClCompile>\n" + firstSearch;
+
+    std::string secondSearch = "  <!--Include End-->";
+    std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\">\n        <Filter>include\\Game</Filter>\n     </ClInclude>\n" + secondSearch;
+
+    size_t pos = str.find(firstSearch);
+    str.replace(pos, std::string(firstSearch).length(), firstReplace);
+    pos = str.find(secondSearch);
+    str.replace(pos, std::string(secondSearch).length(), secondReplace);
+    in_file.close();
+
+    std::ofstream out_file("ZouavZEngine.vcxproj.filters");
+    out_file << str;
+}
+
 void AddToRegisterComponents(std::string className)
 {
     std::ostringstream text;
@@ -389,6 +413,8 @@ bool CreateNewClass(std::string className, std::string parentClassName)
 {
     if (std::filesystem::exists("include/Game/" + className + ".hpp") || std::filesystem::exists("src/Game/" + className + ".cpp"))
         return false;
+
+    AddToVSProjFilters(className);
 
     std::ofstream hppFile(std::string("include/Game/").append(className).append(".hpp").c_str());
     std::ofstream cppFile(std::string("src/Game/").append(className).append(".cpp").c_str());
@@ -435,13 +461,19 @@ bool CreateNewClass(std::string className, std::string parentClassName)
             "{}\n\n"
 
             "void " << className << "::Editor()\n"
-            "{}\n\n"
+            "{\n"
+            "   " << parentClassName << "::Editor();\n"
+            "}\n\n"
 
             "void " << className << "::Begin()\n"
-            "{}\n\n"
+            "{\n"
+            "   " << parentClassName << "::Begin();\n"
+            "}\n\n"
 
             "void " << className << "::Update()\n"
-            "{}\0";
+            "{\n"
+            "   " << parentClassName << "::Update();\n"
+            "}\0";
 
         AddToRegisterComponents(className);
         AddToVSProj(className);

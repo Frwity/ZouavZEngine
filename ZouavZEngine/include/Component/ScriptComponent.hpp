@@ -20,6 +20,7 @@ public:
 	virtual void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) {};
 	virtual void OnContact(class Object* _other, class ShapeCollision* _triggerShape) {};
 	virtual void OnAddComponent() {};
+	virtual void Editor() override {}
 
 	template <class Archive>
 	void serialize(Archive& _ar)
