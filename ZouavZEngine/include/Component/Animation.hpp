@@ -22,6 +22,7 @@ public :
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
+    Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
     float animationSpeed = 0.2f;
     bool loop = true;
 
