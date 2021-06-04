@@ -638,7 +638,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
         }
 
-        if (ImGui::IsWindowFocused() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
+        if (InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT) && isKeyboardEnable)
         {
             isKeyboardEnable = false;
             glfwSetInputMode(_render.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
