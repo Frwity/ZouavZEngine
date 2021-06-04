@@ -232,10 +232,22 @@ Vec3 Quaternion::RotateVector(const Vec3& _vec) const
 Quaternion Quaternion::RotateFromTo(const Vec3& _vec1, const Vec3& _vec2)
 {
 	float dot = _vec1.Dot(_vec2);
-	if (dot > 0.999999f || dot < -0.999999f)
+	Vec3 temp;
+	if (dot < -0.999999f)
+	{
+		temp = Vec3::right.Cross(_vec1);
+		if (temp.GetMagnitude() < 0.000001f)
+			temp = Vec3::up.Cross(_vec1);
+		temp.Normalize();
+		return Quaternion::AngleAxis(temp, M_PI);
+	}
+	else if (dot > 0.999999f) 
 		return Quaternion();
-	Quaternion toReturn(_vec1.Cross(_vec2), sqrtf(_vec1.GetSquaredMagnitude() * _vec2.GetSquaredMagnitude()) + dot);
-	return toReturn.Normalised();
+	else 
+	{
+		temp = _vec1.Cross(_vec2);
+		return Quaternion(1 + dot, temp.x, temp.y, temp.z).Normalised();
+	}
 }
 
 Mat4 Quaternion::GetRotationMatrix() const

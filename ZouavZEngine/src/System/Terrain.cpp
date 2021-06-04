@@ -428,7 +428,7 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	pos = _cca.pos;
 	size = _cca.size;
 	vertexCount = _cca.vertexCount;
-	Vec3 y, yx1, yx2, yz1, yz2;
+	Vec3 tmpPos, yx1, yx2, yz1, yz2;
 	std::vector<Vertex> vertices;
 	vertices.reserve((size_t)vertexCount * (size_t)vertexCount);
 	std::vector<int> indices;
@@ -438,21 +438,18 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	{
 		for (float x = 0.0f; x < vertexCount; x++)
 		{
-			float height = std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight);
-
+			// calculate pos
+			tmpPos = { x / ((float)vertexCount - 1) * size, std::clamp(CalculateHeigt(_cca, x, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z / ((float)vertexCount - 1) * size };
 			// calculate normal with adjactent vertices
-			y = { x, height, z };
-			yx1 = { x - 1, x <= 0.0f ? std::clamp(CalculateHeigt(_cca, x - 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x - 1 + z * vertexCount).pos.y, z };
-			yz1 = { x, z <= 0.0f ? std::clamp(CalculateHeigt(_cca, x, z - 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x + (z - 1) * vertexCount).pos.y, z - 1 };
-			yx2 = { x + 1, std::clamp(CalculateHeigt(_cca, x + 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z };
-			yz2 = { x, std::clamp(CalculateHeigt(_cca, x, z + 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z + 1 };
+			yx1 = { (x - 1) / ((float)vertexCount - 1) * size, x <= 0.0f ? std::clamp(CalculateHeigt(_cca, x - 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x - 1 + z * vertexCount).pos.y, z / ((float)vertexCount - 1) * size };
+			yz1 = { x / ((float)vertexCount - 1) * size, z <= 0.0f ? std::clamp(CalculateHeigt(_cca, x, z - 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight) : vertices.at(x + (z - 1) * vertexCount).pos.y, (z - 1 ) / ((float)vertexCount - 1) * size };
+			yx2 = { (x + 1) / ((float)vertexCount - 1) * size, std::clamp(CalculateHeigt(_cca, x + 1, z) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), z / ((float)vertexCount - 1) * size };
+			yz2 = { x / ((float)vertexCount - 1) * size, std::clamp(CalculateHeigt(_cca, x, z + 1) * _cca.heightIntensity, _cca.minHeight, _cca.maxHeight), (z + 1) / ((float)vertexCount - 1) * size };
 
-			Vec3 normal = ((yx1 - y).Cross(yz2 - y) + (yz2 - y).Cross(yx2 - y) + ((yx2 - y).Cross(yz1 - y)) + (yz1 - y).Cross(yz1 - y)).Normalized();
+			Vec3 normal = ((yx1 - tmpPos).Cross(yz2 - tmpPos) + (yz2 - tmpPos).Cross(yx2 - tmpPos) + ((yx2 - tmpPos).Cross(yz1 - tmpPos)) + (yz1 - tmpPos).Cross(yz1 - tmpPos)).Normalized();
 
 			// create vertices
-			vertices.push_back(Vertex{ Vec3(x / ((float)vertexCount - 1) * size, height, z / ((float)vertexCount - 1) * size),
-										normal,
-										Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
+			vertices.push_back(Vertex{ tmpPos, normal,	Vec2(x / ((float)vertexCount - 1), z / ((float)vertexCount - 1)) });
 		}
 	}
 
