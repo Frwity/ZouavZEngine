@@ -47,10 +47,13 @@ void Animation::Editor()
             if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".dae") != std::string::npos)
             {
                 currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
-                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
+                if (currentAnimation)
+                {
+                    currentAnimation->UpdateAnimationResources(mesh);
+                    animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
+                }
             }
         }
-
         ImGui::EndDragDropTarget();
     }
 
