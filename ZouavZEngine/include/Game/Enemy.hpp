@@ -23,6 +23,10 @@ public:
     void Begin() override;
     void Update() override;
     void Editor() override;
+
+    virtual void PlayWalkAnimation() override;
+    virtual void PlayAttackAnimation() override;
+    virtual void PlayIdleAnimation() override;
     
     int xpGiven = 3;
 

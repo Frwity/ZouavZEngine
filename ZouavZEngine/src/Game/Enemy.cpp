@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Component/BoxCollision.hpp"
-
+#include "Component/Animation.hpp"
 #include "Game/Enemy.hpp"
 
 Enemy::Enemy(GameObject * _gameobject, std::string _name)
@@ -33,24 +33,44 @@ void Enemy::Update()
 
 	ICharacter::Update();
 
-	if (player)
+	if (player && !IsAttacking())
 	{
 		Vec3 direction = player->WorldPosition() - GetGameObject().WorldPosition();
-
-		float angleToPlayer = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
-
-		if (angleToPlayer > 0.2f)
-			GetGameObject().RotateY((angleToPlayer / M_PI) * 180.0f);
 
 		float distanceToPlayer = direction.GetMagnitude();
 
 		if (distanceToPlayer < detectionDistance)
 		{
+			float angleToPlayer = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
+
+			if (angleToPlayer > 0.2f)
+				GetGameObject().RotateY((angleToPlayer / M_PI) * 180.0f);
+
 			if (distanceToPlayer > distanceToStop)
+			{
 				GetGameObject().Translate(direction.Normalized() * TimeManager::GetDeltaTime() * speed);
+				PlayWalkAnimation();
+			}
 
 			if (distanceToPlayer < distanceToAttack && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
 				Attack();
 		}
 	}
+
+	if (!animation->IsPlaying())
+		PlayIdleAnimation();
+}
+
+void Enemy::PlayWalkAnimation()
+{
+	animation->Play("Zombie Walk.fbx");
+}
+
+void Enemy::PlayAttackAnimation()
+{
+	animation->Play("Zombie Punching.fbx");
+}
+void Enemy::PlayIdleAnimation()
+{
+	//animation->Play("Zombie Idle.fbx");
 }

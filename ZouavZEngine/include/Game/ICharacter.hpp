@@ -30,6 +30,7 @@ protected:
     class BoxCollision* attackCollision;
     class RigidBody* rb{ nullptr };
     class AudioBroadcaster* audioBroadcaster;
+    class Animation* animation;
 
 public:
     ICharacter() = delete;
@@ -38,12 +39,19 @@ public:
     void Update() override;
     void Editor() override;
 
+    virtual void PlayIdleAnimation() {};
+    virtual void PlayWalkAnimation() {};
+    virtual void PlayAttackAnimation() {};
+    virtual void PlayDamageAnimation() {};
+    virtual void PlayDeathAnimation() {};
+
     void OnAddComponent() override;
 
     void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
 
     int GetLife() const { return life; }
     bool IsAlive() const { return life > 0; }
+    bool IsAttacking() const;
     bool Damage(int _damage);
     virtual void Attack();
     virtual void StopAttack();

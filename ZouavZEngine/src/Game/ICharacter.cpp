@@ -4,6 +4,7 @@
 #include "Component/BoxCollision.hpp"
 #include "Component/RigidBody.hpp"
 #include "Component/AudioBroadcaster.hpp"
+#include "Component/Animation.hpp"
 
 #include "System/TimeManager.hpp"
 
@@ -38,6 +39,7 @@ void ICharacter::OnAddComponent()
 	baseColor = material->color;
 	GetGameObject().AddComponent<FontComponent>();
 	audioBroadcaster = GetGameObject().AddComponent<AudioBroadcaster>();
+	animation = GetGameObject().AddComponent<Animation>();
 }
 
 void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
@@ -87,7 +89,9 @@ void ICharacter::Begin()
 	attackCollision = GetGameObject().GetComponentByName<BoxCollision>("Attack Collision");
 	rb = GetGameObject().GetComponent<RigidBody>();
 	audioBroadcaster = GetGameObject().GetComponent<AudioBroadcaster>();
+	animation = GetGameObject().GetComponent<Animation>();
 	life > maxLife ? life = maxLife : 0;
+	PlayIdleAnimation();
 }
 
 void ICharacter::Update()
@@ -124,6 +128,11 @@ void ICharacter::Update()
 	}
 }
 
+bool ICharacter::IsAttacking() const
+{
+	return attackCollision->IsActive();
+}
+
 bool ICharacter::Damage(int _damage)
 {
 	if (asTakenDamage)
@@ -156,7 +165,7 @@ void ICharacter::Attack()
 {
 	attackCollision->Activate();
 	timerAttackDuration = attackDuration;
-	audioBroadcaster->Play("attack.wav");
+	PlayAttackAnimation();
 }
 
 void ICharacter::StopAttack()

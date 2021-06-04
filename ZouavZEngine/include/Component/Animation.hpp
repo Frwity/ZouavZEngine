@@ -38,6 +38,8 @@ public :
     void Play() { play = true; }
     void Stop() { play = false; }
     bool IsPlaying() { return play; }
+    bool IsPlaying(std::string _animName);
+
     template <class Archive>
     void serialize(Archive& _ar)
     {

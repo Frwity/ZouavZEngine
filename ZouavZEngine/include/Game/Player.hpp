@@ -34,7 +34,6 @@ private:
 	float totalAngle = 0.0f;
 
 	bool isJumping = false;
-	Animation* animComponent = nullptr;
 
 public:
 

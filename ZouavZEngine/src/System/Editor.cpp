@@ -343,78 +343,82 @@ void AddToVSProj(std::string className)
 {
     std::ostringstream text;
     std::ifstream in_file("ZouavZEngine.vcxproj");
+    if (in_file.is_open())
+    {
+        text << in_file.rdbuf();
+        std::string str = text.str();
 
-    text << in_file.rdbuf();
-    std::string str = text.str();
+        std::string firstSearch = "    <!--Compile End-->";
+        std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\" />\n" + firstSearch;
+        std::string secondSearch = "    <!--Include End-->";
+        std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\" />\n" + secondSearch;
 
-    std::string firstSearch = "    <!--Compile End-->";
-    std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\" />\n" + firstSearch;
-    std::string secondSearch = "    <!--Include End-->";
-    std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\" />\n" + secondSearch;
+        size_t pos = str.find(firstSearch);
+        str.replace(pos, std::string(firstSearch).length(), firstReplace);
+        pos = str.find(secondSearch);
+        str.replace(pos, std::string(secondSearch).length(), secondReplace);
+        in_file.close();
 
-    size_t pos = str.find(firstSearch);
-    str.replace(pos, std::string(firstSearch).length(), firstReplace);
-    pos = str.find(secondSearch);
-    str.replace(pos, std::string(secondSearch).length(), secondReplace);
-    in_file.close();
-
-    std::ofstream out_file("ZouavZEngine.vcxproj");
-    out_file << str;
+        std::ofstream out_file("ZouavZEngine.vcxproj");
+        out_file << str;
+    }
 }
 
 void AddToVSProjFilters(std::string className)
 {
     std::ostringstream text;
     std::ifstream in_file("ZouavZEngine.vcxproj.filters");
+    if (in_file.is_open())
+    {
+        text << in_file.rdbuf();
+        std::string str = text.str();
 
-    text << in_file.rdbuf();
-    std::string str = text.str();
+        std::string firstSearch = "  <!--Compile End-->";
+        std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\">\n        <Filter>src\\Game</Filter>\n     </ClCompile>\n" + firstSearch;
 
-    std::string firstSearch = "  <!--Compile End-->";
-    std::string firstReplace = "    <ClCompile Include=\"src\\Game\\" + className + ".cpp\">\n        <Filter>src\\Game</Filter>\n     </ClCompile>\n" + firstSearch;
+        std::string secondSearch = "  <!--Include End-->";
+        std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\">\n        <Filter>include\\Game</Filter>\n     </ClInclude>\n" + secondSearch;
 
-    std::string secondSearch = "  <!--Include End-->";
-    std::string secondReplace = "    <ClInclude Include=\"include\\Game\\" + className + ".hpp\">\n        <Filter>include\\Game</Filter>\n     </ClInclude>\n" + secondSearch;
+        size_t pos = str.find(firstSearch);
+        str.replace(pos, std::string(firstSearch).length(), firstReplace);
+        pos = str.find(secondSearch);
+        str.replace(pos, std::string(secondSearch).length(), secondReplace);
+        in_file.close();
 
-    size_t pos = str.find(firstSearch);
-    str.replace(pos, std::string(firstSearch).length(), firstReplace);
-    pos = str.find(secondSearch);
-    str.replace(pos, std::string(secondSearch).length(), secondReplace);
-    in_file.close();
-
-    std::ofstream out_file("ZouavZEngine.vcxproj.filters");
-    out_file << str;
+        std::ofstream out_file("ZouavZEngine.vcxproj.filters");
+        out_file << str;
+    }
 }
 
 void AddToRegisterComponents(std::string className)
 {
     std::ostringstream text;
     std::ifstream in_file("src/Component/RegisterComponents.cpp");
+    if (in_file.is_open())
+    {
+        text << in_file.rdbuf();
+        std::string str = text.str();
 
-    text << in_file.rdbuf();
-    std::string str = text.str();
+        std::string firstSearch = "//</REGISTERINCLUDE>";
+        std::string firstReplace = "#include \"Game/" + className + ".hpp\"\n" + firstSearch;
+        std::string secondSearch = "	//</REGISTER>";
+        std::string secondReplace = "    REGISTER(" + className + ");\n" + secondSearch;
 
-    std::string firstSearch = "//</REGISTERINCLUDE>";
-    std::string firstReplace = "#include \"Game/" + className + ".hpp\"\n" + firstSearch;
-    std::string secondSearch = "	//</REGISTER>";
-    std::string secondReplace = "    REGISTER(" + className + ");\n" + secondSearch;
+        size_t pos = str.find(firstSearch);
+        str.replace(pos, std::string(firstSearch).length(), firstReplace);
+        pos = str.find(secondSearch);
+        str.replace(pos, std::string(secondSearch).length(), secondReplace);
+        in_file.close();
 
-    size_t pos = str.find(firstSearch);
-    str.replace(pos, std::string(firstSearch).length(), firstReplace);
-    pos = str.find(secondSearch);
-    str.replace(pos, std::string(secondSearch).length(), secondReplace);
-    in_file.close();
-
-    std::ofstream out_file("src/Component/RegisterComponents.cpp");
-    out_file << str;
+        std::ofstream out_file("src/Component/RegisterComponents.cpp");
+        out_file << str;
+    }
 }
 
 bool CreateNewClass(std::string className, std::string parentClassName)
 {
     if (std::filesystem::exists("include/Game/" + className + ".hpp") || std::filesystem::exists("src/Game/" + className + ".cpp"))
         return false;
-
-    AddToVSProjFilters(className);
 
     std::ofstream hppFile(std::string("include/Game/").append(className).append(".hpp").c_str());
     std::ofstream cppFile(std::string("src/Game/").append(className).append(".cpp").c_str());
@@ -477,6 +481,7 @@ bool CreateNewClass(std::string className, std::string parentClassName)
 
         AddToRegisterComponents(className);
         AddToVSProj(className);
+        AddToVSProjFilters(className);
         return true;
     }
 

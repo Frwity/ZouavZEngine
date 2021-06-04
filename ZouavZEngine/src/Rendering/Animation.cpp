@@ -69,6 +69,11 @@ void Animation::Play(std::string _animName)
     play = true;
 }
 
+bool Animation::IsPlaying(std::string _animName)
+{
+    return currentAnimation->GetName().compare(_animName) == 0 && IsPlaying();
+}
+
 void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)

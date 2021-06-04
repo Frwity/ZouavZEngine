@@ -141,11 +141,11 @@ void Scene::Draw(GameObject* _parent, const Camera* _camera) const
 {
 	if (!_parent->IsActive())
 		return;
-	if (_parent->GetComponent<Animation>() && _parent->GetComponent<Animation>()->IsPlaying())
+	if (_parent->GetComponent<Animation>() && _parent->GetComponent<Animation>()->IsActive() && _parent->GetComponent<Animation>()->IsPlaying())
 		_parent->GetComponent<Animation>()->Draw(*_camera);
 	else if (_parent->GetComponent<MeshRenderer>() && _parent->GetComponent<MeshRenderer>()->IsActive())
 		_parent->GetComponent<MeshRenderer>()->Draw(*_camera);
-	if (_parent->GetComponent<Skybox>())
+	if (_parent->GetComponent<Skybox>() && _parent->GetComponent<Skybox>()->IsActive())
 		_parent->GetComponent<Skybox>()->Draw(*_camera);
 
 	if (dynamic_cast<const SceneCamera*>(_camera))
@@ -168,7 +168,8 @@ void Scene::DrawGUI(GameObject* _parent)
 	std::vector<ProgressBar*> progressBars = _parent->GetComponents<ProgressBar>();
 
 	for (ProgressBar* progressBar : progressBars)
-		progressBar->Draw();
+		if (progressBar->IsActive())
+			progressBar->Draw();
 
 	for (GameObject* child : _parent->GetChildren())
 		DrawGUI(child);
