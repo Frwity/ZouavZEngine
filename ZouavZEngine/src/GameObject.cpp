@@ -295,6 +295,8 @@ void GameObject::DestroyGameObjectIfNeedTo()
 			if (iter->get()->toDestroy)
 			{
 				iter->get()->SetParent(nullptr);
+				for (GameObject* child : iter->get()->children)
+					child->SetParent(nullptr);
 				iter = gameObjects.erase(iter);
 			}
 			else
