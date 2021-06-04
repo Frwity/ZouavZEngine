@@ -1,7 +1,8 @@
 #include "Component/ScriptComponent.hpp"
 #include "System/ScriptSystem.hpp"
+#include "GameObject.hpp"
 
-ScriptComponent::ScriptComponent(class GameObject* _gameObject, std::string _name)
+ScriptComponent::ScriptComponent(GameObject* _gameObject, std::string _name)
 	: Component(_gameObject, _name)
 {
 	ScriptSystem::AddScript(this);

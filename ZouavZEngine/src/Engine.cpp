@@ -95,7 +95,7 @@ void Engine::Update()
 
         editor.NewFrame();
 
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
 
         if (editor.Display(render))
         {

@@ -9,11 +9,6 @@ Component::Component(GameObject* _gameObject, std::string _name)
 {
 }
 
-void Component::Editor()
-{
-
-}
-
 bool Component::EditorCollapsingHeader(const char* _name, std::function<void()> _f)
 {
 	bool open = true;

@@ -31,11 +31,15 @@
 
 using namespace physx;
 
+Terrain* Terrain::terrain;
+
 Terrain::Terrain()
 {
 	AddColorLayer();
 	AddNoiseLayer();
 	AddGenGO();
+
+	terrain = this;
 }
 
 void Terrain::Generate(GameObject* _actualizer)
@@ -191,6 +195,8 @@ void Terrain::DisplayOptionWindow()
 
 		ImGui::Checkbox("Always Actualize", &alwaysActualize);
 		bool actualized = false;
+		actualized |= ImGui::SliderFloat("Chunk Actualization Radius", &chunkDistanceRadius, 0, 512);
+		
 		actualized |= ImGui::SliderInt("Seed", &seed, 0, 214748364);
 
 		actualized |= ImGui::SliderInt("Chunk Size", &chunkSize, 1, 512);
@@ -456,6 +462,10 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 	// place gameobject randomly
 	if (_cca.toGeneratePrefabs.size() > 0 && *_cca.toGeneratePrefabs[0].prefab)
 	{
+		for (GameObject* go : generatedGameObjects)
+			if (go)
+				go->Destroy();
+		generatedGameObjects.clear();
 		int x, z = 0;
 		int randomRatio = 0;
 		int ratioCursor = 0;
@@ -555,19 +565,15 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 
 Chunk::~Chunk()
 {
-	if (actor == nullptr || PhysicSystem::scene == nullptr)
-		return;
-
 	if (isGenerated)
 	{
+		if (PhysicSystem::IsReloading() || actor == nullptr || PhysicSystem::scene == nullptr)
+			return;
 		for (GameObject* go : generatedGameObjects)
 			if (go)
 				go->Destroy();
 
-		//if (PhysicSystem::scene)
-		//{
-		//	PhysicSystem::scene->removeActor(*actor);
-		//	actor = nullptr;
-		//}
+		PhysicSystem::scene->removeActor(*actor);
+		actor = nullptr;
 	}
 }

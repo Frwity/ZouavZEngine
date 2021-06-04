@@ -586,13 +586,6 @@ void Editor::DisplayMenuBar()
             ImGui::MenuItem("New Scene", nullptr, &newSceneWindow);
             ImGui::EndMenu();
         }
-
-        if (ImGui::BeginMenu("Edit"))
-        {
-            ImGui::MenuItem("XXXX", NULL);
-            ImGui::MenuItem("YYYY", NULL);
-            ImGui::EndMenu();
-        }
     }
     ImGui::EndMenuBar();
 }

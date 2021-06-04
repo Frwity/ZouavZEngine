@@ -91,11 +91,12 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 		world.load(iarchive);
 
 		terrain = Terrain{};
-
+		Terrain::terrain = &terrain;
 
 		terrain.load(iarchive);
 	}
 	saveFile.close();
+	PhysicSystem::EndInit();
 
 	terrain.Generate(GameObject::GetGameObjectByTag("Player"));
 	terrain.Update();

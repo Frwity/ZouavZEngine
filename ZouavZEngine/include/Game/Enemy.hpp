@@ -28,6 +28,7 @@ public:
     virtual void PlayAttackAnimation() override;
     virtual void PlayIdleAnimation() override;
     
+    void OnDeath() override;
     int xpGiven = 3;
 
     template <class Archive>

@@ -104,10 +104,17 @@ public:
 	static physx::PxPvdTransport* transport;
 	//static PhysicEventCallback* physicEventCallback;
 
+	static bool reloading;
+
+	static bool IsReloading() { return reloading; }
+
 	PhysicSystem() = delete;
 	~PhysicSystem() = delete;
 
 	static void Init();
 	static void InitScene();
+
+	static void EndInit();
+
 	static void Destroy();
 };

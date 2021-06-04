@@ -36,12 +36,16 @@ public:
     Vec2 operator-() const;
     Vec2 operator*(float _value) const;
     Vec2 operator/(float _value) const;
+    Vec2 operator+(float _value) const;
 
     void operator=(const Vec2& _v);
     void operator+=(const Vec2& _v);
     void operator-=(const Vec2& _v);
     void operator*=(float _value);
     void operator/=(float _value);
+
+    bool operator==(const Vec2& v) const;
+    bool operator!=(const Vec2& v) const;
 
     template <class Archive>
     void serialize(Archive& _ar)

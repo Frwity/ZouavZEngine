@@ -47,7 +47,7 @@ public:
 	Component(class GameObject* _gameObject, std::string _name = "Component");
 	virtual ~Component() = default;
 
-	virtual void Editor();
+	virtual void Editor() {};
 
 	static bool EditorCollapsingHeader(const char* _name = "Component", std::function<void()> _f = [](){});
 

@@ -1,6 +1,6 @@
-#include "Maths/Vec3.hpp"
 #include "Maths/Vec4.hpp"
 #include <cmath>
+#include "Maths/Vec3.hpp"
 
 const Vec3 Vec3::zero{ 0.0f, 0.0f, 0.0f };
 const Vec3 Vec3::one{ 1.0f, 1.0f, 1.0f };
@@ -50,6 +50,11 @@ Vec3 Vec3::Normalized() const
 {
     float length = GetMagnitude();
     return { x / length, y / length, z / length };
+}
+
+std::string Vec3::ToString() const
+{
+    return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
 }
 
 Vec3 Vec3::operator+(const Vec3& _v) const

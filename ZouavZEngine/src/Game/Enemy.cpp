@@ -5,10 +5,20 @@
 #include "Component/BoxCollision.hpp"
 #include "Component/Animation.hpp"
 #include "Game/Enemy.hpp"
+#include "Game/EnemyManager.hpp"
 
 Enemy::Enemy(GameObject * _gameobject, std::string _name)
 : ICharacter(_gameobject, _name)
-{}
+{
+	if (_gameobject->IsActive())
+		 EnemyManager::AddEnemy(this);
+}
+
+void Enemy::OnDeath()
+{
+	if (gameObject->IsActive())
+		EnemyManager::RemoveEnemy(this);
+}
 
 void Enemy::Editor()
 {
@@ -57,18 +67,20 @@ void Enemy::Update()
 		}
 	}
 
-	if (!animation->IsPlaying())
+	if (animation && !animation->IsPlaying())
 		PlayIdleAnimation();
 }
 
 void Enemy::PlayWalkAnimation()
 {
-	animation->Play("Zombie Walk.fbx");
+	if (animation)
+		animation->Play("Zombie Walk.fbx");
 }
 
 void Enemy::PlayAttackAnimation()
 {
-	animation->Play("Zombie Punching.fbx");
+	if (animation)
+		animation->Play("Zombie Punching.fbx");
 }
 void Enemy::PlayIdleAnimation()
 {
