@@ -1,6 +1,8 @@
 #ifndef _VEC3_HPP_
 #define _VEC3_HPP_
 
+#include <string>
+
 class Vec3
 {
     public:
@@ -40,6 +42,8 @@ class Vec3
         bool Colinear(const Vec3& _v) const;
 
         void Normalize();
+
+        std::string ToString() const;
 
         Vec3 operator+(const Vec3& v) const;
         Vec3 operator-(const Vec3& v) const;    

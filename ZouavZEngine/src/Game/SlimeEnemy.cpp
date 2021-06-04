@@ -28,6 +28,7 @@ void SlimeEnemy::Update()
 
 void SlimeEnemy::OnDeath()
 {
+	Enemy::OnDeath();
 	if (++dividedCount > maxDivision)
 		return;
 	GetGameObject().GetComponent<BoxCollision>()->Deactivate();

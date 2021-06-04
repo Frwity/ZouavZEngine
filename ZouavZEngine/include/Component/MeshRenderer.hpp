@@ -35,7 +35,8 @@ public:
 	{
 		_ar(mesh->GetName(), mesh->IsDeletable(), mesh->GetPath(),
 			material.texture->GetName(), material.texture->IsDeletable(), material.texture->GetPath(),
-			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPath());
+			material.shader->GetName(), material.shader->IsDeletable(), material.shader->GetPath(),
+			material.color);
 		_ar(cereal::base_class<Component>(this));
 	}
 

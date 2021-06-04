@@ -17,6 +17,8 @@ PxCooking* PhysicSystem::cooking = nullptr;
 PxPvd* PhysicSystem::pvd = nullptr;
 PxScene* PhysicSystem::scene = nullptr;
 PxPvdTransport* PhysicSystem::transport = nullptr;
+bool PhysicSystem::reloading = false;
+
 //PhysicEventCallback* PhysicSystem::physicEventCallback = new PhysicEventCallback();
 
 static PxFilterFlags filterShader(
@@ -56,7 +58,6 @@ void PhysicSystem::Init()
 	cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(scale));
 	ZASSERT(cooking != nullptr, "PxCreateCooking failed !");
 	InitScene();
-
 }
 
 void PhysicSystem::InitScene()
@@ -79,6 +80,13 @@ void PhysicSystem::InitScene()
 
 	scene = physics->createScene(sceneDesc);
 	ZASSERT(scene != nullptr, "CreateScene failed !");
+
+	reloading = true;
+}
+
+void PhysicSystem::EndInit()
+{
+	reloading = false;
 }
 
 void PhysicSystem::Destroy()

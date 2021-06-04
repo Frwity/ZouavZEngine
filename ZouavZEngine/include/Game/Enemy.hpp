@@ -23,7 +23,7 @@ public:
     void Begin() override;
     void Update() override;
     void Editor() override;
-    
+    void OnDeath() override;
     int xpGiven = 3;
 
     template <class Archive>

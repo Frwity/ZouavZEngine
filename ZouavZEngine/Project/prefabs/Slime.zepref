@@ -1,11 +1,11 @@
 {
     "value0": "Slime",
-    "value1": "",
+    "value1": "Enemy",
     "value2": 0,
     "value3": {
         "value0": 0.0,
-        "value1": 1.4852333068847657,
-        "value2": 0.0
+        "value1": 0.0,
+        "value2": -31.716312408447267
     },
     "value4": {
         "value0": 1.0,
@@ -28,7 +28,12 @@
                 "valid": 1,
                 "data": {
                     "value0": {
-                        "value0": {
+                        "value0": 25.0,
+                        "value1": 2.0,
+                        "value2": 1.5,
+                        "value3": 2.0,
+                        "value4": 10.0,
+                        "value5": {
                             "value0": {
                                 "value0": 1.0,
                                 "value1": 0.0,
@@ -37,8 +42,10 @@
                             },
                             "value1": 1.0,
                             "value2": 5,
-                            "value3": 1,
-                            "value4": {
+                            "value3": 5,
+                            "value4": 1,
+                            "value5": 1,
+                            "value6": {
                                 "value0": true,
                                 "value1": "SlimeEnemy"
                             }
@@ -114,6 +121,12 @@
                     "value7": false,
                     "value8": "resources/BlinnPhongShader.shader",
                     "value9": {
+                        "value0": 0.3235294818878174,
+                        "value1": 1.0,
+                        "value2": 0.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
                         "value0": true,
                         "value1": "MeshRenderer"
                     }

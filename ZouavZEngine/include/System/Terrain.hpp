@@ -107,7 +107,10 @@ public:
 
 class Terrain
 {
+	friend class Scene;
 private:
+	static Terrain* terrain;
+
 	std::unordered_map<std::string, std::unique_ptr<Chunk>> chunks;
 
 	std::vector<physx::PxMaterial*> material;
@@ -123,7 +126,7 @@ public:
 	
 	class GameObject* actualizer = nullptr;
 
-	float chunkDistanceRadius = 196;
+	float chunkDistanceRadius = 256;
 
 	// chunk variable
 
@@ -187,6 +190,13 @@ public:
 	void ComputeTotalRatio();
 
 	void Clear();
+
+	static int GetChunkSize() { return terrain->chunkSize; }
+
+	inline static Vec2 GetChunkPosFromWorldPos(const Vec3& _pos) 
+	{ 
+		return Vec2{ (float)((int)(_pos.x / (float)terrain->chunkSize - (_pos.x < 0.f ? 1.f : 0.f))), (float)((int)(_pos.z / (float)terrain->chunkSize - (_pos.z < 0.f ? 1.f : 0.f))) };
+	};
 
 	template <class Archive>
 	void load(Archive& _ar)

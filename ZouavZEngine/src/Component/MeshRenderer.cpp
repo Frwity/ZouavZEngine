@@ -197,5 +197,5 @@ static void MeshRenderer::load_and_construct(Archive& _ar, cereal::construct<Mes
 	_construct(GameObject::currentLoadedGameObject, *ResourcesManager::AddResourceMesh(meshName, isMeshDeletebale, meshPath.c_str()),
 		*ResourcesManager::AddResourceTexture(textureName, isTextureDeletebale, texturePath.c_str()),
 		*ResourcesManager::AddResourceShader(shaderName, isShaderDeletebale, shaderPath.c_str()));
-    _ar(cereal::base_class<Component>(_construct.ptr()));
+    _ar(_construct->material.color, cereal::base_class<Component>(_construct.ptr()));
 }

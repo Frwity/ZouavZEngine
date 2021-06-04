@@ -1,7 +1,7 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 1,
+    "value2": 4,
     "value3": {
         "value0": 0.0,
         "value1": 0.0,
@@ -23,6 +23,19 @@
     "value8": [
         {
             "polymorphic_id": 2147483649,
+            "polymorphic_name": "Skybox",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": true,
+                        "value1": "Skybox"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483650,
             "polymorphic_name": "Light",
             "ptr_wrapper": {
                 "valid": 1,
@@ -39,9 +52,9 @@
                     "value9": 1.0,
                     "value10": 0.009999999776482582,
                     "value11": 0.0010000000474974514,
-                    "value12": 1.0,
+                    "value12": 0.0,
                     "value13": -1.0,
-                    "value14": -1.0,
+                    "value14": 0.0,
                     "value15": 0.8999999761581421,
                     "value16": 0.800000011920929,
                     "value17": 0,
@@ -53,26 +66,32 @@
             }
         },
         {
-            "polymorphic_id": 2147483650,
-            "polymorphic_name": "Skybox",
+            "polymorphic_id": 2147483651,
+            "polymorphic_name": "EnemyManager",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": {
-                        "value0": true,
-                        "value1": "Skybox"
+                    "value0": 1,
+                    "value1": "Project/prefabs\\Slime.zepref",
+                    "value2": "Project/prefabs\\Spawner.zepref",
+                    "value3": "Project/prefabs\\Pillar.zepref",
+                    "value4": {
+                        "value0": {
+                            "value0": true,
+                            "value1": "EnemyManager"
+                        }
                     }
                 }
             }
         }
     ],
-    "value9": "New GameObject",
+    "value9": "Player",
     "value10": "Player",
     "value11": 0,
     "value12": {
-        "value0": 0.0,
-        "value1": 0.0,
-        "value2": -11.818284034729004
+        "value0": 59.94036102294922,
+        "value1": 2.768129348754883,
+        "value2": -27.855749130249025
     },
     "value13": {
         "value0": 1.0,
@@ -89,7 +108,7 @@
     "value16": false,
     "value17": [
         {
-            "polymorphic_id": 2147483651,
+            "polymorphic_id": 2147483652,
             "polymorphic_name": "Player",
             "ptr_wrapper": {
                 "valid": 1,
@@ -99,7 +118,12 @@
                     "value2": 0,
                     "value3": 1,
                     "value4": 5,
-                    "value5": {
+                    "value5": 15,
+                    "value6": 0.30000001192092898,
+                    "value7": 1.0,
+                    "value8": 0.10000000149011612,
+                    "value9": 0.10000000149011612,
+                    "value10": {
                         "value0": {
                             "value0": 1.0,
                             "value1": 0.0,
@@ -107,8 +131,8 @@
                             "value3": 1.0
                         },
                         "value1": 1.0,
-                        "value2": 5,
-                        "value3": 5,
+                        "value2": 116,
+                        "value3": 116,
                         "value4": 1,
                         "value5": 1,
                         "value6": {
@@ -120,7 +144,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483652,
+            "polymorphic_id": 2147483653,
             "polymorphic_name": "BoxCollision",
             "ptr_wrapper": {
                 "valid": 1,
@@ -155,7 +179,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483653,
+            "polymorphic_id": 2147483654,
             "polymorphic_name": "RigidBody",
             "ptr_wrapper": {
                 "valid": 1,
@@ -171,7 +195,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483654,
+            "polymorphic_id": 2147483655,
             "polymorphic_name": "MeshRenderer",
             "ptr_wrapper": {
                 "valid": 1,
@@ -186,6 +210,12 @@
                     "value7": false,
                     "value8": "resources/BlinnPhongShader.shader",
                     "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
                         "value0": true,
                         "value1": "MeshRenderer"
                     }
@@ -193,7 +223,7 @@
             }
         },
         {
-            "polymorphic_id": 4,
+            "polymorphic_id": 5,
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
@@ -227,7 +257,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483655,
+            "polymorphic_id": 2147483656,
             "polymorphic_name": "FontComponent",
             "ptr_wrapper": {
                 "valid": 1,
@@ -263,7 +293,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483656,
+            "polymorphic_id": 2147483657,
             "polymorphic_name": "AudioBroadcaster",
             "ptr_wrapper": {
                 "valid": 1,
@@ -279,12 +309,12 @@
             }
         },
         {
-            "polymorphic_id": 2147483657,
+            "polymorphic_id": 2147483658,
             "polymorphic_name": "Camera",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 0.6112419962882996,
+                    "value0": 1.08284592628479,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -301,8 +331,8 @@
                     "value14": -0.0020000003278255464,
                     "value15": 0.0,
                     "value16": 0.0,
-                    "value17": 5.0,
-                    "value18": -10.0,
+                    "value17": 12.5,
+                    "value18": -25.0,
                     "value19": 0.0,
                     "value20": 2.0,
                     "value21": 0.0,
@@ -315,8 +345,34 @@
             }
         },
         {
-            "polymorphic_id": 2147483658,
+            "polymorphic_id": 2147483659,
             "polymorphic_name": "ProgressBar",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0,
+                    "value3": 1.0,
+                    "value4": 0.0,
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 1.0,
+                    "value8": 0.0,
+                    "value9": -1.0,
+                    "value10": 0.0,
+                    "value11": 1.0,
+                    "value12": 0.30000001192092898,
+                    "value13": "LifeBar",
+                    "value14": {
+                        "value0": true,
+                        "value1": "LifeBar"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 11,
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
@@ -331,33 +387,7 @@
                     "value8": 0.0,
                     "value9": 1.0,
                     "value10": 0.0,
-                    "value11": 1.0,
-                    "value12": 0.30000001192092898,
-                    "value13": "LifeBar",
-                    "value14": {
-                        "value0": true,
-                        "value1": "LifeBar"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 1.0,
-                    "value1": 1.0,
-                    "value2": 1.0,
-                    "value3": 1.0,
-                    "value4": 0.0,
-                    "value5": 0.0,
-                    "value6": 0.0,
-                    "value7": 1.0,
-                    "value8": 0.0,
-                    "value9": -1.899999976158142,
-                    "value10": 0.0,
-                    "value11": 1.0,
+                    "value11": 1.100000023841858,
                     "value12": 0.30000001192092898,
                     "value13": "XpBar",
                     "value14": {
@@ -368,38 +398,104 @@
             }
         }
     ],
-    "value18": true,
-    "value19": 196.0,
-    "value20": 128,
-    "value21": 16,
-    "value22": 0,
-    "value23": 1,
-    "value24": 0,
-    "value25": -10.0,
-    "value26": 47.57400131225586,
-    "value27": 41.64699935913086,
-    "value28": 1,
+    "value18": "New GameObject",
+    "value19": "",
+    "value20": 0,
+    "value21": {
+        "value0": 0.0,
+        "value1": 200.0,
+        "value2": 0.0
+    },
+    "value22": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value23": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value24": true,
+    "value25": false,
+    "value26": [],
+    "value27": "New GameObject",
+    "value28": "",
     "value29": 0,
-    "value30": true,
-    "value31": 1,
-    "value32": 0,
-    "value33": 0,
-    "value34": 1,
-    "value35": 0.009999999776482582,
-    "value36": 2.0,
-    "value37": 0.5,
-    "value38": 0.0,
-    "value39": 2.0,
-    "value40": 0.0,
-    "value41": 0.0,
-    "value42": 0.0,
-    "value43": 0.0,
-    "value44": 0.0,
-    "value45": 0.0,
-    "value46": 1.0,
-    "value47": "Grass.png",
-    "value48": 4,
-    "value49": "Project/prefabs\\Rock.zepref",
+    "value30": {
+        "value0": 0.0,
+        "value1": 300.0,
+        "value2": 0.0
+    },
+    "value31": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value32": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value33": true,
+    "value34": false,
+    "value35": [],
+    "value36": "New GameObject",
+    "value37": "",
+    "value38": 0,
+    "value39": {
+        "value0": 0.0,
+        "value1": 300.0,
+        "value2": 0.0
+    },
+    "value40": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value41": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value42": true,
+    "value43": false,
+    "value44": [],
+    "value45": true,
+    "value46": 256.0,
+    "value47": 128,
+    "value48": 16,
+    "value49": 0,
     "value50": 1,
-    "value51": true
+    "value51": 0,
+    "value52": -10.0,
+    "value53": -10.0,
+    "value54": 30.0,
+    "value55": 1,
+    "value56": 0,
+    "value57": true,
+    "value58": 1,
+    "value59": 0,
+    "value60": 0,
+    "value61": 1,
+    "value62": 0.009999999776482582,
+    "value63": 2.0,
+    "value64": 0.5,
+    "value65": 0.0,
+    "value66": 2.0,
+    "value67": 0.0,
+    "value68": 0.0,
+    "value69": 0.0,
+    "value70": 0.0,
+    "value71": 0.0,
+    "value72": 0.0,
+    "value73": 8.333000183105469,
+    "value74": "Grass.png",
+    "value75": 1,
+    "value76": "Project/prefabs\\Rock.zepref",
+    "value77": 1,
+    "value78": true
 }

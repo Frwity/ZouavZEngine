@@ -83,6 +83,11 @@ Vec2 Vec2::operator/(float _value) const
     return { x / _value, y / _value };
 }
 
+Vec2 Vec2::operator+(float _value) const
+{
+    return { x + _value, y + _value };
+}
+
 void Vec2::operator=(const Vec2& _v)
 {
     x = _v.x;
@@ -107,4 +112,16 @@ void Vec2::operator*=(float _value)
 void Vec2::operator/=(float _value)
 {
     *this = *this / _value;
+}
+
+bool Vec2::operator==(const Vec2& v) const
+{
+    float dx = x - v.x;
+    float dy = y - v.y;
+    return (dx * dx + dy * dy) < 0.000001f;
+}
+
+bool Vec2::operator!=(const Vec2& v) const
+{
+    return !operator==(v);
 }

@@ -5,10 +5,20 @@
 #include "Component/BoxCollision.hpp"
 
 #include "Game/Enemy.hpp"
+#include "Game/EnemyManager.hpp"
 
 Enemy::Enemy(GameObject * _gameobject, std::string _name)
 : ICharacter(_gameobject, _name)
-{}
+{
+	if (_gameobject->IsActive())
+		 EnemyManager::AddEnemy(this);
+}
+
+void Enemy::OnDeath()
+{
+	if (gameObject->IsActive())
+		EnemyManager::RemoveEnemy(this);
+}
 
 void Enemy::Editor()
 {
