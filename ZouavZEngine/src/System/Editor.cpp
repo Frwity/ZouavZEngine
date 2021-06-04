@@ -1223,7 +1223,7 @@ void Editor::DisplayHierarchy()
                         hierarchyMenu = false;
                         if (newGameObjectParent == gameObjectInspector)
                             gameObjectInspector = nullptr;
-                        //newGameObjectParent = nullptr;
+                        newGameObjectParent = nullptr;
                     }
                     if (ImGui::Button("CreatePrefab"))
                     {
