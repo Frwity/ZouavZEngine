@@ -16,13 +16,15 @@ class Animation : public Component
 {
 private:
     std::shared_ptr<Shader> animationShader;
-    bool play = false;
-
 public :
-    std::unordered_map<std::string, AnimResource*> animationsAttached;
+    bool play = false;
+    std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
+    Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+    float animationSpeed = 0.2f;
+    bool loop = true;
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");
@@ -32,14 +34,16 @@ public :
 
     void Editor() override;
 
+    void Play(std::string _animName);
     void Play() { play = true; }
     void Stop() { play = false; }
     bool IsPlaying() { return play; }
     template <class Archive>
     void serialize(Archive& _ar)
     {
-        if (currentAnimation)
-            _ar(currentAnimation->GetName());
+        _ar(animationsAttached.size());
+        for (std::pair<std::string, std::shared_ptr<AnimResource>> element : animationsAttached)
+            _ar(element.second->GetName());
 
         _ar(cereal::base_class<Component>(this));
     }

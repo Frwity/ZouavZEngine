@@ -9,6 +9,7 @@
 #include <imgui.h>
 #include "Game/Player.hpp"
 
+
 #include <iostream>
 
 #define _USE_MATH_DEFINES
@@ -38,7 +39,17 @@ void Player::OnAddComponent()
 void Player::OnContact(Object* _other, class ShapeCollision* _triggerShape)
 {
 	if (!_other->GetTag().compare("Ground"))
+	{
 		isJumping = false;
+		//Play idle animation
+		if (animComponent)
+		{
+			animComponent->loop = true;
+			std::unordered_map<std::string, std::shared_ptr<AnimResource>>::iterator it = animComponent->animationsAttached.find("idle.fbx");
+			if (it != animComponent->animationsAttached.end())
+				animComponent->currentAnimation = it->second;
+		}
+	}
 }
 
 void Player::Begin()
@@ -57,6 +68,19 @@ void Player::Begin()
 	attackDamage += attackDamageGain * (level - 1);
 	maxLife += lifeGain * (level - 1);
 	ICharacter::Begin();
+	animComponent = gameObject->GetComponent<Animation>();
+
+	if (!animComponent)
+		Debug::LogWarning("Anim component not found");
+	else
+	{
+		std::unordered_map<std::string, std::shared_ptr<AnimResource>>::iterator it = animComponent->animationsAttached.find("idle.fbx");
+		if (it != animComponent->animationsAttached.end())
+			animComponent->currentAnimation = it->second;
+		animComponent->Play();
+	}
+
+
 }
 
 void Player::Update()
@@ -140,6 +164,15 @@ void Player::Update()
 	{
 		isJumping = true;
 		rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed * 100.0f, 0.0f));
+
+		//Play jump animation
+		if (animComponent)
+		{
+			std::unordered_map<std::string, std::shared_ptr<AnimResource>>::iterator it = animComponent->animationsAttached.find("jumping_up.fbx");
+			if (it != animComponent->animationsAttached.end())
+				animComponent->currentAnimation = it->second;
+			animComponent->loop = false;
+		}
 	}
 
 	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)

@@ -172,7 +172,13 @@ void MeshRenderer::Editor()
     TextureEditor();
     MeshEditor();
     ShaderEditor();
-	ImGui::ColorEdit4("Color : ", &material.color.x);
+	
+    if (ImGui::ColorEdit4("Color : ", &material.color.x))
+    {
+        Animation* animComponent = gameObject->GetComponent<Animation>();
+        if (animComponent)
+            animComponent->color = material.color;
+    }
 }
 
 template <class Archive>

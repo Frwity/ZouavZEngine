@@ -9,12 +9,14 @@ layout(location = 4) in vec4 weights;
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
+uniform vec4 color;
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 uniform mat4 finalBonesMatrices[MAX_BONES];
 
 out vec2 TexCoords;
+out vec4 Color;
 
 void main()
 {
@@ -36,6 +38,7 @@ void main()
     mat4 viewModel = view * model;
     gl_Position = projection * viewModel * totalPosition;
     TexCoords = tex;
+    Color = color;
 }
 
 #endif
@@ -45,12 +48,13 @@ void main()
 out vec4 FragColor;
 
 in vec2 TexCoords;
+in vec4 Color;
 
 uniform sampler2D ourTexture;
 
 void main()
 {
-    FragColor = texture(ourTexture, TexCoords);
+    FragColor = texture(ourTexture, TexCoords) * Color;
 }
 
 #endif

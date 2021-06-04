@@ -28,6 +28,7 @@ private:
     void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
     Bone* FindBone(const std::string& _boneName);
     void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform);
+    bool animationFinish = false;
 
 public:
     float currentTime = 0.0f;
@@ -36,7 +37,6 @@ public:
     std::vector<Mat4> finalBonesMatrices;
     float duration;
     int tickPerSecond;
-    bool loop = true;
 
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;
@@ -45,5 +45,5 @@ public:
 
     void RemoveFromResourcesManager() override;
 
-    void UpdateAnimation(float _deltaTime);
+    void UpdateAnimation(float _deltaTime, float _animationSpeed = 1.0f, bool _loop = true);
 };

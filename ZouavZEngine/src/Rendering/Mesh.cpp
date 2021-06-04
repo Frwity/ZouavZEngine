@@ -31,8 +31,11 @@ Mesh::Mesh(const std::string& _name, const char* _path)
 	const aiScene* scene = importer.ReadFile(_path,	aiProcess_Triangulate | 
 													aiProcess_FindInvalidData | 
 													aiProcess_ValidateDataStructure );
-    if (!scene)
+	if (!scene)
+	{
         Debug::LogWarning(std::string("Mesh load failed!: ").append(_path));
+		return;
+	}
 
     std::vector<Vertex> vertices;
 	std::vector<int> indices;

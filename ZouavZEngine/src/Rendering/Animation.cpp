@@ -23,6 +23,7 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
     {
         mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
         text = gameObject->GetComponent<MeshRenderer>()->material.texture.get();
+        color = gameObject->GetComponent<MeshRenderer>()->material.color;
     }
 
     animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
@@ -30,7 +31,8 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
 
 void Animation::Editor()
 {
-    ResourcesManager::ResourceChanger<AnimResource>("Animation", currentAnimation);
+    ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation);
+
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
@@ -44,10 +46,8 @@ void Animation::Editor()
 
             if (_truePath.find(".fbx") != std::string::npos || _truePath.find(".dae") != std::string::npos)
             {
-                if (currentAnimation.use_count() == 2 && currentAnimation->IsDeletable())
-                    ResourcesManager::RemoveResourceAnimation(currentAnimation->GetName());
                 currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
-                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation.get()));
+                animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
             }
         }
 
@@ -63,10 +63,16 @@ void Animation::Editor()
     }
 }
 
+void Animation::Play(std::string _animName)
+{
+    currentAnimation = animationsAttached.find(_animName)->second;
+    play = true;
+}
+
 void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime());
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), animationSpeed, loop);
     else
         return;
 
@@ -77,11 +83,13 @@ void Animation::Draw(const Camera& _camera)
 
     animationShader->SetMatrix("view", _camera.GetMatrix().Reversed());
     animationShader->SetMatrix("projection", _camera.GetProjectionMatrix());
+    animationShader->SetVector4("color", color);
 
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
-
-    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
+    
+    //temp fix mesh scale
+    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale() / 100));
 
     text->Use();
     glBindVertexArray(mesh->GetID());
@@ -94,10 +102,21 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     std::string animationName;
     std::string animationPath;
     std::string meshName;
-
-    _ar(animationName);
+    int animAttachSize = 0;
+    std::vector<std::string> animNames;
+    
+    _ar(animAttachSize);
+    for (int i = 0; i < animAttachSize; i++)
+    {
+        std::string name;
+        _ar(name);
+        animNames.push_back(name);
+    }
 
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
-    _construct->currentAnimation = *ResourcesManager::GetResource<AnimResource>(animationName);
+    for (int i = 0; i < animAttachSize; i++)
+    {
+        _construct->animationsAttached.insert(std::make_pair(animNames[i], *ResourcesManager::GetResource<AnimResource>(animNames[i])));
+    }
 }

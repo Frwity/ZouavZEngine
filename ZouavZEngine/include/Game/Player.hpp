@@ -6,6 +6,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/access.hpp"
+#include "Component/Animation.hpp"
 
 class Player : public ICharacter
 {
@@ -33,6 +34,7 @@ private:
 	float totalAngle = 0.0f;
 
 	bool isJumping = false;
+	Animation* animComponent = nullptr;
 
 public:
 
