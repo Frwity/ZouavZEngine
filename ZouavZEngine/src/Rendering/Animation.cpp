@@ -114,7 +114,6 @@ void Animation::Draw(const Camera& _camera)
 template <class Archive>
 static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct)
 {
-    std::string meshName;
     int animAttachSize = 0;
     std::vector<std::string> animNames;
     std::vector<std::string> animPaths;
@@ -134,6 +133,13 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     _ar(cereal::base_class<Component>(_construct.ptr()));
     for (int i = 0; i < animAttachSize; i++)
     {
-        _construct->animationsAttached.insert(std::make_pair(animNames[i], *ResourcesManager::AddResourceAnimation(animNames[i], true, animPaths[i])));
+        std::shared_ptr<AnimResource> anim = *ResourcesManager::AddResourceAnimation(animNames[i], true, animPaths[i]);
+        MeshRenderer* meshRenderer = _construct->gameObject->GetComponent<MeshRenderer>();
+
+        if (meshRenderer)
+        {
+            anim->UpdateAnimationResources(meshRenderer->mesh.get());
+        }
+        _construct->animationsAttached.insert(std::make_pair(animNames[i], anim));
     }
 }
