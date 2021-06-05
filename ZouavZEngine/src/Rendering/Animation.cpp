@@ -31,7 +31,11 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
 
 void Animation::Editor()
 {
-    ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation);
+    if (ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation))
+    {
+        if(currentAnimation)
+            currentAnimation->UpdateAnimationResources(mesh);
+    }
 
     if (ImGui::BeginDragDropTarget())
     {
@@ -110,24 +114,26 @@ void Animation::Draw(const Camera& _camera)
 template <class Archive>
 static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animation>& _construct)
 {
-    std::string animationName;
-    std::string animationPath;
     std::string meshName;
     int animAttachSize = 0;
     std::vector<std::string> animNames;
+    std::vector<std::string> animPaths;
     
     _ar(animAttachSize);
     for (int i = 0; i < animAttachSize; i++)
     {
         std::string name;
+        std::string path;
         _ar(name);
+        _ar(path);
         animNames.push_back(name);
+        animPaths.push_back(path);
     }
 
     _construct(GameObject::currentLoadedGameObject);
     _ar(cereal::base_class<Component>(_construct.ptr()));
     for (int i = 0; i < animAttachSize; i++)
     {
-        _construct->animationsAttached.insert(std::make_pair(animNames[i], *ResourcesManager::GetResource<AnimResource>(animNames[i])));
+        _construct->animationsAttached.insert(std::make_pair(animNames[i], *ResourcesManager::AddResourceAnimation(animNames[i], true, animPaths[i])));
     }
 }
