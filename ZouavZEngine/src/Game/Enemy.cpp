@@ -4,6 +4,7 @@
 #include <math.h>
 #include "Component/BoxCollision.hpp"
 #include "Component/Animation.hpp"
+#include "Component/RigidBody.hpp"
 #include "Game/Enemy.hpp"
 #include "Game/EnemyManager.hpp"
 
@@ -49,6 +50,8 @@ void Enemy::Update()
 
 		float distanceToPlayer = direction.GetMagnitude();
 
+		Vec3 linearVelocity = rb->GetLinearVelocity();
+
 		if (distanceToPlayer < detectionDistance)
 		{
 			float angleToPlayer = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
@@ -58,13 +61,16 @@ void Enemy::Update()
 
 			if (distanceToPlayer > distanceToStop)
 			{
-				GetGameObject().Translate(direction.Normalized() * TimeManager::GetDeltaTime() * speed);
+				rb->SetLinearVelocity(direction.Normalized() * TimeManager::GetDeltaTime() * speed * 100.0f + (linearVelocity.y * Vec3::up));
 				PlayWalkAnimation();
 			}
 
 			if (distanceToPlayer < distanceToAttack && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
 				Attack();
 		}
+
+		else if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
+			rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
 	}
 
 	if (animation && !animation->IsPlaying())

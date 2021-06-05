@@ -131,14 +131,19 @@ void Player::Update()
 	if (isDashing)
 		direction = direction.GetSquaredMagnitude() > 0.01f ? direction : dashDirection;
 
+	Vec3 linearVelocity = rb->GetLinearVelocity();
+
 	if (direction.GetSquaredMagnitude() > 0.01f)
 	{
 		float angleToDirection = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
 
 		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
 	
-		GetGameObject().Translate(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed));
+		rb->SetLinearVelocity(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed) * 100.0f + (linearVelocity.y * Vec3::up));
 	}
+
+	else if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
+		rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
 
 	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
 	{

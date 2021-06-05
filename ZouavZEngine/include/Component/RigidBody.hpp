@@ -22,7 +22,8 @@ public:
 
 	void Editor() override;
 
-	void SetLinearVelocity(const class Vec3& v);
+	void SetLinearVelocity(const class Vec3& _v);
+	void AddForce(const class Vec3& _v);
 	class Vec3 GetLinearVelocity();
 	void DisableGravity();
 	void EnableGravity();
