@@ -90,5 +90,6 @@ void Enemy::PlayAttackAnimation()
 }
 void Enemy::PlayIdleAnimation()
 {
-	//animation->Play("Zombie Idle.fbx");
+	if (animation)
+		animation->Play("Zombie Idle.fbx");
 }

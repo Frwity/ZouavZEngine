@@ -1,5 +1,6 @@
 #include "GameObject.hpp"
 #include "Game/Arrow.hpp"
+#include "Component/Animation.hpp"
 #include "Game/EnemyArcher.hpp"
 
 EnemyArcher::EnemyArcher(GameObject * _gameobject, std::string _name)
@@ -35,4 +36,10 @@ void EnemyArcher::Attack()
 			arrowComp->Initiate(player->WorldPosition() - GetGameObject().WorldPosition(), attackDamage);
 		timerAttackCooldown = attackCooldown;
 	}
+}
+
+void EnemyArcher::PlayAttackAnimation()
+{
+	if (animation)
+		animation->Play("Range Zombie Attack.fbx");
 }

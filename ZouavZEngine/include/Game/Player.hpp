@@ -42,6 +42,10 @@ public:
 	void Begin() final;
 	void Update() final;
 
+	virtual void PlayWalkAnimation() override;
+	virtual void PlayAttackAnimation() override;
+	virtual void PlayIdleAnimation() override;
+
 	void OnAddComponent() override;
 
 	void OnContact(class Object* _other, class ShapeCollision* _triggerShape) override;

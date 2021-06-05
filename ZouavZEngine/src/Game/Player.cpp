@@ -177,3 +177,20 @@ void Player::Editor()
 	ImGui::Text("Max Xp : %d", maxXp);
 	ImGui::Text("Current Xp : %d", currentXp);
 }
+
+void Player::PlayWalkAnimation()
+{
+	//if (animation)
+	//	animation->Play("Player Walking.fbx");
+}
+
+void Player::PlayAttackAnimation()
+{
+	//if (animation)
+	//	animation->Play("Player Attack.fbx");
+}
+void Player::PlayIdleAnimation()
+{
+	//if (animation)
+	//	animation->Play("Player Idle.fbx");
+}
