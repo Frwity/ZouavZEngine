@@ -235,12 +235,10 @@ public:
 		{
 			if (i != 0)
 				AddGenGO();
-			for (int i = 0; i < GenGOCount; ++i)
-			{
-				GenGOParams[i].prefab.load(_ar);
-				_ar(GenGOParams[i].ratio, GenGOParams[i].isOrientedByNormal);
-			}
+			GenGOParams[i].prefab.load(_ar);
+			_ar(GenGOParams[i].ratio, GenGOParams[i].isOrientedByNormal);
 		}
+		ComputeTotalRatio();
 	}
 	
 	template <class Archive>

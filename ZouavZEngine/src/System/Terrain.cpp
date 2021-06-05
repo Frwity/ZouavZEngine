@@ -313,10 +313,15 @@ void Terrain::DisplayOptionWindow()
 		}
 		GenGOParams[GenGOID].prefab.Editor("Prefab : ");
 		if (ImGui::InputInt("Ratio : ", &GenGOParams[GenGOID].ratio, 1))
+		{
+			if (GenGOParams[GenGOID].ratio < 0)
+				GenGOParams[GenGOID].ratio = 0;
 			ComputeTotalRatio();
+		}
 		ImGui::Checkbox("Oriented By Normal : ", &GenGOParams[GenGOID].isOrientedByNormal);
 		ImGui::InputInt("GameObject Per Chunk", &nbGOPerChunk);
-		
+		if (nbGOPerChunk < 0)
+			nbGOPerChunk = 0;
 		if (alwaysActualize && actualized || ImGui::Button("Actualize"))
 			Actualise();
 
@@ -466,29 +471,39 @@ void Chunk::Generate(ChunkCreateArg _cca, bool _reGenerate)
 			if (go)
 				go->Destroy();
 		generatedGameObjects.clear();
-		int x, z = 0;
-		int randomRatio = 0;
-		int ratioCursor = 0;
-		int actualRatio = _cca.toGeneratePrefabs[0].ratio;
-		Vec3 gopos{};
-		for (int i = 0; i < _cca.nbGOPerChunk; ++i)
+		if (_cca.totalRatio > 0)
 		{
-			x = rand() % vertexCount;
-			z = rand() % vertexCount;
-			randomRatio = rand() % _cca.totalRatio;
-			while (randomRatio > actualRatio)
+			int x, z = 0;
+			int randomRatio = 0;
+			int ratioCursor = 0;
+			int actualRatio = 0;
+			Vec3 gopos{};
+			for (int i = 0; i < _cca.nbGOPerChunk; ++i)
 			{
-				actualRatio += _cca.toGeneratePrefabs[ratioCursor++].ratio;
-				if (randomRatio < actualRatio)
-					ratioCursor--;
+				x = rand() % vertexCount;
+				z = rand() % vertexCount;
+				randomRatio = rand() % _cca.totalRatio;
+				while (randomRatio >= actualRatio)
+				{
+					if (ratioCursor >= _cca.toGeneratePrefabs.size())
+					{
+						--ratioCursor;
+						break;
+					}
+					actualRatio += _cca.toGeneratePrefabs[ratioCursor].ratio;
+					if (randomRatio >= actualRatio)
+						++ratioCursor;
+					else
+						break;
+				}
+				gopos = vertices.at(x + z * vertexCount).pos;
+				generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
+				generatedGameObjects.back()->SetNotToSave(true);
+				if (_cca.toGeneratePrefabs[ratioCursor].isOrientedByNormal)
+					generatedGameObjects.back()->Rotate(Quaternion::RotateFromTo(Vec3::up, vertices.at(x + z * vertexCount).normal));
+				actualRatio = 0;
+				ratioCursor = 0;
 			}
-			gopos = vertices.at(x + z * vertexCount).pos;
-			generatedGameObjects.emplace_back(GameObject::Instanciate(_cca.toGeneratePrefabs[ratioCursor].prefab.operator*(), Vec3(gopos.x + GetWorldPos().x, gopos.y, gopos.z + GetWorldPos().y)));
-			generatedGameObjects.back()->SetNotToSave(true);
-			if (_cca.toGeneratePrefabs[ratioCursor].isOrientedByNormal)
-				generatedGameObjects.back()->Rotate(Quaternion::RotateFromTo(Vec3::up, vertices.at(x + z * vertexCount).normal));
-			actualRatio = 0;
-			ratioCursor = 0;
 		}
 	}
 
