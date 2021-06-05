@@ -52,7 +52,6 @@ Mesh::Mesh(const std::string& _name, const char* _path)
 		vert.texCoord = mesh->HasTextureCoords(0) ? Vec2(mesh->mTextureCoords[0][v].x, mesh->mTextureCoords[0][v].y) : Vec2();
 
 		vertices.push_back(vert);
-
 	}
 
 	ExtractBoneWeightForVertices(vertices, mesh, scene);

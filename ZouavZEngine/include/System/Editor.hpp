@@ -33,9 +33,13 @@ private:
 	class Engine& engine;
 
 	bool changedScene = true;
-
+	float lastFrameTime = 0.0f;
+	float currentTime = 0.0f;
+	int n = 0;
+	int fps = 0;
 public:
 	bool isKeyboardEnable;
+
 	Editor(class Engine& _engine);
 
 	void Init();

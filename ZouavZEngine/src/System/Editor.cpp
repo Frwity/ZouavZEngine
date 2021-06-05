@@ -162,6 +162,17 @@ void Editor::NewFrame()
 
 bool Editor::Display(Render& _render)
 {
+
+    n++;
+    currentTime = TimeManager::GetTime();
+
+    if ((currentTime - lastFrameTime) >= 1.0)
+    {
+        fps = n;
+        n = 0;
+        lastFrameTime = currentTime;
+    }
+
     DisplayMainWindow(_render, _render.gameFramebuffer);
     if (!(state == EDITOR_STATE::PLAYING && maximizeOnPlay))
     {
@@ -977,6 +988,21 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
+
+    //Display FPS counter
+    if (state == EDITOR_STATE::PLAYING)
+    {
+        if (ImGui::Begin("FPS Counter", nullptr,
+            ImGuiWindowFlags_NoScrollbar |
+            ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoScrollWithMouse |
+            ImGuiWindowFlags_NoDocking))
+        {
+
+            ImGui::Text("FPS %d", fps);
+        }
+        ImGui::End();
+    }
 }
 
 void Editor::DisplayProject()
