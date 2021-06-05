@@ -998,7 +998,6 @@ void Editor::DisplayGameWindow(const class Render& _render, class Framebuffer& _
             ImGuiWindowFlags_NoScrollWithMouse |
             ImGuiWindowFlags_NoDocking))
         {
-
             ImGui::Text("FPS %d", fps);
         }
         ImGui::End();

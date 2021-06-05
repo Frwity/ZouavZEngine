@@ -37,6 +37,7 @@ public:
     std::vector<Mat4> finalBonesMatrices;
     float duration;
     int tickPerSecond;
+    float animationSpeed = 0.2;
 
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;
@@ -45,5 +46,5 @@ public:
 
     void RemoveFromResourcesManager() override;
 
-    void UpdateAnimation(float _deltaTime, float _animationSpeed = 1.0f, bool _loop = true);
+    void UpdateAnimation(float _deltaTime, bool _loop = true);
 };
