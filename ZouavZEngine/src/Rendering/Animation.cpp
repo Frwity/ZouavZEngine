@@ -57,6 +57,9 @@ void Animation::Editor()
         ImGui::EndDragDropTarget();
     }
 
+    if(currentAnimation)
+        ImGui::InputFloat("AnimationDuration", &currentAnimation->animationSpeed);
+
     if (ImGui::Button("Play"))
     {
         play = !play;
@@ -80,7 +83,7 @@ bool Animation::IsPlaying(std::string _animName)
 void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), animationSpeed, loop);
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), loop);
     else
         return;
 

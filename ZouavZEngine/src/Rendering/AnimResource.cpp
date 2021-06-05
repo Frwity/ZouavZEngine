@@ -67,9 +67,9 @@ void AnimResource::RemoveFromResourcesManager()
 
 }
 
-void AnimResource::UpdateAnimation(float _deltaTime, float _animationSpeed, bool _loop)
+void AnimResource::UpdateAnimation(float _deltaTime, bool _loop)
 {
-	currentTime += tickPerSecond  * _animationSpeed * _deltaTime;
+	currentTime += tickPerSecond  * animationSpeed * _deltaTime;
 	
 	if (currentTime >= duration)
 	{
