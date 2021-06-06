@@ -26,7 +26,6 @@ public :
     std::shared_ptr<AnimResource> idleAnimation;
     Texture* text;
     Mesh* mesh;
-    Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");

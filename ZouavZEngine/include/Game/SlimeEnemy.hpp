@@ -20,7 +20,7 @@ public:
     void OnDeath() override;
 
     template <class Archive>
-    void serialize(Archive & _ar)
+    void serialize(Archive & _ar) 
     {
         _ar(cereal::base_class<Enemy>(this));
     }

@@ -15,6 +15,9 @@ void SlimeEnemy::Editor()
 
 void SlimeEnemy::Begin()
 {
+	attackAnimName = "Slime Attack.fbx";
+	walkAnimName = "Slime Walk.fbx";
+	idleAnimName = "Slime_Idle.fbx";
 	Enemy::Begin();
 }
 

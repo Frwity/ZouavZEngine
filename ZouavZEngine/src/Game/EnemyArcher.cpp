@@ -37,9 +37,3 @@ void EnemyArcher::Attack()
 		timerAttackCooldown = attackCooldown;
 	}
 }
-
-void EnemyArcher::PlayAttackAnimation()
-{
-	if (animation)
-		animation->Play("Range Zombie Attack.fbx");
-}

@@ -1,7 +1,7 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 2,
+    "value2": 3,
     "value3": {
         "value0": 0.0,
         "value1": 0.0,
@@ -85,13 +85,13 @@
             }
         }
     ],
-    "value9": "Player",
-    "value10": "Player",
+    "value9": "Slime",
+    "value10": "Enemy",
     "value11": 0,
     "value12": {
-        "value0": 59.94036102294922,
-        "value1": 2.768129348754883,
-        "value2": -27.855749130249025
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": -31.716312408447267
     },
     "value13": {
         "value0": 1.0,
@@ -100,44 +100,44 @@
         "value3": 0.0
     },
     "value14": {
-        "value0": 1.0,
-        "value1": 1.0,
-        "value2": 1.0
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
     },
     "value15": true,
     "value16": false,
     "value17": [
         {
             "polymorphic_id": 2147483652,
-            "polymorphic_name": "Player",
+            "polymorphic_name": "SlimeEnemy",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 3,
-                    "value1": 10,
-                    "value2": 0,
-                    "value3": 1,
-                    "value4": 5,
-                    "value5": 15,
-                    "value6": 0.30000001192092898,
-                    "value7": 1.0,
-                    "value8": 0.10000000149011612,
-                    "value9": 0.10000000149011612,
-                    "value10": {
-                        "value0": {
-                            "value0": 1.0,
-                            "value1": 0.0,
-                            "value2": 0.0,
-                            "value3": 1.0
-                        },
-                        "value1": 1.0,
-                        "value2": 116,
-                        "value3": 116,
-                        "value4": 1,
-                        "value5": 1,
-                        "value6": {
-                            "value0": true,
-                            "value1": "Player"
+                    "value0": {
+                        "value0": 25.0,
+                        "value1": 5.0,
+                        "value2": 3.5,
+                        "value3": 2.0,
+                        "value4": 10.0,
+                        "value5": {
+                            "value0": {
+                                "value0": 1.0,
+                                "value1": 0.0,
+                                "value2": 0.0,
+                                "value3": 1.0
+                            },
+                            "value1": 1.0,
+                            "value2": 5,
+                            "value3": 5,
+                            "value4": 1,
+                            "value5": 1,
+                            "value6": 0.5,
+                            "value7": 1.0,
+                            "value8": 0.10000000149011612,
+                            "value9": {
+                                "value0": true,
+                                "value1": "SlimeEnemy"
+                            }
                         }
                     }
                 }
@@ -150,14 +150,14 @@
                 "valid": 1,
                 "data": {
                     "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
+                        "value0": 100.0,
+                        "value1": 100.0,
+                        "value2": 100.0
                     },
                     "value1": false,
                     "value2": {
                         "value0": 0.0,
-                        "value1": 0.0,
+                        "value1": 2.0,
                         "value2": 0.0
                     },
                     "value3": {
@@ -200,9 +200,9 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Cube.obj",
+                    "value0": "Slime_Idle.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime_Idle.fbx",
                     "value3": "Default",
                     "value4": false,
                     "value5": "resources/white.png",
@@ -210,9 +210,9 @@
                     "value7": false,
                     "value8": "resources/BlinnPhongShader.shader",
                     "value9": {
-                        "value0": 1.0,
+                        "value0": 0.3235294818878174,
                         "value1": 1.0,
-                        "value2": 1.0,
+                        "value2": 0.0,
                         "value3": 1.0
                     },
                     "value10": {
@@ -228,15 +228,15 @@
                 "valid": 1,
                 "data": {
                     "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.5
+                        "value0": 100.0,
+                        "value1": 100.0,
+                        "value2": 100.0
                     },
                     "value1": true,
                     "value2": {
                         "value0": 0.0,
-                        "value1": 0.0,
-                        "value2": 1.25
+                        "value1": 2.0,
+                        "value2": 4.0
                     },
                     "value3": {
                         "value0": 1.0,
@@ -265,16 +265,16 @@
                     "value0": "Default",
                     "value1": false,
                     "value2": "resources/Arial.fnt",
-                    "value3": 1,
+                    "value3": 2,
                     "value4": "Default Text",
-                    "value5": 0.0,
+                    "value5": 1.0,
                     "value6": 0.0,
                     "value7": 0.0,
                     "value8": 1.0,
                     "value9": 0.0,
-                    "value10": 0.0,
+                    "value10": 1.7000000476837159,
                     "value11": 0.0,
-                    "value12": 4.0,
+                    "value12": 7.499996662139893,
                     "value13": 0.5,
                     "value14": 0.009999999776482582,
                     "value15": 0.0,
@@ -310,11 +310,294 @@
         },
         {
             "polymorphic_id": 2147483658,
+            "polymorphic_name": "Animation",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": "Slime Attack.fbx",
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": 0.20000000298023225,
+                    "value4": false,
+                    "value5": "Slime Walk.fbx",
+                    "value6": "Project/animations/Slime/Slime Walk.fbx",
+                    "value7": 0.20000000298023225,
+                    "value8": true,
+                    "value9": "Slime_Idle.fbx",
+                    "value10": "Project/animations/Slime/Slime_Idle.fbx",
+                    "value11": 0.4000000059604645,
+                    "value12": true,
+                    "value13": "Slime_Idle.fbx",
+                    "value14": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        }
+    ],
+    "value18": "Player",
+    "value19": "Player",
+    "value20": 0,
+    "value21": {
+        "value0": 0.8139432668685913,
+        "value1": 1.9140068292617798,
+        "value2": 0.0
+    },
+    "value22": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value23": {
+        "value0": 0.02500000037252903,
+        "value1": 0.02500000037252903,
+        "value2": 0.02500000037252903
+    },
+    "value24": true,
+    "value25": false,
+    "value26": [
+        {
+            "polymorphic_id": 2147483659,
+            "polymorphic_name": "Player",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": 10,
+                    "value2": 0,
+                    "value3": 1,
+                    "value4": 5,
+                    "value5": 15,
+                    "value6": 0.30000001192092898,
+                    "value7": 1.0,
+                    "value8": 0.10000000149011612,
+                    "value9": 0.10000000149011612,
+                    "value10": {
+                        "value0": {
+                            "value0": 1.0,
+                            "value1": 0.0,
+                            "value2": 0.0,
+                            "value3": 1.0
+                        },
+                        "value1": 1.0,
+                        "value2": 843,
+                        "value3": 843,
+                        "value4": 1,
+                        "value5": 1,
+                        "value6": 0.5,
+                        "value7": 1.0,
+                        "value8": 0.10000000149011612,
+                        "value9": {
+                            "value0": true,
+                            "value1": "Player"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 43.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 6,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Player Mesh.fbx",
+                    "value1": true,
+                    "value2": "Project/meshes/Player Mesh.fbx",
+                    "value3": "Ch24_1001_Diffuse.png",
+                    "value4": true,
+                    "value5": "Project/textures/Character/Ch24_1001_Diffuse.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 80.0
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 1.75
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 1,
+                    "value4": "Default Text",
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 0.0,
+                    "value12": 4.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 9,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 0,
+                    "value3": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 10,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 5,
+                    "value1": "Player Attack.fbx",
+                    "value2": "Project/animations/Player/Player Attack.fbx",
+                    "value3": 0.699999988079071,
+                    "value4": false,
+                    "value5": "Player Idle.fbx",
+                    "value6": "Project/animations/Player/Player Idle.fbx",
+                    "value7": 0.5,
+                    "value8": true,
+                    "value9": "Player Roulade.fbx",
+                    "value10": "Project/animations/Player/Player Roulade.fbx",
+                    "value11": 1.690000057220459,
+                    "value12": false,
+                    "value13": "Player Run.fbx",
+                    "value14": "Project/animations/Player/Player Run.fbx",
+                    "value15": 1.0,
+                    "value16": true,
+                    "value17": "Player Walking.fbx",
+                    "value18": "Project/animations/Player/Player Walking.fbx",
+                    "value19": 0.6000000238418579,
+                    "value20": true,
+                    "value21": "Player Idle.fbx",
+                    "value22": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483660,
             "polymorphic_name": "Camera",
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.08284592628479,
+                    "value0": 1.3508100509643555,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -345,7 +628,7 @@
             }
         },
         {
-            "polymorphic_id": 2147483659,
+            "polymorphic_id": 2147483661,
             "polymorphic_name": "ProgressBar",
             "ptr_wrapper": {
                 "valid": 1,
@@ -372,7 +655,7 @@
             }
         },
         {
-            "polymorphic_id": 11,
+            "polymorphic_id": 13,
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
@@ -387,7 +670,7 @@
                     "value8": 0.0,
                     "value9": 1.0,
                     "value10": 0.0,
-                    "value11": 1.100000023841858,
+                    "value11": 1.0,
                     "value12": 0.30000001192092898,
                     "value13": "XpBar",
                     "value14": {
@@ -398,63 +681,591 @@
             }
         }
     ],
-    "value18": "New GameObject",
-    "value19": "",
-    "value20": 0,
-    "value21": {
-        "value0": 0.0,
-        "value1": 300.0,
-        "value2": 0.0
+    "value27": "New GameObject",
+    "value28": "",
+    "value29": 10,
+    "value30": {
+        "value0": 100.0,
+        "value1": 0.0,
+        "value2": -100.0
     },
-    "value22": {
+    "value31": {
         "value0": 1.0,
         "value1": 0.0,
         "value2": 0.0,
         "value3": 0.0
     },
-    "value23": {
-        "value0": 1.0,
-        "value1": 1.0,
-        "value2": 1.0
+    "value32": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
     },
-    "value24": true,
-    "value25": false,
-    "value26": [],
-    "value27": true,
-    "value28": 256.0,
-    "value29": 128,
-    "value30": 16,
-    "value31": 0,
-    "value32": 1,
-    "value33": 0,
-    "value34": -10.0,
-    "value35": -10.0,
-    "value36": 30.0,
-    "value37": 1,
+    "value33": true,
+    "value34": false,
+    "value35": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value36": "New GameObject",
+    "value37": "",
     "value38": 0,
-    "value39": true,
-    "value40": 2,
-    "value41": 0,
-    "value42": 0,
-    "value43": 1,
-    "value44": 0.009999999776482582,
-    "value45": 2.0,
-    "value46": 0.5,
-    "value47": 0.0,
-    "value48": 2.0,
-    "value49": 0.0,
-    "value50": 0.0,
-    "value51": 0.0,
-    "value52": 0.0,
-    "value53": 0.0,
-    "value54": 0.0,
-    "value55": 8.333000183105469,
-    "value56": "Grass.png",
-    "value57": 9,
-    "value58": "Project/prefabs\\Rock.zepref",
-    "value59": 1,
+    "value39": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value40": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value41": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value42": true,
+    "value43": false,
+    "value44": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value45": "New GameObject",
+    "value46": "",
+    "value47": 0,
+    "value48": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value49": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value50": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value51": true,
+    "value52": false,
+    "value53": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value54": "New GameObject",
+    "value55": "",
+    "value56": 0,
+    "value57": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value58": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value59": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
     "value60": true,
-    "value61": "Project/prefabs\\Tree.zepref",
-    "value62": 1,
-    "value63": true
+    "value61": false,
+    "value62": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value63": "New GameObject",
+    "value64": "",
+    "value65": 0,
+    "value66": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value67": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value68": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value69": true,
+    "value70": false,
+    "value71": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value72": "New GameObject",
+    "value73": "",
+    "value74": 0,
+    "value75": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value76": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value77": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value78": true,
+    "value79": false,
+    "value80": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value81": "New GameObject",
+    "value82": "",
+    "value83": 0,
+    "value84": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value85": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value86": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value87": true,
+    "value88": false,
+    "value89": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value90": "New GameObject",
+    "value91": "",
+    "value92": 0,
+    "value93": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value94": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value95": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value96": true,
+    "value97": false,
+    "value98": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value99": "New GameObject",
+    "value100": "",
+    "value101": 0,
+    "value102": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value103": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value104": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value105": true,
+    "value106": false,
+    "value107": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value108": "New GameObject",
+    "value109": "",
+    "value110": 0,
+    "value111": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value112": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value113": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value114": true,
+    "value115": false,
+    "value116": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value117": "New GameObject",
+    "value118": "",
+    "value119": 0,
+    "value120": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value121": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value122": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value123": true,
+    "value124": false,
+    "value125": [
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime Attack.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime Attack.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        }
+    ],
+    "value126": true,
+    "value127": 256.0,
+    "value128": 128,
+    "value129": 16,
+    "value130": 0,
+    "value131": 1,
+    "value132": 0,
+    "value133": -10.0,
+    "value134": -10.0,
+    "value135": 30.0,
+    "value136": 1,
+    "value137": 0,
+    "value138": true,
+    "value139": 2,
+    "value140": 0,
+    "value141": 0,
+    "value142": 1,
+    "value143": 0.009999999776482582,
+    "value144": 2.0,
+    "value145": 0.5,
+    "value146": 0.0,
+    "value147": 2.0,
+    "value148": 0.0,
+    "value149": 0.0,
+    "value150": 0.0,
+    "value151": 0.0,
+    "value152": 0.0,
+    "value153": 0.0,
+    "value154": 8.333000183105469,
+    "value155": "Grass.png",
+    "value156": 0,
+    "value157": "Project/prefabs\\Rock.zepref",
+    "value158": 1,
+    "value159": true,
+    "value160": "Project/prefabs\\Tree.zepref",
+    "value161": 1,
+    "value162": true
 }

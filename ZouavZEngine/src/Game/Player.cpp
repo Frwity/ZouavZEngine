@@ -46,6 +46,10 @@ void Player::OnContact(Object* _other, class ShapeCollision* _triggerShape)
 
 void Player::Begin()
 {
+	attackAnimName = "Player Attack.fbx";
+	walkAnimName = "Player Walk.fbx";
+	idleAnimName = "Player Idle.fbx";
+	deathAnimName = "Player Dying.fbx";
 	camera = GetGameObject().GetComponent<Camera>();
 	camera->SetPosition({ 0.0f, 12.5f, -25.0f });
 	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
@@ -63,7 +67,6 @@ void Player::Begin()
 	ICharacter::Begin();
 	timerDashCooldown = dashCooldown;
 	timerDashDuration = dashDuration;
-	deathAnimName = "Player Dying.fbx";
 }
 
 void Player::Update()
@@ -127,10 +130,11 @@ void Player::Update()
 		animation->Play("Player Roulade.fbx");
 		isDashing = true;
 		timerDashDuration = 0.0f;
+		StopAttack();
 
 		if (direction.GetSquaredMagnitude() < 0.01f)
 			direction = GetGameObject().Forward();
-		
+
 		dashDirection = direction;
 	}
 
@@ -139,19 +143,22 @@ void Player::Update()
 
 	Vec3 linearVelocity = rb->GetLinearVelocity();
 
-	if (direction.GetSquaredMagnitude() > 0.01f)
+	if (direction.GetSquaredMagnitude() > 0.01f && !IsAttacking())
 	{
 		float angleToDirection = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
 
 		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
-	
+
 		if (!isDashing)
 		{
 			if (speed < 8)
-				PlayWalkAnimation();
-
-			else if (animation->IsFinish("Player Run.fbx"))
+			{
+				if (animation && !animation->IsPlaying("Player Walking.fbx"))
+					animation->Play("Player Walking.fbx");
+			}
+			else if (animation && !animation->IsPlaying("Player Run.fbx"))
 				animation->Play("Player Run.fbx");
+
 		}
 		rb->SetLinearVelocity(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed) * 100.0f + (linearVelocity.y * Vec3::up));
 	}
@@ -161,8 +168,8 @@ void Player::Update()
 		if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
 			rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
 
-		if (animation && (animation->IsFinish("Player Attack.fbx") || animation->IsFinish("Player Roulade.fbx") || !animation->IsFinish("Player Walking.fbx") || !animation->IsFinish("Player Run.fbx")))
-			PlayIdleAnimation();
+		if (animation && (animation->IsFinish("Player Attack.fbx") || animation->IsFinish("Player Roulade.fbx") || animation->IsPlaying("Player Walking.fbx") || animation->IsPlaying("Player Run.fbx")))
+			animation->Play("Player Idle.fbx");
 	}
 
 	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
@@ -172,7 +179,10 @@ void Player::Update()
 	}
 
 	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown >= attackCooldown && timerAttackDuration >= attackDuration && timerBeforeAttack >= beforeAttack)
+	{
 		NeedToAttack();
+		rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
+	}
 }
 
 void Player::ManageXp(const Enemy& _enemyKilled)
@@ -197,22 +207,4 @@ void Player::Editor()
 	ImGui::Text("Max Xp : %d", maxXp);
 	ImGui::Text("Current Xp : %d", currentXp);
 	ImGui::DragInt("Roulade speed", &dashSpeed, 1.0f, 0);
-}
-
-void Player::PlayWalkAnimation()
-{
-	if (animation && !animation->IsPlaying("Player Walking.fbx") && !IsAttacking() && !isDashing)
-		animation->Play("Player Walking.fbx");
-}
-
-void Player::PlayAttackAnimation()
-{
-	if (animation)
-		animation->Play("Player Attack.fbx");
-}
-
-void Player::PlayIdleAnimation()
-{
-	if (animation)
-		animation->Play("Player Idle.fbx");
 }
