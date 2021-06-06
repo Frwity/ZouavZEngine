@@ -162,6 +162,7 @@ bool ICharacter::Damage(int _damage)
 		}
 		else
 		{
+			animation->Play(deathAnimName);
 			audioBroadcaster->Play("death.wav");
 			StopAttack();
 			OnDeath();

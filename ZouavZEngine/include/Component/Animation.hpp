@@ -39,7 +39,7 @@ public :
     void Play(std::string _animName);
     void Play() { play = true; }
     void Stop() { play = false; }
-    bool IsPlaying() { return play && !animationFinish; }
+    bool IsPlaying() { return play; }
     bool IsPlaying(std::string _animName);
     bool IsFinish() { return animationFinish; }
     bool IsFinish(std::string _animName);
@@ -54,6 +54,7 @@ public :
             _ar(element.second->GetPath());
             _ar(element.second->animationSpeed);
             _ar(element.second->loop);
+            _ar(element.second->goToIdle);
         }
         _ar(idleAnimation->GetName());
 

@@ -33,6 +33,7 @@ protected:
     class RigidBody* rb{ nullptr };
     class AudioBroadcaster* audioBroadcaster;
     class Animation* animation;
+    std::string deathAnimName;
 
 public:
     ICharacter() = delete;
@@ -44,7 +45,6 @@ public:
     virtual void PlayIdleAnimation() {};
     virtual void PlayWalkAnimation() {};
     virtual void PlayAttackAnimation() {};
-    virtual void PlayDamageAnimation() {};
     virtual void PlayDeathAnimation() {};
 
     virtual bool CanAttack() { return true; }

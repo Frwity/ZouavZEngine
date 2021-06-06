@@ -13,9 +13,10 @@ void Zombie::Editor()
 
 void Zombie::Begin()
 {
-   Enemy::Begin();
    attackAnim = "Zombie Punching.fbx";
    walkAnim = "Zombie Walk.fbx";
+   deathAnimName = "Zombie_Death.fbx";
+   Enemy::Begin();
 }
 
 void Zombie::Update()
@@ -25,7 +26,7 @@ void Zombie::Update()
 
 void Zombie::PlayWalkAnimation()
 {
-	if (animation && !animation->IsPlaying("Zombie Walk.fbx"))
+	if (animation && !animation->IsPlaying("Zombie Walk.fbx") && !IsAttacking())
 		animation->Play("Zombie Walk.fbx");
 }
 
@@ -34,6 +35,7 @@ void Zombie::PlayAttackAnimation()
 	if (animation)
 		animation->Play("Zombie Punching.fbx");
 }
+
 void Zombie::PlayIdleAnimation()
 {
 	if (animation)

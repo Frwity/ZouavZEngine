@@ -37,6 +37,7 @@ public:
     int tickPerSecond;
     float animationSpeed = 0.2f;
     bool loop = false;
+    bool goToIdle = true;
 
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;

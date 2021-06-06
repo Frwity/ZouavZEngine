@@ -63,6 +63,7 @@ void Player::Begin()
 	ICharacter::Begin();
 	timerDashCooldown = dashCooldown;
 	timerDashDuration = dashDuration;
+	deathAnimName = "Player Dying.fbx";
 }
 
 void Player::Update()
@@ -149,7 +150,7 @@ void Player::Update()
 			if (speed < 8)
 				PlayWalkAnimation();
 
-			else if (!animation->IsPlaying("Player Run.fbx"))
+			else if (animation->IsFinish("Player Run.fbx"))
 				animation->Play("Player Run.fbx");
 		}
 		rb->SetLinearVelocity(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed) * 100.0f + (linearVelocity.y * Vec3::up));
@@ -160,7 +161,7 @@ void Player::Update()
 		if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
 			rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
 
-		if (animation && (animation->IsFinish("Player Attack.fbx") || animation->IsFinish("Player Roulade.fbx") || animation->IsPlaying("Player Walking.fbx") || animation->IsPlaying("Player Run.fbx")))
+		if (animation && (animation->IsFinish("Player Attack.fbx") || animation->IsFinish("Player Roulade.fbx") || !animation->IsFinish("Player Walking.fbx") || !animation->IsFinish("Player Run.fbx")))
 			PlayIdleAnimation();
 	}
 
@@ -200,7 +201,7 @@ void Player::Editor()
 
 void Player::PlayWalkAnimation()
 {
-	if (animation && !animation->IsPlaying("Player Walking.fbx"))
+	if (animation && !animation->IsPlaying("Player Walking.fbx") && !IsAttacking() && !isDashing)
 		animation->Play("Player Walking.fbx");
 }
 
@@ -209,6 +210,7 @@ void Player::PlayAttackAnimation()
 	if (animation)
 		animation->Play("Player Attack.fbx");
 }
+
 void Player::PlayIdleAnimation()
 {
 	if (animation)
