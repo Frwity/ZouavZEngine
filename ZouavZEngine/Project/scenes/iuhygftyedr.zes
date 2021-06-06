@@ -1,0 +1,686 @@
+{
+    "value0": "iuhygftyedr",
+    "value1": "",
+    "value2": 2,
+    "value3": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": 0.0
+    },
+    "value4": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value5": {
+        "value0": 1.0,
+        "value1": 1.0,
+        "value2": 1.0
+    },
+    "value6": true,
+    "value7": false,
+    "value8": [
+        {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "Light",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 0.5,
+                    "value1": 0.5,
+                    "value2": 0.5,
+                    "value3": 0.5,
+                    "value4": 0.5,
+                    "value5": 0.5,
+                    "value6": 0.5,
+                    "value7": 0.5,
+                    "value8": 0.5,
+                    "value9": 1.0,
+                    "value10": 0.009999999776482582,
+                    "value11": 0.0010000000474974514,
+                    "value12": 0.0,
+                    "value13": -1.0,
+                    "value14": 0.0,
+                    "value15": 0.8999999761581421,
+                    "value16": 0.800000011920929,
+                    "value17": 0,
+                    "value18": {
+                        "value0": true,
+                        "value1": "Light"
+                    }
+                }
+            }
+        }
+    ],
+    "value9": "Player",
+    "value10": "Player",
+    "value11": 0,
+    "value12": {
+        "value0": 0.8139432668685913,
+        "value1": 1.9140068292617798,
+        "value2": 0.0
+    },
+    "value13": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value14": {
+        "value0": 0.02500000037252903,
+        "value1": 0.02500000037252903,
+        "value2": 0.02500000037252903
+    },
+    "value15": true,
+    "value16": false,
+    "value17": [
+        {
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "Player",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": 10,
+                    "value2": 0,
+                    "value3": 1,
+                    "value4": 5,
+                    "value5": 15,
+                    "value6": 0.30000001192092898,
+                    "value7": 1.0,
+                    "value8": 0.10000000149011612,
+                    "value9": 0.10000000149011612,
+                    "value10": {
+                        "value0": {
+                            "value0": 1.0,
+                            "value1": 0.0,
+                            "value2": 0.0,
+                            "value3": 1.0
+                        },
+                        "value1": 1.0,
+                        "value2": 843,
+                        "value3": 843,
+                        "value4": 1,
+                        "value5": 1,
+                        "value6": 0.5,
+                        "value7": 1.0,
+                        "value8": 0.10000000149011612,
+                        "value9": {
+                            "value0": true,
+                            "value1": "Player"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483651,
+            "polymorphic_name": "BoxCollision",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 43.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483652,
+            "polymorphic_name": "RigidBody",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483653,
+            "polymorphic_name": "MeshRenderer",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Player Mesh.fbx",
+                    "value1": true,
+                    "value2": "Project/meshes/Player Mesh.fbx",
+                    "value3": "Ch24_1001_Diffuse.png",
+                    "value4": true,
+                    "value5": "Project/textures/Character/Ch24_1001_Diffuse.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 3,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 80.0
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 1.75
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483654,
+            "polymorphic_name": "FontComponent",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 1,
+                    "value4": "Default Text",
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 0.0,
+                    "value12": 4.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483655,
+            "polymorphic_name": "AudioBroadcaster",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 0,
+                    "value3": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483656,
+            "polymorphic_name": "Animation",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 5,
+                    "value1": "Player Attack.fbx",
+                    "value2": "Project/animations/Player/Player Attack.fbx",
+                    "value3": 0.699999988079071,
+                    "value4": false,
+                    "value5": "Player Idle.fbx",
+                    "value6": "Project/animations/Player/Player Idle.fbx",
+                    "value7": 0.5,
+                    "value8": true,
+                    "value9": "Player Roulade.fbx",
+                    "value10": "Project/animations/Player/Player Roulade.fbx",
+                    "value11": 1.690000057220459,
+                    "value12": false,
+                    "value13": "Player Run.fbx",
+                    "value14": "Project/animations/Player/Player Run.fbx",
+                    "value15": 1.0,
+                    "value16": true,
+                    "value17": "Player Walking.fbx",
+                    "value18": "Project/animations/Player/Player Walking.fbx",
+                    "value19": 0.6000000238418579,
+                    "value20": true,
+                    "value21": "Player Idle.fbx",
+                    "value22": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483657,
+            "polymorphic_name": "Camera",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0650943517684937,
+                    "value1": 0.0,
+                    "value2": 0.0,
+                    "value3": 0.0,
+                    "value4": 0.0,
+                    "value5": 2.4142138957977297,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 0.0,
+                    "value9": 0.0,
+                    "value10": -1.0000003576278687,
+                    "value11": -1.0,
+                    "value12": 0.0,
+                    "value13": 0.0,
+                    "value14": -0.0020000003278255464,
+                    "value15": 0.0,
+                    "value16": 0.0,
+                    "value17": 12.5,
+                    "value18": -25.0,
+                    "value19": 0.0,
+                    "value20": 2.0,
+                    "value21": 0.0,
+                    "value22": true,
+                    "value23": {
+                        "value0": true,
+                        "value1": "Camera"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 2147483658,
+            "polymorphic_name": "ProgressBar",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0,
+                    "value3": 1.0,
+                    "value4": 0.0,
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 1.0,
+                    "value8": 0.0,
+                    "value9": -1.0,
+                    "value10": 0.0,
+                    "value11": 1.0,
+                    "value12": 0.30000001192092898,
+                    "value13": "LifeBar",
+                    "value14": {
+                        "value0": true,
+                        "value1": "LifeBar"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 10,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0,
+                    "value3": 1.0,
+                    "value4": 0.0,
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 1.0,
+                    "value8": 0.0,
+                    "value9": 1.0,
+                    "value10": 0.0,
+                    "value11": 1.0,
+                    "value12": 0.30000001192092898,
+                    "value13": "XpBar",
+                    "value14": {
+                        "value0": true,
+                        "value1": "XpBar"
+                    }
+                }
+            }
+        }
+    ],
+    "value18": "Zombie",
+    "value19": "",
+    "value20": 0,
+    "value21": {
+        "value0": 0.0,
+        "value1": 0.0,
+        "value2": -29.887386322021486
+    },
+    "value22": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value23": {
+        "value0": 0.02500000037252903,
+        "value1": 0.02500000037252903,
+        "value2": 0.02500000037252903
+    },
+    "value24": true,
+    "value25": false,
+    "value26": [
+        {
+            "polymorphic_id": 2147483659,
+            "polymorphic_name": "Zombie",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 25.0,
+                        "value1": 5.0,
+                        "value2": 3.5,
+                        "value3": 2.0,
+                        "value4": 10.0,
+                        "value5": {
+                            "value0": {
+                                "value0": 1.0,
+                                "value1": 0.0,
+                                "value2": 0.0,
+                                "value3": 1.0
+                            },
+                            "value1": 1.0,
+                            "value2": 5,
+                            "value3": 5,
+                            "value4": 1,
+                            "value5": 1,
+                            "value6": 0.5,
+                            "value7": 2.0,
+                            "value8": 0.6000000238418579,
+                            "value9": {
+                                "value0": true,
+                                "value1": "Zombie"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 3,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 40.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 4,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Zombie Mesh.fbx",
+                    "value1": true,
+                    "value2": "Project/meshes/Zombie Mesh.fbx",
+                    "value3": "Yakuzombie_diffuse.png",
+                    "value4": true,
+                    "value5": "Project/textures/Yakuzombie_diffuse.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 3,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 53.0,
+                        "value1": 200.0,
+                        "value2": 80.0
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 1.75
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 6,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 1,
+                    "value4": "Default Text",
+                    "value5": 0.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 0.0,
+                    "value11": 0.0,
+                    "value12": 4.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 0,
+                    "value3": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 3,
+                    "value1": "Zombie Idle.fbx",
+                    "value2": "Project/animations/Zombie/Zombie Idle.fbx",
+                    "value3": 0.4000000059604645,
+                    "value4": true,
+                    "value5": "Zombie Punching.fbx",
+                    "value6": "Project/animations/Zombie/Zombie Punching.fbx",
+                    "value7": 0.4000000059604645,
+                    "value8": false,
+                    "value9": "Zombie Walk.fbx",
+                    "value10": "Project/animations/Zombie/Zombie Walk.fbx",
+                    "value11": 0.4000000059604645,
+                    "value12": true,
+                    "value13": "Zombie Idle.fbx",
+                    "value14": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        }
+    ],
+    "value27": true,
+    "value28": 256.0,
+    "value29": 128,
+    "value30": 16,
+    "value31": 0,
+    "value32": 1,
+    "value33": 0,
+    "value34": -10.0,
+    "value35": 30.0,
+    "value36": 30.0,
+    "value37": 1,
+    "value38": 0,
+    "value39": true,
+    "value40": 1,
+    "value41": 0,
+    "value42": 0,
+    "value43": 1,
+    "value44": 0.009999999776482582,
+    "value45": 2.0,
+    "value46": 0.5,
+    "value47": 0.0,
+    "value48": 2.0,
+    "value49": 0.0,
+    "value50": 0.0,
+    "value51": 0.0,
+    "value52": 0.0,
+    "value53": 0.0,
+    "value54": 0.0,
+    "value55": 9.770000457763672,
+    "value56": "Grass.png",
+    "value57": 1,
+    "value58": "noPath",
+    "value59": 1,
+    "value60": true
+}

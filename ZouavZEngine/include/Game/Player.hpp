@@ -21,9 +21,9 @@ private:
 	int currentXp = 0;
 	int attackDamageGain = 1;
 	int lifeGain = 5;
-	int dashSpeed = 15;
+	int dashSpeed = 8;
 	Vec3 dashDirection;
-	float dashDuration = 0.3f;
+	float dashDuration = 0.7f;
 	float timerDashDuration = 0.0f;
 	float dashCooldown = 1.0f;
 	float timerDashCooldown = 0.0f;
@@ -41,10 +41,6 @@ public:
 	Player(class GameObject* _gameobject, std::string _name = "Player");
 	void Begin() final;
 	void Update() final;
-
-	virtual void PlayWalkAnimation() override;
-	virtual void PlayAttackAnimation() override;
-	virtual void PlayIdleAnimation() override;
 
 	void OnAddComponent() override;
 

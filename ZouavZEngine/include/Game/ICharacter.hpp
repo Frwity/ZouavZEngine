@@ -33,6 +33,9 @@ protected:
     class RigidBody* rb{ nullptr };
     class AudioBroadcaster* audioBroadcaster;
     class Animation* animation;
+    std::string attackAnimName;
+    std::string walkAnimName;
+    std::string idleAnimName;
 
 public:
     ICharacter() = delete;
@@ -40,14 +43,6 @@ public:
     void Begin() override;
     void Update() override;
     void Editor() override;
-
-    virtual void PlayIdleAnimation() {};
-    virtual void PlayWalkAnimation() {};
-    virtual void PlayAttackAnimation() {};
-    virtual void PlayDamageAnimation() {};
-    virtual void PlayDeathAnimation() {};
-
-    virtual bool CanAttack() { return true; }
 
     void OnAddComponent() override;
 

@@ -13,32 +13,13 @@ void Zombie::Editor()
 
 void Zombie::Begin()
 {
+   attackAnimName = "Zombie Punching.fbx";
+   walkAnimName = "Zombie Walk.fbx";
+   idleAnimName = "Zombie Idle.fbx";
    Enemy::Begin();
 }
 
 void Zombie::Update()
 {
    Enemy::Update();
-}
-
-void Zombie::PlayWalkAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Walk.fbx");
-}
-
-void Zombie::PlayAttackAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Punching.fbx");
-}
-void Zombie::PlayIdleAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Idle.fbx");
-}
-
-bool Zombie::CanAttack()
-{
-	return animation->IsFinish("Zombie Punching.fbx") || !animation->IsPlaying("Zombie Punching.fbx");
 }

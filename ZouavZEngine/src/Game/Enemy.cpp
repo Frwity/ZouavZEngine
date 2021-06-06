@@ -66,20 +66,24 @@ void Enemy::Update()
 			if (angleToPlayer > 0.2f)
 				GetGameObject().RotateY((angleToPlayer / M_PI) * 180.0f);
 
-			if (distanceToPlayer > distanceToStop)
+			if (distanceToPlayer > distanceToStop && !IsAttacking())
 			{
 				rb->SetLinearVelocity(direction.Normalized() * TimeManager::GetDeltaTime() * speed * 100.0f + (linearVelocity.y * Vec3::up));
-				PlayWalkAnimation();
+				if (animation && !animation->IsPlaying(walkAnimName))
+					animation->Play(walkAnimName);
 			}
 
 			if (distanceToPlayer < distanceToAttack && timerAttackCooldown >= attackCooldown && timerAttackDuration >= attackDuration && timerBeforeAttack >= beforeAttack)
 				NeedToAttack();
 		}
 
-		else if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
-			rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
-	}
+		else
+		{
+			if (animation && (animation->IsFinish(attackAnimName) || animation->IsPlaying(walkAnimName)))
+					animation->Play(idleAnimName);
 
-	if (animation && !animation->IsPlaying())
-		PlayIdleAnimation();
+			if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
+				rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
+		}
+	}
 }

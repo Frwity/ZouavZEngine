@@ -46,6 +46,9 @@ void Player::OnContact(Object* _other, class ShapeCollision* _triggerShape)
 
 void Player::Begin()
 {
+	attackAnimName = "Player Attack.fbx";
+	walkAnimName = "Player Walk.fbx";
+	idleAnimName = "Player Idle.fbx";
 	camera = GetGameObject().GetComponent<Camera>();
 	camera->SetPosition({ 0.0f, 12.5f, -25.0f });
 	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
@@ -86,8 +89,8 @@ void Player::Update()
 
 	ICharacter::Update();
 
-	if (InputManager::GetKeyPressed(E_KEYS::RSHIFT))
-		speed = 100;
+	if (InputManager::GetKeyPressed(E_KEYS::LSHIFT))
+		speed = 8;
 	else
 		speed = 3;
 
@@ -112,22 +115,25 @@ void Player::Update()
 
 	Vec3 direction;
 
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_UP))
+	if (InputManager::GetKeyPressed(E_KEYS::W))
 		direction += cameraForward;
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_DOWN))
+	if (InputManager::GetKeyPressed(E_KEYS::S))
 		direction -= cameraForward;
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_RIGHT))
+	if (InputManager::GetKeyPressed(E_KEYS::D))
 		direction += cameraRight;
-	if (InputManager::GetKeyPressed(E_KEYS::ARROW_LEFT))
+	if (InputManager::GetKeyPressed(E_KEYS::A))
 		direction -= cameraRight;
 
-	if (InputManager::GetKeyPressedOneTime(E_KEYS::LCTRL))
+	if (InputManager::GetKeyPressedOneTime(E_KEYS::LCTRL) && !isDashing)
 	{
+		animation->Play("Player Roulade.fbx");
 		isDashing = true;
 		timerDashDuration = 0.0f;
 
-		if (direction.GetSquaredMagnitude() > 0.01f)
+		if (direction.GetSquaredMagnitude() < 0.01f)
 			direction = GetGameObject().Forward();
+		
+		dashDirection = direction;
 	}
 
 	if (isDashing)
@@ -141,11 +147,28 @@ void Player::Update()
 
 		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
 	
+		if (!isDashing)
+		{
+			if (speed < 8)
+			{
+				if (animation && !animation->IsPlaying("Player Walking.fbx"))
+					animation->Play("Player Walking.fbx");
+			}
+			else if (animation && !animation->IsPlaying("Player Run.fbx"))
+				animation->Play("Player Run.fbx");
+		}
 		rb->SetLinearVelocity(GetGameObject().Forward() * TimeManager::GetDeltaTime() * (isDashing ? dashSpeed : speed) * 100.0f + (linearVelocity.y * Vec3::up));
 	}
 
-	else if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
-		rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
+	else
+	{
+		if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)
+			rb->SetLinearVelocity(linearVelocity.y * Vec3::up);
+
+		if (animation && (animation->IsFinish("Player Attack.fbx") || animation->IsFinish("Player Roulade.fbx") || animation->IsPlaying("Player Walking.fbx") || animation->IsPlaying("Player Run.fbx")))
+			if (animation)
+				animation->Play("Player Idle.fbx");
+	}
 
 	if (InputManager::GetKeyPressed(E_KEYS::SPACEBAR) && !isJumping)
 	{
@@ -178,21 +201,5 @@ void Player::Editor()
 	ImGui::DragInt("", &level);
 	ImGui::Text("Max Xp : %d", maxXp);
 	ImGui::Text("Current Xp : %d", currentXp);
-}
-
-void Player::PlayWalkAnimation()
-{
-	//if (animation)
-	//	animation->Play("Player Walking.fbx");
-}
-
-void Player::PlayAttackAnimation()
-{
-	//if (animation)
-	//	animation->Play("Player Attack.fbx");
-}
-void Player::PlayIdleAnimation()
-{
-	//if (animation)
-	//	animation->Play("Player Idle.fbx");
+	ImGui::DragInt("Roulade speed", &dashSpeed, 1.0f, 0);
 }

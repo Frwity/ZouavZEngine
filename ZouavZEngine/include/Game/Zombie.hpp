@@ -15,12 +15,6 @@ public:
     void Update() override;
     void Editor() override;
 
-    void PlayWalkAnimation() override;
-    void PlayAttackAnimation() override;
-    void PlayIdleAnimation() override;
-
-    bool CanAttack() override;
-
     template <class Archive>
     void serialize(Archive & _ar)
     {

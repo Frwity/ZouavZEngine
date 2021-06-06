@@ -93,7 +93,8 @@ void ICharacter::Begin()
 	audioBroadcaster = GetGameObject().GetComponent<AudioBroadcaster>();
 	animation = GetGameObject().GetComponent<Animation>();
 	life > maxLife ? life = maxLife : 0;
-	PlayIdleAnimation();
+	if (animation)
+		animation->Play(idleAnimName);
 	timerAttackCooldown = attackCooldown;
 	timerAttackDuration = attackDuration;
 	timerBeforeAttack = beforeAttack;
@@ -142,7 +143,7 @@ void ICharacter::Update()
 
 bool ICharacter::IsAttacking() const
 {
-	return attackCollision->IsActive();
+	return attackCollision->IsActive() || timerBeforeAttack < beforeAttack;
 }
 
 bool ICharacter::Damage(int _damage)
@@ -175,10 +176,11 @@ bool ICharacter::Damage(int _damage)
 
 void ICharacter::NeedToAttack()
 {
-	if (CanAttack())
+	if (animation->IsFinish(attackAnimName) || !animation->IsPlaying(attackAnimName))
 	{
 		timerBeforeAttack = 0.0f;
-		PlayAttackAnimation();
+		if (animation)
+			animation->Play(attackAnimName);
 	}
 }
 
