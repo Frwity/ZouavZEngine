@@ -1,12 +1,12 @@
 {
     "value0": 0,
     "value1": 8,
-    "value2": "oui.fbx",
+    "value2": "Tree.obj",
     "value3": true,
-    "value4": "Project/oui.fbx",
-    "value5": "Tree.obj",
+    "value4": "Project/meshes/Tree.obj",
+    "value5": "oui.fbx",
     "value6": true,
-    "value7": "Project/meshes/Tree.obj",
+    "value7": "Project/oui.fbx",
     "value8": "Default",
     "value9": false,
     "value10": "resources/Cube.obj",
@@ -80,11 +80,8 @@
     "value78": "Default",
     "value79": false,
     "value80": "resources/Skybox.dds",
-    "value81": 2,
-    "value82": "Slime_Anim.fbx",
+    "value81": 1,
+    "value82": "Slime Idle.fbx",
     "value83": true,
-    "value84": "Project/Slime_Anim.fbx",
-    "value85": "oui.fbx",
-    "value86": true,
-    "value87": "Project/oui.fbx"
+    "value84": "Project/Slime Idle.fbx"
 }
