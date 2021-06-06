@@ -35,7 +35,8 @@ public:
     std::vector<Mat4> finalBonesMatrices;
     float duration;
     int tickPerSecond;
-    float animationSpeed = 0.2;
+    float animationSpeed = 0.2f;
+    bool loop = false;
 
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;

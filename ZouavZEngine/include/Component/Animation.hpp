@@ -23,10 +23,10 @@ private:
 public :
     std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
+    std::shared_ptr<AnimResource> idleAnimation;
     Texture* text;
     Mesh* mesh;
     Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-    bool loop = false;
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");
@@ -39,7 +39,7 @@ public :
     void Play(std::string _animName);
     void Play() { play = true; }
     void Stop() { play = false; }
-    bool IsPlaying() { return play; }
+    bool IsPlaying() { return play && !animationFinish; }
     bool IsPlaying(std::string _animName);
     bool IsFinish() { return animationFinish; }
     bool IsFinish(std::string _animName);
@@ -53,7 +53,9 @@ public :
             _ar(element.second->GetName());
             _ar(element.second->GetPath());
             _ar(element.second->animationSpeed);
+            _ar(element.second->loop);
         }
+        _ar(idleAnimation->GetName());
 
         _ar(cereal::base_class<Component>(this));
     }

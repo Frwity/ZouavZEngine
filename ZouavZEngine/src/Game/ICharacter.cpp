@@ -142,7 +142,7 @@ void ICharacter::Update()
 
 bool ICharacter::IsAttacking() const
 {
-	return attackCollision->IsActive();
+	return attackCollision->IsActive() || timerBeforeAttack < beforeAttack;
 }
 
 bool ICharacter::Damage(int _damage)
