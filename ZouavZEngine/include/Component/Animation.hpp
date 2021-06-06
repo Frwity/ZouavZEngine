@@ -25,7 +25,6 @@ public :
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
-    Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
     bool loop = false;
 
     Animation() = default;

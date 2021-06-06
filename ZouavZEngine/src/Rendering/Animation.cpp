@@ -23,7 +23,6 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
     {
         mesh = gameObject->GetComponent<MeshRenderer>()->mesh.get();
         text = gameObject->GetComponent<MeshRenderer>()->material.texture.get();
-        color = gameObject->GetComponent<MeshRenderer>()->material.color;
     }
 
     animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
@@ -107,7 +106,7 @@ void Animation::Draw(const Camera& _camera)
 
     animationShader->SetMatrix("view", _camera.GetMatrix().Reversed());
     animationShader->SetMatrix("projection", _camera.GetProjectionMatrix());
-    animationShader->SetVector4("color", color);
+    animationShader->SetVector4("color", gameObject->GetComponent<MeshRenderer>() ? gameObject->GetComponent<MeshRenderer>()->material.color : Vec4{1.f, 1.f, 1.f, 1.f});
 
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
