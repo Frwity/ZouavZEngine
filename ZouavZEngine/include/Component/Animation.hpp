@@ -16,14 +16,17 @@ class Animation : public Component
 {
 private:
     std::shared_ptr<Shader> animationShader;
-public :
     bool play = false;
+    bool animationFinish = false;
+    float currentTime = 0.0f;
+
+public :
     std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     Texture* text;
     Mesh* mesh;
     Vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-    bool loop = true;
+    bool loop = false;
 
     Animation() = default;
     Animation(GameObject* _gameObject, std::string _animationPath = std::string(), Mesh* _mesh = nullptr, std::string _name = "Animation");
@@ -38,6 +41,8 @@ public :
     void Stop() { play = false; }
     bool IsPlaying() { return play; }
     bool IsPlaying(std::string _animName);
+    bool IsFinish() { return animationFinish; }
+    bool IsFinish(std::string _animName);
 
     template <class Archive>
     void serialize(Archive& _ar)

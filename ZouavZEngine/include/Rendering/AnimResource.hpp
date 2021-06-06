@@ -27,11 +27,9 @@ private:
     void ReadMissingBones(const aiAnimation* animation);
     void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
     Bone* FindBone(const std::string& _boneName);
-    void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform);
-    bool animationFinish = false;
+    void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform, float _currentTime);
 
 public:
-    float currentTime = 0.0f;
     AssimpNodeData rootNode;
     std::map<std::string, BoneInfo> boneInfoMap;
     std::vector<Mat4> finalBonesMatrices;
@@ -46,5 +44,5 @@ public:
 
     void RemoveFromResourcesManager() override;
 
-    void UpdateAnimation(float _deltaTime, bool _loop = true);
+    void UpdateAnimation(float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish);
 };
