@@ -45,7 +45,10 @@
                             "value3": 5,
                             "value4": 1,
                             "value5": 1,
-                            "value6": {
+                            "value6": 0.5,
+                            "value7": 2.0,
+                            "value8": 0.6000000238418579,
+                            "value9": {
                                 "value0": true,
                                 "value1": "SlimeEnemy"
                             }

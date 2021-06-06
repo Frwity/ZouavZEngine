@@ -135,6 +135,9 @@
                         "value3": 116,
                         "value4": 1,
                         "value5": 1,
+ 		   	"value6": 0.5,
+                        "value7": 1.0,
+                        "value8": 0.10000000149011612,
                         "value6": {
                             "value0": true,
                             "value1": "Player"
@@ -466,6 +469,9 @@
                             "value3": 5,
                             "value4": 1,
                             "value5": 1,
+ 			    "value6": 0.5,
+                            "value7": 1.0,
+                            "value8": 0.10000000149011612,
                             "value6": {
                                 "value0": true,
                                 "value1": "SlimeEnemy"
