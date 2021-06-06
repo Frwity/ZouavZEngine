@@ -38,7 +38,8 @@ RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
 
 void RigidBody::SetLinearVelocity(const class Vec3& _v)
 {
-	((PxRigidBody*)actor)->setLinearVelocity(PxVec3FromVec3(_v));
+	if(isActive)
+		((PxRigidBody*)actor)->setLinearVelocity(PxVec3FromVec3(_v));
 }
 
 void RigidBody::AddForce(const class Vec3& _v)
