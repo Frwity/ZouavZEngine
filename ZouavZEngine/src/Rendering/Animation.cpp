@@ -61,20 +61,24 @@ void Animation::Editor()
         ImGui::EndDragDropTarget();
     }
 
-    if(currentAnimation)
+    if (currentAnimation)
+    {
         ImGui::InputFloat("AnimationDuration", &currentAnimation->animationSpeed);
-
+        ImGui::Checkbox("Loop", &loop);
+    }
     if (ImGui::Button("Play"))
     {
         play = !play;
 
         if(currentAnimation)
-            currentAnimation->currentTime = 0.0f;
+            currentTime = 0.0f;
     }
 }
 
 void Animation::Play(std::string _animName)
 {
+    currentTime = 0.0f;
+    animationFinish = false;
     currentAnimation = animationsAttached.find(_animName)->second;
     play = true;
 }
@@ -84,10 +88,15 @@ bool Animation::IsPlaying(std::string _animName)
     return currentAnimation->GetName().compare(_animName) == 0 && IsPlaying();
 }
 
+bool Animation::IsFinish(std::string _animName)
+{
+    return currentAnimation->GetName().compare(_animName) == 0 && IsFinish();
+}
+
 void Animation::Draw(const Camera& _camera)
 {
     if (play && currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), loop);
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), loop, currentTime, animationFinish);
     else
         return;
 

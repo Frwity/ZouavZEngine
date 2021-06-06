@@ -37,3 +37,8 @@ void Zombie::PlayIdleAnimation()
 	if (animation)
 		animation->Play("Zombie Idle.fbx");
 }
+
+bool Zombie::CanAttack()
+{
+	return animation->IsFinish("Zombie Punching.fbx") || !animation->IsPlaying("Zombie Punching.fbx");
+}
