@@ -44,7 +44,10 @@ public :
     {
         _ar(animationsAttached.size());
         for (std::pair<std::string, std::shared_ptr<AnimResource>> element : animationsAttached)
+        {
             _ar(element.second->GetName());
+            _ar(element.second->GetPath());
+        }
 
         _ar(cereal::base_class<Component>(this));
     }
