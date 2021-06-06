@@ -32,5 +32,6 @@ public:
 	void SetVector4(const std::string& name, const Vec4& v) const;
 	void SetVector2(const std::string& name, const Vec2& v) const;
 	void SetMatrix(const std::string& name, const Mat4& mat) const;
+	void SetMatrices(const std::string& _name, const float* _mat, unsigned int size) const;
 	void SetLight(const std::vector<class Light*>& lights);
 };

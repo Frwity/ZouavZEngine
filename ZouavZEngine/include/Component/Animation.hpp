@@ -55,7 +55,7 @@ public :
             _ar(element.second->animationSpeed);
             _ar(element.second->loop);
         }
-        _ar(idleAnimation->GetName());
+        _ar(idleAnimation ? idleAnimation->GetName() : "NoIdle");
 
         _ar(cereal::base_class<Component>(this));
     }

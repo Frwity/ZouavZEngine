@@ -117,8 +117,7 @@ void Animation::Draw(const Camera& _camera)
     animationShader->SetMatrix("projection", _camera.GetProjectionMatrix());
     animationShader->SetVector4("color", color);
 
-    for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
-        animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
+    animationShader->SetMatrices("finalBonesMatrices", currentAnimation->finalBonesMatrices.data(), currentAnimation->finalBonesMatrices.size() / 16);
     
     animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
 
@@ -172,5 +171,7 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
         }
         _construct->animationsAttached.insert(std::make_pair(animNames[i], anim));
     }
-    _construct->idleAnimation = _construct->animationsAttached.find(idleAnimName)->second;
+    
+    if(idleAnimName.compare("NoIdle") != 0)
+        _construct->idleAnimation = _construct->animationsAttached.find(idleAnimName)->second;
 }

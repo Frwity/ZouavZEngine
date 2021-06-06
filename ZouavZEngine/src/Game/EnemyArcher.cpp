@@ -20,6 +20,8 @@ void EnemyArcher::Editor()
 void EnemyArcher::Begin()
 {
 	Enemy::Begin();
+	attackAnim = "Range Zombie Attack.fbx";
+	walkAnim = "Zombie Walk.fbx";
 }
 
 void EnemyArcher::Update()

@@ -32,7 +32,7 @@ private:
 public:
     AssimpNodeData rootNode;
     std::map<std::string, BoneInfo> boneInfoMap;
-    std::vector<Mat4> finalBonesMatrices;
+    std::vector<float> finalBonesMatrices;
     float duration;
     int tickPerSecond;
     float animationSpeed = 0.2f;
