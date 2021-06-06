@@ -84,21 +84,25 @@ void ShapeCollision::UpdateShapeTransform()
 	
 	if (rigid)
 	{
-		int i = 0;
-		shapeActor = (physx::PxShape**)malloc(sizeof(physx::PxShape*) * rigid->actor->getNbShapes());
-		int j = rigid->actor->getShapes(shapeActor, rigid->actor->getNbShapes());
+		//int i = 0;
+		//shapeActor = (physx::PxShape**)malloc(sizeof(physx::PxShape*) * rigid->actor->getNbShapes());
+		//int j = rigid->actor->getShapes(shapeActor, rigid->actor->getNbShapes());
 
-  		while(i++ < j - 1)
-			if (shapeActor[i] == shape)
-				shape->setLocalPose(PxTransformFromTransformLocal(transform));
+  //		while(i++ < j - 1)
+		//	if (shapeActor[i] == shape)
+		//		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 
-		free(shapeActor);
+		//free(shapeActor);
+		shape->setLocalPose(PxTransformFromTransformLocal(transform));
 	}
 }
 
-void ShapeCollision::AttachToRigidComponent()
+void ShapeCollision::AttachToRigidComponent(Rigid* _toAttach)
 {
 	Rigid* rigid = GetGameObject().GetComponent<Rigid>();
+
+	if (!rigid)
+		rigid = _toAttach;
 
 	if (rigid)
 	{

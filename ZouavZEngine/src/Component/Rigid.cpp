@@ -57,8 +57,10 @@ void Rigid::AttachShape()
 			collision->isAttach = true;
 
 			collision->shape = physx::PxRigidActorExt::createExclusiveShape(*actor, *collision->geometry, *collision->material);
-			if(!collision->shape)
+			if (!collision->shape)
 				Debug::LogError("Attach to shape failed !");
+			else
+				collision->UpdateScale(this);
 		}
 	}
 }

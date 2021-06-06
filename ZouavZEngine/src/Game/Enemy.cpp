@@ -47,6 +47,7 @@ void Enemy::Update()
 	if (player && !IsAttacking())
 	{
 		Vec3 direction = player->WorldPosition() - GetGameObject().WorldPosition();
+		direction.y = 0;
 
 		float distanceToPlayer = direction.GetMagnitude();
 
@@ -75,21 +76,4 @@ void Enemy::Update()
 
 	if (animation && !animation->IsPlaying())
 		PlayIdleAnimation();
-}
-
-void Enemy::PlayWalkAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Walk.fbx");
-}
-
-void Enemy::PlayAttackAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Punching.fbx");
-}
-void Enemy::PlayIdleAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Idle.fbx");
 }

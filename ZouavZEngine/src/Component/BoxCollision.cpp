@@ -42,16 +42,19 @@ void BoxCollision::Editor()
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void BoxCollision::UpdateScale()
+void BoxCollision::UpdateScale(Rigid* _toAttach)
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	if (!rigid)
+		rigid = _toAttach;
 
 	if (rigid && shape)
 		rigid->actor->detachShape(*shape);
 
 	geometry = new PxBoxGeometry(PxVec3FromVec3(halfExtends * gameObject->WorldScale()) / 2.0f);
 
-	AttachToRigidComponent();
+	AttachToRigidComponent(_toAttach);
 	if(shape)
 		shape->userData = this;
 

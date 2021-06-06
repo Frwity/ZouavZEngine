@@ -47,6 +47,7 @@ public :
         {
             _ar(element.second->GetName());
             _ar(element.second->GetPath());
+            _ar(element.second->animationSpeed);
         }
 
         _ar(cereal::base_class<Component>(this));

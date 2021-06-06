@@ -288,6 +288,9 @@
     <ClCompile Include="src\Game\EnemyManager.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Zombie.cpp">
+        <Filter>src\Game</Filter>
+     </ClCompile>
   <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +522,9 @@
     <ClInclude Include="include\Game\EnemyManager.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\Game\Zombie.hpp">
+        <Filter>include\Game</Filter>
+     </ClInclude>
   <!--Include End-->
   </ItemGroup>
 </Project>

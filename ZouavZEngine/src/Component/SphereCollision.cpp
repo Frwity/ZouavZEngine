@@ -40,11 +40,14 @@ void SphereCollision::Editor()
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void SphereCollision::UpdateScale()
+void SphereCollision::UpdateScale(Rigid* _toAttach)
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
 
-	if (rigid)
+	if (!rigid)
+		rigid = _toAttach;
+
+	if (rigid && shape)
 		rigid->actor->detachShape(*shape);
 
 	//TODO world scale

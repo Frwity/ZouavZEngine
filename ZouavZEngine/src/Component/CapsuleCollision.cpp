@@ -45,11 +45,14 @@ void CapsuleCollision::Editor()
 	ImGui::Checkbox("isTrigger", &isTrigger);
 }
 
-void CapsuleCollision::UpdateScale()
+void CapsuleCollision::UpdateScale(Rigid* _toAttach)
 {
 	Rigid* rigid = gameObject->GetComponent<Rigid>();
+
+	if (!rigid)
+		rigid = _toAttach;
 	
-	if (rigid)
+	if (rigid && shape)
 		rigid->actor->detachShape(*shape);
 	
 	//TODO use gameObject->WorldScale()

@@ -14,7 +14,7 @@ public:
 	~SphereCollision() = default;
 
 	void Editor() override;
-	void UpdateScale();
+	void UpdateScale(class Rigid* _toAttach = nullptr) override;
 	void DrawGizmos(const Camera& _camera) override;
 
 	template <class Archive>

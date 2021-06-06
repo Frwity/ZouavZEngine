@@ -15,7 +15,7 @@ public:
 
 	void Editor() override;
 	void DrawGizmos(const Camera& _camera) override;
-	void UpdateScale() override;
+	void UpdateScale(class Rigid* _toAttach = nullptr) override;
 
 	template <class Archive>
 	void serialize(Archive& _ar)
@@ -37,6 +37,7 @@ public:
 		_ar(t.localPosition, t.localRotation, t.localScale);
 
 		_construct(GameObject::currentLoadedGameObject, halfExtends, trigger, t);
+		_construct->UpdateScale();
 		_ar(cereal::base_class<Component>(_construct.ptr()));
 	}
 };

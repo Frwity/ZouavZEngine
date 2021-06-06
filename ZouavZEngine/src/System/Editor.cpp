@@ -697,7 +697,7 @@ void Editor::DisplaySceneWindow(const class Render& _render, class Framebuffer& 
 
         ImGui::Image((ImTextureID)_framebuffer.getTexture(), ImVec2((float)_framebuffer.getWidth(), (float)_framebuffer.getHeight()), ImVec2(0,1), ImVec2(1,0));
 
-        if (gameObjectInspector)
+        if (gameObjectInspector && gameObjectInspector->parent)
         {
             ImGuizmo::Enable(true);
 

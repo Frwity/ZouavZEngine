@@ -22,7 +22,7 @@ protected:
 	Transform transform;
 	std::shared_ptr<Shader> gizmoShader;
 	std::shared_ptr<Mesh> gizmoMesh;
-	void AttachToRigidComponent();
+	void AttachToRigidComponent(class Rigid* _toAttach = nullptr);
 	void InternalActivate() override;
 	void InternalDeactivate() override;
 	bool isTrigger = false;
@@ -45,7 +45,7 @@ public:
 	virtual void Editor() override;
 	virtual void DrawGizmos(const Camera& _camera);
 	void UpdateShapeTransform();
-	virtual void UpdateScale() { };
+	virtual void UpdateScale(class Rigid* _toAttach = nullptr) { };
 		
 	void Activate() override;
 	void Deactivate() override;

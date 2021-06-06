@@ -26,9 +26,9 @@ RigidBody::RigidBody(GameObject* _gameObject, std::string _name)
 
 	actor->userData = _gameObject;
 
-	AttachShape();
-
 	PhysicSystem::scene->addActor(*actor);
+
+	AttachShape();
 
 	if (!_gameObject->IsActive())
 		InternalDeactivate();

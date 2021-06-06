@@ -9,10 +9,10 @@ using namespace physx;
 Plane::Plane(GameObject* _gameObject, std::string _name)
 	: ShapeCollision(_gameObject)
 {
-	shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
-	name = _name;
+	//shape = PhysicSystem::physics->createShape(PxPlaneGeometry(), *material);
+	//name = _name;
 
-	AttachToRigidComponent();
+	//AttachToRigidComponent();
 }
 
 Plane::~Plane()

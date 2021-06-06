@@ -103,8 +103,7 @@ void Animation::Draw(const Camera& _camera)
     for (int i = 0; i < currentAnimation->finalBonesMatrices.size(); ++i)
         animationShader->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", currentAnimation->finalBonesMatrices[i]);
     
-    //temp fix mesh scale
-    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale() / 100));
+    animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
 
     text->Use();
     glBindVertexArray(mesh->GetID());
@@ -117,16 +116,20 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     int animAttachSize = 0;
     std::vector<std::string> animNames;
     std::vector<std::string> animPaths;
+    std::vector<float> animSpeeds;
     
     _ar(animAttachSize);
     for (int i = 0; i < animAttachSize; i++)
     {
         std::string name;
         std::string path;
+        float speed;
         _ar(name);
         _ar(path);
+        _ar(speed);
         animNames.push_back(name);
         animPaths.push_back(path);
+        animSpeeds.push_back(speed);
     }
 
     _construct(GameObject::currentLoadedGameObject);
@@ -134,6 +137,7 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     for (int i = 0; i < animAttachSize; i++)
     {
         std::shared_ptr<AnimResource> anim = *ResourcesManager::AddResourceAnimation(animNames[i], true, animPaths[i]);
+        anim->animationSpeed = animSpeeds[i];
         MeshRenderer* meshRenderer = _construct->gameObject->GetComponent<MeshRenderer>();
 
         if (meshRenderer)
