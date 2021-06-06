@@ -67,22 +67,23 @@ void AnimResource::RemoveFromResourcesManager()
 
 }
 
-void AnimResource::UpdateAnimation(float _deltaTime, bool _loop)
+void AnimResource::UpdateAnimation(float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish)
 {
-	currentTime += tickPerSecond  * animationSpeed * _deltaTime;
-	
-	if (currentTime >= duration)
+	if (!_animationFinish)
 	{
-		currentTime = 0.0f;
-		animationFinish = true;
+		_currentTime += tickPerSecond * animationSpeed * _deltaTime;
+
+		if (_currentTime >= duration)
+		{
+			_currentTime = 0.0f;
+			_animationFinish = true;
+		}
 	}
+	if (_animationFinish && _loop)
+		_animationFinish = false;
 
-	if (animationFinish && _loop)
-		animationFinish = false;
-
-	if(!animationFinish)
-		CalculateBoneTransform(&rootNode, Mat4::identity);
-	
+	if(!_animationFinish)
+		CalculateBoneTransform(&rootNode, Mat4::identity, _currentTime);	
 }
 
 void AnimResource::ReadMissingBones(const aiAnimation* animation)
@@ -135,7 +136,7 @@ Bone* AnimResource::FindBone(const std::string& _boneName)
 		return &(*iter);
 }
 
-void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform)
+void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform, float _currentTime)
 {
 	std::string nodeName = _node->name;
 	Mat4 nodeTransform = _node->transformation;
@@ -144,7 +145,7 @@ void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _par
 
 	if (Bone)
 	{
-		Bone->Update(currentTime);
+		Bone->Update(_currentTime);
 		nodeTransform = Bone->localTransform;
 	}
 
@@ -159,5 +160,5 @@ void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _par
 	}
 
 	for (int i = 0; i < _node->childrenCount; i++)
-		CalculateBoneTransform(&_node->children[i], globalTransformation);
+		CalculateBoneTransform(&_node->children[i], globalTransformation, _currentTime);
 }

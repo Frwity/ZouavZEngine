@@ -18,6 +18,8 @@ protected:
     Vec4 damageColor{ 1.0f, 0.0f, 0.0f, 1.0f };
     float invulnerabilityFrame = 1.0f;
     float invulnerabilityTimer = 0.0f;
+    float beforeAttack = 0.1f;
+    float timerBeforeAttack = 0.0f;
     int life = 5;
     int maxLife = 5;
     int attackDamage = 1;
@@ -45,6 +47,8 @@ public:
     virtual void PlayDamageAnimation() {};
     virtual void PlayDeathAnimation() {};
 
+    virtual bool CanAttack() { return true; }
+
     void OnAddComponent() override;
 
     void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
@@ -53,6 +57,7 @@ public:
     bool IsAlive() const { return life > 0; }
     bool IsAttacking() const;
     bool Damage(int _damage);
+    void NeedToAttack();
     virtual void Attack();
     virtual void StopAttack();
     virtual void OnDeath() {};
@@ -60,14 +65,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
-        _ar(damageColor, invulnerabilityFrame, life, maxLife, attackDamage, level);
+        _ar(damageColor, invulnerabilityFrame, life, maxLife, attackDamage, level, attackDuration, attackCooldown, beforeAttack);
         _ar(cereal::base_class<Component>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<ICharacter>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
-        _ar(_construct->damageColor, _construct->invulnerabilityFrame, _construct->life, _construct->maxLife, _construct->attackDamage, _construct->level);
+        _ar(_construct->damageColor, _construct->invulnerabilityFrame, _construct->life, _construct->maxLife, _construct->attackDamage, _construct->level, _construct->attackDuration, _construct->attackCooldown, _construct->beforeAttack);
         _ar(cereal::base_class<Component>(_construct.ptr()));
     }
 };

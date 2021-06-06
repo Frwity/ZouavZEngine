@@ -34,8 +34,6 @@ void ICharacter::OnAddComponent()
 	attackCollision->SetName("Attack Collision");
 	attackCollision->SetTrigger(true);
 	attackCollision->Deactivate();
-	attackCollision->halfExtends.z = 1.5f;
-	attackCollision->EditPosition({ 0.0f, 0.0f, 1.25f });
 	baseColor = material->color;
 	GetGameObject().AddComponent<FontComponent>();
 	audioBroadcaster = GetGameObject().AddComponent<AudioBroadcaster>();
@@ -71,6 +69,10 @@ void ICharacter::Editor()
 	ImGui::ColorEdit4("Damage Color : ", &damageColor.x);
 	ImGui::DragInt("Life : ", &life, 1.0f, 0, maxLife);
 	ImGui::DragInt("Max Life : ", &maxLife, 1.0f, 0, 1000000);
+	ImGui::DragFloat("Time before attack : ", &beforeAttack, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("Attack Cooldown", &attackCooldown, 0.1f, 0.f);
+	ImGui::DragFloat("Invulnerability Fram", &invulnerabilityFrame, 0.1f, 0.f);
+	ImGui::DragFloat("Attack Duration", &attackDuration, 0.1f, 0.f);
 }
 
 void ICharacter::Begin()
@@ -92,6 +94,9 @@ void ICharacter::Begin()
 	animation = GetGameObject().GetComponent<Animation>();
 	life > maxLife ? life = maxLife : 0;
 	PlayIdleAnimation();
+	timerAttackCooldown = attackCooldown;
+	timerAttackDuration = attackDuration;
+	timerBeforeAttack = beforeAttack;
 }
 
 void ICharacter::Update()
@@ -99,18 +104,25 @@ void ICharacter::Update()
 	if (!IsAlive())
 		return;
 
-	if (timerAttackCooldown >= 0.0f)
-		timerAttackCooldown -= TimeManager::GetDeltaTime();
+	if (timerAttackCooldown < attackCooldown)
+		timerAttackCooldown += TimeManager::GetDeltaTime();
 
-	if (timerAttackDuration >= 0.0f)
+	if (timerAttackDuration < attackDuration)
 	{
-		timerAttackDuration -= TimeManager::GetDeltaTime();
+		timerAttackDuration += TimeManager::GetDeltaTime();
 
-		if (timerAttackDuration < 0.0f)
+		if (timerAttackDuration > attackDuration)
 		{
 			StopAttack();
-			timerAttackCooldown = attackCooldown;
+			timerAttackCooldown = 0.0f;
 		}
+	}
+
+	if (timerBeforeAttack < beforeAttack)
+	{
+		timerBeforeAttack += TimeManager::GetDeltaTime();
+		if (timerBeforeAttack > beforeAttack)
+			Attack();
 	}
 
 	if (asTakenDamage)
@@ -161,11 +173,19 @@ bool ICharacter::Damage(int _damage)
 	return true;
 }
 
+void ICharacter::NeedToAttack()
+{
+	if (CanAttack())
+	{
+		timerBeforeAttack = 0.0f;
+		PlayAttackAnimation();
+	}
+}
+
 void ICharacter::Attack()
 {
 	attackCollision->Activate();
-	timerAttackDuration = attackDuration;
-	PlayAttackAnimation();
+	timerAttackDuration = 0.0f;
 }
 
 void ICharacter::StopAttack()
