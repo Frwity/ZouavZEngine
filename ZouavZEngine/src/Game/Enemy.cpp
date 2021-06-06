@@ -7,6 +7,7 @@
 #include "Component/RigidBody.hpp"
 #include "Game/Enemy.hpp"
 #include "Game/EnemyManager.hpp"
+#include <imgui.h>
 
 Enemy::Enemy(GameObject * _gameobject, std::string _name)
 : ICharacter(_gameobject, _name)
@@ -24,12 +25,17 @@ void Enemy::OnDeath()
 void Enemy::Editor()
 {
 	ICharacter::Editor();
+	ImGui::DragFloat("Detection Distance", &detectionDistance, 0.1f, 0.f);
+	ImGui::DragFloat("Distance To Attack", &distanceToAttack, 0.1f, 0.f);
+	ImGui::DragFloat("Distance To Stop", &distanceToStop, 0.1f, 0.f);
+	ImGui::DragFloat("Speed", &speed, 0.1f, 0.f);
 }
 
 void Enemy::Begin()
 {
 	ICharacter::Begin();
 	player = GameObject::GetGameObjectByTag("Player");
+	distanceToAttack = 5.0f;
 }
 
 void Enemy::Update()
@@ -66,8 +72,8 @@ void Enemy::Update()
 				PlayWalkAnimation();
 			}
 
-			if (distanceToPlayer < distanceToAttack && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
-				Attack();
+			if (distanceToPlayer < distanceToAttack && timerAttackCooldown >= attackCooldown && timerAttackDuration >= attackDuration && timerBeforeAttack >= beforeAttack)
+				NeedToAttack();
 		}
 
 		else if (linearVelocity.x * linearVelocity.x > 0.1f || linearVelocity.z * linearVelocity.z > 0.1f)

@@ -61,6 +61,8 @@ void Player::Begin()
 	attackDamage += attackDamageGain * (level - 1);
 	maxLife += lifeGain * (level - 1);
 	ICharacter::Begin();
+	timerDashCooldown = dashCooldown;
+	timerDashDuration = dashDuration;
 }
 
 void Player::Update()
@@ -68,17 +70,17 @@ void Player::Update()
 	if (!IsAlive())
 		return;
 
-	if (timerDashCooldown >= 0.0f)
-		timerDashCooldown -= TimeManager::GetDeltaTime();
+	if (timerDashCooldown < dashCooldown)
+		timerDashCooldown += TimeManager::GetDeltaTime();
 
-	if (timerDashDuration >= 0.0f)
+	if (timerDashDuration < dashDuration)
 	{
-		timerDashDuration -= TimeManager::GetDeltaTime();
+		timerDashDuration += TimeManager::GetDeltaTime();
 
-		if (timerDashDuration < 0.0f)
+		if (timerDashDuration > dashDuration)
 		{
 			isDashing = false;
-			timerDashCooldown = attackCooldown;
+			timerDashCooldown = 0.0f;
 		}
 	}
 
@@ -122,7 +124,7 @@ void Player::Update()
 	if (InputManager::GetKeyPressedOneTime(E_KEYS::LCTRL))
 	{
 		isDashing = true;
-		timerDashDuration = dashDuration;
+		timerDashDuration = 0.0f;
 
 		if (direction.GetSquaredMagnitude() > 0.01f)
 			direction = GetGameObject().Forward();
@@ -151,8 +153,8 @@ void Player::Update()
 		rb->SetLinearVelocity(Vec3(0.0f, TimeManager::GetDeltaTime() * speed * 100.0f, 0.0f));
 	}
 
-	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown < 0.0f && timerAttackDuration < 0.0f)
-		Attack();
+	if (InputManager::GetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && timerAttackCooldown >= attackCooldown && timerAttackDuration >= attackDuration && timerBeforeAttack >= beforeAttack)
+		NeedToAttack();
 }
 
 void Player::ManageXp(const Enemy& _enemyKilled)
