@@ -33,8 +33,14 @@ void Animation::Editor()
 {
     if (ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation))
     {
-        if(currentAnimation)
+        if (currentAnimation)
             currentAnimation->UpdateAnimationResources(mesh);
+    }
+
+    if (ResourcesManager::ResourceChanger<AnimResource>("Idle Animation", idleAnimation))
+    {
+        if (idleAnimation)
+            idleAnimation->UpdateAnimationResources(mesh);
     }
 
     if (ImGui::BeginDragDropTarget())
@@ -64,7 +70,7 @@ void Animation::Editor()
     if (currentAnimation)
     {
         ImGui::InputFloat("AnimationDuration", &currentAnimation->animationSpeed);
-        ImGui::Checkbox("Loop", &loop);
+        ImGui::Checkbox("Loop", &currentAnimation->loop);
     }
     if (ImGui::Button("Play"))
     {
@@ -95,10 +101,12 @@ bool Animation::IsFinish(std::string _animName)
 
 void Animation::Draw(const Camera& _camera)
 {
-    if (play && currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), loop, currentTime, animationFinish);
+    if (currentAnimation)
+        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), currentAnimation->loop, currentTime, animationFinish);
     else
         return;
+    if (IsFinish())
+        Play(idleAnimation->GetName());
 
     if(!mesh)
         return;
@@ -126,6 +134,7 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
     std::vector<std::string> animNames;
     std::vector<std::string> animPaths;
     std::vector<float> animSpeeds;
+    std::vector<bool> animLoops;
     
     _ar(animAttachSize);
     for (int i = 0; i < animAttachSize; i++)
@@ -133,20 +142,28 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
         std::string name;
         std::string path;
         float speed;
+        bool loop;
         _ar(name);
         _ar(path);
         _ar(speed);
+        _ar(loop);
         animNames.push_back(name);
         animPaths.push_back(path);
         animSpeeds.push_back(speed);
+        animLoops.push_back(loop);
     }
+    
+    std::string idleAnimName;
+    _ar(idleAnimName);
 
     _construct(GameObject::currentLoadedGameObject);
+    
     _ar(cereal::base_class<Component>(_construct.ptr()));
     for (int i = 0; i < animAttachSize; i++)
     {
         std::shared_ptr<AnimResource> anim = *ResourcesManager::AddResourceAnimation(animNames[i], true, animPaths[i]);
         anim->animationSpeed = animSpeeds[i];
+        anim->loop = animLoops[i];
         MeshRenderer* meshRenderer = _construct->gameObject->GetComponent<MeshRenderer>();
 
         if (meshRenderer)
@@ -155,4 +172,5 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
         }
         _construct->animationsAttached.insert(std::make_pair(animNames[i], anim));
     }
+    _construct->idleAnimation = _construct->animationsAttached.find(idleAnimName)->second;
 }

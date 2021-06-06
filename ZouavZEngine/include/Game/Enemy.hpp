@@ -16,6 +16,8 @@ protected:
 
     float decayTimer = 0.0f;
     float timeToDecay = 10.f;
+    std::string attackAnim;
+    std::string walkAnim;
 
 public:
     Enemy() = delete;
