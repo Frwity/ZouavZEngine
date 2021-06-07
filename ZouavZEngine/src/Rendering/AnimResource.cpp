@@ -6,6 +6,8 @@
 AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh)
 	:Resource(_name, _path.c_str())
 {
+	bones.clear();
+	rootNode.children.clear();
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
@@ -83,6 +85,8 @@ void AnimResource::AssignBoneToNode(std::map<std::string, BoneInfo>& _boneInfoMa
 
 void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 {
+	bones.clear();
+	rootNode.children.clear();
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
@@ -100,6 +104,7 @@ void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 	std::map<std::string, BoneInfo> boneInfoMap = mesh->boneInfoMap;
 
 	finalBonesMatrices.clear();
+	finalBonesMatrices.shrink_to_fit();
 	finalBonesMatrices.reserve(100 * 16);
 	Mat4 mat = Mat4::identity;
 	for (int i = 0; i < 100; i++)
@@ -164,6 +169,7 @@ void AnimResource::UpdateAnimation(float _deltaTime, bool _loop, float& _current
 
 void AnimResource::ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMap, const aiAnimation* animation)
 {
+	bones.clear();
 	for (int i = 0; i < animation->mNumChannels; i++)
 	{
 		auto channel = animation->mChannels[i];
@@ -175,8 +181,8 @@ void AnimResource::ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMa
 			_boneInfoMap[boneName].id = mesh->boneCounter;
 			mesh->boneCounter++;
 		}
-		bones.push_back(Bone(channel->mNodeName.data,
-			_boneInfoMap[channel->mNodeName.data].id, channel));
+		bones.emplace_back(Bone{ channel->mNodeName.data,
+			_boneInfoMap[channel->mNodeName.data].id, channel });
 	}
 
 	mesh->boneInfoMap = _boneInfoMap;
@@ -184,6 +190,8 @@ void AnimResource::ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMa
 
 void AnimResource::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
 {
+	dest.children.clear();
+
 	dest.name = src->mName.data;
 	dest.transformation = Mat4::ConvertAssimpMatrixToMat4(src->mTransformation);
 	dest.childrenCount = src->mNumChildren;
@@ -192,7 +200,7 @@ void AnimResource::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
 	{
 		AssimpNodeData newData;
 		ReadHeirarchyData(newData, src->mChildren[i]);
-		dest.children.push_back(newData);
+		dest.children.emplace_back(newData);
 	}
 }
 int fast_compare(const char* ptr0, const char* ptr1, int len) {

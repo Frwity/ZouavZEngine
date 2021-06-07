@@ -180,7 +180,7 @@ static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct
 	for (int i = 0; i < soundsSize; i++)
 	{
 		_ar(soundName);
-		_construct->sounds.emplace_back(*ResourcesManager::GetResource<Sound>(soundName));
+		_construct->sounds.emplace_back(*ResourcesManager::AddResourceSound(soundName));
 	}
 
 	_ar(cereal::base_class<Component>(_construct.ptr()));

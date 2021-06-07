@@ -7,16 +7,16 @@ Bone::Bone(const std::string& _name, int _id, const aiNodeAnim* channel):
     id(_id),
     localTransform(Mat4::identity)
 {
+    positions.clear();
+    rotations.clear();
+    scales.clear();
     nbPositionsKeys = channel->mNumPositionKeys;
 
     for (int positionIndex = 0; positionIndex < nbPositionsKeys; ++positionIndex)
     {
         aiVector3D aiPosition = channel->mPositionKeys[positionIndex].mValue;
         float timeStamp = channel->mPositionKeys[positionIndex].mTime;
-        KeyPosition data;
-        data.position = { aiPosition.x, aiPosition.y, aiPosition.z };
-        data.timeStamp = timeStamp;
-        positions.push_back(data);
+        positions.emplace_back(KeyPosition{ { aiPosition.x, aiPosition.y, aiPosition.z }, timeStamp });
     }
 
     nbRotationsKeys = channel->mNumRotationKeys;
@@ -25,10 +25,7 @@ Bone::Bone(const std::string& _name, int _id, const aiNodeAnim* channel):
     {
         aiQuaternion aiOrientation = channel->mRotationKeys[rotationIndex].mValue;
         float timeStamp = channel->mRotationKeys[rotationIndex].mTime;
-        KeyRotation data;
-        data.orientation = { aiOrientation.w, aiOrientation.x, aiOrientation.y, aiOrientation.z };
-        data.timeStamp = timeStamp;
-        rotations.push_back(data);
+        rotations.emplace_back(KeyRotation{ {aiOrientation.w, aiOrientation.x, aiOrientation.y, aiOrientation.z}, timeStamp });
     }
 
     nbScalesKeys = channel->mNumScalingKeys;
@@ -36,10 +33,7 @@ Bone::Bone(const std::string& _name, int _id, const aiNodeAnim* channel):
     {
         aiVector3D scale = channel->mScalingKeys[keyIndex].mValue;
         float timeStamp = channel->mScalingKeys[keyIndex].mTime;
-        KeyScale data;
-        data.scale = { scale.x, scale.y, scale.z };
-        data.timeStamp = timeStamp;
-        scales.push_back(data);
+        scales.emplace_back(KeyScale{ { scale.x, scale.y, scale.z }, timeStamp });
     }
 }
 

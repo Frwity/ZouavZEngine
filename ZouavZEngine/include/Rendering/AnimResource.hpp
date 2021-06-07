@@ -34,7 +34,6 @@ private:
 
 public:
     AssimpNodeData rootNode;
-    //std::map<std::string, BoneInfo> boneInfoMap;
     std::vector<float> finalBonesMatrices;
     float duration;
     int tickPerSecond;
