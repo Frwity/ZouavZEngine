@@ -63,6 +63,10 @@ void AnimResource::AssignBoneToNode(std::map<std::string, BoneInfo>& _boneInfoMa
 
 void AnimResource::UpdateAnimationResources(AssimpNodeData* _rootNode, Mesh* _mesh)
 {
+	//no need to reread bone if mesh already set
+	if (mesh == _mesh)
+		return;
+
 	bones.clear();
 	rootNode.children.clear();
 	Assimp::Importer importer;
@@ -80,30 +84,6 @@ void AnimResource::UpdateAnimationResources(AssimpNodeData* _rootNode, Mesh* _me
 	mesh = _mesh;
 
 	std::map<std::string, BoneInfo> boneInfoMap = mesh->boneInfoMap;
-
-	finalBonesMatrices.clear();
-	finalBonesMatrices.shrink_to_fit();
-	finalBonesMatrices.reserve(100 * 16);
-	Mat4 mat = Mat4::identity;
-	for (int i = 0; i < 100; i++)
-	{
-		finalBonesMatrices.emplace_back(mat.matrix[0]);
-		finalBonesMatrices.emplace_back(mat.matrix[1]);
-		finalBonesMatrices.emplace_back(mat.matrix[2]);
-		finalBonesMatrices.emplace_back(mat.matrix[3]);
-		finalBonesMatrices.emplace_back(mat.matrix[4]);
-		finalBonesMatrices.emplace_back(mat.matrix[5]);
-		finalBonesMatrices.emplace_back(mat.matrix[6]);
-		finalBonesMatrices.emplace_back(mat.matrix[7]);
-		finalBonesMatrices.emplace_back(mat.matrix[8]);
-		finalBonesMatrices.emplace_back(mat.matrix[9]);
-		finalBonesMatrices.emplace_back(mat.matrix[10]);
-		finalBonesMatrices.emplace_back(mat.matrix[11]);
-		finalBonesMatrices.emplace_back(mat.matrix[12]);
-		finalBonesMatrices.emplace_back(mat.matrix[13]);
-		finalBonesMatrices.emplace_back(mat.matrix[14]);
-		finalBonesMatrices.emplace_back(mat.matrix[15]);
-	}
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(boneInfoMap, animation);
