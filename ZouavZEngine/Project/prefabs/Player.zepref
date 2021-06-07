@@ -45,8 +45,8 @@
                             "value3": 1.0
                         },
                         "value1": 1.0,
-                        "value2": 843,
-                        "value3": 843,
+                        "value2": 30,
+                        "value3": 30,
                         "value4": 1,
                         "value5": 1,
                         "value6": 0.5,
@@ -282,7 +282,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.3272950649261475,
+                    "value0": 0.9047784805297852,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,
@@ -302,7 +302,7 @@
                     "value17": 12.5,
                     "value18": -25.0,
                     "value19": 0.0,
-                    "value20": 2.0,
+                    "value20": 7.0,
                     "value21": 0.0,
                     "value22": true,
                     "value23": {
@@ -318,11 +318,11 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0,
+                    "value0": 0.0,
                     "value1": 1.0,
-                    "value2": 1.0,
+                    "value2": 0.20833349227905274,
                     "value3": 1.0,
-                    "value4": 0.0,
+                    "value4": 1.0,
                     "value5": 0.0,
                     "value6": 0.0,
                     "value7": 1.0,
@@ -344,12 +344,12 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0,
-                    "value1": 1.0,
+                    "value0": 0.0,
+                    "value1": 0.02978992462158203,
                     "value2": 1.0,
                     "value3": 1.0,
-                    "value4": 0.0,
-                    "value5": 0.0,
+                    "value4": 0.9431817531585693,
+                    "value5": 1.0,
                     "value6": 0.0,
                     "value7": 1.0,
                     "value8": 0.0,
