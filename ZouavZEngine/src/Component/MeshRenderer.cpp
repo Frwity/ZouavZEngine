@@ -21,7 +21,7 @@ MeshRenderer::MeshRenderer(GameObject* _gameObject, std::shared_ptr<Mesh>& _mesh
         animation->text = material.texture.get();
         
         if (animation->currentAnimation)
-            animation->currentAnimation->UpdateAnimationResources(mesh.get());
+            animation->currentAnimation->UpdateAnimationResources(&animation->rootNode, mesh.get());
     }
 }
 
@@ -37,7 +37,7 @@ MeshRenderer::MeshRenderer(GameObject* _gameObject, std::string _name)
         animation->text = material.texture.get();
 
         if (animation->currentAnimation)
-            animation->currentAnimation->UpdateAnimationResources(mesh.get());
+            animation->currentAnimation->UpdateAnimationResources(&animation->rootNode, mesh.get());
     }
 }
 
@@ -111,7 +111,7 @@ void MeshRenderer::MeshEditor()
             animComponent->mesh = mesh.get();
 
             if (animComponent->currentAnimation)
-                animComponent->currentAnimation->UpdateAnimationResources(animComponent->mesh);
+                animComponent->currentAnimation->UpdateAnimationResources(&animComponent->rootNode, animComponent->mesh);
         }
     }
 
@@ -135,7 +135,7 @@ void MeshRenderer::MeshEditor()
                 {
                     animComponent->mesh = mesh.get();
                     if (animComponent->currentAnimation)
-                        animComponent->currentAnimation->UpdateAnimationResources(animComponent->mesh);
+                        animComponent->currentAnimation->UpdateAnimationResources(&animComponent->rootNode, animComponent->mesh);
                 }
             }
         }

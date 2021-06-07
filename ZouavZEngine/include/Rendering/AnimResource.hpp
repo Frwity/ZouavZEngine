@@ -34,8 +34,6 @@ private:
 
 public:
     AssimpNodeData rootNode;
-    //std::map<std::string, BoneInfo> boneInfoMap;
-    //std::vector<float> finalBonesMatrices;
     float duration;
     int tickPerSecond;
     float animationSpeed = 0.2f;
@@ -45,9 +43,9 @@ public:
     AnimResource(const std::string& _name, std::string& _path, Mesh* _mesh = nullptr);
     ~AnimResource() = default;
 
-    void UpdateAnimationResources(Mesh* _mesh = nullptr);
+    void UpdateAnimationResources(AssimpNodeData* _rootNode, Mesh* _mesh = nullptr);
 
     void RemoveFromResourcesManager() override;
 
-    void UpdateAnimation(std::vector<float>* finalBonesMatrices, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish);
+    void UpdateAnimation(std::vector<float>* finalBonesMatrices, AssimpNodeData* _rootNode, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish);
 };
