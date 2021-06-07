@@ -35,7 +35,6 @@ void Enemy::Begin()
 {
 	ICharacter::Begin();
 	player = GameObject::GetGameObjectByTag("Player");
-	distanceToAttack = 5.0f;
 }
 
 void Enemy::Update()
@@ -74,7 +73,7 @@ void Enemy::Update()
 					if (animation && !animation->IsPlaying(walkAnimName))
 						animation->Play(walkAnimName);
 				}
-				else
+				else if (animation->IsFinish(attackAnimName) || animation->IsPlaying(walkAnimName))
 					animation->Play(idleAnimName);
 			}
 
