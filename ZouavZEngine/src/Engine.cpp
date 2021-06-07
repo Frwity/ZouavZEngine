@@ -142,6 +142,8 @@ void Engine::Update()
         GameObject::DestroyGameObjectIfNeedTo();
     }
 
+    GameObject::prefabGameObjects.clear();
+    ResourcesManager::Clear();
     GameObject::gameObjects.clear();
     scene.world.children.clear();
 }

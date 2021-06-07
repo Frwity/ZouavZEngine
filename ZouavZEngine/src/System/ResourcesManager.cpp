@@ -81,6 +81,17 @@ void ResourcesManager::ClearHasToBeDelete()
             it++;
 }
 
+void ResourcesManager::Clear()
+{
+    soundResources.clear();
+    meshResources.clear();
+    textureResources.clear();
+    shaderResources.clear();
+    fontResources.clear();
+    cubemapTextureResources.clear();
+    animationsResources.clear();
+}
+
 std::shared_ptr<Resource>& ResourcesManager::ResourceChangerImpl(const char* _label, std::shared_ptr<Resource>& _resource, const std::unordered_map<std::string, std::shared_ptr<Resource>>& _resources, bool& _changed)
 {
     if (ImGui::BeginCombo(_label, _resource ? _resource->GetName().c_str() : ""))
