@@ -120,6 +120,7 @@ void ShapeCollision::AttachToRigidComponent(Rigid* _toAttach)
 	if (rigid)
 	{
 		//ZASSERT(shape->getGeometryType() == physx::PxGeometryType::ePLANE && rigid->actor->is<physx::PxRigidDynamic>(), "Plane must be created with a RigidStatic");
+
 		shape = physx::PxRigidActorExt::createExclusiveShape(*rigid->actor, *geometry, *material);
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !isTrigger);
 		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, isTrigger);
