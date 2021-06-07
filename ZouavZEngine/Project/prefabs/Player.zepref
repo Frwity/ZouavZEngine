@@ -219,9 +219,12 @@
                     "value1": false,
                     "value2": 3,
                     "value3": "attack.wav",
-                    "value4": "damage.wav",
-                    "value5": "death.wav",
-                    "value6": {
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
@@ -279,7 +282,7 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0650943517684937,
+                    "value0": 1.3272950649261475,
                     "value1": 0.0,
                     "value2": 0.0,
                     "value3": 0.0,

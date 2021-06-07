@@ -35,11 +35,9 @@ void EnemyArcher::Attack()
 {
 	if (*arrow)
 	{
-		Arrow* arrowComp = GameObject::Instanciate(*arrow, GetGameObject().WorldPosition())->GetComponent<Arrow>();
+		Arrow* arrowComp = GameObject::Instanciate(*arrow, GetGameObject().WorldPosition() + Vec3::up * 3.0f)->GetComponent<Arrow>();
 		if (arrowComp)
-			arrowComp->Initiate(player->WorldPosition() - GetGameObject().WorldPosition(), attackDamage);
-		timerAttackCooldown = attackCooldown;
-		if (animation)
-			animation->Play("Range Zombie Attack.fbx");
+			arrowComp->Initiate((player->WorldPosition() - GetGameObject().WorldPosition() + Vec3::up * -0.5f).Normalized(), attackDamage);
+		timerAttackCooldown = 0.0f;
 	}
 }

@@ -3,7 +3,7 @@
     "value1": "Enemy",
     "value2": 0,
     "value3": {
-        "value0": 0.0,
+        "value0": 24.22603416442871,
         "value1": 0.0,
         "value2": -31.716312408447267
     },
@@ -47,7 +47,7 @@
                             "value5": 1,
                             "value6": 0.5,
                             "value7": 1.0,
-                            "value8": 0.10000000149011612,
+                            "value8": 0.5,
                             "value9": {
                                 "value0": true,
                                 "value1": "SlimeEnemy"
@@ -228,24 +228,29 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 3,
+                    "value0": 4,
                     "value1": "Slime Attack.fbx",
                     "value2": "Project/animations/Slime/Slime Attack.fbx",
-                    "value3": 0.20000000298023225,
+                    "value3": 0.699999988079071,
                     "value4": false,
                     "value5": true,
-                    "value6": "Slime Walk.fbx",
-                    "value7": "Project/animations/Slime/Slime Walk.fbx",
+                    "value6": "Slime Death.fbx",
+                    "value7": "Project/animations/Slime/Slime Death.fbx",
                     "value8": 0.20000000298023225,
-                    "value9": true,
-                    "value10": true,
-                    "value11": "Slime_Idle.fbx",
-                    "value12": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value13": 0.4000000059604645,
+                    "value9": false,
+                    "value10": false,
+                    "value11": "Slime Walk.fbx",
+                    "value12": "Project/animations/Slime/Slime Walk.fbx",
+                    "value13": 0.20000000298023225,
                     "value14": true,
-               	    "value15": true,
+                    "value15": true,
                     "value16": "Slime_Idle.fbx",
-                    "value17": {
+                    "value17": "Project/animations/Slime/Slime_Idle.fbx",
+                    "value18": 0.4000000059604645,
+                    "value19": true,
+                    "value20": true,
+                    "value21": "Slime_Idle.fbx",
+                    "value22": {
                         "value0": true,
                         "value1": "Animation"
                     }

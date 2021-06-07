@@ -75,6 +75,19 @@ void ShapeCollision::Editor()
 		transform.localRotation = Quaternion(localEulerAngles);
 		UpdateScale();
 	}
+
+	ImGui::Text("Material");
+	float value = material->getStaticFriction();
+	if (ImGui::DragFloat("Static friction", &value, 0.01f, 0.0f, 1.0f))
+		material->setStaticFriction(value);
+
+	value = material->getDynamicFriction();
+	if (ImGui::DragFloat("Dynamic friction", &value, 0.01f, 0.0f, 1.0f))
+		material->setDynamicFriction(value);
+
+	value = material->getRestitution();
+	if (ImGui::DragFloat("Restitution", &value, 0.01f, 0.0f, 1.0f))
+		material->setRestitution(value);
 }
 
 void ShapeCollision::UpdateShapeTransform()

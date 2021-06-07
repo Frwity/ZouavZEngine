@@ -174,13 +174,16 @@ static void AudioBroadcaster::load_and_construct(Archive& _ar, cereal::construct
 	_construct(GameObject::currentLoadedGameObject);
 	
 	std::string soundName;
+	std::string soundPath;
+
 	float soundsSize;
 	_ar(_construct->ambient, _construct->loop, soundsSize);
 
 	for (int i = 0; i < soundsSize; i++)
 	{
 		_ar(soundName);
-		_construct->sounds.emplace_back(*ResourcesManager::AddResourceSound(soundName));
+		_ar(soundPath);
+		_construct->sounds.emplace_back(*ResourcesManager::AddResourceSound(soundName, true, soundPath.c_str()));
 	}
 
 	_ar(cereal::base_class<Component>(_construct.ptr()));

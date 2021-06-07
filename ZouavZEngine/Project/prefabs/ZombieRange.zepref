@@ -32,7 +32,7 @@
                     },
                     "value1": {
                         "value0": 50.0,
-                        "value1": 5.0,
+                        "value1": 17.5,
                         "value2": 15.0,
                         "value3": 2.0,
                         "value4": 10.0,
@@ -48,9 +48,9 @@
                             "value3": 5,
                             "value4": 1,
                             "value5": 1,
-                            "value6": 0.5,
+                            "value6": 1.0,
                             "value7": 2.0,
-                            "value8": 0.6000000238418579,
+                            "value8": 1.0,
                             "value9": {
                                 "value0": true,
                                 "value1": "EnemyArcher"
@@ -217,8 +217,14 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
@@ -231,29 +237,34 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 4,
-                    "value1": "Zombie Walk.fbx",
-                    "value2": "Project/animations/Zombie/Zombie Walk.fbx",
-                    "value3": 0.20000000298023225,
-                    "value4": true,
+                    "value0": 5,
+                    "value1": "Range Zombie Attack.fbx",
+                    "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
+                    "value3": 0.6000000238418579,
+                    "value4": false,
                     "value5": true,
-                    "value6": "Range Zombie Attack.fbx",
-                    "value7": "Project/animations/Zombie/Range Zombie Attack.fbx",
-                    "value8": 0.20000000298023225,
-                    "value9": false,
+                    "value6": "Zombie Walk.fbx",
+                    "value7": "Project/animations/Zombie/Zombie Walk.fbx",
+                    "value8": 1.0,
+                    "value9": true,
                     "value10": true,
                     "value11": "Zombie Idle.fbx",
                     "value12": "Project/animations/Zombie/Zombie Idle.fbx",
-                    "value13": 0.20000000298023225,
+                    "value13": 0.4000000059604645,
                     "value14": true,
                     "value15": true,
                     "value16": "Zombie Death.fbx",
                     "value17": "Project/animations/Zombie/Zombie Death.fbx",
-                    "value18": 0.20000000298023225,
+                    "value18": 0.4000000059604645,
                     "value19": false,
                     "value20": false,
-                    "value21": "Zombie Idle.fbx",
-                    "value22": {
+                    "value21": "Zombie_Death.fbx",
+                    "value22": "Project/animations/Zombie/Zombie_Death.fbx",
+                    "value23": 0.4000000059604645,
+                    "value24": false,
+                    "value25": false,
+                    "value26": "Zombie Idle.fbx",
+                    "value27": {
                         "value0": true,
                         "value1": "Animation"
                     }

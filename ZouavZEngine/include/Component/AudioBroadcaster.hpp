@@ -43,7 +43,10 @@ public:
 	{
 		_ar(ambient, loop, sounds.size());
 		for (std::shared_ptr<Sound> sound : sounds)
+		{
 			_ar(sound->GetName());
+			_ar(sound->GetPath());
+		}
 		_ar(cereal::base_class<Component>(this));
 	}
 

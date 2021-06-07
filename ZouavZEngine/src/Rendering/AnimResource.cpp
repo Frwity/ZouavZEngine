@@ -29,27 +29,6 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	std::map<std::string, BoneInfo> boneInfoMap = mesh->boneInfoMap;
 
-	finalBonesMatrices.reserve(100 * 16);
-	Mat4 mat = Mat4::identity;
-	for (int i = 0; i < 100; i++)
-	{
-		finalBonesMatrices.emplace_back(mat.matrix[0]);
-		finalBonesMatrices.emplace_back(mat.matrix[1]);
-		finalBonesMatrices.emplace_back(mat.matrix[2]);
-		finalBonesMatrices.emplace_back(mat.matrix[3]);
-		finalBonesMatrices.emplace_back(mat.matrix[4]);
-		finalBonesMatrices.emplace_back(mat.matrix[5]);
-		finalBonesMatrices.emplace_back(mat.matrix[6]);
-		finalBonesMatrices.emplace_back(mat.matrix[7]);
-		finalBonesMatrices.emplace_back(mat.matrix[8]);
-		finalBonesMatrices.emplace_back(mat.matrix[9]);
-		finalBonesMatrices.emplace_back(mat.matrix[10]);
-		finalBonesMatrices.emplace_back(mat.matrix[11]);
-		finalBonesMatrices.emplace_back(mat.matrix[12]);
-		finalBonesMatrices.emplace_back(mat.matrix[13]);
-		finalBonesMatrices.emplace_back(mat.matrix[14]);
-		finalBonesMatrices.emplace_back(mat.matrix[15]);
-	}
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(boneInfoMap, animation);
@@ -148,7 +127,7 @@ void AnimResource::RemoveFromResourcesManager()
 
 }
 
-void AnimResource::UpdateAnimation(float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish)
+void AnimResource::UpdateAnimation(std::vector<float>* finalBonesMatrices, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish)
 {
 	if (!_animationFinish)
 	{
@@ -164,7 +143,7 @@ void AnimResource::UpdateAnimation(float _deltaTime, bool _loop, float& _current
 		_animationFinish = false;
 
 	if(!_animationFinish)
-		CalculateBoneTransform(&rootNode, Mat4::identity, _currentTime);	
+		CalculateBoneTransform(finalBonesMatrices, &rootNode, Mat4::identity, _currentTime);	
 }
 
 void AnimResource::ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMap, const aiAnimation* animation)
@@ -203,52 +182,18 @@ void AnimResource::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
 		dest.children.emplace_back(newData);
 	}
 }
-int fast_compare(const char* ptr0, const char* ptr1, int len) {
-	int fast = len / sizeof(size_t) + 1;
-	int offset = (fast - 1) * sizeof(size_t);
-	int current_block = 0;
 
-	if (len <= sizeof(size_t)) { fast = 0; }
-
-
-	size_t* lptr0 = (size_t*)ptr0;
-	size_t* lptr1 = (size_t*)ptr1;
-
-	while (current_block < fast) {
-		if ((lptr0[current_block] ^ lptr1[current_block])) {
-			int pos;
-			for (pos = current_block * sizeof(size_t); pos < len; ++pos) {
-				if ((ptr0[pos] ^ ptr1[pos]) || (ptr0[pos] == 0) || (ptr1[pos] == 0)) {
-					return  (int)((unsigned char)ptr0[pos] - (unsigned char)ptr1[pos]);
-				}
-			}
-		}
-
-		++current_block;
-	}
-
-	while (len > offset) {
-		if ((ptr0[offset] ^ ptr1[offset])) {
-			return (int)((unsigned char)ptr0[offset] - (unsigned char)ptr1[offset]);
-		}
-		++offset;
-	}
-
-
-	return 0;
-}
 Bone* AnimResource::FindBone(const char* _boneName)
 {
 	for (auto& bone : bones)
 	{
-		//if (fast_compare(bone.name.c_str(), _boneName, bone.name.size()) == 0)
 		if (strcmp(bone.name.c_str(), _boneName) == 0)
 			return &bone;
 	}
 	return nullptr;
 }
 
-void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform, float _currentTime)
+void AnimResource::CalculateBoneTransform(std::vector<float>* finalBonesMatrices, const AssimpNodeData* _node, Mat4 _parentTransform, float _currentTime)
 {
 	const char* nodeName = _node->name.c_str();
 	Mat4 nodeTransform = _node->transformation;
@@ -266,24 +211,24 @@ void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _par
 		int index = _node->boneInfo.id * 16;
 		Mat4 mat = globalTransformation * _node->boneInfo.offset;
 
-		finalBonesMatrices[index] = mat.matrix[0];
-		finalBonesMatrices[index + 1] = mat.matrix[1];
-		finalBonesMatrices[index + 2] = mat.matrix[2];
-		finalBonesMatrices[index + 3] = mat.matrix[3];
-		finalBonesMatrices[index + 4] = mat.matrix[4];
-		finalBonesMatrices[index + 5] = mat.matrix[5];
-		finalBonesMatrices[index + 6] = mat.matrix[6];
-		finalBonesMatrices[index + 7] = mat.matrix[7];
-		finalBonesMatrices[index + 8] = mat.matrix[8];
-		finalBonesMatrices[index + 9] = mat.matrix[9];
-		finalBonesMatrices[index + 10] = mat.matrix[10];
-		finalBonesMatrices[index + 11] = mat.matrix[11];
-		finalBonesMatrices[index + 12] = mat.matrix[12];
-		finalBonesMatrices[index + 13] = mat.matrix[13];
-		finalBonesMatrices[index + 14] = mat.matrix[14];
-		finalBonesMatrices[index + 15] = mat.matrix[15];
+		(*finalBonesMatrices)[index] = mat.matrix[0];
+		(*finalBonesMatrices)[index + 1] = mat.matrix[1];
+		(*finalBonesMatrices)[index + 2] = mat.matrix[2];
+		(*finalBonesMatrices)[index + 3] = mat.matrix[3];
+		(*finalBonesMatrices)[index + 4] = mat.matrix[4];
+		(*finalBonesMatrices)[index + 5] = mat.matrix[5];
+		(*finalBonesMatrices)[index + 6] = mat.matrix[6];
+		(*finalBonesMatrices)[index + 7] = mat.matrix[7];
+		(*finalBonesMatrices)[index + 8] = mat.matrix[8];
+		(*finalBonesMatrices)[index + 9] = mat.matrix[9];
+		(*finalBonesMatrices)[index + 10] = mat.matrix[10];
+		(*finalBonesMatrices)[index + 11] = mat.matrix[11];
+		(*finalBonesMatrices)[index + 12] = mat.matrix[12];
+		(*finalBonesMatrices)[index + 13] = mat.matrix[13];
+		(*finalBonesMatrices)[index + 14] = mat.matrix[14];
+		(*finalBonesMatrices)[index + 15] = mat.matrix[15];
 	}
 
 	for (int i = 0; i < _node->childrenCount; i++)
-		CalculateBoneTransform(&_node->children[i], globalTransformation, _currentTime);
+		CalculateBoneTransform(finalBonesMatrices, &_node->children[i], globalTransformation, _currentTime);
 }

@@ -26,6 +26,52 @@ Animation::Animation(GameObject* _gameObject, std::string _animationPath, Mesh* 
     }
 
     animationShader = *ResourcesManager::GetResource<Shader>("AnimShader");
+
+    finalBonesMatrices.reserve(100 * 16);
+    Mat4 mat = Mat4::identity;
+    for (int i = 0; i < 100; i++)
+    {
+        finalBonesMatrices.emplace_back(mat.matrix[0]);
+        finalBonesMatrices.emplace_back(mat.matrix[1]);
+        finalBonesMatrices.emplace_back(mat.matrix[2]);
+        finalBonesMatrices.emplace_back(mat.matrix[3]);
+        finalBonesMatrices.emplace_back(mat.matrix[4]);
+        finalBonesMatrices.emplace_back(mat.matrix[5]);
+        finalBonesMatrices.emplace_back(mat.matrix[6]);
+        finalBonesMatrices.emplace_back(mat.matrix[7]);
+        finalBonesMatrices.emplace_back(mat.matrix[8]);
+        finalBonesMatrices.emplace_back(mat.matrix[9]);
+        finalBonesMatrices.emplace_back(mat.matrix[10]);
+        finalBonesMatrices.emplace_back(mat.matrix[11]);
+        finalBonesMatrices.emplace_back(mat.matrix[12]);
+        finalBonesMatrices.emplace_back(mat.matrix[13]);
+        finalBonesMatrices.emplace_back(mat.matrix[14]);
+        finalBonesMatrices.emplace_back(mat.matrix[15]);
+    }
+}
+
+void Animation::clearBoneMatrices()
+{
+    Mat4 mat = Mat4::identity;
+    for (int i = 0; i < 100; i++)
+    {
+        finalBonesMatrices.emplace_back(mat.matrix[0]);
+        finalBonesMatrices.emplace_back(mat.matrix[1]);
+        finalBonesMatrices.emplace_back(mat.matrix[2]);
+        finalBonesMatrices.emplace_back(mat.matrix[3]);
+        finalBonesMatrices.emplace_back(mat.matrix[4]);
+        finalBonesMatrices.emplace_back(mat.matrix[5]);
+        finalBonesMatrices.emplace_back(mat.matrix[6]);
+        finalBonesMatrices.emplace_back(mat.matrix[7]);
+        finalBonesMatrices.emplace_back(mat.matrix[8]);
+        finalBonesMatrices.emplace_back(mat.matrix[9]);
+        finalBonesMatrices.emplace_back(mat.matrix[10]);
+        finalBonesMatrices.emplace_back(mat.matrix[11]);
+        finalBonesMatrices.emplace_back(mat.matrix[12]);
+        finalBonesMatrices.emplace_back(mat.matrix[13]);
+        finalBonesMatrices.emplace_back(mat.matrix[14]);
+        finalBonesMatrices.emplace_back(mat.matrix[15]);
+    }
 }
 
 void Animation::Editor()
@@ -54,6 +100,7 @@ void Animation::Editor()
                 {
                     currentAnimation->UpdateAnimationResources(mesh);
                     animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
+                    clearBoneMatrices();
                 }
             }
         }
@@ -102,7 +149,7 @@ bool Animation::IsFinish(std::string _animName)
 void Animation::Draw(const Camera& _camera)
 {
     if (currentAnimation)
-        currentAnimation->UpdateAnimation(TimeManager::GetDeltaTime(), currentAnimation->loop, currentTime, animationFinish);
+        currentAnimation->UpdateAnimation(&finalBonesMatrices, TimeManager::GetDeltaTime(), currentAnimation->loop, currentTime, animationFinish);
     else
         return;
     if (IsFinish() && currentAnimation->goToIdle)
@@ -115,7 +162,7 @@ void Animation::Draw(const Camera& _camera)
 
     animationShader->SetVector4("color", gameObject->GetComponent<MeshRenderer>() ? gameObject->GetComponent<MeshRenderer>()->material.color : Vec4{1.f, 1.f, 1.f, 1.f});
 
-    animationShader->SetMatrices("finalBonesMatrices", currentAnimation->finalBonesMatrices.data(), currentAnimation->finalBonesMatrices.size() / 16);
+    animationShader->SetMatrices("finalBonesMatrices", finalBonesMatrices.data(), finalBonesMatrices.size() / 16);
     
     animationShader->SetMatrix("model", Mat4::CreateTRSMatrix(gameObject->WorldPosition(), gameObject->WorldRotation(), gameObject->WorldScale()));
 
