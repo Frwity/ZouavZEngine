@@ -1032,6 +1032,10 @@ void Editor::DisplayProject()
         float windowWidth = ImGui::GetContentRegionAvailWidth();
         int nbButton = ((windowWidth - 20.0f) / 72.0f) - 2;
 
+        static bool deleteFileWindow = false;
+        static std::string deleteFileName;
+        static ImVec2 deleteFileWindowPos;
+
         for (const auto& entry : std::filesystem::directory_iterator(currentProjectFolder))
         {
             if (entry.path().extension().string().compare(".zesr") == 0)
@@ -1089,17 +1093,24 @@ void Editor::DisplayProject()
                     ImGui::Text(currentName.c_str());
                     ImGui::EndDragDropSource();
                 }
+
+                if (ImGui::IsItemHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_RIGHT))
+                {
+                    deleteFileWindow = true;
+                    deleteFileName = entry.path().string();
+                    deleteFileWindowPos = ImGui::GetMousePos();
+                }
+
                 ImGui::Text(currentName.size() > 11 ? (currentName.substr(0, 9) + "...").c_str() : currentName.c_str());
                 ImGui::EndGroup();
                 ImGui::PopID();
             }
         }
     
-        if (!isKeyboardEnable && ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
+        if (!isKeyboardEnable && ImGui::IsWindowHovered() && !ImGui::IsAnyItemHovered() && InputManager::EditorGetMouseButtonPressed(E_MOUSE_BUTTON::BUTTON_RIGHT))
         {
             projectNewFolderPos = ImGui::GetMousePos();
             projectNewFolder = true;
-
         }
 
         if (projectNewFolder)
@@ -1129,6 +1140,32 @@ void Editor::DisplayProject()
                     newHierarchyFolderName = "New Folder";
                 }
             }
+            ImGui::End();
+        }
+
+        if (deleteFileWindow)
+        {
+            ImGui::SetNextWindowPos(deleteFileWindowPos);
+            if (ImGui::Begin("Delete window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+            {
+                static bool isClickWhenWindowNotHovered = false;
+
+                if (InputManager::EditorGetMouseButtonPressedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && !ImGui::IsWindowHovered())
+                    isClickWhenWindowNotHovered = true;
+
+                if (ImGui::Button("Delete File"))
+                {
+                    std::remove(deleteFileName.c_str());
+                    deleteFileWindow = false;
+                }
+
+                if (!ImGui::IsWindowHovered() && InputManager::EditorGetMouseButtonReleasedOneTime(E_MOUSE_BUTTON::BUTTON_LEFT) && isClickWhenWindowNotHovered)
+                {
+                    deleteFileWindow = false;
+                    isClickWhenWindowNotHovered = false;
+                }
+            }
+
             ImGui::End();
         }
     }
