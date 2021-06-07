@@ -52,7 +52,7 @@ void Player::Begin()
 	deathAnimName = "Player Dying.fbx";
 	camera = GetGameObject().GetComponent<Camera>();
 	camera->SetPosition({ 0.0f, 12.5f, -25.0f });
-	camera->SetTarget({ 0.0f, 2.0f, 0.0f });
+	camera->SetTarget({ 0.0f, 7.0f, 0.0f });
 	ProgressBar* progressBar = GetGameObject().GetComponentByName<ProgressBar>("XpBar");
 	progressBar->currentValue = (float*)&currentXp;
 	progressBar->maxValue = (float*)&maxXp;
