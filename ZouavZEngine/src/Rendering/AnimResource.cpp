@@ -63,6 +63,10 @@ void AnimResource::AssignBoneToNode(std::map<std::string, BoneInfo>& _boneInfoMa
 
 void AnimResource::UpdateAnimationResources(AssimpNodeData* _rootNode, Mesh* _mesh)
 {
+	//no need to reread bone if mesh already set
+	if (mesh == _mesh)
+		return;
+
 	bones.clear();
 	rootNode.children.clear();
 	Assimp::Importer importer;
