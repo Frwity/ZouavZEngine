@@ -145,7 +145,7 @@ void Player::Update()
 
 	if (direction.GetSquaredMagnitude() > 0.01f && !IsAttacking())
 	{
-		float angleToDirection = GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
+		float angleToDirection = 0.25f * GetGameObject().Forward().SignedAngleToVector(direction, Vec3::up) + M_PI + M_PI;
 
 		GetGameObject().RotateY((angleToDirection / M_PI) * 180.0f);
 

@@ -27,6 +27,8 @@ public:
     void OnDeath() override;
     int xpGiven = 3;
 
+    void UpdateLevel(int _level);
+
     template <class Archive>
     void serialize(Archive & _ar)
     {

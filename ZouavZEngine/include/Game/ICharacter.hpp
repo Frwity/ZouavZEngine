@@ -49,6 +49,7 @@ public:
 
     void OnTrigger(class Object* _other, class ShapeCollision* _triggerShape) override;
 
+    int GetLevel() { return level; };
     int GetLife() const { return life; }
     bool IsAlive() const { return life > 0; }
     bool IsAttacking() const;

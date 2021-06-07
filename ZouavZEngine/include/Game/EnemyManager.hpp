@@ -26,6 +26,12 @@ private:
 
     bool isSpawningDone = false;
     bool asDoneChunk = false;
+
+    float toSpawnTime = 10.0f;
+    float toFinishSpawn = 20.0f;
+    float timerToSpawn = 0.0f;
+    float timerToFinish = 0.0f;
+
 public:
     EnemyManager() = delete;
     EnemyManager(class GameObject* _gameobject, std::string _name = "EnemyManager");

@@ -33,9 +33,12 @@ void ScriptSystem::RemoveScript(ScriptComponent* _script)
 
 void ScriptSystem::Begin()
 {
-	for (ScriptComponent* script : scripts)
-		if (script->IsActive())
-			script->Begin();
+	float scriptsSize = scripts.size();
+	for (int i = 0; i < scriptsSize; i++)
+	{
+		if (scripts[i] && scripts[i]->IsActive())
+			scripts[i]->Begin();
+	}
 }
 
 void ScriptSystem::FixedUpdate()

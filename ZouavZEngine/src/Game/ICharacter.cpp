@@ -187,6 +187,7 @@ void ICharacter::NeedToAttack()
 
 void ICharacter::Attack()
 {
+	audioBroadcaster->Play("attack.wav");
 	attackCollision->Activate();
 	timerAttackDuration = 0.0f;
 }
