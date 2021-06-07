@@ -132,8 +132,9 @@ void EnemyManager::Update()
                 iter = enemies.erase(iter);
             else
                 iter++;
-        if (isSpawningDone && enemies.size() == 0)
+        if (isSpawningDone && enemies.size() <= 1)
         {
+            enemies.clear();
             asDoneChunk = true;
             for (auto obj : arenaObject)
                 obj->GetComponent<MeshRenderer>()->material.color = { 0.0f, 1.0f, 0.0f, 1.0f };

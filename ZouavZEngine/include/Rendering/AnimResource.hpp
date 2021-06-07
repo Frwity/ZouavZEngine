@@ -49,4 +49,3 @@ public:
 
     void UpdateAnimation(std::vector<float>* finalBonesMatrices, AssimpNodeData* _rootNode, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish);
 };
-};
