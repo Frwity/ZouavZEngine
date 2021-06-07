@@ -217,8 +217,14 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }

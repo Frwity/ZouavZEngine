@@ -138,11 +138,15 @@ public:
 	{
 		int nbChild;
 
+		GameObject* _currentLoadedGameObject = currentLoadedGameObject;
 		currentLoadedGameObject = this;
 
 		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab);
 		UpdateTransform(Mat4::identity);
+
 		_ar(components);
+		if (isPrefab)
+			currentLoadedGameObject = _currentLoadedGameObject;
 
 		std::string childName;
 		std::string childTag;
@@ -158,11 +162,15 @@ public:
 			else
 				gameobject = CreateGameObject(childName, childTag);
 
+			GameObject* _currentLoadedGameObject = currentLoadedGameObject;
 			currentLoadedGameObject = gameobject;
 
 			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
 			UpdateTransform(Mat4::CreateTRSMatrix(WorldPosition(), WorldRotation(), WorldScale()));
 			_ar(gameobject->components);
+
+			if (gameobject->isPrefab)
+				currentLoadedGameObject = _currentLoadedGameObject;
 
 			loadRecurss(_ar, gameobject, nbChild2);
 		}
@@ -186,11 +194,16 @@ public:
 			else
 				gameobject = CreateGameObject(childName, childTag);
 
+			GameObject* _currentLoadedGameObject = currentLoadedGameObject;
 			currentLoadedGameObject = gameobject;
 
 			_ar(gameobject->localPosition, gameobject->localRotation, gameobject->localScale, gameobject->isActive, gameobject->isPrefab);
 			UpdateTransform(Mat4::CreateTRSMatrix(_gameobject->WorldPosition(), _gameobject->WorldRotation(), _gameobject->WorldScale()));
 			_ar(gameobject->components);
+
+			if (gameobject->isPrefab)
+				currentLoadedGameObject = _currentLoadedGameObject;
+
 			_gameobject->AddChild(gameobject);
 
 			loadRecurss(_ar, gameobject, nbChild2);
