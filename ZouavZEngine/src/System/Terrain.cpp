@@ -589,6 +589,7 @@ Chunk::~Chunk()
 				go->Destroy();
 
 		PhysicSystem::scene->removeActor(*actor);
+		actor->release();
 		actor = nullptr;
 	}
 }

@@ -307,6 +307,7 @@
     <ClInclude Include="include\System\SoundManager.hpp" />
     <ClInclude Include="include\System\Terrain.hpp" />
     <ClInclude Include="include\System\TimeManager.hpp" />
+    <ClInclude Include="src\Project.hpp" />
     <ClInclude Include="VisualLeakDetector\include\vld.h" />
     <ClInclude Include="VisualLeakDetector\include\vld_def.h" />
     <ClInclude Include="include\Game\Enemy.hpp" />

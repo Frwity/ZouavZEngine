@@ -280,8 +280,8 @@
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\PhysxShowcaseScript.cpp">
-        <Filter>src\Game</Filter>
-     </ClCompile>
+      <Filter>src\Game</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\SlimeEnemy.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
@@ -289,9 +289,9 @@
       <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Zombie.cpp">
-        <Filter>src\Game</Filter>
-     </ClCompile>
-  <!--Compile End-->
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -514,8 +514,8 @@
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\PhysxShowcaseScript.hpp">
-        <Filter>include\Game</Filter>
-     </ClInclude>
+      <Filter>include\Game</Filter>
+    </ClInclude>
     <ClInclude Include="include\Game\SlimeEnemy.hpp">
       <Filter>include\Game</Filter>
     </ClInclude>
@@ -523,8 +523,11 @@
       <Filter>include\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Game\Zombie.hpp">
-        <Filter>include\Game</Filter>
-     </ClInclude>
-  <!--Include End-->
+      <Filter>include\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <!--Include End-->
   </ItemGroup>
 </Project>

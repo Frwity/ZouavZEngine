@@ -193,6 +193,7 @@ void Player::ManageXp(const Enemy& _enemyKilled)
 		maxXp = level * 10;
 		attackDamage += attackDamageGain;
 		maxLife += lifeGain;
+		life = maxLife;
 	}
 }
 
