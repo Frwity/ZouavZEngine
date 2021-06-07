@@ -70,7 +70,7 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 	world.children.clear();
 	PhysicSystem::Destroy();
 	PhysicSystem::Init();
-
+	GameObject::resetScene = true;
 	std::ifstream saveFile;
 	if (_changingScene)
 	{
@@ -100,6 +100,8 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 
 	terrain.Generate(GameObject::GetGameObjectByTag("Player"));
 	terrain.Update();
+
+	GameObject::resetScene = false;
 }
 
 void Scene::Save()

@@ -1,7 +1,7 @@
 {
     "value0": "World",
     "value1": "",
-    "value2": 7,
+    "value2": 4,
     "value3": {
         "value0": 0.0,
         "value1": 0.0,
@@ -91,9 +91,9 @@
     "value10": "Player",
     "value11": 0,
     "value12": {
-        "value0": -11.192004203796387,
-        "value1": 1.9140068292617798,
-        "value2": 0.0
+        "value0": -10.587018966674805,
+        "value1": 1.913993000984192,
+        "value2": -2.981656074523926
     },
     "value13": {
         "value0": 1.0,
@@ -133,12 +133,12 @@
                             "value3": 1.0
                         },
                         "value1": 1.0,
-                        "value2": 843,
-                        "value3": 843,
+                        "value2": 30,
+                        "value3": 30,
                         "value4": 1,
                         "value5": 1,
-                        "value6": 0.5,
-                        "value7": 1.0,
+                        "value6": 0.20000000298023225,
+                        "value7": 0.33000001311302187,
                         "value8": 0.10000000149011612,
                         "value9": {
                             "value0": true,
@@ -270,22 +270,22 @@
                     "value0": "Default",
                     "value1": false,
                     "value2": "resources/Arial.fnt",
-                    "value3": 1,
+                    "value3": 3,
                     "value4": "Default Text",
-                    "value5": 0.0,
+                    "value5": 1.0,
                     "value6": 0.0,
                     "value7": 0.0,
                     "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 0.0,
+                    "value9": 8.600000381469727,
+                    "value10": -76.0,
                     "value11": 0.0,
                     "value12": 4.0,
                     "value13": 0.5,
                     "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
+                    "value15": 0.34999996423721316,
+                    "value16": 0.4109998941421509,
+                    "value17": 0.3181818723678589,
+                    "value18": 1.0,
                     "value19": 0.0,
                     "value20": 0.0,
                     "value21": 0.0,
@@ -406,19 +406,19 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0,
+                    "value0": 0.0,
                     "value1": 1.0,
-                    "value2": 1.0,
+                    "value2": 0.20833349227905274,
                     "value3": 1.0,
-                    "value4": 0.0,
+                    "value4": 1.0,
                     "value5": 0.0,
                     "value6": 0.0,
                     "value7": 1.0,
                     "value8": 0.0,
-                    "value9": -1.0,
+                    "value9": -0.949999988079071,
                     "value10": 0.0,
                     "value11": 1.0,
-                    "value12": 0.30000001192092898,
+                    "value12": 0.15000000596046449,
                     "value13": "LifeBar",
                     "value14": {
                         "value0": true,
@@ -432,19 +432,19 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 1.0,
-                    "value1": 1.0,
+                    "value0": 0.0,
+                    "value1": 0.02978992462158203,
                     "value2": 1.0,
                     "value3": 1.0,
-                    "value4": 0.0,
-                    "value5": 0.0,
+                    "value4": 0.9431817531585693,
+                    "value5": 1.0,
                     "value6": 0.0,
                     "value7": 1.0,
                     "value8": 0.0,
-                    "value9": 1.0,
+                    "value9": 0.949999988079071,
                     "value10": 0.0,
                     "value11": 1.0,
-                    "value12": 0.30000001192092898,
+                    "value12": 0.15000000596046449,
                     "value13": "XpBar",
                     "value14": {
                         "value0": true,
@@ -454,13 +454,13 @@
             }
         }
     ],
-    "value18": "Slime",
-    "value19": "Enemy",
+    "value18": "ZombieRange",
+    "value19": "",
     "value20": 0,
     "value21": {
-        "value0": 64.0,
+        "value0": -64.0,
         "value1": 40.0,
-        "value2": 64.0
+        "value2": -64.0
     },
     "value22": {
         "value0": 1.0,
@@ -469,1313 +469,16 @@
         "value3": 0.0
     },
     "value23": {
-        "value0": 0.03999999910593033,
-        "value1": 0.03999999910593033,
-        "value2": 0.03999999910593033
+        "value0": 0.02500000037252903,
+        "value1": 0.02500000037252903,
+        "value2": 0.02500000037252903
     },
     "value24": true,
     "value25": false,
     "value26": [
         {
             "polymorphic_id": 2147483661,
-            "polymorphic_name": "SlimeEnemy",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 25.0,
-                        "value1": 3.5,
-                        "value2": 3.5,
-                        "value3": 2.0,
-                        "value4": 10.0,
-                        "value5": {
-                            "value0": {
-                                "value0": 1.0,
-                                "value1": 0.0,
-                                "value2": 0.0,
-                                "value3": 1.0
-                            },
-                            "value1": 1.0,
-                            "value2": 5,
-                            "value3": 5,
-                            "value4": 1,
-                            "value5": 1,
-                            "value6": 0.5,
-                            "value7": 1.0,
-                            "value8": 0.5,
-                            "value9": {
-                                "value0": true,
-                                "value1": "SlimeEnemy"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 0.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 7,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Slime_Idle.fbx",
-                    "value1": true,
-                    "value2": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": 0.3235294818878174,
-                        "value1": 1.0,
-                        "value2": 0.0,
-                        "value3": 1.0
-                    },
-                    "value10": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 4.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 8,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Arial.fnt",
-                    "value3": 2,
-                    "value4": "Default Text",
-                    "value5": 1.0,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 1.7000000476837159,
-                    "value11": 0.0,
-                    "value12": 7.499996662139893,
-                    "value13": 0.5,
-                    "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
-                    "value19": 0.0,
-                    "value20": 0.0,
-                    "value21": 0.0,
-                    "value22": false,
-                    "value23": {
-                        "value0": true,
-                        "value1": "FontComponent"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": false,
-                    "value1": false,
-                    "value2": 3,
-                    "value3": "attack.wav",
-                    "value4": "Project/sounds/attack.wav",
-                    "value5": "damage.wav",
-                    "value6": "Project/sounds/damage.wav",
-                    "value7": "death.wav",
-                    "value8": "Project/sounds/death.wav",
-                    "value9": {
-                        "value0": true,
-                        "value1": "AudioBroadcaster"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 4,
-                    "value1": "Slime Attack.fbx",
-                    "value2": "Project/animations/Slime/Slime Attack.fbx",
-                    "value3": 0.699999988079071,
-                    "value4": false,
-                    "value5": true,
-                    "value6": "Slime Death.fbx",
-                    "value7": "Project/animations/Slime/Slime Death.fbx",
-                    "value8": 0.20000000298023225,
-                    "value9": false,
-                    "value10": false,
-                    "value11": "Slime Walk.fbx",
-                    "value12": "Project/animations/Slime/Slime Walk.fbx",
-                    "value13": 0.20000000298023225,
-                    "value14": true,
-                    "value15": true,
-                    "value16": "Slime_Idle.fbx",
-                    "value17": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value18": 0.4000000059604645,
-                    "value19": true,
-                    "value20": true,
-                    "value21": "Slime_Idle.fbx",
-                    "value22": {
-                        "value0": true,
-                        "value1": "Animation"
-                    }
-                }
-            }
-        }
-    ],
-    "value27": "ZombieRange",
-    "value28": "",
-    "value29": 0,
-    "value30": {
-        "value0": 64.0,
-        "value1": 40.0,
-        "value2": 64.0
-    },
-    "value31": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value32": {
-        "value0": 0.02500000037252903,
-        "value1": 0.02500000037252903,
-        "value2": 0.02500000037252903
-    },
-    "value33": true,
-    "value34": false,
-    "value35": [
-        {
-            "polymorphic_id": 2147483662,
             "polymorphic_name": "EnemyArcher",
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": "Project/prefabs\\ArrowPrefab.zepref"
-                    },
-                    "value1": {
-                        "value0": 50.0,
-                        "value1": 17.5,
-                        "value2": 15.0,
-                        "value3": 2.0,
-                        "value4": 10.0,
-                        "value5": {
-                            "value0": {
-                                "value0": 1.0,
-                                "value1": 0.0,
-                                "value2": 0.0,
-                                "value3": 1.0
-                            },
-                            "value1": 1.0,
-                            "value2": 5,
-                            "value3": 5,
-                            "value4": 1,
-                            "value5": 1,
-                            "value6": 1.0,
-                            "value7": 2.0,
-                            "value8": 1.0,
-                            "value9": {
-                                "value0": true,
-                                "value1": "EnemyArcher"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 200.0,
-                        "value2": 100.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.4000000953674318,
-                        "value2": 0.6000000238418579
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 7,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Range Zombie.fbx",
-                    "value1": true,
-                    "value2": "Project/meshes/Range Zombie.fbx",
-                    "value3": "Range Zombie.png",
-                    "value4": true,
-                    "value5": "Project/textures/Range Zombie.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0,
-                        "value3": 1.0
-                    },
-                    "value10": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 100.0,
-                        "value2": 1.25
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 8,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Arial.fnt",
-                    "value3": 1,
-                    "value4": "Default Text",
-                    "value5": 0.0,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 0.0,
-                    "value11": 0.0,
-                    "value12": 4.0,
-                    "value13": 0.5,
-                    "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
-                    "value19": 0.0,
-                    "value20": 0.0,
-                    "value21": 0.0,
-                    "value22": false,
-                    "value23": {
-                        "value0": true,
-                        "value1": "FontComponent"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": false,
-                    "value1": false,
-                    "value2": 3,
-                    "value3": "attack.wav",
-                    "value4": "Project/sounds/attack.wav",
-                    "value5": "damage.wav",
-                    "value6": "Project/sounds/damage.wav",
-                    "value7": "death.wav",
-                    "value8": "Project/sounds/death.wav",
-                    "value9": {
-                        "value0": true,
-                        "value1": "AudioBroadcaster"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 4,
-                    "value1": "Range Zombie Attack.fbx",
-                    "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
-                    "value3": 0.6000000238418579,
-                    "value4": false,
-                    "value5": true,
-                    "value6": "Zombie Walk_Range.fbx",
-                    "value7": "Project/animations/Zombie/Zombie Walk_Range.fbx",
-                    "value8": 1.0,
-                    "value9": true,
-                    "value10": true,
-                    "value11": "Zombie Idle Range.fbx",
-                    "value12": "Project/animations/Zombie/Zombie Idle Range.fbx",
-                    "value13": 0.4000000059604645,
-                    "value14": true,
-                    "value15": true,
-                    "value16": "Zombie Death Range.fbx",
-                    "value17": "Project/animations/Zombie/Zombie Death Range.fbx",
-                    "value18": 0.4000000059604645,
-                    "value19": false,
-                    "value20": false,
-                    "value21": "Zombie Idle Range.fbx",
-                    "value22": {
-                        "value0": true,
-                        "value1": "Animation"
-                    }
-                }
-            }
-        }
-    ],
-    "value36": "ZombieRange",
-    "value37": "",
-    "value38": 0,
-    "value39": {
-        "value0": -64.0,
-        "value1": 40.0,
-        "value2": 64.0
-    },
-    "value40": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value41": {
-        "value0": 0.02500000037252903,
-        "value1": 0.02500000037252903,
-        "value2": 0.02500000037252903
-    },
-    "value42": true,
-    "value43": false,
-    "value44": [
-        {
-            "polymorphic_id": 14,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": "Project/prefabs\\ArrowPrefab.zepref"
-                    },
-                    "value1": {
-                        "value0": 50.0,
-                        "value1": 17.5,
-                        "value2": 15.0,
-                        "value3": 2.0,
-                        "value4": 10.0,
-                        "value5": {
-                            "value0": {
-                                "value0": 1.0,
-                                "value1": 0.0,
-                                "value2": 0.0,
-                                "value3": 1.0
-                            },
-                            "value1": 1.0,
-                            "value2": 5,
-                            "value3": 5,
-                            "value4": 1,
-                            "value5": 1,
-                            "value6": 1.0,
-                            "value7": 2.0,
-                            "value8": 1.0,
-                            "value9": {
-                                "value0": true,
-                                "value1": "EnemyArcher"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 200.0,
-                        "value2": 100.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.4000000953674318,
-                        "value2": 0.6000000238418579
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 7,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Range Zombie.fbx",
-                    "value1": true,
-                    "value2": "Project/meshes/Range Zombie.fbx",
-                    "value3": "Range Zombie.png",
-                    "value4": true,
-                    "value5": "Project/textures/Range Zombie.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0,
-                        "value3": 1.0
-                    },
-                    "value10": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 100.0,
-                        "value2": 1.25
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 8,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Arial.fnt",
-                    "value3": 1,
-                    "value4": "Default Text",
-                    "value5": 0.0,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 0.0,
-                    "value11": 0.0,
-                    "value12": 4.0,
-                    "value13": 0.5,
-                    "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
-                    "value19": 0.0,
-                    "value20": 0.0,
-                    "value21": 0.0,
-                    "value22": false,
-                    "value23": {
-                        "value0": true,
-                        "value1": "FontComponent"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": false,
-                    "value1": false,
-                    "value2": 3,
-                    "value3": "attack.wav",
-                    "value4": "Project/sounds/attack.wav",
-                    "value5": "damage.wav",
-                    "value6": "Project/sounds/damage.wav",
-                    "value7": "death.wav",
-                    "value8": "Project/sounds/death.wav",
-                    "value9": {
-                        "value0": true,
-                        "value1": "AudioBroadcaster"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 4,
-                    "value1": "Range Zombie Attack.fbx",
-                    "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
-                    "value3": 0.6000000238418579,
-                    "value4": false,
-                    "value5": true,
-                    "value6": "Zombie Walk_Range.fbx",
-                    "value7": "Project/animations/Zombie/Zombie Walk_Range.fbx",
-                    "value8": 1.0,
-                    "value9": true,
-                    "value10": true,
-                    "value11": "Zombie Idle Range.fbx",
-                    "value12": "Project/animations/Zombie/Zombie Idle Range.fbx",
-                    "value13": 0.4000000059604645,
-                    "value14": true,
-                    "value15": true,
-                    "value16": "Zombie Death Range.fbx",
-                    "value17": "Project/animations/Zombie/Zombie Death Range.fbx",
-                    "value18": 0.4000000059604645,
-                    "value19": false,
-                    "value20": false,
-                    "value21": "Zombie Idle Range.fbx",
-                    "value22": {
-                        "value0": true,
-                        "value1": "Animation"
-                    }
-                }
-            }
-        }
-    ],
-    "value45": "Slime",
-    "value46": "Enemy",
-    "value47": 0,
-    "value48": {
-        "value0": -64.0,
-        "value1": 40.0,
-        "value2": 64.0
-    },
-    "value49": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value50": {
-        "value0": 0.03999999910593033,
-        "value1": 0.03999999910593033,
-        "value2": 0.03999999910593033
-    },
-    "value51": true,
-    "value52": false,
-    "value53": [
-        {
-            "polymorphic_id": 13,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 25.0,
-                        "value1": 3.5,
-                        "value2": 3.5,
-                        "value3": 2.0,
-                        "value4": 10.0,
-                        "value5": {
-                            "value0": {
-                                "value0": 1.0,
-                                "value1": 0.0,
-                                "value2": 0.0,
-                                "value3": 1.0
-                            },
-                            "value1": 1.0,
-                            "value2": 5,
-                            "value3": 5,
-                            "value4": 1,
-                            "value5": 1,
-                            "value6": 0.5,
-                            "value7": 1.0,
-                            "value8": 0.5,
-                            "value9": {
-                                "value0": true,
-                                "value1": "SlimeEnemy"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 0.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 7,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Slime_Idle.fbx",
-                    "value1": true,
-                    "value2": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": 0.3235294818878174,
-                        "value1": 1.0,
-                        "value2": 0.0,
-                        "value3": 1.0
-                    },
-                    "value10": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 4.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 8,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Arial.fnt",
-                    "value3": 2,
-                    "value4": "Default Text",
-                    "value5": 1.0,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 1.7000000476837159,
-                    "value11": 0.0,
-                    "value12": 7.499996662139893,
-                    "value13": 0.5,
-                    "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
-                    "value19": 0.0,
-                    "value20": 0.0,
-                    "value21": 0.0,
-                    "value22": false,
-                    "value23": {
-                        "value0": true,
-                        "value1": "FontComponent"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": false,
-                    "value1": false,
-                    "value2": 3,
-                    "value3": "attack.wav",
-                    "value4": "Project/sounds/attack.wav",
-                    "value5": "damage.wav",
-                    "value6": "Project/sounds/damage.wav",
-                    "value7": "death.wav",
-                    "value8": "Project/sounds/death.wav",
-                    "value9": {
-                        "value0": true,
-                        "value1": "AudioBroadcaster"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 4,
-                    "value1": "Slime Attack.fbx",
-                    "value2": "Project/animations/Slime/Slime Attack.fbx",
-                    "value3": 0.699999988079071,
-                    "value4": false,
-                    "value5": true,
-                    "value6": "Slime Death.fbx",
-                    "value7": "Project/animations/Slime/Slime Death.fbx",
-                    "value8": 0.20000000298023225,
-                    "value9": false,
-                    "value10": false,
-                    "value11": "Slime Walk.fbx",
-                    "value12": "Project/animations/Slime/Slime Walk.fbx",
-                    "value13": 0.20000000298023225,
-                    "value14": true,
-                    "value15": true,
-                    "value16": "Slime_Idle.fbx",
-                    "value17": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value18": 0.4000000059604645,
-                    "value19": true,
-                    "value20": true,
-                    "value21": "Slime_Idle.fbx",
-                    "value22": {
-                        "value0": true,
-                        "value1": "Animation"
-                    }
-                }
-            }
-        }
-    ],
-    "value54": "Slime",
-    "value55": "Enemy",
-    "value56": 0,
-    "value57": {
-        "value0": -64.0,
-        "value1": 40.0,
-        "value2": 64.0
-    },
-    "value58": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value59": {
-        "value0": 0.03999999910593033,
-        "value1": 0.03999999910593033,
-        "value2": 0.03999999910593033
-    },
-    "value60": true,
-    "value61": false,
-    "value62": [
-        {
-            "polymorphic_id": 13,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 25.0,
-                        "value1": 3.5,
-                        "value2": 3.5,
-                        "value3": 2.0,
-                        "value4": 10.0,
-                        "value5": {
-                            "value0": {
-                                "value0": 1.0,
-                                "value1": 0.0,
-                                "value2": 0.0,
-                                "value3": 1.0
-                            },
-                            "value1": 1.0,
-                            "value2": 5,
-                            "value3": 5,
-                            "value4": 1,
-                            "value5": 1,
-                            "value6": 0.5,
-                            "value7": 1.0,
-                            "value8": 0.5,
-                            "value9": {
-                                "value0": true,
-                                "value1": "SlimeEnemy"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": false,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 0.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": true,
-                        "value1": "BoxCollision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 6,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": true,
-                    "value1": true,
-                    "value2": true,
-                    "value3": {
-                        "value0": true,
-                        "value1": "RigidBody"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 7,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Slime_Idle.fbx",
-                    "value1": true,
-                    "value2": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value3": "Default",
-                    "value4": false,
-                    "value5": "resources/white.png",
-                    "value6": "Default",
-                    "value7": false,
-                    "value8": "resources/BlinnPhongShader.shader",
-                    "value9": {
-                        "value0": 0.3235294818878174,
-                        "value1": 1.0,
-                        "value2": 0.0,
-                        "value3": 1.0
-                    },
-                    "value10": {
-                        "value0": true,
-                        "value1": "MeshRenderer"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 5,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": {
-                        "value0": 100.0,
-                        "value1": 100.0,
-                        "value2": 100.0
-                    },
-                    "value1": true,
-                    "value2": {
-                        "value0": 0.0,
-                        "value1": 2.0,
-                        "value2": 4.0
-                    },
-                    "value3": {
-                        "value0": 1.0,
-                        "value1": 0.0,
-                        "value2": 0.0,
-                        "value3": 0.0
-                    },
-                    "value4": {
-                        "value0": 1.0,
-                        "value1": 1.0,
-                        "value2": 1.0
-                    },
-                    "value5": {
-                        "value0": false,
-                        "value1": "Attack Collision"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 8,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": "Default",
-                    "value1": false,
-                    "value2": "resources/Arial.fnt",
-                    "value3": 2,
-                    "value4": "Default Text",
-                    "value5": 1.0,
-                    "value6": 0.0,
-                    "value7": 0.0,
-                    "value8": 1.0,
-                    "value9": 0.0,
-                    "value10": 1.7000000476837159,
-                    "value11": 0.0,
-                    "value12": 7.499996662139893,
-                    "value13": 0.5,
-                    "value14": 0.009999999776482582,
-                    "value15": 0.0,
-                    "value16": 0.0010000000474974514,
-                    "value17": 0.0,
-                    "value18": 0.0,
-                    "value19": 0.0,
-                    "value20": 0.0,
-                    "value21": 0.0,
-                    "value22": false,
-                    "value23": {
-                        "value0": true,
-                        "value1": "FontComponent"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 9,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": false,
-                    "value1": false,
-                    "value2": 3,
-                    "value3": "attack.wav",
-                    "value4": "Project/sounds/attack.wav",
-                    "value5": "damage.wav",
-                    "value6": "Project/sounds/damage.wav",
-                    "value7": "death.wav",
-                    "value8": "Project/sounds/death.wav",
-                    "value9": {
-                        "value0": true,
-                        "value1": "AudioBroadcaster"
-                    }
-                }
-            }
-        },
-        {
-            "polymorphic_id": 10,
-            "ptr_wrapper": {
-                "valid": 1,
-                "data": {
-                    "value0": 4,
-                    "value1": "Slime Death.fbx",
-                    "value2": "Project/animations/Slime/Slime Death.fbx",
-                    "value3": 0.20000000298023225,
-                    "value4": false,
-                    "value5": false,
-                    "value6": "Slime Attack.fbx",
-                    "value7": "Project/animations/Slime/Slime Attack.fbx",
-                    "value8": 0.699999988079071,
-                    "value9": false,
-                    "value10": true,
-                    "value11": "Slime Walk.fbx",
-                    "value12": "Project/animations/Slime/Slime Walk.fbx",
-                    "value13": 0.20000000298023225,
-                    "value14": true,
-                    "value15": true,
-                    "value16": "Slime_Idle.fbx",
-                    "value17": "Project/animations/Slime/Slime_Idle.fbx",
-                    "value18": 0.4000000059604645,
-                    "value19": true,
-                    "value20": true,
-                    "value21": "Slime_Idle.fbx",
-                    "value22": {
-                        "value0": true,
-                        "value1": "Animation"
-                    }
-                }
-            }
-        }
-    ],
-    "value63": "ZombieRange",
-    "value64": "",
-    "value65": 0,
-    "value66": {
-        "value0": -64.0,
-        "value1": 40.0,
-        "value2": 64.0
-    },
-    "value67": {
-        "value0": 1.0,
-        "value1": 0.0,
-        "value2": 0.0,
-        "value3": 0.0
-    },
-    "value68": {
-        "value0": 0.02500000037252903,
-        "value1": 0.02500000037252903,
-        "value2": 0.02500000037252903
-    },
-    "value69": true,
-    "value70": false,
-    "value71": [
-        {
-            "polymorphic_id": 14,
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
@@ -2013,92 +716,612 @@
             }
         }
     ],
-    "value72": true,
-    "value73": 256.0,
-    "value74": 128,
-    "value75": 33,
+    "value27": "ZombieRange",
+    "value28": "",
+    "value29": 0,
+    "value30": {
+        "value0": -64.0,
+        "value1": 40.0,
+        "value2": -64.0
+    },
+    "value31": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value32": {
+        "value0": 0.02500000037252903,
+        "value1": 0.02500000037252903,
+        "value2": 0.02500000037252903
+    },
+    "value33": true,
+    "value34": false,
+    "value35": [
+        {
+            "polymorphic_id": 13,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": "Project/prefabs\\ArrowPrefab.zepref"
+                    },
+                    "value1": {
+                        "value0": 50.0,
+                        "value1": 17.5,
+                        "value2": 15.0,
+                        "value3": 2.0,
+                        "value4": 10.0,
+                        "value5": {
+                            "value0": {
+                                "value0": 1.0,
+                                "value1": 0.0,
+                                "value2": 0.0,
+                                "value3": 1.0
+                            },
+                            "value1": 1.0,
+                            "value2": 5,
+                            "value3": 5,
+                            "value4": 1,
+                            "value5": 1,
+                            "value6": 1.0,
+                            "value7": 2.0,
+                            "value8": 1.0,
+                            "value9": {
+                                "value0": true,
+                                "value1": "EnemyArcher"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 100.0,
+                        "value1": 200.0,
+                        "value2": 100.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.4000000953674318,
+                        "value2": 0.6000000238418579
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 6,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Range Zombie.fbx",
+                    "value1": true,
+                    "value2": "Project/meshes/Range Zombie.fbx",
+                    "value3": "Range Zombie.png",
+                    "value4": true,
+                    "value5": "Project/textures/Range Zombie.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 100.0,
+                        "value2": 1.25
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 2,
+                    "value4": "Default Text",
+                    "value5": 1.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 6.199999809265137,
+                    "value11": 0.0,
+                    "value12": 15.0,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 9,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 10,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 4,
+                    "value1": "Range Zombie Attack.fbx",
+                    "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
+                    "value3": 0.6000000238418579,
+                    "value4": false,
+                    "value5": true,
+                    "value6": "Zombie Walk_Range.fbx",
+                    "value7": "Project/animations/Zombie/Zombie Walk_Range.fbx",
+                    "value8": 1.0,
+                    "value9": true,
+                    "value10": true,
+                    "value11": "Zombie Idle Range.fbx",
+                    "value12": "Project/animations/Zombie/Zombie Idle Range.fbx",
+                    "value13": 0.4000000059604645,
+                    "value14": true,
+                    "value15": true,
+                    "value16": "Zombie Death Range.fbx",
+                    "value17": "Project/animations/Zombie/Zombie Death Range.fbx",
+                    "value18": 0.4000000059604645,
+                    "value19": false,
+                    "value20": false,
+                    "value21": "Zombie Idle Range.fbx",
+                    "value22": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        }
+    ],
+    "value36": "Slime",
+    "value37": "Enemy",
+    "value38": 0,
+    "value39": {
+        "value0": -64.0,
+        "value1": 40.0,
+        "value2": -64.0
+    },
+    "value40": {
+        "value0": 1.0,
+        "value1": 0.0,
+        "value2": 0.0,
+        "value3": 0.0
+    },
+    "value41": {
+        "value0": 0.03999999910593033,
+        "value1": 0.03999999910593033,
+        "value2": 0.03999999910593033
+    },
+    "value42": true,
+    "value43": false,
+    "value44": [
+        {
+            "polymorphic_id": 2147483662,
+            "polymorphic_name": "SlimeEnemy",
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 25.0,
+                        "value1": 3.5,
+                        "value2": 3.5,
+                        "value3": 2.0,
+                        "value4": 10.0,
+                        "value5": {
+                            "value0": {
+                                "value0": 1.0,
+                                "value1": 0.0,
+                                "value2": 0.0,
+                                "value3": 1.0
+                            },
+                            "value1": 1.0,
+                            "value2": 5,
+                            "value3": 5,
+                            "value4": 1,
+                            "value5": 1,
+                            "value6": 0.5,
+                            "value7": 1.0,
+                            "value8": 0.5,
+                            "value9": {
+                                "value0": true,
+                                "value1": "SlimeEnemy"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 100.0,
+                        "value1": 100.0,
+                        "value2": 100.0
+                    },
+                    "value1": false,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.0,
+                        "value2": 0.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": true,
+                        "value1": "BoxCollision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 6,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": true,
+                    "value1": true,
+                    "value2": true,
+                    "value3": {
+                        "value0": true,
+                        "value1": "RigidBody"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 7,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Slime_Idle.fbx",
+                    "value1": true,
+                    "value2": "Project/animations/Slime/Slime_Idle.fbx",
+                    "value3": "Default",
+                    "value4": false,
+                    "value5": "resources/white.png",
+                    "value6": "Default",
+                    "value7": false,
+                    "value8": "resources/BlinnPhongShader.shader",
+                    "value9": {
+                        "value0": 0.3235294818878174,
+                        "value1": 1.0,
+                        "value2": 0.0,
+                        "value3": 1.0
+                    },
+                    "value10": {
+                        "value0": true,
+                        "value1": "MeshRenderer"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 5,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": {
+                        "value0": 100.0,
+                        "value1": 100.0,
+                        "value2": 100.0
+                    },
+                    "value1": true,
+                    "value2": {
+                        "value0": 0.0,
+                        "value1": 2.0,
+                        "value2": 4.0
+                    },
+                    "value3": {
+                        "value0": 1.0,
+                        "value1": 0.0,
+                        "value2": 0.0,
+                        "value3": 0.0
+                    },
+                    "value4": {
+                        "value0": 1.0,
+                        "value1": 1.0,
+                        "value2": 1.0
+                    },
+                    "value5": {
+                        "value0": false,
+                        "value1": "Attack Collision"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 8,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": "Default",
+                    "value1": false,
+                    "value2": "resources/Arial.fnt",
+                    "value3": 2,
+                    "value4": "Default Text",
+                    "value5": 1.0,
+                    "value6": 0.0,
+                    "value7": 0.0,
+                    "value8": 1.0,
+                    "value9": 0.0,
+                    "value10": 4.099999904632568,
+                    "value11": 0.0,
+                    "value12": 15.000022888183594,
+                    "value13": 0.5,
+                    "value14": 0.009999999776482582,
+                    "value15": 0.0,
+                    "value16": 0.0010000000474974514,
+                    "value17": 0.0,
+                    "value18": 0.0,
+                    "value19": 0.0,
+                    "value20": 0.0,
+                    "value21": 0.0,
+                    "value22": false,
+                    "value23": {
+                        "value0": true,
+                        "value1": "FontComponent"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 9,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": false,
+                    "value1": false,
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
+                        "value0": true,
+                        "value1": "AudioBroadcaster"
+                    }
+                }
+            }
+        },
+        {
+            "polymorphic_id": 10,
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "value0": 4,
+                    "value1": "Slime Death.fbx",
+                    "value2": "Project/animations/Slime/Slime Death.fbx",
+                    "value3": 0.20000000298023225,
+                    "value4": false,
+                    "value5": false,
+                    "value6": "Slime Attack.fbx",
+                    "value7": "Project/animations/Slime/Slime Attack.fbx",
+                    "value8": 0.699999988079071,
+                    "value9": false,
+                    "value10": true,
+                    "value11": "Slime Walk.fbx",
+                    "value12": "Project/animations/Slime/Slime Walk.fbx",
+                    "value13": 0.20000000298023225,
+                    "value14": true,
+                    "value15": true,
+                    "value16": "Slime_Idle.fbx",
+                    "value17": "Project/animations/Slime/Slime_Idle.fbx",
+                    "value18": 0.4000000059604645,
+                    "value19": true,
+                    "value20": true,
+                    "value21": "Slime_Idle.fbx",
+                    "value22": {
+                        "value0": true,
+                        "value1": "Animation"
+                    }
+                }
+            }
+        }
+    ],
+    "value45": true,
+    "value46": 256.0,
+    "value47": 128,
+    "value48": 33,
+    "value49": 0,
+    "value50": 4,
+    "value51": 3,
+    "value52": -5.835999965667725,
+    "value53": 64.61799621582031,
+    "value54": 132.30499267578126,
+    "value55": 4,
+    "value56": 3,
+    "value57": true,
+    "value58": 3,
+    "value59": 0,
+    "value60": 0,
+    "value61": 1,
+    "value62": 0.009999999776482582,
+    "value63": 2.0,
+    "value64": 0.5,
+    "value65": 0.0,
+    "value66": 2.0,
+    "value67": 4,
+    "value68": 0,
+    "value69": 1,
+    "value70": 0.009999999776482582,
+    "value71": 2.0,
+    "value72": 0.5,
+    "value73": 0.0,
+    "value74": 2.0,
+    "value75": 0,
     "value76": 0,
-    "value77": 4,
-    "value78": 3,
-    "value79": -5.835999965667725,
-    "value80": 64.61799621582031,
-    "value81": 132.30499267578126,
-    "value82": 4,
-    "value83": 3,
-    "value84": true,
-    "value85": 3,
-    "value86": 0,
-    "value87": 0,
-    "value88": 1,
-    "value89": 0.009999999776482582,
+    "value77": 1,
+    "value78": 0.017999999225139619,
+    "value79": 2.0,
+    "value80": 0.5,
+    "value81": 0.0,
+    "value82": 2.0,
+    "value83": 0,
+    "value84": 0,
+    "value85": 1,
+    "value86": 0.014999999664723874,
+    "value87": 2.0,
+    "value88": 0.5,
+    "value89": 0.0,
     "value90": 2.0,
-    "value91": 0.5,
+    "value91": 0.0,
     "value92": 0.0,
-    "value93": 2.0,
-    "value94": 4,
-    "value95": 0,
-    "value96": 1,
-    "value97": 0.009999999776482582,
-    "value98": 2.0,
-    "value99": 0.5,
-    "value100": 0.0,
-    "value101": 2.0,
-    "value102": 0,
-    "value103": 0,
-    "value104": 1,
-    "value105": 0.017999999225139619,
-    "value106": 2.0,
+    "value93": 0.0,
+    "value94": 0.0,
+    "value95": 0.0,
+    "value96": 0.0,
+    "value97": 5.572000026702881,
+    "value98": "Grass.png",
+    "value99": 0.25,
+    "value100": 0.25,
+    "value101": 0.25,
+    "value102": 0.5220000147819519,
+    "value103": 0.12600000202655793,
+    "value104": 0.0,
+    "value105": 19.062000274658204,
+    "value106": "Stony ground.png",
     "value107": 0.5,
-    "value108": 0.0,
-    "value109": 2.0,
-    "value110": 0,
-    "value111": 0,
-    "value112": 1,
-    "value113": 0.014999999664723874,
-    "value114": 2.0,
-    "value115": 0.5,
-    "value116": 0.0,
-    "value117": 2.0,
-    "value118": 0.0,
-    "value119": 0.0,
-    "value120": 0.0,
-    "value121": 0.0,
-    "value122": 0.0,
-    "value123": 0.0,
-    "value124": 5.572000026702881,
-    "value125": "Grass.png",
-    "value126": 0.25,
-    "value127": 0.25,
-    "value128": 0.25,
-    "value129": 0.5220000147819519,
-    "value130": 0.12600000202655793,
-    "value131": 0.0,
-    "value132": 19.062000274658204,
-    "value133": "Stony ground.png",
-    "value134": 0.5,
-    "value135": 0.5,
-    "value136": 0.5,
-    "value137": 0.5809999704360962,
-    "value138": 0.10000000149011612,
-    "value139": 0.0,
-    "value140": 100.0,
-    "value141": "Rocks.png",
-    "value142": 1.0,
-    "value143": 0.9999899864196777,
-    "value144": 0.9999899864196777,
-    "value145": 0.6190000176429749,
-    "value146": 0.11999999731779099,
-    "value147": 0.5339999794960022,
-    "value148": 53.07899856567383,
-    "value149": "Snow.png",
-    "value150": 4,
-    "value151": "Project/prefabs\\Rock.zepref",
-    "value152": 1,
-    "value153": true,
-    "value154": "Project/prefabs\\Rock2.zepref",
-    "value155": 1,
-    "value156": true,
-    "value157": "Project/prefabs\\Tree.zepref",
-    "value158": 1,
-    "value159": true
+    "value108": 0.5,
+    "value109": 0.5,
+    "value110": 0.5809999704360962,
+    "value111": 0.10000000149011612,
+    "value112": 0.0,
+    "value113": 100.0,
+    "value114": "Rocks.png",
+    "value115": 1.0,
+    "value116": 0.9999899864196777,
+    "value117": 0.9999899864196777,
+    "value118": 0.6190000176429749,
+    "value119": 0.11999999731779099,
+    "value120": 0.5339999794960022,
+    "value121": 53.07899856567383,
+    "value122": "Snow.png",
+    "value123": 4,
+    "value124": "Project/prefabs\\Rock.zepref",
+    "value125": 1,
+    "value126": true,
+    "value127": "Project/prefabs\\Rock2.zepref",
+    "value128": 1,
+    "value129": true,
+    "value130": "Project/prefabs\\Tree.zepref",
+    "value131": 1,
+    "value132": true
 }

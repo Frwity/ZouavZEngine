@@ -25,6 +25,7 @@ private:
 	friend class cereal::access;
 
 	static bool destroyGameObject;
+	static bool resetScene;
 	static std::vector<std::unique_ptr<GameObject>> gameObjects;
 	static std::unordered_map<std::string ,std::unique_ptr<GameObject>> prefabGameObjects;
 	std::vector<std::unique_ptr<Component>> components;
@@ -34,6 +35,7 @@ private:
 	bool toDestroy{ false };
 	bool isPrefab{ false };
 	bool notToSave{ false };
+	bool canBeLoad{ false };
 
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
@@ -52,7 +54,7 @@ public:
 
 	void Destroy();
 
-	void SetNotToSave(bool _state) { notToSave = _state; }
+	void SetNotToSave(bool _state, bool _canBeLoadAsPrefab = false) { notToSave = _state; canBeLoad = _canBeLoadAsPrefab; }
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
@@ -213,7 +215,7 @@ public:
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		if (notToSave)
+		if (notToSave && !canBeLoad)
 			return;
 		int nbChild = (int)children.size();
 		

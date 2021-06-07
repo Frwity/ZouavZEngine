@@ -17,7 +17,7 @@ EnemyManager::EnemyManager(GameObject * _gameobject, std::string _name)
 
 void EnemyManager::AddEnemy(Enemy* _enemy)
 {
-    enemies.push_back(_enemy);
+    enemies.emplace_back(_enemy);
 }
 
 void EnemyManager::RemoveEnemy(Enemy* _enemy)
@@ -98,7 +98,8 @@ void EnemyManager::Update()
         {
             timerToSpawn = 0.0f;
             enemies.emplace_back(GameObject::Instanciate(*enemiesPrefab[rand() % nbEnemiesPrefab], { currentChunkWorldPos.x + chunkSize / 2.f, 40.f, currentChunkWorldPos.y + chunkSize / 2.f })->GetComponent<Enemy>());
-            enemies[enemies.size() - 1]->UpdateLevel(playerComp->GetLevel());
+            enemies.back()->GetGameObject().SetNotToSave(true, true);
+            enemies.back()->UpdateLevel(playerComp->GetLevel());
         }
     }
     else if (asDoneChunk)
@@ -123,6 +124,9 @@ void EnemyManager::Update()
             arenaObject.emplace_back(GameObject::Instanciate(*cornerPillar, { currentChunkWorldPos.x + chunkSize, 0.f, currentChunkWorldPos.y }))->SetNotToSave(true);
             arenaObject.emplace_back(GameObject::Instanciate(*cornerPillar, { currentChunkWorldPos.x + chunkSize, 0.f, currentChunkWorldPos.y + chunkSize }))->SetNotToSave(true);
             arenaObject.emplace_back(GameObject::Instanciate(*cornerPillar, { currentChunkWorldPos.x, 0.f, currentChunkWorldPos.y + chunkSize }))->SetNotToSave(true);
+
+            enemies.clear();
+            enemies.shrink_to_fit();
         }
     }
     else

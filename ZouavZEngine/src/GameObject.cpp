@@ -16,6 +16,7 @@
 #include "GameObject.hpp"
 
 bool GameObject::destroyGameObject = false;
+bool GameObject::resetScene = false;
 GameObject* GameObject::currentLoadedGameObject = nullptr;
 std::vector<std::unique_ptr<GameObject>> GameObject::gameObjects;
 std::unordered_map < std::string, std::unique_ptr<GameObject >> GameObject::prefabGameObjects;
