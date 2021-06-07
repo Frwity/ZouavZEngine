@@ -22,6 +22,7 @@ private:
     std::vector<float> finalBonesMatrices;
 
 public :
+    AssimpNodeData rootNode;
     std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
     std::shared_ptr<AnimResource> currentAnimation;
     std::shared_ptr<AnimResource> idleAnimation;
@@ -44,6 +45,8 @@ public :
     bool IsFinish() { return animationFinish; }
     bool IsFinish(std::string _animName);
     void clearBoneMatrices();
+
+    void UpdateAnimationResources(Mesh* _mesh);
 
     template <class Archive>
     void serialize(Archive& _ar)

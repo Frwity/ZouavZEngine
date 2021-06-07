@@ -424,7 +424,7 @@
     "value19": "",
     "value20": 0,
     "value21": {
-        "value0": 0.0,
+        "value0": -3.5488367080688478,
         "value1": 0.0,
         "value2": -29.887386322021486
     },
@@ -683,9 +683,9 @@
     "value28": "",
     "value29": 0,
     "value30": {
-        "value0": -28.743968963623048,
+        "value0": -35.90986251831055,
         "value1": -0.000007696478860452772,
-        "value2": -17.739519119262697
+        "value2": -25.013893127441408
     },
     "value31": {
         "value0": 1.0,
@@ -911,34 +911,29 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 5,
+                    "value0": 4,
                     "value1": "Range Zombie Attack.fbx",
                     "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
                     "value3": 0.6000000238418579,
                     "value4": false,
                     "value5": true,
-                    "value6": "Zombie Walk.fbx",
-                    "value7": "Project/animations/Zombie/Zombie Walk.fbx",
+                    "value6": "Zombie Walk_Range.fbx",
+                    "value7": "Project/animations/Zombie/Zombie Walk_Range.fbx",
                     "value8": 1.0,
                     "value9": true,
                     "value10": true,
-                    "value11": "Zombie Idle.fbx",
-                    "value12": "Project/animations/Zombie/Zombie Idle.fbx",
+                    "value11": "Zombie Idle Range.fbx",
+                    "value12": "Project/animations/Zombie/Zombie Idle Range.fbx",
                     "value13": 0.4000000059604645,
                     "value14": true,
                     "value15": true,
-                    "value16": "Zombie Death.fbx",
-                    "value17": "Project/animations/Zombie/Zombie Death.fbx",
+                    "value16": "Zombie Death Range.fbx",
+                    "value17": "Project/animations/Zombie/Zombie Death Range.fbx",
                     "value18": 0.4000000059604645,
                     "value19": false,
                     "value20": false,
-                    "value21": "Zombie_Death.fbx",
-                    "value22": "Project/animations/Zombie/Zombie_Death.fbx",
-                    "value23": 0.4000000059604645,
-                    "value24": false,
-                    "value25": false,
-                    "value26": "Zombie Idle.fbx",
-                    "value27": {
+                    "value21": "Zombie Idle Range.fbx",
+                    "value22": {
                         "value0": true,
                         "value1": "Animation"
                     }
@@ -950,7 +945,7 @@
     "value37": "Enemy",
     "value38": 0,
     "value39": {
-        "value0": 24.22603416442871,
+        "value0": 41.81391525268555,
         "value1": 0.0,
         "value2": -31.716312408447267
     },
@@ -976,7 +971,7 @@
                 "data": {
                     "value0": {
                         "value0": 25.0,
-                        "value1": 5.0,
+                        "value1": 3.5,
                         "value2": 3.5,
                         "value3": 2.0,
                         "value4": 10.0,
@@ -1156,8 +1151,14 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
@@ -1170,16 +1171,16 @@
                 "valid": 1,
                 "data": {
                     "value0": 4,
-                    "value1": "Slime Attack.fbx",
-                    "value2": "Project/animations/Slime/Slime Attack.fbx",
-                    "value3": 0.699999988079071,
+                    "value1": "Slime Death.fbx",
+                    "value2": "Project/animations/Slime/Slime Death.fbx",
+                    "value3": 0.20000000298023225,
                     "value4": false,
-                    "value5": true,
-                    "value6": "Slime Death.fbx",
-                    "value7": "Project/animations/Slime/Slime Death.fbx",
-                    "value8": 0.20000000298023225,
+                    "value5": false,
+                    "value6": "Slime Attack.fbx",
+                    "value7": "Project/animations/Slime/Slime Attack.fbx",
+                    "value8": 0.699999988079071,
                     "value9": false,
-                    "value10": false,
+                    "value10": true,
                     "value11": "Slime Walk.fbx",
                     "value12": "Project/animations/Slime/Slime Walk.fbx",
                     "value13": 0.20000000298023225,

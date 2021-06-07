@@ -20,9 +20,9 @@ void EnemyArcher::Editor()
 void EnemyArcher::Begin()
 {
 	attackAnimName = "Range Zombie Attack.fbx";
-	walkAnimName = "Zombie Walk.fbx";
-	idleAnimName = "Zombie Idle.fbx";
-	deathAnimName = "Zombie_Death.fbx";
+	walkAnimName = "Zombie Walk_Range.fbx";
+	idleAnimName = "Zombie Idle Range.fbx";
+	deathAnimName = "Zombie Death Range.fbx";
 	Enemy::Begin();
 }
 

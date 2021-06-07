@@ -29,7 +29,6 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	std::map<std::string, BoneInfo> boneInfoMap = mesh->boneInfoMap;
 
-
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(boneInfoMap, animation);
 
@@ -62,7 +61,7 @@ void AnimResource::AssignBoneToNode(std::map<std::string, BoneInfo>& _boneInfoMa
 		AssignBoneToNode(_boneInfoMap, &child);
 }
 
-void AnimResource::UpdateAnimationResources(Mesh* _mesh)
+void AnimResource::UpdateAnimationResources(AssimpNodeData* _rootNode, Mesh* _mesh)
 {
 	bones.clear();
 	rootNode.children.clear();
@@ -120,6 +119,8 @@ void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 
 	for (auto& child : rootNode.children)
 		AssignBoneToNode(boneInfoMap, &child);
+
+	_rootNode = &rootNode;
 }
 
 void AnimResource::RemoveFromResourcesManager()
@@ -127,7 +128,7 @@ void AnimResource::RemoveFromResourcesManager()
 
 }
 
-void AnimResource::UpdateAnimation(std::vector<float>* finalBonesMatrices, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish)
+void AnimResource::UpdateAnimation(std::vector<float>* finalBonesMatrices, AssimpNodeData* _rootNode, float _deltaTime, bool _loop, float& _currentTime, bool& _animationFinish)
 {
 	if (!_animationFinish)
 	{
@@ -143,7 +144,7 @@ void AnimResource::UpdateAnimation(std::vector<float>* finalBonesMatrices, float
 		_animationFinish = false;
 
 	if(!_animationFinish)
-		CalculateBoneTransform(finalBonesMatrices, &rootNode, Mat4::identity, _currentTime);	
+		CalculateBoneTransform(finalBonesMatrices, &rootNode, Mat4::identity, _currentTime);
 }
 
 void AnimResource::ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMap, const aiAnimation* animation)

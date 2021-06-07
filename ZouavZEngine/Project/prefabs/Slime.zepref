@@ -3,7 +3,7 @@
     "value1": "Enemy",
     "value2": 0,
     "value3": {
-        "value0": 24.22603416442871,
+        "value0": 41.81391525268555,
         "value1": 0.0,
         "value2": -31.716312408447267
     },
@@ -29,7 +29,7 @@
                 "data": {
                     "value0": {
                         "value0": 25.0,
-                        "value1": 5.0,
+                        "value1": 3.5,
                         "value2": 3.5,
                         "value3": 2.0,
                         "value4": 10.0,
@@ -214,8 +214,14 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "Project/sounds/attack.wav",
+                    "value5": "damage.wav",
+                    "value6": "Project/sounds/damage.wav",
+                    "value7": "death.wav",
+                    "value8": "Project/sounds/death.wav",
+                    "value9": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
