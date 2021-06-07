@@ -3,9 +3,9 @@
     "value1": "",
     "value2": 0,
     "value3": {
-        "value0": -28.743968963623048,
+        "value0": -35.90986251831055,
         "value1": -0.000007696478860452772,
-        "value2": -17.739519119262697
+        "value2": -25.013893127441408
     },
     "value4": {
         "value0": 1.0,
@@ -237,34 +237,29 @@
             "ptr_wrapper": {
                 "valid": 1,
                 "data": {
-                    "value0": 5,
+                    "value0": 4,
                     "value1": "Range Zombie Attack.fbx",
                     "value2": "Project/animations/Zombie/Range Zombie Attack.fbx",
                     "value3": 0.6000000238418579,
                     "value4": false,
                     "value5": true,
-                    "value6": "Zombie Walk.fbx",
-                    "value7": "Project/animations/Zombie/Zombie Walk.fbx",
+                    "value6": "Zombie Walk_Range.fbx",
+                    "value7": "Project/animations/Zombie/Zombie Walk_Range.fbx",
                     "value8": 1.0,
                     "value9": true,
                     "value10": true,
-                    "value11": "Zombie Idle.fbx",
-                    "value12": "Project/animations/Zombie/Zombie Idle.fbx",
+                    "value11": "Zombie Idle Range.fbx",
+                    "value12": "Project/animations/Zombie/Zombie Idle Range.fbx",
                     "value13": 0.4000000059604645,
                     "value14": true,
                     "value15": true,
-                    "value16": "Zombie Death.fbx",
-                    "value17": "Project/animations/Zombie/Zombie Death.fbx",
+                    "value16": "Zombie Death Range.fbx",
+                    "value17": "Project/animations/Zombie/Zombie Death Range.fbx",
                     "value18": 0.4000000059604645,
                     "value19": false,
                     "value20": false,
-                    "value21": "Zombie_Death.fbx",
-                    "value22": "Project/animations/Zombie/Zombie_Death.fbx",
-                    "value23": 0.4000000059604645,
-                    "value24": false,
-                    "value25": false,
-                    "value26": "Zombie Idle.fbx",
-                    "value27": {
+                    "value21": "Zombie Idle Range.fbx",
+                    "value22": {
                         "value0": true,
                         "value1": "Animation"
                     }

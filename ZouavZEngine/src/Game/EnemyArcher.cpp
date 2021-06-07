@@ -21,8 +21,8 @@ void EnemyArcher::Begin()
 {
 	attackAnimName = "Range Zombie Attack.fbx";
 	walkAnimName = "Zombie Walk_Range.fbx";
-	idleAnimName = "Zombie Idle_Range.fbx";
-	deathAnimName = "Zombie_Death_Range.fbx";
+	idleAnimName = "Zombie Idle Range.fbx";
+	deathAnimName = "Zombie Death Range.fbx";
 	Enemy::Begin();
 }
 

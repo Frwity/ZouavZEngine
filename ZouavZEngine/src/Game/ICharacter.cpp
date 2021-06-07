@@ -163,10 +163,13 @@ bool ICharacter::Damage(int _damage)
 		}
 		else
 		{
+			OnDeath();
 			animation->Play(deathAnimName);
 			audioBroadcaster->Play("death.wav");
-			StopAttack();
-			OnDeath();
+			std::vector<BoxCollision*> boxCollisions = GetGameObject().GetComponents<BoxCollision>();
+			for (BoxCollision* boxCollision : boxCollisions)
+				boxCollision->Deactivate();
+ 			rb->Deactivate();
 		}
 	}
 	else

@@ -40,6 +40,7 @@ public:
 	bool IsTrigger() { return isTrigger; }
 	void SetTrigger(bool _isTrigger);
 	void UpdateIsTrigger();
+	Vec3 GetPosition() { return transform.localPosition; }
 	void EditPosition(const Vec3& _newPos);
 	void EditRotation(const Vec3& _newRot);
 	virtual void Editor() override;
