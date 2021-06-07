@@ -38,7 +38,17 @@ class Mat4 : public Matrix
 
         Vec3 operator*(const Vec3& _v) const;
         Vec4 operator*(const Vec4& _v) const;
-        Mat4 operator*(const Mat4& _m) const;
+        inline Mat4 operator*(const Mat4& _m) const
+        {
+            Mat4 result = zero;
+
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 16; j += 4)
+                    for (int k = 0; k < 4; ++k)
+                        result.matrix[i + j] += matrix[i + k * 4] * _m.matrix[k + j];
+
+            return result;
+        }
         Mat4 operator*(float _value) const;
         Mat4 operator/(float _value) const;
 

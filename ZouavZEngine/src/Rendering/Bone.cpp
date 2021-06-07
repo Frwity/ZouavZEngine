@@ -47,7 +47,7 @@ void Bone::Update(float _animationTime)
 {
     Vec3 translation    = InterpolatePosition(_animationTime);
     Quaternion rotation = InterpolateRotation(_animationTime);
-    Vec3 scale = InterpolateScaling(_animationTime);
+    Vec3 scale          = InterpolateScaling(_animationTime);
 
     localTransform = Mat4::CreateTRSMatrix(translation, rotation, scale);
 }

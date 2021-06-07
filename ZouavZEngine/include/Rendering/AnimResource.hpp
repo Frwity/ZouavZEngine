@@ -12,10 +12,12 @@
 
 struct AssimpNodeData
 {
+    Bone* bone;
+    std::vector<AssimpNodeData> children;
+    BoneInfo boneInfo;
     Mat4 transformation;
     std::string name;
     int childrenCount;
-    std::vector<AssimpNodeData> children;
 };
 
 class AnimResource: public Resource
@@ -24,14 +26,15 @@ private:
     std::vector<Bone> bones;
     Mesh* mesh;
 
-    void ReadMissingBones(const aiAnimation* animation);
+    void ReadMissingBones(std::map<std::string, BoneInfo>& _boneInfoMap, const aiAnimation* animation);
     void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
-    Bone* FindBone(const std::string& _boneName);
+    Bone* FindBone(const char* _boneName);
     void CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _parentTransform, float _currentTime);
+    void AssignBoneToNode(std::map<std::string, BoneInfo>& _boneInfoMap, AssimpNodeData* _node);
 
 public:
     AssimpNodeData rootNode;
-    std::map<std::string, BoneInfo> boneInfoMap;
+    //std::map<std::string, BoneInfo> boneInfoMap;
     std::vector<float> finalBonesMatrices;
     float duration;
     int tickPerSecond;

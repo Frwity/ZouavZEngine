@@ -19,9 +19,11 @@ void EnemyArcher::Editor()
 
 void EnemyArcher::Begin()
 {
+	attackAnimName = "Range Zombie Attack.fbx";
+	walkAnimName = "Zombie Walk.fbx";
+	idleAnimName = "Zombie Idle.fbx";
+	deathAnimName = "Zombie_Death.fbx";
 	Enemy::Begin();
-	attackAnim = "Range Zombie Attack.fbx";
-	walkAnim = "Zombie Walk.fbx";
 }
 
 void EnemyArcher::Update()
@@ -37,24 +39,7 @@ void EnemyArcher::Attack()
 		if (arrowComp)
 			arrowComp->Initiate(player->WorldPosition() - GetGameObject().WorldPosition(), attackDamage);
 		timerAttackCooldown = attackCooldown;
-		PlayAttackAnimation();
+		if (animation)
+			animation->Play("Range Zombie Attack.fbx");
 	}
-}
-
-void EnemyArcher::PlayAttackAnimation()
-{
-	if (animation)
-		animation->Play("Range Zombie Attack.fbx");
-}
-
-void EnemyArcher::PlayIdleAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Idle.fbx");
-}
-
-void EnemyArcher::PlayWalkAnimation()
-{
-	if (animation)
-		animation->Play("Zombie Walk.fbx");
 }

@@ -166,7 +166,7 @@ bool Editor::Display(Render& _render)
     n++;
     currentTime = TimeManager::GetTime();
 
-    if ((currentTime - lastFrameTime) >= 1.0)
+    if ((currentTime - lastFrameTime) >= 1.0f)
     {
         fps = n;
         n = 0;

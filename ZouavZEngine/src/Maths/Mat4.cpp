@@ -214,18 +214,6 @@ Mat4 Mat4::ConvertAssimpMatrixToMat4(aiMatrix4x4t<ai_real> matrix)
     return r.Transposed();
 }
 
-Mat4 Mat4::operator*(const Mat4& m) const
-{
-    Mat4 result = zero;
-
-    for (int i = 0; i < 4; ++i)
-        for (int j = 0; j < 16; j+=4)
-            for (int k = 0; k < 4; ++k)
-                result.matrix[i + j] += matrix[i + k * 4] * m.matrix[k + j];
-
-    return result;
-}
-
 Mat4 Mat4::operator*(float _value) const
 {
     Mat4 result = *this;

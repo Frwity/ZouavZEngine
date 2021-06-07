@@ -22,12 +22,13 @@ struct Vertex
 
 struct BoneInfo
 {
-    /*id is index in finalBoneMatrices*/
-    int id;
-
     /*offset matrix transforms vertex from model space to bone space*/
     Mat4 offset;
 
+    /*id is index in finalBoneMatrices*/
+    int id;
+
+    bool isValid = true;
 };
 
 class Mesh : public Resource
