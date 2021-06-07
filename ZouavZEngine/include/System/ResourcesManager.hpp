@@ -37,6 +37,7 @@ public:
 	static void InitDefaultResources();
 	static void PrepareClear();
 	static void ClearHasToBeDelete();
+	static void Clear();
 
 	template <class Archive>
 	static void load(Archive& _ar)
@@ -381,37 +382,51 @@ public:
 
 	static void RemoveResourceSound(std::string _name)
 	{
-		soundResources.erase(_name);
+		auto it = soundResources.find(_name);
+		if (it != soundResources.end())
+			soundResources.erase(it);
 	}
 
 	static void RemoveResourceTexture(std::string _name)
 	{
-		textureResources.erase(_name);
+		auto it = textureResources.find(_name);
+		if (it != textureResources.end())
+			textureResources.erase(it);
 	}
 
 	static void RemoveResourceFont(std::string _name)
 	{
-		fontResources.erase(_name);
+		auto it = fontResources.find(_name);
+		if (it != fontResources.end())
+			fontResources.erase(it);
 	}
 
 	static void RemoveResourceMesh(std::string _name)
 	{
-		meshResources.erase(_name);
+		auto it = meshResources.find(_name);
+		if (it != meshResources.end())
+			meshResources.erase(it);
 	}
 
 	static void RemoveResourceShader(std::string _name)
 	{
-		shaderResources.erase(_name);
+		auto it = shaderResources.find(_name);
+		if (it != shaderResources.end())
+			shaderResources.erase(_name);
 	}
 	
 	static void RemoveResourceCubemapTexture(std::string _name)
 	{
-		cubemapTextureResources.erase(_name);
+		auto it = cubemapTextureResources.find(_name);
+		if (it != cubemapTextureResources.end())
+			cubemapTextureResources.erase(it);
 	}
 
 	static void RemoveResourceAnimation(std::string _name)
 	{
-		animationsResources.erase(_name);
+		auto it = animationsResources.find(_name);
+		if (it != animationsResources.end())
+			animationsResources.erase(it);
 	}
 
 	template<typename T>

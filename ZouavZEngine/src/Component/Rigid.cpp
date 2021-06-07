@@ -93,7 +93,7 @@ void Rigid::OnTrigger(Object* _other, physx::PxShape* _collidingShape)
 
 Rigid::~Rigid()
 {
-	if (!PhysicSystem::scene)
+	if (!PhysicSystem::scene || !GetGameObject().IsActive())
 		return;
 
 	if (actor)
