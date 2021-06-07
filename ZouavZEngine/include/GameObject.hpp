@@ -35,7 +35,6 @@ private:
 	bool toDestroy{ false };
 	bool isPrefab{ false };
 	bool notToSave{ false };
-	bool canBeLoad{ false };
 
 	void CreatePrefab();
 	static GameObject* LoadPrefab(const std::string& _path);
@@ -54,7 +53,7 @@ public:
 
 	void Destroy();
 
-	void SetNotToSave(bool _state, bool _canBeLoadAsPrefab = false) { notToSave = _state; canBeLoad = _canBeLoadAsPrefab; }
+	void SetNotToSave(bool _state) { notToSave = _state; }
 
 	bool IsActive() const { return isActive && !isPrefab; }
 	void Activate();
@@ -215,12 +214,12 @@ public:
 	template <class Archive>
 	void save(Archive& _ar) const
 	{
-		if (notToSave && !canBeLoad)
+		if (resetScene && notToSave)
 			return;
 		int nbChild = (int)children.size();
 		
 		for (GameObject* child : children)
-			if (child->notToSave)
+			if (resetScene && child->notToSave)
 				--nbChild;
 
 		_ar(name, tag, nbChild, localPosition, localRotation, localScale, isActive, isPrefab, components);

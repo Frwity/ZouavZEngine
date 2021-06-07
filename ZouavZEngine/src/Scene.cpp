@@ -70,7 +70,6 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 	world.children.clear();
 	PhysicSystem::Destroy();
 	PhysicSystem::Init();
-	GameObject::resetScene = true;
 	std::ifstream saveFile;
 	if (_changingScene)
 	{
@@ -101,11 +100,11 @@ void Scene::Load(const std::string& _path, bool _changingScene)
 	terrain.Generate(GameObject::GetGameObjectByTag("Player"));
 	terrain.Update();
 
-	GameObject::resetScene = false;
 }
 
 void Scene::Save()
 {
+	GameObject::resetScene = true;
 	std::ofstream saveFile;
 	saveFile.open(std::string("Project/scenes/" + world.name + ".zesr"), std::ios::binary);
 	{
@@ -123,6 +122,7 @@ void Scene::Save()
 		terrain.save(oArchive);
 	}
 	saveFile.close();
+	GameObject::resetScene = false;
 }
 
 void Scene::UpdateShaderUniform(const Camera& _camera)

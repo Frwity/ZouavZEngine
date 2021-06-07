@@ -51,7 +51,7 @@ void ICharacter::OnTrigger(Object* _other, ShapeCollision* _triggerShape)
 		Enemy* thisEnemy = GetGameObject().GetComponent<Enemy>();
 		if ((otherEnemy && !thisEnemy) || (!otherEnemy && thisEnemy))
 		{
-			if (go->GetComponent<ICharacter>()->IsAlive())
+			if (go->GetComponent<ICharacter>() && go->GetComponent<ICharacter>()->IsAlive())
 			{
 				Player* goPlayer = go->GetComponent<Player>();
 				if (goPlayer && goPlayer->IsDashing())

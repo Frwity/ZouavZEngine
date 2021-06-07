@@ -79,6 +79,7 @@ void EnemyManager::Begin()
     arenaObject.emplace_back(GameObject::Instanciate(*cornerPillar, { currentChunkWorldPos.x + chunkSize, 0.f, currentChunkWorldPos.y + chunkSize }))->SetNotToSave(true);
     arenaObject.emplace_back(GameObject::Instanciate(*cornerPillar, { currentChunkWorldPos.x, 0.f, currentChunkWorldPos.y + chunkSize }))->SetNotToSave(true);
     enemies.emplace_back(GameObject::Instanciate(*enemiesPrefab[rand() % nbEnemiesPrefab], { currentChunkWorldPos.x + chunkSize / 2.f, 40.f, currentChunkWorldPos.y + chunkSize / 2.f })->GetComponent<Enemy>());
+    enemies.back()->GetGameObject().SetNotToSave(true);
 }
 
 void EnemyManager::Update()
@@ -98,7 +99,7 @@ void EnemyManager::Update()
         {
             timerToSpawn = 0.0f;
             enemies.emplace_back(GameObject::Instanciate(*enemiesPrefab[rand() % nbEnemiesPrefab], { currentChunkWorldPos.x + chunkSize / 2.f, 40.f, currentChunkWorldPos.y + chunkSize / 2.f })->GetComponent<Enemy>());
-            enemies.back()->GetGameObject().SetNotToSave(true, true);
+            enemies.back()->GetGameObject().SetNotToSave(true);
             enemies.back()->UpdateLevel(playerComp->GetLevel());
         }
     }
@@ -136,7 +137,7 @@ void EnemyManager::Update()
                 iter = enemies.erase(iter);
             else
                 iter++;
-        if (isSpawningDone && enemies.size() <= 1)
+        if (isSpawningDone && enemies.size() <= 0)
         {
             enemies.clear();
             asDoneChunk = true;
