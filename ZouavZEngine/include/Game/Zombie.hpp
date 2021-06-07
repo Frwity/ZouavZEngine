@@ -20,6 +20,7 @@ public:
     {
         _ar(cereal::base_class<Enemy>(this));
     }
+    
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<Zombie>&_construct)
     {

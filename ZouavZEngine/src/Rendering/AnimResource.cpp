@@ -27,9 +27,27 @@ AnimResource::AnimResource(const std::string& _name, std::string& _path, Mesh* _
 
 	boneInfoMap = mesh->boneInfoMap;
 
-	finalBonesMatrices.reserve(100);
+	finalBonesMatrices.reserve(100 * 16);
+	Mat4 mat = Mat4::identity;
 	for (int i = 0; i < 100; i++)
-		finalBonesMatrices.push_back(Mat4::identity);
+	{
+		finalBonesMatrices.emplace_back(mat.matrix[0]);
+		finalBonesMatrices.emplace_back(mat.matrix[1]);
+		finalBonesMatrices.emplace_back(mat.matrix[2]);
+		finalBonesMatrices.emplace_back(mat.matrix[3]);
+		finalBonesMatrices.emplace_back(mat.matrix[4]);
+		finalBonesMatrices.emplace_back(mat.matrix[5]);
+		finalBonesMatrices.emplace_back(mat.matrix[6]);
+		finalBonesMatrices.emplace_back(mat.matrix[7]);
+		finalBonesMatrices.emplace_back(mat.matrix[8]);
+		finalBonesMatrices.emplace_back(mat.matrix[9]);
+		finalBonesMatrices.emplace_back(mat.matrix[10]);
+		finalBonesMatrices.emplace_back(mat.matrix[11]);
+		finalBonesMatrices.emplace_back(mat.matrix[12]);
+		finalBonesMatrices.emplace_back(mat.matrix[13]);
+		finalBonesMatrices.emplace_back(mat.matrix[14]);
+		finalBonesMatrices.emplace_back(mat.matrix[15]);
+	}
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
@@ -54,9 +72,28 @@ void AnimResource::UpdateAnimationResources(Mesh* _mesh)
 
 	boneInfoMap = mesh->boneInfoMap;
 
-	finalBonesMatrices.reserve(100);
+	finalBonesMatrices.clear();
+	finalBonesMatrices.reserve(100 * 16);
+	Mat4 mat = Mat4::identity;
 	for (int i = 0; i < 100; i++)
-		finalBonesMatrices.push_back(Mat4::identity);
+	{
+		finalBonesMatrices.emplace_back(mat.matrix[0]);
+		finalBonesMatrices.emplace_back(mat.matrix[1]);
+		finalBonesMatrices.emplace_back(mat.matrix[2]);
+		finalBonesMatrices.emplace_back(mat.matrix[3]);
+		finalBonesMatrices.emplace_back(mat.matrix[4]);
+		finalBonesMatrices.emplace_back(mat.matrix[5]);
+		finalBonesMatrices.emplace_back(mat.matrix[6]);
+		finalBonesMatrices.emplace_back(mat.matrix[7]);
+		finalBonesMatrices.emplace_back(mat.matrix[8]);
+		finalBonesMatrices.emplace_back(mat.matrix[9]);
+		finalBonesMatrices.emplace_back(mat.matrix[10]);
+		finalBonesMatrices.emplace_back(mat.matrix[11]);
+		finalBonesMatrices.emplace_back(mat.matrix[12]);
+		finalBonesMatrices.emplace_back(mat.matrix[13]);
+		finalBonesMatrices.emplace_back(mat.matrix[14]);
+		finalBonesMatrices.emplace_back(mat.matrix[15]);
+	}
 
 	ReadHeirarchyData(rootNode, scene->mRootNode);
 	ReadMissingBones(animation);
@@ -156,7 +193,23 @@ void AnimResource::CalculateBoneTransform(const AssimpNodeData* _node, Mat4 _par
 		int index = boneInfoMap[nodeName].id;
 		Mat4 offset = boneInfoMap[nodeName].offset;
 
-		finalBonesMatrices[index] = globalTransformation * offset;
+		Mat4 mat = globalTransformation * offset;
+		finalBonesMatrices[index * 16] = mat.matrix[0];
+		finalBonesMatrices[index * 16 + 1] = mat.matrix[1];
+		finalBonesMatrices[ index * 16 + 2] = mat.matrix[2];
+		finalBonesMatrices[ index * 16 + 3] = mat.matrix[3];
+		finalBonesMatrices[ index * 16 + 4] = mat.matrix[4];
+		finalBonesMatrices[ index * 16 + 5] = mat.matrix[5];
+		finalBonesMatrices[ index * 16 + 6] = mat.matrix[6];
+		finalBonesMatrices[ index * 16 + 7] = mat.matrix[7];
+		finalBonesMatrices[ index * 16 + 8] = mat.matrix[8];
+		finalBonesMatrices[ index * 16 + 9] = mat.matrix[9];
+		finalBonesMatrices[ index * 16 + 10] = mat.matrix[10];
+		finalBonesMatrices[ index * 16 + 11] = mat.matrix[11];
+		finalBonesMatrices[ index * 16 + 12] = mat.matrix[12];
+		finalBonesMatrices[ index * 16 + 13] = mat.matrix[13];
+		finalBonesMatrices[ index * 16 + 14] = mat.matrix[14];
+		finalBonesMatrices[ index * 16 + 15] = mat.matrix[15];
 	}
 
 	for (int i = 0; i < _node->childrenCount; i++)
