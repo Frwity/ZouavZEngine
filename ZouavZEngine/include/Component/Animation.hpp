@@ -19,6 +19,7 @@ private:
     bool play = false;
     bool animationFinish = false;
     float currentTime = 0.0f;
+    std::vector<float> finalBonesMatrices;
 
 public :
     std::unordered_map<std::string, std::shared_ptr<AnimResource>> animationsAttached;
@@ -42,6 +43,7 @@ public :
     bool IsPlaying(std::string _animName);
     bool IsFinish() { return animationFinish; }
     bool IsFinish(std::string _animName);
+    void clearBoneMatrices();
 
     template <class Archive>
     void serialize(Archive& _ar)
