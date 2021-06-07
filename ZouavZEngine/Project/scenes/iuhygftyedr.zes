@@ -271,8 +271,11 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "damage.wav",
+                    "value5": "death.wav",
+                    "value6": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
@@ -624,8 +627,11 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "damage.wav",
+                    "value5": "death.wav",
+                    "value6": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
@@ -650,7 +656,7 @@
                     "value10": true,
                     "value11": "Zombie Walk.fbx",
                     "value12": "Project/animations/Zombie/Zombie Walk.fbx",
-                    "value13": 0.4000000059604645,
+                    "value13": 1.600000023841858,
                     "value14": true,
                     "value15": true,
                     "value16": "Zombie_Death.fbx",

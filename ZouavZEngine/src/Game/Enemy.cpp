@@ -95,3 +95,11 @@ void Enemy::Update()
 		}
 	}
 }
+
+void Enemy::UpdateLevel(int _level)
+{
+	level = _level;
+	maxLife = 6 * level;
+	attackDamage = 2 * level;
+	xpGiven = 3 * level;
+}

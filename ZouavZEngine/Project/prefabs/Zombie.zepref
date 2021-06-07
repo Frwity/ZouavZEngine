@@ -3,9 +3,9 @@
     "value1": "",
     "value2": 0,
     "value3": {
-        "value0": 0.0,
-        "value1": 0.0,
-        "value2": -29.887386322021486
+        "value0": 64.0,
+        "value1": 40.0,
+        "value2": 64.0
     },
     "value4": {
         "value0": 1.0,
@@ -214,8 +214,11 @@
                 "data": {
                     "value0": false,
                     "value1": false,
-                    "value2": 0,
-                    "value3": {
+                    "value2": 3,
+                    "value3": "attack.wav",
+                    "value4": "damage.wav",
+                    "value5": "death.wav",
+                    "value6": {
                         "value0": true,
                         "value1": "AudioBroadcaster"
                     }
