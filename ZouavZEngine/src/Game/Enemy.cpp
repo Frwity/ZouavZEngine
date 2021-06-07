@@ -5,6 +5,7 @@
 #include "Component/BoxCollision.hpp"
 #include "Component/Animation.hpp"
 #include "Component/RigidBody.hpp"
+#include "PhysX/PxRigidDynamic.h"
 #include "Game/Enemy.hpp"
 #include "Game/EnemyManager.hpp"
 #include <imgui.h>
@@ -35,6 +36,7 @@ void Enemy::Begin()
 {
 	ICharacter::Begin();
 	player = GameObject::GetGameObjectByTag("Player");
+	static_cast<physx::PxRigidDynamic*>(rb->actor)->setMass(10.0f);
 }
 
 void Enemy::Update()
