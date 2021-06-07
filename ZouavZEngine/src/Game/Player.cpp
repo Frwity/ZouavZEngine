@@ -56,11 +56,9 @@ void Player::Begin()
 	ProgressBar* progressBar = GetGameObject().GetComponentByName<ProgressBar>("XpBar");
 	progressBar->currentValue = (float*)&currentXp;
 	progressBar->maxValue = (float*)&maxXp;
-	progressBar->pos = { 0.0f, 1.0f, 0.0f };
 	progressBar = GetGameObject().GetComponentByName<ProgressBar>("LifeBar");
 	progressBar->currentValue = (float*)&life;
 	progressBar->maxValue = (float*)&maxLife;
-	progressBar->pos = { 0.0f, -1.0f, 0.0f };
 	maxXp = level * 10;
 	attackDamage += attackDamageGain * (level - 1);
 	maxLife += lifeGain * (level - 1);
