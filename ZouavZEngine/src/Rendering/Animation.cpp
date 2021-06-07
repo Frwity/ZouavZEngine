@@ -79,7 +79,7 @@ void Animation::Editor()
     if (ResourcesManager::ResourceChanger<AnimResource>("Animations", currentAnimation))
     {
         if (currentAnimation)
-            currentAnimation->UpdateAnimationResources(mesh);
+            currentAnimation->UpdateAnimationResources(&rootNode, mesh);
     }
 
     if (ImGui::BeginDragDropTarget())
@@ -98,7 +98,7 @@ void Animation::Editor()
                 currentAnimation = *ResourcesManager::AddResourceAnimation(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath, mesh);
                 if (currentAnimation)
                 {
-                    currentAnimation->UpdateAnimationResources(mesh);
+                    currentAnimation->UpdateAnimationResources(&rootNode, mesh);
                     animationsAttached.insert(std::make_pair(currentAnimation->GetName(), currentAnimation));
                     clearBoneMatrices();
                 }
@@ -110,7 +110,7 @@ void Animation::Editor()
     if (ResourcesManager::ResourceChanger<AnimResource>("Idle Animation", idleAnimation))
     {
         if (idleAnimation)
-            idleAnimation->UpdateAnimationResources(mesh);
+            idleAnimation->UpdateAnimationResources(&rootNode, mesh);
     }
 
     if (currentAnimation)
@@ -133,6 +133,7 @@ void Animation::Play(std::string _animName)
     currentTime = 0.0f;
     animationFinish = false;
     currentAnimation = animationsAttached.find(_animName)->second;
+    rootNode = currentAnimation->rootNode;
     play = true;
 }
 
@@ -149,7 +150,7 @@ bool Animation::IsFinish(std::string _animName)
 void Animation::Draw(const Camera& _camera)
 {
     if (currentAnimation)
-        currentAnimation->UpdateAnimation(&finalBonesMatrices, TimeManager::GetDeltaTime(), currentAnimation->loop, currentTime, animationFinish);
+        currentAnimation->UpdateAnimation(&finalBonesMatrices, &rootNode, TimeManager::GetDeltaTime(), currentAnimation->loop, currentTime, animationFinish);
     else
         return;
     if (IsFinish() && currentAnimation->goToIdle)
@@ -217,7 +218,7 @@ static void Animation::load_and_construct(Archive& _ar, cereal::construct<Animat
 
         if (meshRenderer)
         {
-            anim->UpdateAnimationResources(meshRenderer->mesh.get());
+            anim->UpdateAnimationResources(&_construct->rootNode, meshRenderer->mesh.get());
         }
         _construct->animationsAttached.insert(std::make_pair(animNames[i], anim));
     }
