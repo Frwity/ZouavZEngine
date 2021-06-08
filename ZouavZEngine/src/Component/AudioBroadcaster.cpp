@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "System/SoundManager.hpp"
 #include "Maths/Vec3.hpp"
+#include "Component/AudioListener.hpp"
 #include "Component/AudioBroadcaster.hpp"
 
 AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::string _name)
@@ -22,7 +23,8 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::string _name)
 	alSourcef(source, AL_MAX_DISTANCE, 60.0f);
 	alSource3f(source, AL_POSITION, 0.0f, 0.0f, 0.0f);
 	alSource3f(source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
-	alSourcei(source, AL_LOOPING, AL_FALSE);
+	SetLooping(loop);
+	SetAmbient(ambient);
 	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 
 	SoundManager::AddSound(this);
@@ -43,7 +45,8 @@ AudioBroadcaster::AudioBroadcaster(GameObject* _gameObject, std::shared_ptr<Soun
 	alSourcef(source, AL_MAX_DISTANCE, 60.0f);
 	alSource3f(source, AL_POSITION, 0.0f, 0.0f, 0.0f);
 	alSource3f(source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
-	alSourcei(source, AL_LOOPING, AL_FALSE);
+	SetLooping(loop);
+	SetAmbient(ambient);
 	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 	
 	SoundManager::AddSound(this);
@@ -63,11 +66,10 @@ AudioBroadcaster::~AudioBroadcaster()
 
 void AudioBroadcaster::Update()
 {
-	for (std::shared_ptr<Sound> sound : sounds)
-	{
-		if (!ambient && sound)
-			SetPosition(GetGameObject().WorldPosition());
-	}
+	if (!ambient)
+		SetPosition(GetGameObject().WorldPosition());
+	else
+		SetPosition(SoundManager::GetListener()->GetGameObject().WorldPosition());
 }
 
 void AudioBroadcaster::Play(std::string _soundName)
@@ -120,8 +122,9 @@ void AudioBroadcaster::SetLooping(bool _loop)
 void AudioBroadcaster::SetAmbient(bool _ambient)
 {
 	alSourcei(source, AL_SOURCE_RELATIVE, !_ambient);
-	SetPosition(Vec3::zero);
 	ambient = _ambient;
+	if (ambient)
+		SetPosition(Vec3::zero);
 }
 
 void AudioBroadcaster::Editor()

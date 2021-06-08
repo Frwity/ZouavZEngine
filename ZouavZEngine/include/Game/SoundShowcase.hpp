@@ -20,12 +20,14 @@ public:
     template <class Archive>
     void serialize(Archive & _ar)
     {
+        _ar(name);
         _ar(cereal::base_class<ScriptComponent>(this));
     }
     template <class Archive>
     static void load_and_construct(Archive & _ar, cereal::construct<SoundShowcase>&_construct)
     {
         _construct(GameObject::currentLoadedGameObject);
+        _ar(_construct->name);
         _ar(cereal::base_class<ScriptComponent>(_construct.ptr()));
     }
 };

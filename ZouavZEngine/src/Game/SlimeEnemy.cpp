@@ -3,6 +3,7 @@
 #include "Component/RigidBody.hpp"
 #include "System/TimeManager.hpp"
 #include "Component/FontComponent.hpp"
+#include "PhysX/PxRigidDynamic.h"
 #include "Game/SlimeEnemy.hpp"
 
 SlimeEnemy::SlimeEnemy(GameObject * _gameobject, std::string _name)
@@ -21,6 +22,7 @@ void SlimeEnemy::Begin()
 	idleAnimName = "Slime_Idle.fbx";
 	deathAnimName = "Slime Death.fbx";
 	Enemy::Begin();
+	static_cast<physx::PxRigidDynamic*>(rb->actor)->setMass(1.0f);
 }
 
 void SlimeEnemy::Update() 

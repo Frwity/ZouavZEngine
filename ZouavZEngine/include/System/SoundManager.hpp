@@ -23,6 +23,7 @@ public:
 	static void RemoveSound(class AudioBroadcaster* _soundToRemove);
 
 	static void SetListener(class AudioListener* _listener);
+	static const class AudioListener* GetListener() { return audioListener; }
 	static void RemoveListener(class AudioListener* _listener);
 
 	static void SetListenerPosition(const Vec3& _position);
