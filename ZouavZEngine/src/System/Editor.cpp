@@ -280,7 +280,7 @@ void Editor::DisplayOptionWindow()
         }
 	    state = EDITOR_STATE::PLAYING;
         TimeManager::gameClock->Activate();
-	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(3.0f, 0.0f, 0.0f, 0.5f);
+	    imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.6f, 0.3f, 0.3f, 0.5f);
     }
     ImGui::SameLine();
     if (ImGui::Button("Pause"))
@@ -295,7 +295,7 @@ void Editor::DisplayOptionWindow()
         state = EDITOR_STATE::EDITING;
         TimeManager::gameClock->Reset();
         gameObjectInspector = nullptr;
-        imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
+        imguiStyle->Colors[ImGuiCol_WindowBg] = ImVec4(0.12f, 0.12f, 0.12f, 0.94f);
         engine.scene.Load(false);
 	}
     ImGui::SameLine();
