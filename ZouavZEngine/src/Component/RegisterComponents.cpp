@@ -14,6 +14,7 @@
 #include "Game/PhysxShowcaseScript.hpp"
 #include "Game/EnemyManager.hpp"
 #include "Game/Zombie.hpp"
+#include "Game/SoundShowcase.hpp"
 //</REGISTERINCLUDE>
 
 void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFunctions)
@@ -35,6 +36,7 @@ void RegisterComponents(std::vector<bool (*)(GameObject* _go)>& _addComponentsFu
     REGISTER(PhysxShowcaseScript);
     REGISTER(EnemyManager);
     REGISTER(Zombie);
+    REGISTER(SoundShowcase);
 	//</REGISTER>
 
 

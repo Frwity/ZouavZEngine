@@ -2,12 +2,14 @@
 #include <AL/alc.h>
 #include <iostream>
 #include "Component/AudioBroadcaster.hpp"
+#include "Component/AudioListener.hpp"
 #include "System/Debug.hpp"
 #include "Maths/Vec3.hpp"
 #include "System/SoundManager.hpp"
 
 float SoundManager::mainVolume = 1.0f;
 std::vector<AudioBroadcaster*> SoundManager::audioBroadcasters;
+AudioListener* SoundManager::audioListener = nullptr;
 
 void SoundManager::Init()
 {
@@ -42,7 +44,10 @@ void SoundManager::Update()
     for (AudioBroadcaster* sound : audioBroadcasters)
     {
         sound->SetVolume(mainVolume * sound->volumeIntensity * sound->GetSoundIntensity());
+        sound->Update();
     }
+    if (audioListener)
+        audioListener->Update();
 }
 
 void SoundManager::Destroy()
@@ -74,6 +79,17 @@ void SoundManager::RemoveSound(AudioBroadcaster* _newSound)
         else
             ++it;
     }
+}
+
+void SoundManager::SetListener(AudioListener* _listener)
+{
+    audioListener = _listener;
+}
+
+void SoundManager::RemoveListener(AudioListener* _listener)
+{
+    if (_listener == audioListener)
+        audioListener = nullptr;
 }
 
 void SoundManager::SetListenerPosition(const Vec3& _position)

@@ -291,7 +291,10 @@
     <ClCompile Include="src\Game\Zombie.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
-    <!--Compile End-->
+      <ClCompile Include="src\Game\SoundShowcase.cpp">
+        <Filter>src\Game</Filter>
+     </ClCompile>
+  <!--Compile End-->
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Rendering\Shader.hpp">
@@ -528,6 +531,9 @@
     <ClInclude Include="src\Project.hpp">
       <Filter>src</Filter>
     </ClInclude>
-    <!--Include End-->
+      <ClInclude Include="include\Game\SoundShowcase.hpp">
+        <Filter>include\Game</Filter>
+     </ClInclude>
+  <!--Include End-->
   </ItemGroup>
 </Project>

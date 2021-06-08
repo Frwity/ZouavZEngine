@@ -132,12 +132,13 @@ void AudioBroadcaster::Editor()
 	}
 	for (std::shared_ptr<Sound>& sound : sounds)
 	{
+		ImGui::PushID(sound.get());
 		ResourcesManager::ResourceChanger<Sound>("Sound", sound);
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ProjectFile"))
 			{
-				ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new texture");
+				ZASSERT(payload->DataSize == sizeof(std::string), "Error in add new sound");
 				std::string _path = *(const std::string*)payload->Data;
 				std::string _truePath = _path;
 				size_t start_pos = _truePath.find("\\");
@@ -146,7 +147,7 @@ void AudioBroadcaster::Editor()
 				if (_truePath.find(".wav") != std::string::npos)
 				{
 					if (sound.use_count() == 2 && sound->IsDeletable())
-						ResourcesManager::RemoveResourceTexture(sound->GetName());
+						ResourcesManager::RemoveResourceSound(sound->GetName());
 					sound = *ResourcesManager::AddResourceSound(_path.substr(_path.find_last_of("/\\") + 1), true, _truePath.c_str());
 				}
 			}
@@ -154,6 +155,7 @@ void AudioBroadcaster::Editor()
 		}
 		if (sound)
 			ImGui::DragFloat("Sound volume intensity", &sound->volumeIntensity, 0.01f, 0.0f, 1.0f);
+		ImGui::PopID();
 		ImGui::NewLine();
 	}
 	ImGui::DragFloat("Volume intensity", &volumeIntensity, 0.01f, 0.0f, 1.0f);
@@ -165,7 +167,7 @@ void AudioBroadcaster::Editor()
 	ImGui::Text("Loop    : ");
 	ImGui::SameLine();
 	if (ImGui::Checkbox("##loop", &loop))
-		SetAmbient(loop);
+		SetLooping(loop);
 }
 
 template <class Archive>

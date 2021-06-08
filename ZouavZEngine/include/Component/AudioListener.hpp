@@ -9,7 +9,7 @@ public:
 	AudioListener() = delete;
 	AudioListener(class GameObject* _gameObject, std::string _name = "AudioListener");
 
-	~AudioListener() = default;
+	~AudioListener();
 
 	void Update();
 

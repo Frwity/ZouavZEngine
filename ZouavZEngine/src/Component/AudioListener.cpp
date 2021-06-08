@@ -10,11 +10,19 @@ AudioListener::AudioListener(GameObject* _gameObject, std::string _name)
 	SoundManager::SetListenerVelocity({ 0.0f, 0.0f, 0.0f });
 	if (_gameObject)
 		SoundManager::SetListenerPosition(_gameObject->WorldPosition());
+	SoundManager::SetListener(this);
+}
+
+AudioListener::~AudioListener()
+{
+	SoundManager::RemoveListener(this);
 }
 
 void AudioListener::Update()
 {
 	SoundManager::SetListenerPosition(GetGameObject().WorldPosition());
+	float values[6] = {GetGameObject().Forward().x, GetGameObject().Forward().y, GetGameObject().Forward().z, GetGameObject().Up().x, GetGameObject().Up().y, GetGameObject().Up().z };
+	alListenerfv(AL_ORIENTATION, values);
 }
 
 void AudioListener::Editor()

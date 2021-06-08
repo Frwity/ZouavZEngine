@@ -12,7 +12,7 @@ class AudioBroadcaster : public Component
 private:
 	std::vector<std::shared_ptr<class Sound>> sounds;
 	unsigned int source = 0;
-	bool ambient = false;
+	bool ambient = true;
 	bool loop = false;
 	std::shared_ptr<class Sound> currentSound;
 
