@@ -2,8 +2,8 @@
 
 -----
 
-> Développeur :
-> Gavelle Anthony
+> Programmers :
+> Gavelle Antony
 > Grondin Jérémy
 > Deprez Nicolas
 
@@ -11,24 +11,22 @@
     
 </div>-->
 
-## Description :
-Projet moteur : moteur de jeu 3d et création d'un rpg
+[![Watch the video](media/ZouavZEnginE.png)](https://www.youtube.com/watch?v=dySbOfGVTKY&t=70s)
 
 ## Features :
-Différentes fenêtre d'éditeur dockable:
--> Hierarchy, Inspector, Console, Project, Generation Procédurale, fenêtre de la scène, fenêtre du jeu
-Déplacement de gameObject dans la hierarchie en glissant déposant vers un autre parent
-Création, modification, sauvegarde de scène
-Affichage de mesh avec texture et shader editables
-Modification des composants d'un gameObject dans l'inspector
-Création et sauvegarde de prefab
-Génération procédural de terrain
-Skybox
-Animation
-Sauvegarde et chargement de scènes
-PhysX : Rigidbody/RigidStatic et collision de base (box, sphère, capsule), callback de détection de collisions
-Création de fichier
-Sons (spatialisé ou non)
+- dockable editor windows (Hierarchy, Inspector, Console, Project, Procedural Generation, Scene, Game)
+- Move GameObject in the hierarchy with drag and drop
+- Create, Edit, Save scenes
+- Mesh display with editable textures and shaders
+- Editing of components in the inspector
+- Prefab creation
+- Procedural generation of terrain
+- Skybox
+- Animation
+- PhysX: Rigidbody/RigidStatic and basic collision (box, sphere, capsule), collision detection callback
+File creation
+- Sounds (spatialized or not)
+
 
 ##Librairie externe : 
 Assimp
@@ -43,13 +41,14 @@ glad
 libsndfile
 
 
-## Comment executer : 
-Executer l'éditeur : Release\ZouavZEnginE.exe
-Jeu: lancer dans l'éditeur la scene aller dans l'onglet Project ouvrir le dossier Scene et appuyer sur World.zes ou appuyer sur Load
+## Execute : 
+Run the editor: ReleaseZouavZEnginE.exe
+Game: launch the scene in the editor, go to the Project tab, open the Scene folder and press World.zes or press Load
 
-## Bug connus
-Warning Physx dans la console lors de certaines opérations
-Lorsqu'on crée une scène et qu'il y avait déjà la génération procédurale, le mesh du terrain reste en background 
+## Known bug
+Warning Physx in the console during some operations
+When you create a scene and there was already a procedural terrain, the terrain mesh remains in background 
+
 
 ## License :
 
